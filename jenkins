@@ -14,8 +14,8 @@ pipeline {
 
         stage('Restore') {
             steps {
+                // Restore NuGet packages
                 script {
-                    // Restore NuGet packages
                     sh "${env.DOTNET_ROOT}/dotnet restore"
                 }
             }
@@ -23,8 +23,8 @@ pipeline {
 
         stage('Build') {
             steps {
+                // Build the .csproj projects
                 script {
-                    // Build the .csproj projects
                     sh "${env.DOTNET_ROOT}/dotnet build -c Release -o packages"
                 }
             }
@@ -32,9 +32,7 @@ pipeline {
 
         stage('Publish') {
             steps {
-                script {
-                    // You can add additional steps here to publish the project if needed
-                }
+                // You can add additional steps here to publish the project if needed
             }
         }
     }
