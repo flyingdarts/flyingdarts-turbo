@@ -6,6 +6,14 @@ pipeline {
     }
     
     stages {
+        stage('Install .NET SDK') {
+            steps {
+                sh 'wget -q https://dot.net/v1/dotnet-install.sh'
+                sh 'chmod +x dotnet-install.sh'
+                sh './dotnet-install.sh -c Current'
+            }
+        }
+    
         stage('Checkout') {
             steps {
                 checkout scm
@@ -14,8 +22,8 @@ pipeline {
 
         stage('Restore') {
             steps {
-                // Restore NuGet packages
                 script {
+                    // Restore NuGet packages
                     sh "${env.DOTNET_ROOT}/dotnet restore"
                 }
             }
@@ -23,8 +31,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Build the .csproj projects
                 script {
+                    // Build the .csproj projects
                     sh "${env.DOTNET_ROOT}/dotnet build -c Release -o packages"
                 }
             }
