@@ -30,11 +30,6 @@ pipeline {
             }
         }
 
-        stage('Publish') {
-            steps {
-                // You can add additional steps here to publish the project if needed
-            }
-        }
     }
 
     post {
