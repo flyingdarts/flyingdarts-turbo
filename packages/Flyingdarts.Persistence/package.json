@@ -1,0 +1,9 @@
+{
+    "name": "flyingdarts.persistence",
+    "version": "1.3.6",
+    "private": true,
+    "scripts": {
+        "build": "dotnet build -c Debug --no-dependencies",
+        "build:prod": "dotnet build -c Release --no-dependencies"
+    }
+}

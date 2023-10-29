@@ -1,0 +1,14 @@
+global using Amazon.CDK;
+global using Amazon.CDK.AWS.Amplify.Alpha;
+global using Amazon.CDK.AWS.Apigatewayv2.Alpha;
+global using Amazon.CDK.AWS.Apigatewayv2.Integrations.Alpha;
+global using Amazon.CDK.AWS.CodeCommit;
+global using Amazon.CDK.AWS.DynamoDB;
+global using Amazon.CDK.AWS.IAM;
+global using Amazon.CDK.AWS.Lambda;
+global using Amazon.CDK.AWS.SSM;
+global using Constructs;
+global using App = Amazon.CDK.AWS.Amplify.Alpha.App;
+global using AppProps = Amazon.CDK.AWS.Amplify.Alpha.AppProps;
+global using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
+global using Code = Amazon.CDK.AWS.Lambda.Code;

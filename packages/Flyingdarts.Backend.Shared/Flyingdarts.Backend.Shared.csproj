@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Flyingdarts.Backend.Shared</Title>
+    <VersionPrefix>1.3.14</VersionPrefix>
+    <Version>$(VersionPrefix)</Version>
+    <PackageId>Flyingdarts.Backend.Shared</PackageId>
+    <Authors>Flyingdarts</Authors>
+    <Description>A NuGet package with shared models for the flyingdarts backend</Description>
+    <PackageProjectUrl>https://github.com/flyingdarts/Flyingdarts.Persistence</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/flyingdarts/Flyingdarts.Persistence.git</RepositoryUrl>
+    <LicenseFile>LICENSE.md</LicenseFile>
+    <PackageTags>Flyingdarts Backend</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReleaseNotes>Update packages</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.6.0" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.11" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
+    <PackageReference Include="FluentValidation" Version="11.8.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0-rc.1.23419.4" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0-rc.2.23479.6" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0-rc.2.23479.6" />
+    <PackageReference Include="Flyingdarts.Shared" Version="1.0.4" />
+    <PackageReference Include="Flyingdarts.Persistence" Version="1.3.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+    <Content Include="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+    <Content Include="LICENSE.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+  </ItemGroup>
+</Project>

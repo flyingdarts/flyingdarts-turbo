@@ -1,0 +1,9 @@
+{
+    "name": "flyingdarts.shared",
+    "version": "1.0.4",
+    "private": true,
+    "scripts": {
+        "build": "dotnet build -c Debug --no-dependencies",
+        "build:prod": "dotnet build -c Release --no-dependencies"
+    }
+}

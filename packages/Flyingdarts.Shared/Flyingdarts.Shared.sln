@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C4BD458C-5CB0-4FBF-93FE-62ED50F409B8}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{2C4C2D65-6859-4C9C-9DBC-06A0C3436B2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{9D264F2E-E0C5-4164-94F4-614A8FEA004C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-and-publish-package.yml = .github\workflows\build-and-publish-package.yml
+		.github\workflows\codeql.yml = .github\workflows\codeql.yml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Shared", "Flyingdarts.Shared.csproj", "{7A70A676-F8BD-459D-A1EE-422FD62EEEED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A70A676-F8BD-459D-A1EE-422FD62EEEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A70A676-F8BD-459D-A1EE-422FD62EEEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A70A676-F8BD-459D-A1EE-422FD62EEEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A70A676-F8BD-459D-A1EE-422FD62EEEED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2C4C2D65-6859-4C9C-9DBC-06A0C3436B2F} = {C4BD458C-5CB0-4FBF-93FE-62ED50F409B8}
+		{9D264F2E-E0C5-4164-94F4-614A8FEA004C} = {2C4C2D65-6859-4C9C-9DBC-06A0C3436B2F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B916E2B2-D947-4C17-BA0E-F3D92FFABE4A}
+	EndGlobalSection
+EndGlobal

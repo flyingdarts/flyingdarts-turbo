@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Flyingdarts.Shared</Title>
+    <VersionPrefix>1.0.4</VersionPrefix>
+    <Version>$(VersionPrefix)</Version>
+    <PackageId>Flyingdarts.Shared</PackageId>
+    <Authors>Flyingdarts</Authors>
+    <Description>A NuGet package with shared models</Description>
+    <PackageProjectUrl>https://github.com/flyingdarts/Flyingdarts.Persistence</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/flyingdarts/Flyingdarts.Persistence.git</RepositoryUrl>
+    <LicenseFile>LICENSE.md</LicenseFile>
+    <PackageTags>Flyingdarts Shared</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReleaseNotes>Added BadRequestException class</PackageReleaseNotes>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.11" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+    <Content Include="README.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+    <Content Include="LICENSE.md">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </Content>
+  </ItemGroup>
+</Project>
