@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+    
+    environment {
+        DOTNET_ROOT = tool name: 'dotnet', type: 'Tool'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Restore') {
+            steps {
+                script {
+                    // Restore NuGet packages
+                    sh "${env.DOTNET_ROOT}/dotnet restore"
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Build the .csproj projects
+                    sh "${env.DOTNET_ROOT}/dotnet build -c Release -o packages"
+                }
+            }
+        }
+
+        stage('Publish') {
+            steps {
+                script {
+                    // You can add additional steps here to publish the project if needed
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            archiveArtifacts artifacts: 'packages/**/*', allowEmptyArchive: true
+        }
+    }
+}
