@@ -1,13 +1,13 @@
 {
-    "$schema": "https://turbo.build/schema.json",
-    "pipeline": {
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
       "build": {
-        "outputs": ["bin/Debug/**", "obj/smth here idk exact path"],
-        "cache": true
+          "outputs": ["**/*/bin/Debug/net6.0/**", "**/*/obj/Debug/net6.0/**"],
+          "cache": true
       },
       "build:prod": {
-        "outputs": ["bin/Release/**", "obj/smth here idk exact path"],
-        "cache": true
+          "outputs": ["**/*/bin/Release/net6.0/**", "**/*/obj/Release/net6.0/**"],
+          "cache": true
       }
-    }
   }
+}
