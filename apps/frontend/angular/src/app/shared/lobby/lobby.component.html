@@ -1,0 +1,25 @@
+<div class="container-fluid body-content h-100">
+    <div class="card h-100">
+        <div class="card-body">
+            <div class="container-fluid px-0 h-100">
+                <div class="flyingdarts-login-container d-flex">
+                    <div class="col-sm-12 col-md-12 col-lg-4 p-0 flyingdarts-mobile-container">
+                        <div *ngIf="(loading$ | async)" class="container-auth h-100">
+                            <app-loading></app-loading>
+                        </div>
+                        <div *ngIf="!(loading$ | async)" class=" container-auth h-100">
+                            <div class="form-group">
+                                <h1 class="fw-bold my-sign-in-header">Play with friends</h1>
+                                <div class="form-check">
+                                    <!-- <input class="form-control room-number-input" placeholder="Enter room number"
+                                        type="text" value="" id="roomNumber" checked> -->
+                                    <button id="gameWithFriendsButton" class="form-control create-room-button" (click)="joinX01Queue()">Create room</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

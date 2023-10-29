@@ -1,0 +1,33 @@
+<div class="flyingdarts-navbar">
+  <nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid justify-content-space-between flyingdarts-nav">
+      <a class="nav-link" href="/">Flyingdarts</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-angle-down"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul *ngIf="isRegistered" class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <a id="loggedInUserName" class="nav-link"> 
+            {{ (userName$ | async) }}
+          </a>
+          <a id="profileButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['profile']}}]">
+            <i class="fa-solid fa-user-circle"></i>
+          </a>
+          <a id="settingsButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['settings']}}]">
+            <i class="fa-solid fa-cog"></i>
+          </a>
+          <a class="nav-link" href="#" (click)="signOut()">
+            <i class="fa-solid fa-sign-out"></i>
+          </a>
+          <!-- <li class="list-inline-item">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Ranked</label>
+              </div>
+            </li> -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>

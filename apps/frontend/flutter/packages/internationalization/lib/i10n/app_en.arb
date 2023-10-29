@@ -1,0 +1,18 @@
+{
+    "helloWorld": "Hello World!",
+    "@helloWorld": {
+      "description": "The conventional newborn programmer greeting"
+    },
+    "underConstruction": "Under construction",
+    "@underConstruction": {
+        "description": "A typical under construction message"
+    },
+    "speechWidgetListening": "Listening",
+    "@speechWidgetListening": {
+        "description": "A message to show the speech recognition is active"
+    },
+    "speechWidgetHoldMicrophone": "Hold the microphone",
+    "@speechWidgetHoldMicrophone": {
+        "description": "A message to call for action to enable speech recognition"
+    }
+  }

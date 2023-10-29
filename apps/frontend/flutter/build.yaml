@@ -1,0 +1,16 @@
+targets:
+  $default:
+    builders:
+      mockito|mockBuilder:
+        generate_for:
+          - lib/presentation/bloc/**.dart
+builders:
+  mockBuilder:
+    import: "package:mockito/src/builder.dart"
+    builder_factories: ["buildMocks"]
+    build_extensions: {".dart": [".mocks.dart"]}
+    build_to: source
+    auto_apply: dependents
+    defaults:
+      generate_for: ['tests/**']
+    

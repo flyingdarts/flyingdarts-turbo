@@ -1,0 +1,67 @@
+<div class="container-fluid body-content h-100">
+  <div class="card h-100">
+    <div class="card-body">
+      <div class="container-fluid px-0 h-100">
+        <div class="flyingdarts-login-container d-flex">
+          <div class="col-sm-12 col-md-12 col-lg-4 p-0 flyingdarts-mobile-container">
+            <div *ngIf="(loading$ | async)" class="container-auth h-100">
+              <app-loading></app-loading>
+            </div>
+            <div *ngIf="!(loading$ | async)" class=" container-auth h-100">
+
+              <form [formGroup]="profileForm" class="form-group" (ngSubmit)="submitForm()">
+                <h1 class="fw-bold my-sign-in-header">Play with friends</h1>
+                <div class="form-group">
+                  <input formControlName="userName" placeholder="Nickname" type="text" class="form-control"
+                    id="profileFormNickname" />
+                  <select formControlName="country" id="profileFormCountry" class="form-select"
+                    aria-label="Default select example" value="Select your country">
+                    <option selected>Select your country</option>
+                    <option value="AT">Austria</option>
+                    <option value="BE">Belgium</option>
+                    <option value="BG">Bulgaria</option>
+                    <option value="HR">Croatia</option>
+                    <option value="CY">Cyprus</option>
+                    <option value="CZ">Czechia</option>
+                    <option value="DK">Denmark</option>
+                    <option value="EE">Estonia</option>
+                    <option value="FI">Finland</option>
+                    <option value="FR">France</option>
+                    <option value="DE">Germany</option>
+                    <option value="GR">Greece</option>
+                    <option value="HU">Hungary</option>
+                    <option value="IE">Ireland</option>
+                    <option value="IT">Italy</option>
+                    <option value="LV">Latvia</option>
+                    <option value="LT">Lithuania</option>
+                    <option value="LU">Luxembourg</option>
+                    <option value="MT">Malta</option>
+                    <option value="NL">Netherlands</option>
+                    <option value="PL">Poland</option>
+                    <option value="PT">Portugal</option>
+                    <option value="RO">Romania</option>
+                    <option value="SK">Slovakia</option>
+                    <option value="SI">Slovenia</option>
+                    <option value="ES">Spain</option>
+                    <option value="SE">Sweden</option>
+                  </select>
+                  <input placeholder="Email" formControlName="email" type="email" class="form-control"
+                    id="profileFormEmailAddress" />
+                  <button class="form-control create-room-button">Next</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.onload = () => {
+
+    var select = document.getElementById("profileFormCountry");
+    select.selectedIndex = 0;
+  }
+</script>

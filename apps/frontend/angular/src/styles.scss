@@ -1,0 +1,353 @@
+/* You can add global styles to this file, and also import other style files */
+/* @import './../../../node_modules/@aws-amplify/ui-angular/theme.css'; */
+@import '~@aws-amplify/ui-angular/theme.css';
+@import './colors.scss';
+body {
+    height: 100vh !important;
+    padding: 20px !important;
+    margin: 0 !important;
+    background-color: #252D49;
+}
+.arrow-background-light {
+    background-image: url('assets/images/arrow_background_light.svg');
+}
+.arrow-background-dark {
+    background-image: url('assets/images/arrow_background_dark.svg');
+}
+.arrow-background {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.card {
+    background: none;
+}
+$input-bg: white;
+$body-bg: unset;
+
+
+.amplify-tabs {
+    display: none;
+}
+
+.amplify-input {
+    background-color: $input-bg;
+    @extend .form-control !optional;
+    @extend .form-control-lg !optional;
+    @extend .border-2 !optional;
+    @extend .rounded !optional;
+}
+
+.amplify-input[name='password'] {
+    background-color: $input-bg;
+    @extend .form-control !optional;
+    @extend .form-control-lg !optional;
+    @extend .border-2 !optional;
+    @extend .rounded-0 !optional;
+    @extend .rounded-start !optional;
+}
+
+.amplify-input[name='confirm_password'] {
+    background-color: $input-bg;
+    @extend .form-control !optional;
+    @extend .form-control-lg !optional;
+    @extend .border-2 !optional;
+    @extend .rounded-0 !optional;
+    @extend .rounded-start !optional;
+}
+
+.amplify-button[data-variation='primary'] {
+    @extend .bg-primary !optional;
+    @extend .px-5 !optional;
+    @extend .text-white !optional;
+    @extend .rounded !optional;
+    @extend .fw-bold !optional;
+    font-size: 1.125rem;
+}
+
+.amplify-tabs-item {
+    @extend .text-primary !optional;
+}
+
+input.amplify-field-group__control {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+[data-amplify-authenticator] {
+    display: flex;
+    flex-direction: column;
+    height: -webkit-fill-available;
+}
+
+[data-amplify-authenticator] [data-amplify-router] {
+    background-color: $body-bg;
+    border-width: 0;
+    box-shadow: none;
+    height: 100%;
+}
+
+[data-amplify-container] {
+    width: 100% !important;
+    height: -webkit-fill-available;
+}
+
+// [data-amplify-router-content] {
+//     height: 100% !important
+// }
+
+[data-amplify-form] {
+    padding: 0 !important;
+}
+
+.amplify-divider {
+    opacity: unset !important;
+    background: none !important;
+}
+
+.amplify-divider--label::after {
+    background-color: #4c56c0;
+    color: white;
+    display: none;
+}
+
+[data-amplify-fieldset] {
+    display: none !important;
+}
+
+[data-amplify-footer] {
+    display: none !important;
+}
+
+.amplify-divider .amplify-divider--label .amplify-divider--small {
+    background: none !important;
+}
+
+button[data-variation='link'] {
+    width: fit-content;
+    @extend .float-start !optional;
+    @extend .p-0 !optional;
+    @extend .my-1 !optional;
+    font-size: var(--bs-body-font-size);
+    text-decoration: underline;
+    color: #f9617d;
+}
+
+.my-sign-in-no-account {
+    margin: 0 0 0 20px;
+    color: white !important;
+}
+
+a.my-link {
+    background-color: inherit;
+    color: #f9617d !important;
+}
+
+a.my-link:hover {
+    background-color: inherit;
+    color: #d92079 !important;
+}
+
+button[data-variation='link']:hover {
+    background-color: inherit;
+    color: #d92079;
+}
+
+[amplify-button][type='submit'] {
+    width: fit-content;
+    @extend .float-end !optional;
+    @extend .mt-4 !optional;
+    @extend .ms-auto !optional;
+    background-color: #f9617d;
+}
+
+[amplify-button][aria-label='Show password'] {
+    background-color: $input-bg;
+    @extend .form-control !optional;
+    @extend .form-control-lg !optional;
+    @extend .border-2 !optional;
+    @extend .rounded-0 !optional;
+    @extend .border-start-0 !optional;
+    @extend .rounded-end !optional;
+}
+
+[amplify-button][aria-label='Hide password'] {
+    background-color: $input-bg;
+    @extend .form-control !optional;
+    @extend .form-control-lg !optional;
+    @extend .border-2 !optional;
+    @extend .rounded-0 !optional;
+    @extend .border-start-0 !optional;
+    @extend .rounded-end !optional;
+}
+
+amplify-slot[name='reset-password-header'] .amplify-heading {
+    display: none;
+}
+
+amplify-slot[name='confirm-reset-password-header'] .amplify-heading {
+    display: none;
+}
+
+amplify-slot[name='force-new-password-header'] .amplify-heading {
+    display: none;
+}
+
+.amplify-alert {
+    @extend .rounded !optional;
+}
+
+.federated-sign-in-container {
+    padding-bottom: 0;
+    justify-content: center;
+
+}
+
+
+.federated-sign-in-button {
+    background: white;
+    border-width: 1px;
+    border-radius: 10px;
+    margin: 0 auto;
+    height: 50px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    text-align: center;
+    path {
+        opacity: 1 !important;
+    }
+    .federated-sign-in-button-row {
+        align-items: center;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+
+        svg {
+            height: 16px;
+        }
+
+        p {
+            padding: 0;
+            margin: 0;
+        }
+    }
+}
+
+.my-primary-button {
+    background-color: #f9617d;
+    border-color: #f9617d;
+    margin-top: 20px;
+}
+
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {}
+
+/* Media Query for low resolution  Tablets, Ipads */
+@media (min-width: 481px) and (max-width: 767px) {}
+
+/* Media Query for Tablets Ipads portrait mode */
+@media (min-width: 768px) and (max-width: 1024px) {}
+
+/* Media Query for Laptops and Desktops */
+@media (min-width: 1025px) and (max-width: 1280px) {}
+
+/* Media Query for Large screens */
+@media (min-width: 1281px) {}
+
+ng-lottie {
+    height: 140px;
+    width: 140px;
+    margin: 0 auto;
+}
+
+.navbar {
+    ng-lottie {
+        height: 140px;
+        width: 140px;
+        margin: unset !important;
+        margin-right: 40px !important;
+    }
+}
+
+#wrapper {
+    margin: 0 auto;
+}
+
+path,
+#zero,
+.number,
+#dbull,
+#sbull {
+    opacity: 0;
+}
+
+.elem {
+    fill: white;
+    font-size: 4em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bolder;
+}
+
+.target:hover {
+    fill: blue;
+}
+
+.flyingdarts-primary-button {
+    background-color: $flyingdarts-secundary;
+    width: 100%;
+    color: white;
+}
+
+.flyingdarts-primary-button:hover {
+    background-color: darken($flyingdarts-secundary, 4%);
+}
+
+@media (max-width: 480px) {
+    body {
+        height: 100% !important;
+    }
+    .hide-mobile {
+        display: none !important;
+    }
+    .padding-bottom-5 {
+        padding-bottom: 20px;
+    }
+    .chatbox {
+        height: 200px !important;
+        padding-bottom: 10px !important;
+    }
+    .card-footer {
+        height: 60px !important;
+    }
+    .github-link {
+        margin-bottom: unset !important;
+    }
+}
+/* Media Query for low resolution  Tablets, Ipads */
+@media (min-width: 481px) and (max-width: 767px) {
+    body {
+        height: 100% !important;
+    }
+    .hide-mobile {
+        display: none !important;
+    }
+    .padding-bottom-5 {
+        padding-bottom: 20px;
+    }
+    .chatbox {
+        height: 200px !important;
+        padding-bottom: 10px !important;
+    }
+    .card-footer {
+        height: 60px !important;
+    }
+    .github-link {
+        margin-bottom: unset !important;
+    }
+}
+

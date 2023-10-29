@@ -1,0 +1,189 @@
+name: "build and deploy widgetbook"
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  run-unittests:
+    runs-on: ubuntu-22.04
+    if: "!contains(github.event.head_commit.message, 'NORUN')" # Skip the build by adding NORUN in all caps to your commit message
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.5"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run State tests
+        run: flutter test test/old/bloc/speech_bloc_test.dart
+
+  build-features-book:
+    needs: [run-unittests]
+    runs-on: ubuntu-22.04
+    if: "!contains(github.event.head_commit.message, 'NORUN')" # Skip the build by adding NORUN in all caps to your commit message
+    permissions:
+      id-token: write
+      contents: read
+    steps:      
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.5"
+
+      - name: Install dependencies
+        working-directory: packages/features
+        run: flutter pub get
+      
+      - name: Run build_runner
+        working-directory: packages/features
+        run: flutter pub run build_runner build 
+
+  build-shared-book:
+    needs: [run-unittests]
+    runs-on: ubuntu-22.04
+    if: "!contains(github.event.head_commit.message, 'NORUN')" # Skip the build by adding NORUN in all caps to your commit message
+    permissions:
+      id-token: write
+      contents: read
+    steps:   
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.5"
+
+      - name: Install dependencies
+        working-directory: packages/shared
+        run: flutter pub get
+      
+      - name: Run build_runner
+        working-directory: packages/shared
+        run: flutter pub run build_runner build   
+
+  build-core-book:
+    needs: [run-unittests]
+    runs-on: ubuntu-22.04
+    if: "!contains(github.event.head_commit.message, 'NORUN')" # Skip the build by adding NORUN in all caps to your commit message
+    permissions:
+      id-token: write
+      contents: read
+    steps:      
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.5"
+
+      - name: Install dependencies
+        working-directory: packages/core
+        run: flutter pub get
+      
+      - name: Run build_runner
+        working-directory: packages/core
+        run: flutter pub run build_runner build
+ 
+  publish-widgetbook:
+    needs: [build-core-book, build-shared-book, build-features-book]
+    runs-on: ubuntu-22.04
+    if: "!contains(github.event.head_commit.message, 'NORUN')" # Skip the build by adding NORUN in all caps to your commit message
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Setup flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.5"
+
+      - name: Install dependencies features
+        working-directory: packages/features
+        run: flutter pub get
+
+      - name: Run build_runner features
+        working-directory: packages/features
+        run: flutter pub run build_runner build
+
+      - name: Install dependencies shared
+        working-directory: packages/shared
+        run: flutter pub get
+
+      - name: Run build_runner shared
+        working-directory: packages/shared
+        run: flutter pub run build_runner build
+        
+      - name: Install dependencies core
+        working-directory: packages/core
+        run: flutter pub get
+
+      - name: Run build_runner core
+        working-directory: packages/core
+        run: flutter pub run build_runner build 
+
+      - name: Install dependencies features
+        run: flutter pub get
+
+      - name: Run build_runner
+        run: flutter pub run build_runner build
+
+      - name: Build Widgetbook
+        run: flutter build web -t lib/widgetbook.generator.dart -o build/widgetbook
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Amplify CLI
+        run: |
+          npm i -g @aws-amplify/cli
+
+      - name: Pull Amplify backend
+        run: |
+          amplify pull --yes
+      - name: Publish Widgetbook
+        run: |
+          aws s3 cp build/widgetbook s3://${{ secrets.WIDGETBOOK_S3_BUCKET_NAME }}/widgetbook --recursive

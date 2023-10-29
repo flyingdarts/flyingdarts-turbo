@@ -410,4 +410,3 @@ amplifytools.xcconfig
 **/bin/*
 **/obj/*
 .turbo
-apps/frontend

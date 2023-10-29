@@ -1,0 +1,317 @@
+@import './../../../colors.scss';
+
+h1,
+h2,
+p,
+span {
+    padding: 10px 0;
+    margin: 0;
+    color: white;
+}
+
+h1 {}
+
+h2 {
+    color: black;
+    padding: 20px;
+}
+
+.row {
+    margin: 0;
+    padding: 0;
+}
+
+.lobby-card-inner:first {
+    margin-left: 20px;
+}
+
+.lobby-container {
+    height: 100%;
+    text-align: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+
+    .lobby-game-modes {
+        height: calc(100% - 160px);
+
+        div:hover {
+            cursor: pointer;
+        }
+
+        .lobby-card-inner {
+            height: 100%;
+            display: unset !important;
+        }
+
+        .lobby-card {
+            background-color: #4C56C0;
+            background-repeat: no-repeat;
+            background-size: 95%;
+            background-position-y: bottom;
+            background-position-x: center;
+            background-size: contain;
+            padding: 20px;
+
+            p {
+                font-size: 2em;
+                font-weight: 600;
+                color: white;
+                font-size-adjust: 0.5;
+            }
+
+            .subtitle {
+                font-size: 24px;
+                font-weight: 300;
+            }
+
+            .lobby-card-content {
+                height: 140px;
+                width: 100%;
+                text-align: center;
+
+                svg {
+                    height: 140px;
+                    width: 140px;
+                }
+            }
+        }
+    }
+}
+
+ng-lottie {
+    svg {
+        height: 140px;
+        width: 140px;
+    }
+}
+
+.card-friends {
+    background-image: url('/assets/friends.svg');
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+.card-solo {
+    background-image: url('/assets/solo.svg');
+    background-position-x: right !important;
+    justify-content: space-between;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.card-question {
+    background-image: url('/assets/ideas.svg');
+    background-position-x: left !important;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
+.solo-beuter {
+    flex-direction: column;
+    text-align: left;
+
+    p {
+        font-weight: 200 !important;
+
+        strong {
+            font-weight: 700 !important;
+            color: $flyingdarts-secundary;
+        }
+    }
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+    h2 {
+        font-size: 0.8em;
+    }
+
+    .card {
+        height: 100% !important;
+    }
+
+    .lobby-container {
+        .lobby-game-modes {
+
+
+            .lobby-card {
+                width: calc(100% - 40px);
+                height: 250px !important;
+
+                p {
+                    font-size: 1.2em;
+                    font-weight: 600;
+                    color: white;
+                    font-size-adjust: 0.5;
+                }
+
+                .subtitle {
+                    font-size: 0.8em;
+                    font-weight: 300;
+                }
+
+                .lobby-card-content {
+                    height: 100px;
+                    width: 100%;
+                    text-align: center;
+
+                    svg {
+                        height: 100px;
+                        width: 100px;
+                    }
+                }
+            }
+        }
+    }
+
+    .card-friends {
+        margin: 0 auto !important;
+        margin-bottom: 20px !important;
+    }
+
+    .card-solo {
+        margin: 0 auto !important;
+        margin-bottom: 20px !important;
+    }
+
+    .card-question {
+        margin: 0 auto !important;
+    }
+}
+
+/* Media Query for low resolution  Tablets, Ipads */
+@media (min-width: 481px) and (max-width: 767px) {
+    h2 {
+        font-size: 0.8em;
+    }
+
+    .lobby-container {
+        .lobby-game-modes {
+
+            height: 350px;
+
+            .lobby-card {
+                width: calc(100% - 40px);
+
+                p {
+                    font-size: 1.6em;
+                    font-weight: 600;
+                    color: white;
+                    font-size-adjust: 0.5;
+                }
+
+                .subtitle {
+                    font-size: 24px;
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+
+    .card-friends {
+        margin: 0 auto;
+    }
+
+    .card-solo {
+        margin: 0;
+        margin: 0 auto;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .card-question {
+        margin: 0;
+        margin: 0 auto;
+
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+}
+
+/* Media Query for Tablets Ipads portrait mode */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .lobby-container {
+        .lobby-game-modes {
+            .lobby-card {
+                p {
+                    font-size: 1.6em;
+                    font-weight: 600;
+                    color: white;
+                    font-size-adjust: 0.5;
+                }
+
+                .subtitle {
+                    font-size: 24px;
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+
+    .card-friends {
+        margin: 0;
+        margin-left: 20px;
+        margin-right: 10px;
+    }
+
+    .card-solo {
+        margin: 0;
+        margin-right: 20px;
+        margin-left: 10px;
+    }
+
+    .card-question {
+        margin: 0;
+        margin-right: 20px;
+        margin-top: 20px;
+        margin-left: 20px;
+    }
+}
+
+/* Media Query for Laptops and Desktops */
+@media (min-width: 1025px) and (max-width: 1280px) {
+    .lobby-container {
+        .lobby-game-modes {
+            .lobby-card {
+                p {
+                    font-size: 1.4em;
+                    font-weight: 600;
+                    color: white;
+                    font-size-adjust: 0.5;
+                }
+
+                .subtitle {
+                    font-size: 1em;
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+}
+
+/* Media Query for Large screens */
+@media (min-width: 1281px) {
+    .lobby-container {
+        .lobby-game-modes {
+            .lobby-card {
+                p {
+                    font-size: 1.6em;
+                    font-weight: 600;
+                    color: white;
+                    font-size-adjust: 0.5;
+                }
+
+                .subtitle {
+                    font-size: 24px;
+                    font-weight: 300;
+                }
+            }
+        }
+    }
+}
+
+.top-fill,
+.bottom-fill {
+    height: max-content;
+    width: 100%;
+}

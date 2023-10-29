@@ -1,0 +1,63 @@
+@import './../../../colors.scss';
+.carousel-caption h5 {
+    font-size: 1.8em;
+}
+
+.carousel-caption p {
+    font-size: 1em;
+}
+
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+.carousel {
+    display: flex;
+    flex-direction: column;
+    height: calc(100%);
+    justify-content: center;
+
+    .carousel-inner {
+        height: 100%;
+
+        .carousel-item {
+            height: 100%;
+
+            .carousel-custom-top {
+                display: flex !important;
+                height: 50% !important;
+
+                img {
+                    height: fit-content !important;
+                    display: flex;
+                    align-self: end;
+                }
+            }
+
+            .carousel-custom-bottom {
+                display: flex !important;
+                height: 50% !important;
+                width: 100%;
+
+                .carousel-caption {
+                    width: 100%;
+
+                    h5 {
+                        margin-top: 20px;
+                    }
+
+                    p {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.carousel-caption {
+    position: relative !important;
+    color: #4C56C0;
+    left: initial !important;
+    right: initial !important;
+}

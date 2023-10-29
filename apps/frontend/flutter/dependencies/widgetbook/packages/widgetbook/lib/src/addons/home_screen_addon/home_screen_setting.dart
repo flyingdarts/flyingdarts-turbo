@@ -1,0 +1,3 @@
+class HomeScreenSetting {
+  const HomeScreenSetting();
+}

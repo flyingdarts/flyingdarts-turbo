@@ -1,0 +1,3 @@
+[submodule "dependencies/widgetbook"]
+	path = dependencies/widgetbook
+	url = https://github.com/mikepattyn/widgetbook.git
