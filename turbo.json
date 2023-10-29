@@ -1,0 +1,13 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "pipeline": {
+      "build": {
+        "outputs": ["bin/Debug/**", "obj/smth here idk exact path"],
+        "cache": true
+      },
+      "build:prod": {
+        "outputs": ["bin/Release/**", "obj/smth here idk exact path"],
+        "cache": true
+      }
+    }
+  }

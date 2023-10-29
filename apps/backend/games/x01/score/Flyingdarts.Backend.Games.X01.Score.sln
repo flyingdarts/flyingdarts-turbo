@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Backend.Games.X01.Score", "Flyingdarts.Backend.Games.X01.Score.csproj", "{B949F940-15A9-4625-90D2-EF3C4016243E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B949F940-15A9-4625-90D2-EF3C4016243E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B949F940-15A9-4625-90D2-EF3C4016243E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B949F940-15A9-4625-90D2-EF3C4016243E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B949F940-15A9-4625-90D2-EF3C4016243E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

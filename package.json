@@ -1,0 +1,12 @@
+{
+	"name": "flyingdarts",
+	"workspaces": [
+		"packages/**",
+		"apps/backend/**",
+		"apps/tools/**"
+	],
+	"dependencies": {
+		"turbo": "latest"
+	},
+	"packageManager": "npm@9.5.0"
+}

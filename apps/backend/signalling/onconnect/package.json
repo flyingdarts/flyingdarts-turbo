@@ -1,0 +1,14 @@
+{
+	"name": "flyingdarts.backend.signalling.onconnect",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+	  "build": "dotnet build -c Debug --no-dependencies",
+	  "build:prod": "dotnet build -c Release --no-dependencies"
+	},
+	"dependencies": {
+		"flyingdarts.shared": "*",
+		"flyingdarts.backend.shared": "*",
+		"flyingdarts.persistence": "*"
+	}
+  }

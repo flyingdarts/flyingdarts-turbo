@@ -1,0 +1,49 @@
+name: "Deploy Flyingdarts.Backend.User.Profile.VerifyEmail"
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  DeployFunction:
+    runs-on: ubuntu-22.04
+    if: "!contains(github.event.head_commit.message, 'NORUN')" # Skip the build by adding NORUN in all caps to your commit message
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+      - name: Install Amazon.Lambda.Tools
+        run: |
+          dotnet tool install -g Amazon.Lambda.Tools
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_OIDC_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Deploy function
+        run: |
+          REPO_NAME=$GITHUB_REPOSITORY
+          REPO_NAME_WITH_DASHES=$(echo $REPO_NAME | sed 's/\./\-/g')
+          REPO_NAME_WITH_DASHES=$(echo $REPO_NAME_WITH_DASHES | sed 's/flyingdarts\///')
+          echo "REPO_NAME_WITHOUT_DASHES=$(echo $REPO_NAME | sed 's/flyingdarts\///')" >> $GITHUB_ENV
+          dotnet lambda deploy-function --function-name $REPO_NAME_WITH_DASHES -frun dotnet6 -f net6.0 --region ${{ secrets.AWS_REGION }}
+      - name: Get repo name
+        run: |
+          REPO_NAME=$GITHUB_REPOSITORY
+          echo "REPO_NAME_WITHOUT_DASHES=$(echo $REPO_NAME | sed 's/flyingdarts\///')" >> $GITHUB_ENV  
+      - name: Discord Webhook Action
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.DISCORD_DEVELOPMENT_ENDPOINTS_CHANNEL_WEBHOOK }}
+          embed-title: ${{ env.REPO_NAME_WITHOUT_DASHES }}
+          embed-description: ${{ github.event.head_commit.message }}
+          embed-footer-text: ${{ github.ref_name }}
+          embed-timestamp: ${{ github.event.head_commit.timestamp }}
+          embed-author-name: ${{ github.event.head_commit.author.name }}         
