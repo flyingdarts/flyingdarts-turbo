@@ -411,3 +411,4 @@ amplifytools.xcconfig
 **/obj/*
 .turbo
 **/*/package.json
+**/node_modules/*

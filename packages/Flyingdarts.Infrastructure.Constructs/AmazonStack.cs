@@ -24,8 +24,8 @@ public class AmazonStack : Stack
         };
 
         var endpoints = functions
-            .Where(x => 
-                !x.Contains("Signalling") && 
+            .Where(x =>
+                !x.Contains("Signalling") &&
                 !x.Contains("Infrastructure") &&
                 !x.Contains("VerifyEmail")
             ).ToArray();
@@ -39,6 +39,12 @@ public class AmazonStack : Stack
                 "QueueUrl", communicationConstruct.Queue.QueueUrl
             }
         });
+
+        new RestfullBackendConstruct(this, "RestfullBackend", new string[] { 
+            "Flyingdarts.RestfullBackend.User.Profile.Get", 
+            "Flyingdarts.RestfullBackend.User.Stats.X01.Get",
+        });
+
         //new AmplifyConstruct(this, "Frontend");
         new AuthConstruct(this, "OIDC", functions);
 
