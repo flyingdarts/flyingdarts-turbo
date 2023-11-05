@@ -127,9 +127,6 @@ export class X01Component implements OnInit {
       const newScore = score - this.input.Sum;
 
       if (newScore >= 0) {
-        if (newScore == 0) {
-          var playerSets
-        }
         this.x01ApiService.score(
           this.gameId!,
           this.clientId!,

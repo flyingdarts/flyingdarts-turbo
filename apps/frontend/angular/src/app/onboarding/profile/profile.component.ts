@@ -43,7 +43,8 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     public authenticator: AuthenticatorService,
     private userProfileStateService: UserProfileStateService,
-    private appStore: AppStore) {
+    private appStore: AppStore,
+    private authService: AmplifyAuthService,) {
 
     this.profileForm = new FormGroup({
       userName: new FormControl('', Validators.required),
@@ -56,12 +57,14 @@ export class ProfileComponent implements OnInit {
       this.router.navigate(['/', 'lobby'])
     }
   }
-  submitForm() {
+  async submitForm() {
     if (this.profileForm.valid) {
       this.appStore.patchProfileState({
         UserName: this.profileForm.value.userName,
         Email: this.profileForm.value.email,
-        Country: this.profileForm.value.country
+        Country: this.profileForm.value.country,
+        CognitoUserId: await this.authService.getCognitoUserId(),
+        CognitoUserName: await this.authService.getCognitoName(),
       });
       this.router.navigate(['/', 'onboarding', { outlets: { 'onboarding-outlet': ['camera'] } }])
     }

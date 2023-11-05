@@ -52,17 +52,13 @@ export class ProfileComponent implements OnInit {
   public loadingSubtitle: string = "One moment please.";
 
   ngOnInit() {
-    this.initForm(this.userProfileService.currentUserProfileDetails)
-  }
-
-  private initForm(profile: UserProfileDetails) {
+    var profile = this.userProfileService.currentUserProfileDetails;
     this.profileForm = this.formBuilder.group({
       userName: profile.UserName || '',
       country: profile.Country || '',
       email: profile.Email || '',
     });
   }
-
   updateProfile() {
     if (this.profileForm.valid) {
       this.loadingTitle = "Updating your profile";
