@@ -1,6 +1,6 @@
 {
   "name": "web-socket-frontend",
-  "version": "1.1.9",
+  "version": "1.1.13",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,7 +10,8 @@
     "e2e": "tsc -p e2e/tsconfig.json && wdio run ./wdio.conf.js",
     "test": "ng test",
     "wdio": "wdio run ./wdio.conf.ts",
-    "wdio-browserstack": "npx wdio webdriverio.conf.js"
+    "wdio-browserstack": "npx wdio webdriverio.conf.js",
+    "build:prod": "ng build"
   },
   "private": true,
   "dependencies": {

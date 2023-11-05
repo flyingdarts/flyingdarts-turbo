@@ -1,13 +1,23 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-      "build": {
-          "outputs": ["**/*/bin/Debug/net6.0/**", "**/*/obj/Debug/net6.0/**"],
-          "cache": true
-      },
-      "build:prod": {
-          "outputs": ["**/*/bin/Release/net6.0/**", "**/*/obj/Release/net6.0/**"],
-          "cache": true
-      }
+    "build": {
+      "outputs": [ "bin/Debug/net6.0/**", "obj/Debug/net6.0/**" ],
+      "cache": true
+    },
+    "build:prod": {
+      "outputs": [ "bin/Release/net6.0/**", "obj/Release/net6.0/**" ],
+      "cache": true
+    },
+    "deploy": {
+      "steps": [
+        {
+          "name": "deploy-lambda",
+          "command": "npm run deploy",
+          "cwd": "apps/**/*",
+          "dependsOn": "build"
+        }
+      ]
+    }
   }
 }

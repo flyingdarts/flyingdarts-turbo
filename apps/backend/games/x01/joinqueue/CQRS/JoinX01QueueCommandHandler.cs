@@ -31,8 +31,8 @@ public class JoinX01QueueCommandHandler : IRequestHandler<JoinX01QueueCommand, A
 
         var qualifyingGames = await GetQualifyingGamesAsync(cancellationToken);
 
-        var game = qualifyingGames.Any() 
-            ? qualifyingGames.First() 
+        var game = qualifyingGames.Any()
+            ? qualifyingGames.First()
             : await CreateGame(cancellationToken);
 
         socketMessage.Message!.GameId = game.GameId.ToString();
@@ -43,18 +43,27 @@ public class JoinX01QueueCommandHandler : IRequestHandler<JoinX01QueueCommand, A
             Body = JsonSerializer.Serialize(socketMessage)
         };
     }
+
     private async Task<List<Game>> GetQualifyingGamesAsync(CancellationToken cancellationToken)
     {
-        var games = await _dbContext.FromQueryAsync<Game>(X01GamesQueryConfig(), _applicationOptions.ToOperationConfig())
+        var qualifyingGames = await _dbContext.FromQueryAsync<Game>(X01GamesQueryConfig(), _applicationOptions.ToOperationConfig())
             .GetRemainingAsync(cancellationToken);
 
-        return games.Where(x => x.Status == GameStatus.Qualifying).ToList();
+        var groupedGames = qualifyingGames.GroupBy(x => x.GameId);
+
+        var qualifyingGamesToReturn = groupedGames
+            .Where(group => group.Count() == 1) // Filter out groups with more than one item
+            .Select(group => group.Single()) // Select the single item in each group
+            .ToList();
+
+        return qualifyingGamesToReturn;
     }
+
 
     private async Task<Game> CreateGame(CancellationToken cancellationToken)
     {
         var game = Game.Create(2, X01GameSettings.Create(1, 3));
-        var gameWrite = _dbContext.CreateBatchWrite<Game>(_applicationOptions.ToOperationConfig()); 
+        var gameWrite = _dbContext.CreateBatchWrite<Game>(_applicationOptions.ToOperationConfig());
         gameWrite.AddPutItem(game);
 
         await gameWrite.ExecuteAsync(cancellationToken);

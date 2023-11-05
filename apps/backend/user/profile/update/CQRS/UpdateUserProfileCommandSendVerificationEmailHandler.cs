@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Amazon.Lambda;
 using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Model;
 using Amazon.SQS;
 using Amazon.SQS.Model;
 using MediatR.Pipeline;

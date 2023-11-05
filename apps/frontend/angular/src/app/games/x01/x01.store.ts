@@ -15,7 +15,7 @@ export class X01Store extends ComponentStore<X01State> {
   private readonly loading$: Observable<boolean> = this.select(state => state.loading);
   private readonly error$: Observable<string> = this.select(state => state.error);
   private readonly currentPlayer$: Observable<string> = this.select(state => state.currentPlayer);
-
+  private readonly winningPlayer$: Observable<string | null> = this.select(state => state.winningPlayer);
   readonly vm$ = this.select(
     this.currentInput$,
     this.player$,
@@ -23,13 +23,15 @@ export class X01Store extends ComponentStore<X01State> {
     this.loading$,
     this.error$,
     this.currentPlayer$,
-    (currentInput, player, opponent, loading, error, currentPlayer) => ({
+    this.winningPlayer$,
+    (currentInput, player, opponent, loading, error, currentPlayer, winningPlayer) => ({
       currentInput,
       player,
       opponent,
       loading,
       error,
-      currentPlayer
+      currentPlayer,
+      winningPlayer
     }),
     { debounce: true }
   )

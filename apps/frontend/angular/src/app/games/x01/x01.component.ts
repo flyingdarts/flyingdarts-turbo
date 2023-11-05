@@ -78,9 +78,9 @@ export class X01Component implements OnInit {
       }
     });
 
-    this.jitsiService.namePrincipalRoom = `Flyingdarts ${this.gameId!}`;
-    this.jitsiService.moveRoom(this.jitsiService.namePrincipalRoom, false);
-    this.jitsiService.user.setName(this.userProfileService.currentUserProfileDetails.UserName!);
+    // this.jitsiService.namePrincipalRoom = `Flyingdarts ${this.gameId!}`;
+    // this.jitsiService.moveRoom(this.jitsiService.namePrincipalRoom, false);
+    // this.jitsiService.user.setName(this.userProfileService.currentUserProfileDetails.UserName!);
 
   }
   private handleMetadata(message: any) {

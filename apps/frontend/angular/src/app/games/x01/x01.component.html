@@ -94,7 +94,7 @@
                                     <div *ngIf="(vm$ | async)?.currentPlayer == clientId! && (vm$ | async)?.currentPlayer != null" class="loading-animation">
                                         <ng-lottie [options]="currentPlayerAnimation"></ng-lottie>
                                     </div>
-                                    <div *ngIf="(vm$ | async)?.winningPlayer == clientId!">
+                                    <div *ngIf="(vm$ | async)?.winningPlayer != null && (vm$ | async)?.winningPlayer == clientId!">
                                         <i class='fa-solid fa-crown'></i>
                                     </div>
                                 </td>
@@ -116,7 +116,7 @@
                                     <div *ngIf="(vm$ | async)?.currentPlayer != clientId! && (vm$ | async)?.currentPlayer != null" class="loading-animation">
                                         <ng-lottie [options]="currentPlayerAnimation"></ng-lottie>
                                     </div>
-                                    <div *ngIf="(vm$ | async)?.winningPlayer != clientId!">
+                                    <div *ngIf="(vm$ | async)?.winningPlayer != null && (vm$ | async)?.winningPlayer != clientId!">
                                         <i class='fa-solid fa-crown'></i>
                                     </div>
                                 </td>

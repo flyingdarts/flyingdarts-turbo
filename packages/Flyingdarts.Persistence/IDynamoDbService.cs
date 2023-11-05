@@ -2,7 +2,7 @@
 
 public interface IDynamoDbService
 {
-    Task<Game> ReadGameAsync(long gameId, CancellationToken cancellationToken);
+    Task<List<Game>> ReadGameAsync(long gameId, CancellationToken cancellationToken);
     Task<List<GamePlayer>> ReadGamePlayersAsync(long gameId, CancellationToken cancellationToken);
     Task<List<GameDart>> ReadGameDartsAsync(long gameId, CancellationToken cancellationToken);
     Task<List<User>> ReadUsersAsync(string[] userIds, CancellationToken cancellationToken);

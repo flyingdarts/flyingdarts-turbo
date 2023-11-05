@@ -14,26 +14,20 @@
     <RepositoryUrl>https://github.com/flyingdarts/Flyingdarts.Persistence.git</RepositoryUrl>
     <LicenseFile>LICENSE.md</LicenseFile>
     <PackageTags>Flyingdarts Shared</PackageTags>
-    <PackageIcon>icon.png</PackageIcon>
     <PackageReleaseNotes>Added BadRequestException class</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.11" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.12" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </Content>
     <Content Include="README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </Content>
     <Content Include="LICENSE.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </Content>

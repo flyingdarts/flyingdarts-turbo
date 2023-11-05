@@ -2,11 +2,12 @@ using Flyingdarts.Shared;
 namespace Flyingdarts.Persistence;
 public record DynamoDbService(IDynamoDBContext DbContext, IOptions<ApplicationOptions> ApplicationOptions) : IDynamoDbService
 {
-    public async Task<Game> ReadGameAsync(long gameId, CancellationToken cancellationToken)
+    public async Task<List<Game>> ReadGameAsync(long gameId, CancellationToken cancellationToken)
     {
         var games = await DbContext.FromQueryAsync<Game>(QueryGameConfig(gameId.ToString()), ApplicationOptions.Value.ToOperationConfig())
             .GetRemainingAsync(cancellationToken);
-        return games.Single();
+        
+        return games;
     }
 
     public async Task<List<GamePlayer>> ReadGamePlayersAsync(long gameId, CancellationToken cancellationToken)

@@ -5,7 +5,7 @@ export interface X01State {
   loading: boolean;
   error: string;
   currentPlayer: string;
-  winningPlayer: string;
+  winningPlayer: string | null;
 }
 
 
@@ -22,7 +22,7 @@ export interface X01PlayerState {
 export const initialX01State: X01State = {
   currentInput: '',
   currentPlayer: '',
-  winningPlayer: '',
+  winningPlayer: null,
   loading: false,
   error: '',
   player: {

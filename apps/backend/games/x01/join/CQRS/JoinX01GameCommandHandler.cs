@@ -26,7 +26,7 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
 
         await UpdateConnectionId(socketMessage, cancellationToken);
 
-        request.Game = await DynamoDbService.ReadGameAsync(long.Parse(request.GameId), cancellationToken);
+        request.Game = (await DynamoDbService.ReadGameAsync(long.Parse(request.GameId), cancellationToken)).OrderByDescending(x => x.CreationDate).First();
 
         if (request.Game is not null)
         {
@@ -41,44 +41,28 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
         {
             await UpdateGameStatus(request.Game, GameStatus.Started, cancellationToken);
         }
-        
+
         request.Users = await DynamoDbService.ReadUsersAsync(request.Players.Select(x => x.PlayerId).ToArray(), cancellationToken);
         request.Darts = await DynamoDbService.ReadGameDartsAsync(long.Parse(request.GameId), cancellationToken);
-        
-        socketMessage.Metadata = CreateMetaData(request.Game, request.Darts, request.Players, request.Users);
-        
-        if (HasAnyPlayerWon(request.Darts, request.Game!.X01.Legs, request.Game.X01.Sets,request.Players.Select(x => x.PlayerId.ToString()).ToList()))
+
+        socketMessage.Metadata = GameHelper.CreateMetaData(request.Game, request.Darts, request.Players, request.Users);
+
+        if (GameHelper.HasAnyPlayerWon(request.Darts, request.Game!.X01.Legs, request.Game.X01.Sets, request.Players.Select(x => x.PlayerId.ToString()).ToList()))
         {
             socketMessage.Metadata!["NextPlayer"] = null;
-            socketMessage.Metadata!["WinningPlayer"] = GetWinningPlayer(request.Darts, request.Game.X01.Legs,
+            socketMessage.Metadata!["WinningPlayer"] = GameHelper.GetWinningPlayer(request.Darts, request.Game.X01.Legs,
                 request.Game.X01.Sets, request.Players.Select(x => x.PlayerId.ToString()).ToList());
 
             request.Game.Status = GameStatus.Finished;
 
             await DynamoDbService.WriteGameAsync(request.Game, cancellationToken);
         }
-        
+
         await NotifyRoomAsync(socketMessage, cancellationToken);
 
         return new APIGatewayProxyResponse { StatusCode = 200, Body = JsonSerializer.Serialize(socketMessage) };
     }
-    public static string GetWinningPlayer(List<GameDart> darts, int legsRequired, int bestOfSets, List<string> playerIds)
-    {
-        foreach (var playerId in playerIds)
-        {
-            int setsWonByPlayer = CalculateSets(darts, playerId, legsRequired);
-            int setsRequiredToWin = (bestOfSets + 1) / 2;
 
-            // If the player has won the required number of sets in a "best of" scenario, they've won the game.
-            if (setsWonByPlayer >= setsRequiredToWin)
-            {
-                return playerId;
-            }
-        }
-
-        // If no player has won enough sets, return null to indicate that the game is still ongoing.
-        return null;
-    }
     public async Task UpdateConnectionId(SocketMessage<JoinX01GameCommand> message, CancellationToken cancellationToken)
     {
         var user = await DynamoDbService.ReadUserAsync(message.Message!.PlayerId, cancellationToken);
@@ -115,8 +99,29 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
         game.Status = gameStatus;
         game.LSI1 = $"{gameStatus}#{game.GameId}";
         game.SortKey = $"{game.GameId}#{gameStatus}";
-        
+
         await DynamoDbService.WriteGameAsync(game, cancellationToken);
+    }
+}
+
+public class GameHelper
+{
+    public static string GetWinningPlayer(List<GameDart> darts, int legsRequired, int bestOfSets, List<string> playerIds)
+    {
+        foreach (var playerId in playerIds)
+        {
+            int setsWonByPlayer = CalculateSets(darts, playerId, legsRequired);
+            int setsRequiredToWin = (bestOfSets + 1) / 2;
+
+            // If the player has won the required number of sets in a "best of" scenario, they've won the game.
+            if (setsWonByPlayer >= setsRequiredToWin)
+            {
+                return playerId;
+            }
+        }
+
+        // If no player has won enough sets, return null to indicate that the game is still ongoing.
+        return null;
     }
     public static Dictionary<string, object> CreateMetaData(Game game, List<GameDart> darts, List<GamePlayer> players, List<User> users)
     {
@@ -156,7 +161,7 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
                         Score = x.Score,
                         GameScore = x.GameScore,
                         Set = x.Set,
-                        Leg= x.Leg,
+                        Leg = x.Leg,
                         CreatedAt = x.CreatedAt.Ticks
                     })
                     .ToList();
@@ -177,10 +182,10 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
                     Sets = CalculateSets(darts!, x.PlayerId, data.Game.X01.Legs).ToString()
                 };
             }).OrderBy(x => x.CreatedAt);
-            
+
             data.Players = orderedPlayers;
-        }       
-        
+        }
+
         DetermineNextPlayer(data);
 
         try
@@ -191,8 +196,9 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
 
             data.Darts[data.Darts.Keys.Last()] =
                 data.Darts[data.Darts.Keys.Last()].Where(x => x.CreatedAt > lastFinisher.CreatedAt.Ticks).ToList();
-        } catch { }
-        
+        }
+        catch { }
+
         return data.toDictionary();
     }
     public static int CalculateLegs(List<GameDart> darts, string playerId)
@@ -237,16 +243,6 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
         }
 
         return totalSetsWon;
-    }
-
-    public static bool HasPlayerWon(List<GameDart> darts, string playerId, int legsRequired, int bestOfSets)
-    {
-        int setsWon = CalculateSets(darts, playerId, legsRequired);
-    
-        int setsRequiredToWin = (bestOfSets + 1) / 2;
-    
-        // If the player has won the required number of sets in a "best of" scenario, they've won the game.
-        return setsWon >= setsRequiredToWin;
     }
     public static bool HasAnyPlayerWon(List<GameDart> darts, int legsRequired, int bestOfSets, List<string> playerIds)
     {

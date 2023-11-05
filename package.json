@@ -2,8 +2,7 @@
 	"name": "flyingdarts",
 	"workspaces": [
 		"packages/**",
-		"apps/backend/**",
-		"apps/tools/**"
+		"apps/**/**"
 	],
 	"dependencies": {
 		"turbo": "latest"

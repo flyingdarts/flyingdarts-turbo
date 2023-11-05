@@ -14,30 +14,26 @@
     <RepositoryUrl>https://github.com/flyingdarts/Flyingdarts.Persistence.git</RepositoryUrl>
     <LicenseFile>LICENSE.md</LicenseFile>
     <PackageTags>Flyingdarts Persistence DynamoDb</PackageTags>
-    <PackageIcon>icon.png</PackageIcon>
     <PackageReleaseNotes>PlayerId is now behaves like GameId, it is == the CreatedAt = DateTime.UtcNow.Ticks</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.11" />
-    <PackageReference Include="Flyingdarts.Shared" Version="1.0.4" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.203.12" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0-rc.2.23479.6" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="icon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </Content>
     <Content Include="README.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </Content>
     <Content Include="LICENSE.md">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </Content>
   </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
+	</ItemGroup>
 </Project>

@@ -410,3 +410,4 @@ amplifytools.xcconfig
 **/bin/*
 **/obj/*
 .turbo
+**/*/package.json
