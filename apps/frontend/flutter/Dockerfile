@@ -1,5 +1,5 @@
 # Use an official Nginx image as the base image
-FROM nginx:1.25.3-alpine
+FROM nginx:1.25.3-alpine-slim
 
 # Set the working directory to /app
 WORKDIR /app
