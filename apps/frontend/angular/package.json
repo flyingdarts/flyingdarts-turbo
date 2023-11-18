@@ -1,17 +1,18 @@
 {
   "name": "web-socket-frontend",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
     "serve": "npm run start",
     "e2e": "tsc -p e2e/tsconfig.json && wdio run ./wdio.conf.js",
     "test": "ng test",
     "wdio": "wdio run ./wdio.conf.ts",
     "wdio-browserstack": "npx wdio webdriverio.conf.js",
-    "build:prod": "ng build"
+    "build:prod": "ng build",
+    "deploy": "git push -u origin main"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +39,7 @@
     "lottie-web": "^5.10.0",
     "ngx-lottie": "^9.1.0",
     "ngx-webcam": "^0.4.1",
+    "plotly.js-dist-min": "^2.27.1",
     "properties-reader": "^2.2.0",
     "rxjs": "~7.5.0",
     "zone.js": "~0.11.4"

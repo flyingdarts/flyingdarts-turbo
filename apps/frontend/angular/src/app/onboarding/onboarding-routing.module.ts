@@ -4,6 +4,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { CameraComponent } from './camera/camera.component';
 import { OnboardingRootComponent } from './onboarding-root/onboarding-root.component';
 import { ProfileResolver } from '../resolvers/profile.resolver';
+import { OnboardingGuard } from './onboarding.guard';
 
 const routes: Routes = [
   {
@@ -14,6 +15,7 @@ const routes: Routes = [
         path: "profile",
         component: ProfileComponent,
         outlet: "onboarding-outlet",
+        canActivate: [OnboardingGuard]
       },
       {
         path: "camera",

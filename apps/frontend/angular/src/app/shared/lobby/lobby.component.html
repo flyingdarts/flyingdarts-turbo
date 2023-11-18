@@ -3,17 +3,90 @@
         <div class="card-body">
             <div class="container-fluid px-0 h-100">
                 <div class="flyingdarts-login-container d-flex">
-                    <div class="col-sm-12 col-md-12 col-lg-4 p-0 flyingdarts-mobile-container">
-                        <div *ngIf="(loading$ | async)" class="container-auth h-100">
+                    <div class="col-sm-12 col-md-6 col-lg-2 p-0 flyingdarts-mobile-container">
+                        <div *ngIf="(loading$ | async)" class="container-auth h-100 w-100">
                             <app-loading></app-loading>
                         </div>
-                        <div *ngIf="!(loading$ | async)" class=" container-auth h-100">
-                            <div class="form-group">
-                                <h1 class="fw-bold my-sign-in-header">Play with friends</h1>
+                        <div *ngIf="!(loading$ | async)" class="container-auth h-100 w-100">
+                            <div class="form-group lobby-card-container">
+                                <div class="lobby-card-overlay w-100 h-100" [class.lobby-card-overlay-hidden]="!shouldShowFriendSettings">
+                                    <ul class="list-inline d-flex justify-content-between mt-3">
+                                        <li class="list-inline-item">
+                                            <a (click)="openFriendSettings()">
+                                                <i class="material-icons">close</i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <h1 class="fw-bold my-sign-in-header">configure<br>game<br><h6>best of sets (1) legs (3)</h6></h1>
+                                    <div class="game-input">
+                                        <div class="qty mt-5">
+                                            <span class="count title">sets </span>
+                                            <span class="minus bg-dark">-</span>
+                                            <input type="number" class="count" name="qty" value="1">
+                                            <span class="plus bg-dark">+</span>
+                                        </div>
+                                        <div class="qty mt-5">
+                                            <span class="count title">legs </span>
+                                            <span class="minus bg-dark">-</span>
+                                            <input type="number" class="count" name="qty" value="1">
+                                            <span class="plus bg-dark">+</span>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <div class="form-check">
+                                        <!-- <input class="form-control room-number-input" placeholder="Enter room number"
+                                            type="text" value="" id="roomNumber" checked> -->
+                                        <button id="gameWithFriendsButton" class="form-control create-room-button"
+                                            (click)="joinX01Queue()">save settings</button>
+                                    </div>
+                                </div>
+                                <ul class="list-inline d-flex justify-content-between mt-3">
+                                    <li class="list-inline-item">
+                                        <a (click)="openFriendSettings()">
+                                            <i class="material-icons">settings</i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a>
+                                            <i class="material-icons">question_mark</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <h1 class="fw-bold my-sign-in-header">invite<br>a friend<br>501<br><h6>best of sets (1) legs (3)</h6></h1>
                                 <div class="form-check">
                                     <!-- <input class="form-control room-number-input" placeholder="Enter room number"
                                         type="text" value="" id="roomNumber" checked> -->
-                                    <button id="gameWithFriendsButton" class="form-control create-room-button" (click)="joinX01Queue()">Create room</button>
+                                    <button id="gameWithFriendsButton" class="form-control create-room-button"
+                                        (click)="joinX01Queue()">create room</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-2 p-0 flyingdarts-mobile-container">
+                        <div *ngIf="(loading$ | async)" class="container-auth h-100 w-100">
+                            <app-loading></app-loading>
+                        </div>
+                        <div *ngIf="!(loading$ | async)" class=" container-auth h-100 w-100">
+                            <div class="form-group lobby-card-container">
+                                <ul class="list-inline d-flex justify-content-between mt-3">
+                                    <li class="list-inline-item">
+                                        <a href="#" style="display:none;">
+                                            <i class="material-icons">settings</i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a>
+                                            <i class="material-icons">question_mark</i>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <h1 class="fw-bold my-sign-in-header">play<br>ranked<br>501<br><h6>best of sets (1) legs (3)</h6></h1>
+                                <div class="form-check">
+                                    <!-- <input class="form-control room-number-input" placeholder="Enter room number"
+                                        type="text" value="" id="roomNumber" checked> -->
+                                    <button id="gameWithFriendsButton" class="form-control create-room-button"
+                                        (click)="joinX01Queue()">play now!</button>
                                 </div>
                             </div>
                         </div>

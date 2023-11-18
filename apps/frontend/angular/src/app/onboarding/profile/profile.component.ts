@@ -55,10 +55,15 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     if (!isNullOrUndefined(this.userProfileStateService.currentUserProfileDetails)) {
       this.router.navigate(['/', 'lobby'])
+    } else {
+      this.appStore.setLoading(false);
     }
   }
   async submitForm() {
     if (this.profileForm.valid) {
+      var userId = await this.authService.getCognitoUserId();
+      var userName = await this.authService.getCognitoName();
+      console.log(`patching profile state for user ${userId}:${userName}`);
       this.appStore.patchProfileState({
         UserName: this.profileForm.value.userName,
         Email: this.profileForm.value.email,

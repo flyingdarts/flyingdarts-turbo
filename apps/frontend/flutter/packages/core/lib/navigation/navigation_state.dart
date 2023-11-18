@@ -20,7 +20,7 @@ class NavigationState {
       selectedPage ?? this.selectedPage,
       pages ?? this.pages,
       isLoading ?? this.isLoading,
-      kDebugMode ? true : isLoggedIn ?? this.isLoggedIn,
+      isLoggedIn ?? this.isLoggedIn,
     );
   }
 

@@ -72,12 +72,14 @@ dependencies:
     #   path: packages/widgetbook
 
   alchemist: ^0.6.1
+
   amplify_api:
   amplify_auth_cognito:
   amplify_authenticator:
   amplify_datastore:
   amplify_flutter:
   amplify_storage_s3:
+  
   go_router:
   loading_animation_widget:
   flutter_svg: ^2.0.7

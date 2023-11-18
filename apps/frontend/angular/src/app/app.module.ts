@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AmplifyAuthService } from './services/amplify-auth.service';
@@ -21,6 +21,7 @@ import { AppStore } from './app.store';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth.effects';
 import { StoreModule } from '@ngrx/store';
+import { ApiClient } from './services/api.client';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { StoreModule } from '@ngrx/store';
     SharedModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([AuthEffects]),
+    HttpClientModule,
   ],
   providers: [
     {
@@ -49,6 +51,7 @@ import { StoreModule } from '@ngrx/store';
     UserProfileApiService,
     X01ApiService,
     provideComponentStore(AppStore),
+    ApiClient
   ],
   bootstrap: [AppComponent],
 })

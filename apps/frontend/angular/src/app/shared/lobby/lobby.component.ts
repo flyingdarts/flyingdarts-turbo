@@ -70,6 +70,11 @@ export class LobbyComponent implements OnInit {
     this.x01ApiService.joinQueue(this.clientId);
   }
 
+  public shouldShowFriendSettings: boolean = false;
+
+  public openFriendSettings() {
+    this.shouldShowFriendSettings = !this.shouldShowFriendSettings;
+  }
   public sendMessage() {
     console.log("Sending message", {
       date: new Date(),

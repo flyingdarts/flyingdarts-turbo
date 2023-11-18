@@ -40,10 +40,7 @@ public class AmazonStack : Stack
             }
         });
 
-        new RestfullBackendConstruct(this, "RestfullBackend", new string[] { 
-            "Flyingdarts.RestfullBackend.User.Profile.Get", 
-            "Flyingdarts.RestfullBackend.User.Stats.X01.Get",
-        });
+        new RestfullBackendConstruct(this, "RestfullBackend");
 
         //new AmplifyConstruct(this, "Frontend");
         new AuthConstruct(this, "OIDC", functions);

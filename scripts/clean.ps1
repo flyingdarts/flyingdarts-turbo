@@ -7,14 +7,14 @@ function Remove-BinObjFolders {
         [string] $folderPath
     )
 
-    # Check if the folder is 'bin' or 'obj'
-    if ($folderPath -match "\\bin$|\\obj$") {
+    # Check if the folder is 'bin' or 'obj' or '.turbo'
+    if ($folderPath -match "\\bin$|\\obj$|\\.turbo") {
         Write-Host "Removing folder: $folderPath"
         Remove-Item -Path $folderPath -Force -Recurse
     }
 }
 
-# Recursively find and remove bin and obj folders only in 'apps' and 'packages' folders
+# Recursively find and remove bin and obj and .turbo folders only in 'apps' and 'packages' folders
 Get-ChildItem -Path $currentDirectory -Directory -Recurse | ForEach-Object {
     $folderPath = $_.FullName
     $parentFolder = (Split-Path -Path $folderPath -Leaf)
@@ -24,4 +24,4 @@ Get-ChildItem -Path $currentDirectory -Directory -Recurse | ForEach-Object {
     }
 }
 
-Write-Host "All bin and obj folders removed in 'apps' and 'packages' folders."
+Write-Host "All bin, obj and .turbo folders removed in 'apps' and 'packages' folders."

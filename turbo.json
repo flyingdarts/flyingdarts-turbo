@@ -2,22 +2,31 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "outputs": [ "bin/Debug/net6.0/**", "obj/Debug/net6.0/**" ],
-      "cache": true
+      "outputs": [
+        "bin/Debug/net6.0/**",
+        "obj/Debug/net6.0/**"
+      ]
     },
     "build:prod": {
-      "outputs": [ "bin/Release/net6.0/**", "obj/Release/net6.0/**" ],
-      "cache": true
+      "outputs": [
+        "bin/Release/net6.0/**",
+        "obj/Release/net6.0/**"
+      ]
     },
     "deploy": {
-      "steps": [
-        {
-          "name": "deploy-lambda",
-          "command": "npm run deploy",
-          "cwd": "apps/**/*",
-          "dependsOn": "build"
-        }
+      "dependsOn": [
+        "build"
       ]
+    },
+    "serve": {
+      "outputMode": "full",
+      "persistent": true
+    },
+    "dockerize": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": false
     }
   }
 }

@@ -12,5 +12,5 @@
   "function-memory-size": 256,
   "function-timeout": 30,
   "function-handler": "Flyingdarts.Backend.User.Profile.Get",
-  "msbuild-parameters": "--self-contained true"
+  "function-url-enable": true
 }

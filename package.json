@@ -2,10 +2,23 @@
 	"name": "flyingdarts",
 	"workspaces": [
 		"packages/**",
-		"apps/**/**"
+		"apps/backend/**",
+		"apps/frontend/**"
 	],
 	"dependencies": {
 		"turbo": "latest"
 	},
-	"packageManager": "npm@9.5.0"
+	"packageManager": "npm@9.5.0",
+	"scripts": {
+		"generate-files": "turbo run generate --log-order=grouped --filter=./apps/frontend/flutter/**",
+		
+		"build-packages": "turbo run build --log-order=grouped --filter=./packages/**",
+		"build-backend": "turbo run build --log-order=grouped --filter=./apps/backend/**",
+		"build-frontend": "turbo run build --log-order=grouped --filter=./apps/frontend/**",
+		
+		"serve-angular": "turbo run serve --log-order=stream --filter=./apps/frontend/angular",
+		"serve-flutter": "turbo run serve --log-order=stream --filter=./apps/frontend/flutter",
+
+		"dockerize": "turbo run dockerize --log-order=grouped --filter=flyingdarts.frontend.flutter..."
+	}
 }
