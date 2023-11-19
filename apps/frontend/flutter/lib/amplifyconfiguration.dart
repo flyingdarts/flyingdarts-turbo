@@ -1,4 +1,4 @@
-const amplifyconfig = ''' {
+const amplifyconfig = '''{
     "UserAgent": "aws-amplify-cli/2.0",
     "Version": "1.0",
     "auth": {
@@ -29,8 +29,8 @@ const amplifyconfig = ''' {
                         "OAuth": {
                             "WebDomain": "nabzwdf7t9ey-staging.auth.eu-west-1.amazoncognito.com",
                             "AppClientId": "60sev9r9l9mrbo9iv5qt6902b2",
-                            "SignInRedirectURI": "https://flyingdarts.net/login,flyingdartscontrol://login",
-                            "SignOutRedirectURI": "https://flyingdarts.net/logout,flyingdartscontrol://logout",
+                            "SignInRedirectURI": "https://flyingdarts.net/login,https://localhost:8000/login",
+                            "SignOutRedirectURI": "https://flyingdarts.net/logout,https://localhost:8000/logout",
                             "Scopes": [
                                 "phone",
                                 "email",

@@ -1,5 +1,4 @@
-﻿
-namespace Flyingdarts.Infrastructure;
+﻿namespace Flyingdarts.Infrastructure.Constructs;
 
 public class AmazonStack : Stack
 {
@@ -39,8 +38,6 @@ public class AmazonStack : Stack
                 "QueueUrl", communicationConstruct.Queue.QueueUrl
             }
         });
-
-        new RestfullBackendConstruct(this, "RestfullBackend");
 
         //new AmplifyConstruct(this, "Frontend");
         new AuthConstruct(this, "OIDC", functions);

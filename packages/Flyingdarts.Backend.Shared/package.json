@@ -4,7 +4,8 @@
     "private": true,
     "scripts": {
         "build": "dotnet build -c Debug --no-dependencies",
-        "build:prod": "dotnet build -c Release --no-dependencies"
+        "build:prod": "dotnet build --configuration Release",
+        "publish": "dotnet nuget push 'bin/Release/Flyingdarts.Backend.Shared.*.nupkg' -k $Env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json --skip-duplicate"
     },
     "dependencies": {
         "flyingdarts.shared": "*",

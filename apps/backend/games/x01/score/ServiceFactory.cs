@@ -6,6 +6,7 @@ using Flyingdarts.Shared;
 using Microsoft.Extensions.Configuration;
 using Amazon.ApiGatewayManagementApi;
 using Flyingdarts.Persistence;
+using StackExchange.Redis;
 
 /// <summary>
 /// Factory class for creating the service provider.
@@ -29,6 +30,10 @@ public static class ServiceFactory
         // Configure AWS services.
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
         services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
+
+        // Setup Redis client
+        var redisConnectionString = configuration.GetAWSOptions("Redis");
+        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(System.Environment.GetEnvironmentVariable("Redis")));
 
         // Register application options.
         services.AddOptions<ApplicationOptions>();

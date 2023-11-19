@@ -1,4 +1,5 @@
 ﻿using Amazon.CDK;
+using Flyingdarts.Infrastructure.Constructs;
 
 namespace Flyingdarts.Infrastructure
 {
@@ -16,6 +17,7 @@ namespace Flyingdarts.Infrastructure
                     Region = System.Environment.GetEnvironmentVariable("AWS_REGION")
                 }
             });
+
             app.Synth();
         }
     }

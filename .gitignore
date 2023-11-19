@@ -412,3 +412,6 @@ amplifytools.xcconfig
 .turbo
 **/*/package.json
 **/node_modules/*
+apps/frontend/flutter/server.py
+apps/frontend/flutter/localhost.crt
+apps/frontend/flutter/localhost.key
