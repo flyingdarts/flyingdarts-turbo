@@ -30,10 +30,14 @@ public static class ServiceFactory
         // Configure AWS services.
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
         services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
-
+        
         // Setup Redis client
-        var redisConnectionString = configuration.GetAWSOptions("Redis");
-        services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(System.Environment.GetEnvironmentVariable("Redis")));
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = System.Environment.GetEnvironmentVariable("Redis");
+            // Additional configuration if needed
+        });
+        services.AddSingleton<IDatabase>(provider => provider.GetRequiredService<IConnectionMultiplexer>().GetDatabase());
 
         // Register application options.
         services.AddOptions<ApplicationOptions>();

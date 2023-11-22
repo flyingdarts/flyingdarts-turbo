@@ -25,6 +25,7 @@ public class InnerHandler
     public InnerHandler(ServiceProvider serviceProvider)
     {
         _mediator = serviceProvider.GetRequiredService<IMediator>();
+        
     }
 
     /// <summary>

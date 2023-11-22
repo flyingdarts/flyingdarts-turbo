@@ -1,0 +1,18 @@
+{
+	"name": "flyingdarts.frontend.flutter",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"build": "flutter build web",
+		"build:prod": "flutter --version",
+		"dockerize": "docker build -t flyingdarts-flutter-app:slim .",
+		"serve": "flutter run -d Chrome --web-hostname=127.0.0.1 --web-port=4100 --profile -v"
+	},
+	"dependencies": {
+		"flyingdarts.frontend.flutter.packages.core": "*",
+		"flyingdarts.frontend.flutter.packages.domain": "*",
+		"flyingdarts.frontend.flutter.packages.features": "*",
+		"flyingdarts.frontend.flutter.packages.internationalization": "*",
+		"flyingdarts.frontend.flutter.packages.shared": "*"
+	}
+}

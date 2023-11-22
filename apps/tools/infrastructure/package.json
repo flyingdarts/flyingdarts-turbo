@@ -1,0 +1,10 @@
+{
+  "name": "infrastructure",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "dotnet build -c Debug --no-dependencies",
+    "build:prod": "dotnet build -c Release --no-dependencies",
+    "deploy": "cdk deploy"
+  }
+}

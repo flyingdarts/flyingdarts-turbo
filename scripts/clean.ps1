@@ -3,25 +3,24 @@ $currentDirectory = Get-Location
 
 # Function to remove bin and obj folders
 function Remove-BinObjFolders {
-    param(
+    param (
         [string] $folderPath
     )
 
     # Check if the folder is 'bin' or 'obj' or '.turbo'
-    if ($folderPath -match "\\bin$|\\obj$|\\.turbo") {
+    if ($folderPath -match "\\bin$|\\obj$|\\node_modules$|\\.dart_tool|\\build|\\.angular") {
+        $confirmation = 'Y'  # Automatically answer Yes to the confirmation prompt
         Write-Host "Removing folder: $folderPath"
         Remove-Item -Path $folderPath -Force -Recurse
+        $folderPath
     }
 }
 
-# Recursively find and remove bin and obj and .turbo folders only in 'apps' and 'packages' folders
-Get-ChildItem -Path $currentDirectory -Directory -Recurse | ForEach-Object {
+# Recursively find and remove bin and obj and .turbo folders starting from the working directory
+$deletedFolders = Get-ChildItem -Path $currentDirectory -Directory -Recurse | ForEach-Object {
     $folderPath = $_.FullName
-    $parentFolder = (Split-Path -Path $folderPath -Leaf)
+    Remove-BinObjFolders -folderPath $folderPath
+} | Where-Object { $_ -ne $null }
 
-    if ($parentFolder -eq 'apps' -or $parentFolder -eq 'packages') {
-        Remove-BinObjFolders -folderPath $folderPath
-    }
-}
-
-Write-Host "All bin, obj and .turbo folders removed in 'apps' and 'packages' folders."
+Write-Host "All bin, obj, .turbo, node_modules, .angular and .dart_tool folders removed starting from the working directory."
+Write-Host "Deleted folder paths:`n$deletedFolders"

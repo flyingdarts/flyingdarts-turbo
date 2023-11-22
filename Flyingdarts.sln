@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Flyingdarts.Infrastructure"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7E862083-9C54-4D03-B228-022AA1A7C8F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Infrastructure", "apps\tools\Flyingdarts.Infrastructure\src\Flyingdarts.Infrastructure\Flyingdarts.Infrastructure.csproj", "{A022C3E1-8783-48E9-AF04-D2EC8B946EEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Infrastructure", "apps\tools\infrastructure\src\Flyingdarts.Infrastructure\Flyingdarts.Infrastructure.csproj", "{A022C3E1-8783-48E9-AF04-D2EC8B946EEB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "backend", "backend", "{16A97C07-5E35-4D7E-AD1E-2CFC09336A8C}"
 EndProject

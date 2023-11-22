@@ -1,14 +1,22 @@
-using Amazon.Runtime.Internal.Util;
-using Amazon.Runtime.Internal;
 using Flyingdarts.Shared;
 using System.Text.Json;
 using StackExchange.Redis;
-using static Flyingdarts.Shared.Lambdas.Functions.User;
-using System.Numerics;
+using Amazon.ElastiCache.Model;
+using Amazon.ElastiCache;
 
 namespace Flyingdarts.Persistence;
-public record DynamoDbService(IDynamoDBContext DbContext, IOptions<ApplicationOptions> ApplicationOptions, IDatabase Cache) : IDynamoDbService
+public class DynamoDbService : IDynamoDbService
 {
+    private IDatabase Cache;
+    private IDynamoDBContext DbContext;
+    private IOptions<ApplicationOptions> ApplicationOptions;
+    public DynamoDbService(IRedisService redisService, IDynamoDBContext dbContext, IOptions<ApplicationOptions> applicationOptions)
+    {
+        this.Cache = redisService.GetDatabase();
+        this.DbContext = dbContext;
+        this.ApplicationOptions = applicationOptions;
+    }
+
     public async Task<List<Game>> ReadGameAsync(long gameId, CancellationToken cancellationToken)
     {
         var cacheKey = $"Game#{gameId}";
@@ -17,10 +25,10 @@ public record DynamoDbService(IDynamoDBContext DbContext, IOptions<ApplicationOp
         {
             return JsonSerializer.Deserialize<List<Game>>(cachedValue);
         }
-        
+
         var games = await DbContext.FromQueryAsync<Game>(QueryGameConfig(gameId.ToString()), ApplicationOptions.Value.ToOperationConfig())
             .GetRemainingAsync(cancellationToken);
-        
+
         Cache.StringSet(cacheKey, JsonSerializer.Serialize(games), TimeSpan.FromMinutes(30));
 
         return games;
@@ -34,7 +42,7 @@ public record DynamoDbService(IDynamoDBContext DbContext, IOptions<ApplicationOp
         {
             return JsonSerializer.Deserialize<List<GamePlayer>>(cachedValue);
         }
-        
+
         var gamePlayers = await DbContext.FromQueryAsync<GamePlayer>(QueryGamePlayersConfig(gameId.ToString()), ApplicationOptions.Value.ToOperationConfig())
             .GetRemainingAsync(cancellationToken);
 
@@ -85,8 +93,8 @@ public record DynamoDbService(IDynamoDBContext DbContext, IOptions<ApplicationOp
     }
     public async Task WriteUserAsync(User user, CancellationToken cancellationToken)
     {
-        var cacheKey = $"Users#{user.UserId}";
-        var cachedValue = Cache.StringGet(cacheKey);
+        string cacheKey = $"Users#{user.UserId}";
+        string cachedValue = Cache!.StringGet(cacheKey)!;
         var users = new List<User>();
 
         if (!string.IsNullOrEmpty(cachedValue))

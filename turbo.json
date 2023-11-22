@@ -16,7 +16,8 @@
     "deploy": {
       "dependsOn": [
         "build"
-      ]
+      ],
+      "cache": false
     },
     "serve": {
       "outputMode": "full",

@@ -410,7 +410,6 @@ amplifytools.xcconfig
 **/bin/*
 **/obj/*
 .turbo
-**/*/package.json
 **/node_modules/*
 apps/frontend/flutter/server.py
 apps/frontend/flutter/localhost.crt

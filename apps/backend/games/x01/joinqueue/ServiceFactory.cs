@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using Flyingdarts.Shared;
 using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
+using System;
 
 /// <summary>
 /// Factory class for creating the service provider.
@@ -14,6 +16,20 @@ public static class ServiceFactory
     /// Creates and configures the service provider.
     /// </summary>
     /// <returns>The configured service provider.</returns>
+    private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+{
+    // Replace "your-elasticache-endpoint" and "your-elasticache-port" with your ElastiCache for Redis endpoint and port.
+    string cacheEndpoint = System.Environment.GetEnvironmentVariable("Redis");
+    return ConnectionMultiplexer.Connect(cacheEndpoint);
+});
+
+    public static ConnectionMultiplexer Connection
+    {
+        get
+        {
+            return lazyConnection.Value;
+        }
+    }
     public static ServiceProvider GetServiceProvider()
     {
         // Build the configuration using AWS Systems Manager Parameter Store.
@@ -27,6 +43,8 @@ public static class ServiceFactory
         // Configure AWS services.
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
         services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
+
+        services.AddTransient<IDatabase>(provider => Connection.GetDatabase());
 
         // Register application options.
         services.AddOptions<ApplicationOptions>();

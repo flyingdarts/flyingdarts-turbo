@@ -1,8 +1,4 @@
-﻿using Amazon.CDK.AWS.APIGateway;
-using Amazon.CDK.AWS.SQS;
-using Flyingdarts.Shared;
-
-public class BackendConstruct : Construct
+﻿public class BackendConstruct : Construct
 {
     private Table SignallingTable { get; }
     private WebSocketApi Api { get; }
@@ -104,6 +100,12 @@ public class BackendConstruct : Construct
                         {
                             "*"
                         }
+                    }),
+                    new PolicyStatement(new PolicyStatementProps{
+                        Actions = new [] { "elasticache:*", "ec2:*"},
+                        Resources = new [] {
+                            "*"
+                        }
                     })
                 }
             });
@@ -143,6 +145,7 @@ public class BackendConstruct : Construct
             lambda.AddEnvironment("LAMBDA_NET_SERIALIZER_DEBUG", "true");
             lambda.AddEnvironment("EnvironmentName", "Development");
             lambda.AddEnvironment("WebSocketApiUrl", Stage.Url);
+            lambda.AddEnvironment("Redis", System.Environment.GetEnvironmentVariable("ELASTICACHE_REDIS")!);
         }
 
         new CfnOutput(this, "WebSocketUrlCfnOutput", new CfnOutputProps
@@ -157,6 +160,7 @@ public class BackendConstruct : Construct
             StringValue = ApplicationTable.TableName, // Set the value for the parameter
             ParameterName = $"/{System.Environment.GetEnvironmentVariable("EnvironmentName")}/Application/DynamoDb"
         });
+        
     }
 
     private Function CreateSignallingFunction(string functionName, Table table)

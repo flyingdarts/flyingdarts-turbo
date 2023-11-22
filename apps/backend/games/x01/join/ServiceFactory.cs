@@ -6,7 +6,14 @@ using Flyingdarts.Shared;
 using Microsoft.Extensions.Configuration;
 using Amazon.ApiGatewayManagementApi;
 using Flyingdarts.Persistence;
-
+public static class CacheSetup {
+    public static IServiceCollection AddDatabase(this IServiceCollection services) {
+        return services.AddSingleton<IRedisService, RedisService>(sp =>
+        {
+            return new RedisService();
+        });
+    }
+}
 /// <summary>
 /// Factory class for creating the service provider.
 /// </summary>
@@ -16,8 +23,10 @@ public static class ServiceFactory
     /// Creates and configures the service provider.
     /// </summary>
     /// <returns>The configured service provider.</returns>
+
     public static ServiceProvider GetServiceProvider()
     {
+
         // Build the configuration using AWS Systems Manager Parameter Store.
         var configuration = new ConfigurationBuilder()
             .AddSystemsManager($"/{System.Environment.GetEnvironmentVariable("EnvironmentName")}/Application")
@@ -30,13 +39,15 @@ public static class ServiceFactory
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
         services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
 
+        services.AddDatabase();
+
         // Register application options.
         services.AddOptions<ApplicationOptions>();
 
         services.AddTransient<IDynamoDBContext, DynamoDBContext>();
 
         // Register GameService with Reads and Writes.
-        services.AddTransient<IDynamoDbService, DynamoDbService>();  
+        services.AddTransient<IDynamoDbService, DynamoDbService>();
 
         // Register validators from the assembly containing the JoinX01GameCommandValidator.
         services.AddValidatorsFromAssemblyContaining<JoinX01GameCommandValidator>();
