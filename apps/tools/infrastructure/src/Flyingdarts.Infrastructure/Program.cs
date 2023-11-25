@@ -1,5 +1,6 @@
 ﻿using Amazon.CDK;
 using Flyingdarts.Infrastructure.Constructs;
+using Flyingdarts.Infrastructure.Constructs.v2;
 
 namespace Flyingdarts.Infrastructure
 {
@@ -8,9 +9,20 @@ namespace Flyingdarts.Infrastructure
         public static void Main(string[] args)
         {
             var app = new App();
-            new AmazonStack(app, new StackProps
+
+            new FlyingdartsStack(app, "Development", new StackProps
             {
-                StackName = "Flyingdarts-Stack-Development",
+                StackName = $"FD-Stack-Development",
+                Env = new Environment
+                {
+                    Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"), 
+                    Region = System.Environment.GetEnvironmentVariable("AWS_REGION")
+                }
+            });
+            
+            new FlyingdartsStack(app, "Production", new StackProps
+            {
+                StackName = $"FD-Stack-Production",
                 Env = new Environment
                 {
                     Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"), 
