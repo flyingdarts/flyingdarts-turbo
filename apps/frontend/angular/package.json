@@ -11,7 +11,7 @@
     "test": "ng test",
     "wdio": "wdio run ./wdio.conf.ts",
     "wdio-browserstack": "npx wdio webdriverio.conf.js",
-    "build:prod": "ng build"
+    "build:prod": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
