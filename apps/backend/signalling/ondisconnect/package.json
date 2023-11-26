@@ -4,7 +4,9 @@
 	"private": true,
 	"scripts": {
 	  "build": "dotnet build -c Debug --no-dependencies",
-	  "build:prod": "dotnet build -c Release --no-dependencies"
+	  "build:prod": "dotnet build -c Release --no-dependencies",
+	  "deploy:development": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnDisconnect-Development  -frun dotnet6 -f net6.0 --region eu-west-1",
+	  "deploy:production": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnDisconnect-Production  -frun dotnet6 -f net6.0 --region eu-west-1"
 	},
 	"dependencies": {
 		"flyingdarts.shared": "*",

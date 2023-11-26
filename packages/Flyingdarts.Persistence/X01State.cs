@@ -1,7 +1,7 @@
 namespace Flyingdarts.Persistence
 {
     [DynamoDBTable("Flyingdarts-State-Table")]
-    public class X01State : IPrimaryKeyItem, ISortKeyItem, IAlternativeSortKeyItem
+    public class X01State : IPrimaryKeyItem, ISortKeyItem
     {
         [DynamoDBHashKey("PK")]
         public string PrimaryKey { get; set; }
@@ -18,13 +18,6 @@ namespace Flyingdarts.Persistence
         {
             PrimaryKey = $"X01State";
             SortKey = $"{GameId}";
-        }
-
-        public User()
-        {
-            CreatedAt = DateTime.UtcNow;
-            UserId = CreatedAt.Ticks.ToString();
-            PrimaryKey = Constants.User;
         }
 
         public static User Create(string cognitoUserId, string cognitoUserName, string connectionId, UserProfile userProfile)

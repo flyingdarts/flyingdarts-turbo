@@ -19,6 +19,12 @@
       ],
       "cache": false
     },
+    "deploy:development": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": false
+    },
     "serve": {
       "outputMode": "full",
       "persistent": true

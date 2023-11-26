@@ -5,7 +5,8 @@
 	"scripts": {
 	  "build": "dotnet build -c Debug --no-dependencies",
 	  "build:prod": "dotnet build -c Release --no-dependencies",
-	  "deploy": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-User-Profile-Get  -frun dotnet6 -f net6.0 --region eu-west-1"
+	  "deploy:development": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-User-Profile-Get-Development  -frun dotnet6 -f net6.0 --region eu-west-1",
+	  "deploy:production": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-User-Profile-Get-Production  -frun dotnet6 -f net6.0 --region eu-west-1"
 	},
 	"dependencies": {
 		"flyingdarts.shared": "*",

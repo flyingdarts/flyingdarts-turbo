@@ -9,33 +9,36 @@ public class FlyingdartsStack : Stack
     
     public FlyingdartsStack(Construct scope, string environment, IStackProps props) : base(scope, $"FD-Stack-{environment}", props)
     {
-        DynamoDbConstruct = new DynamoDbConstruct(scope, $"Tables-{environment}", environment);
-        QueueConstruct = new QueueConstruct(scope, $"Queues-{environment}", environment);
-        LambdaConstruct = new LambdaConstruct(scope, $"Lambdas-{environment}", environment, DynamoDbConstruct, QueueConstruct);
-        ApiGatewayConstruct = new ApiGatewayConstruct(scope, $"Apis-{environment}", environment, LambdaConstruct);
+        DynamoDbConstruct = new DynamoDbConstruct(this, $"Tables-{environment}", environment);
+        QueueConstruct = new QueueConstruct(this, $"Queues-{environment}", environment);
+        LambdaConstruct = new LambdaConstruct(this, $"Lambdas-{environment}", environment, DynamoDbConstruct, QueueConstruct);
+        ApiGatewayConstruct = new ApiGatewayConstruct(this, $"Apis-{environment}", environment, LambdaConstruct);
         
         new CfnOutput(this, $"WebSocket-Api-Url-Output-{environment}", new CfnOutputProps
         {
-            ExportName = "WebSocketApiUrl",
+            ExportName = $"WebSocketApiUrl{environment}",
             Value = ApiGatewayConstruct.WebSocketStage.Url
         });
         
         new StringParameter(this, $"SignallingTable-DynamoDb-StringParameter-{environment}", new StringParameterProps
         {
             StringValue = DynamoDbConstruct.SignallingTable.TableName,
-            ParameterName = $"/{environment}/Application/DynamoDb"
+            ParameterName = $"/{environment}/Application/DynamoDbTableName"
         });
         
         new StringParameter(this, $"ApplicationTable-DynamoDb-StringParameter-{environment}", new StringParameterProps
         {
             StringValue = DynamoDbConstruct.ApplicationTable.TableName,
-            ParameterName = $"/{environment}/Signalling/DynamoDb"
+            ParameterName = $"/{environment}/Signalling/DynamoDbTableName"
         });
 
         new StringParameter(this, $"X01StateTable-DynamoDb-StringParameter-{environment}", new StringParameterProps
         {
             StringValue = DynamoDbConstruct.X01StateTable.TableName,
-            ParameterName = $"/{environment}/X01State/DynamoDb"
+            ParameterName = $"/{environment}/X01State/DynamoDbTableName"
         });
+        
+        Aspects.Of(this).Add(new Tag("Environment", environment));
+        Aspects.Of(this).Add(new Tag("App", "FD-V1"));
     }
 }
