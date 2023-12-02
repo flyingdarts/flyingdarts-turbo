@@ -18,19 +18,19 @@
                                         </li>
                                     </ul>
                                     <div>
-                                        <h1 class="fw-bold my-sign-in-header">configure<br>game<br><h6>best of sets (1) legs (3)</h6></h1>
+                                        <h1 class="fw-bold my-sign-in-header">configure<br>game<br><h6>best of sets ({{ preferedX01Sets }}) legs ({{ preferedX01Legs }})</h6></h1>
                                     <div class="game-input">
                                         <div class="qty mt-5">
                                             <span class="count title">sets </span>
-                                            <span class="minus bg-dark">-</span>
-                                            <input type="number" class="count" name="qty" value="1">
-                                            <span class="plus bg-dark">+</span>
+                                            <button class="minus bg-dark" (click)="decreaseX01Sets()">-</button>
+                                            <input type="number" class="count" name="qty" value="{{ preferedX01Sets }}">
+                                            <button class="plus bg-dark" (click)="increaseX01Sets()">+</button>
                                         </div>
                                         <div class="qty mt-5">
                                             <span class="count title">legs </span>
-                                            <span class="minus bg-dark">-</span>
-                                            <input type="number" class="count" name="qty" value="1">
-                                            <span class="plus bg-dark">+</span>
+                                            <button class="minus bg-dark" (click)="decreaseX01Legs()">-</button>
+                                            <input type="number" class="count" name="qty" value="{{ preferedX01Legs }}">
+                                            <button class="plus bg-dark" (click)="increaseX01Legs()">+</button>
                                         </div>
                                     </div>
                                     </div>
@@ -38,7 +38,7 @@
                                         <!-- <input class="form-control room-number-input" placeholder="Enter room number"
                                             type="text" value="" id="roomNumber" checked> -->
                                         <button id="gameWithFriendsButton" class="form-control create-room-button"
-                                            (click)="joinX01Queue()">save settings</button>
+                                            (click)="saveX01Settings()">save settings</button>
                                     </div>
                                 </div>
                                 <ul class="list-inline d-flex justify-content-between mt-3">
@@ -53,12 +53,12 @@
                                         </a>
                                     </li>
                                 </ul>
-                                <h1 class="fw-bold my-sign-in-header">invite<br>a friend<br>501<br><h6>best of sets (1) legs (3)</h6></h1>
+                                <h1 class="fw-bold my-sign-in-header">invite<br>a friend<br>501<br><h6>best of sets ({{ preferedX01Sets }}) legs ({{ preferedX01Legs }})</h6></h1>
                                 <div class="form-check">
                                     <!-- <input class="form-control room-number-input" placeholder="Enter room number"
                                         type="text" value="" id="roomNumber" checked> -->
                                     <button id="gameWithFriendsButton" class="form-control create-room-button"
-                                        (click)="joinX01Queue()">create room</button>
+                                        (click)="createX01Game()">create room</button>
                                 </div>
                             </div>
                         </div>

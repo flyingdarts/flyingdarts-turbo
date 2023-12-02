@@ -6,30 +6,14 @@ using Flyingdarts.Shared;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using System;
+using Flyingdarts.Backend.Shared.Caching;
+using Flyingdarts.Persistence;
 
 /// <summary>
 /// Factory class for creating the service provider.
 /// </summary>
 public static class ServiceFactory
 {
-    /// <summary>
-    /// Creates and configures the service provider.
-    /// </summary>
-    /// <returns>The configured service provider.</returns>
-    private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-{
-    // Replace "your-elasticache-endpoint" and "your-elasticache-port" with your ElastiCache for Redis endpoint and port.
-    string cacheEndpoint = System.Environment.GetEnvironmentVariable("Redis");
-    return ConnectionMultiplexer.Connect(cacheEndpoint);
-});
-
-    public static ConnectionMultiplexer Connection
-    {
-        get
-        {
-            return lazyConnection.Value;
-        }
-    }
     public static ServiceProvider GetServiceProvider()
     {
         // Build the configuration using AWS Systems Manager Parameter Store.
@@ -42,9 +26,7 @@ public static class ServiceFactory
 
         // Configure AWS services.
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
-
-        services.AddTransient<IDatabase>(provider => Connection.GetDatabase());
+        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDbTableName"));
 
         // Register application options.
         services.AddOptions<ApplicationOptions>();
@@ -57,7 +39,7 @@ public static class ServiceFactory
 
         // Register MediatR and register services from the assembly containing JoinX01QueueCommand.
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(JoinX01QueueCommand).Assembly));
-
+        
         // Build and return the service provider.
         return services.BuildServiceProvider();
     }

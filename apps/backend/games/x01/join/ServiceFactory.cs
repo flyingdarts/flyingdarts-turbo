@@ -5,15 +5,9 @@ using FluentValidation;
 using Flyingdarts.Shared;
 using Microsoft.Extensions.Configuration;
 using Amazon.ApiGatewayManagementApi;
+using Flyingdarts.Backend.Shared.Caching;
 using Flyingdarts.Persistence;
-public static class CacheSetup {
-    public static IServiceCollection AddDatabase(this IServiceCollection services) {
-        return services.AddSingleton<IRedisService, RedisService>(sp =>
-        {
-            return new RedisService();
-        });
-    }
-}
+
 /// <summary>
 /// Factory class for creating the service provider.
 /// </summary>
@@ -37,9 +31,7 @@ public static class ServiceFactory
 
         // Configure AWS services.
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
-
-        services.AddDatabase();
+        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDbTableName"));
 
         // Register application options.
         services.AddOptions<ApplicationOptions>();
@@ -48,7 +40,10 @@ public static class ServiceFactory
 
         // Register GameService with Reads and Writes.
         services.AddTransient<IDynamoDbService, DynamoDbService>();
-
+        
+        // Register a caching service
+        services.AddScoped<CachingService<X01State>>();
+        
         // Register validators from the assembly containing the JoinX01GameCommandValidator.
         services.AddValidatorsFromAssemblyContaining<JoinX01GameCommandValidator>();
 
@@ -62,7 +57,6 @@ public static class ServiceFactory
             {
                 ServiceURL = System.Environment.GetEnvironmentVariable("WebSocketApiUrl")!
             };
-
             return new AmazonApiGatewayManagementApiClient(config);
         });
 

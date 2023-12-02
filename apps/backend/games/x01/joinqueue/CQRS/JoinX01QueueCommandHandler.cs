@@ -14,7 +14,9 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Flyingdarts.Backend.Shared.Models;
 
-public class JoinX01QueueCommandHandler : IRequestHandler<JoinX01QueueCommand, APIGatewayProxyResponse>
+public class 
+    
+    JoinX01QueueCommandHandler : IRequestHandler<JoinX01QueueCommand, APIGatewayProxyResponse>
 {
     private readonly IDynamoDBContext _dbContext;
     private readonly ApplicationOptions _applicationOptions;
@@ -27,13 +29,13 @@ public class JoinX01QueueCommandHandler : IRequestHandler<JoinX01QueueCommand, A
     {
         var socketMessage = new SocketMessage<JoinX01QueueCommand>();
         socketMessage.Message = request;
-        socketMessage.Action = "v2/games/x01/joinqueue";
+        socketMessage.Action = "games/x01/joinqueue";
 
         var qualifyingGames = await GetQualifyingGamesAsync(cancellationToken);
 
         var game = qualifyingGames.Any()
             ? qualifyingGames.First()
-            : await CreateGame(cancellationToken);
+            : await CreateGame(request.Sets, request.Legs, cancellationToken);
 
         socketMessage.Message!.GameId = game.GameId.ToString();
 
@@ -60,9 +62,9 @@ public class JoinX01QueueCommandHandler : IRequestHandler<JoinX01QueueCommand, A
     }
 
 
-    private async Task<Game> CreateGame(CancellationToken cancellationToken)
+    private async Task<Game> CreateGame(int sets, int legs, CancellationToken cancellationToken)
     {
-        var game = Game.Create(2, X01GameSettings.Create(1, 3));
+        var game = Game.Create(2, X01GameSettings.Create(sets, legs));
         var gameWrite = _dbContext.CreateBatchWrite<Game>(_applicationOptions.ToOperationConfig());
         gameWrite.AddPutItem(game);
 
@@ -74,29 +76,5 @@ public class JoinX01QueueCommandHandler : IRequestHandler<JoinX01QueueCommand, A
     {
         var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.Game);
         return new QueryOperationConfig { Filter = queryFilter };
-    }
-
-    private static string ConvertTicksToBase64()
-    {
-        long ticks = DateTime.UtcNow.Ticks;
-        byte[] tickBytes = BitConverter.GetBytes(ticks);
-        string base64String = Convert.ToBase64String(tickBytes);
-
-        // Remove leading slashes if any
-        while (base64String.StartsWith("/"))
-        {
-            base64String = base64String.Substring(1);
-        }
-
-        // Replace any special characters
-        base64String = Regex.Replace(base64String, @"[^A-Za-z0-9]", "");
-
-        // Add trailing '=' character if needed
-        if (base64String.Length == 0 || base64String[base64String.Length - 1] != '=')
-        {
-            base64String += "=";
-        }
-
-        return base64String;
     }
 }

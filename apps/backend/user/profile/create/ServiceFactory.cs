@@ -1,3 +1,5 @@
+using System;
+using System.Text.Json;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +14,9 @@ public static class ServiceFactory
         var configuration = new ConfigurationBuilder()
             .AddSystemsManager($"/{System.Environment.GetEnvironmentVariable("EnvironmentName")}/Application")
             .Build();
-
         var services = new ServiceCollection();
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
+        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDbTableName"));
         services.AddOptions<ApplicationOptions>();
         services.AddTransient<IDynamoDBContext, DynamoDBContext>();
         services.AddValidatorsFromAssemblyContaining<CreateUserProfileCommandValidator>();

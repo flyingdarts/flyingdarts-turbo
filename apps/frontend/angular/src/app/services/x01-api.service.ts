@@ -27,9 +27,11 @@ export class X01ApiService {
     this.webSocketMessageService.sendMessage(JSON.stringify(body));
   }
 
-  public joinQueue(gamePlayerId: string, roomId?: string) {
+  public joinQueue(gamePlayerId: string, sets: number = 1, legs: number = 3, roomId?: string) {
     var message: JoinX01QueueCommand = {
       PlayerId: gamePlayerId,
+      Sets: sets,
+      Legs: legs
     };
     if (!!roomId) 
       message.GameId = roomId;

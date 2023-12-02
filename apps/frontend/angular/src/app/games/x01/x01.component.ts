@@ -16,6 +16,7 @@ import { JitsiService } from 'src/app/services/jitsi.service';
 import { Metadata } from './Metadata';
 import { AnimationOptions } from 'ngx-lottie';
 import { DartDto } from './dtos/DartDto';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-x01',
@@ -61,7 +62,7 @@ export class X01Component implements OnInit {
     this.gameId = this.route.snapshot.paramMap.get('id')!;
     this.clientId = this.userProfileService.currentUserProfileDetails.UserId!;
     this.componentStore.setState(initialX01State);
-    this.jitsiService.moveRoom(this.gameId, false);
+    // this.jitsiService.moveRoom(this.gameId, false);
     this.webSocketService.connected$.subscribe((connected) => {
       if (connected) {
         this.userProfileService.userName$.subscribe((userName) => {
@@ -77,10 +78,11 @@ export class X01Component implements OnInit {
           break;
       }
     });
-
-    // this.jitsiService.namePrincipalRoom = `Flyingdarts ${this.gameId!}`;
-    // this.jitsiService.moveRoom(this.jitsiService.namePrincipalRoom, false);
-    // this.jitsiService.user.setName(this.userProfileService.currentUserProfileDetails.UserName!);
+    if (environment.production) {
+      this.jitsiService.namePrincipalRoom = `Flyingdarts ${this.gameId!}`;
+      this.jitsiService.moveRoom(this.jitsiService.namePrincipalRoom, true);
+      this.jitsiService.user.setName(this.userProfileService.currentUserProfileDetails.UserName!);
+    }
 
   }
   private handleMetadata(message: any) {
@@ -183,7 +185,4 @@ export class X01Component implements OnInit {
     this.input.reset();
     this.x01Store.setCurrentInput(this.input.getSum());
   }
-
-
-
 }

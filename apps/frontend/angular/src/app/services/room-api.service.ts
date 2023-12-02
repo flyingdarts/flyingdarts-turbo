@@ -24,16 +24,4 @@ export class ApiService {
         console.log(body);
         this.webSocketService.postMessage(JSON.stringify(body));
     }
-
-    roomsOnCreate(roomId: string) {
-        var message: CreateRoomCommand = {
-            RoomId: roomId
-        };
-        let body: WebSocketMessage<CreateRoomCommand> = {
-            action: WebSocketActions.RoomsOnCreate,
-            message: message
-        };
-        console.log(body);
-        this.webSocketService.postMessage(JSON.stringify(body));
-    }
 }

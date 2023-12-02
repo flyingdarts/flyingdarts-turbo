@@ -94,7 +94,7 @@ public class LambdaConstruct : Construct
             {
                 new PolicyStatement(new PolicyStatementProps
                 {
-                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable" },
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
                     Resources = new[]
                     {
                         "*"
@@ -122,7 +122,7 @@ public class LambdaConstruct : Construct
             {
                 new PolicyStatement(new PolicyStatementProps
                 {
-                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable" },
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
                     Resources = new[]
                     {
                         "*"
@@ -150,7 +150,7 @@ public class LambdaConstruct : Construct
             {
                 new PolicyStatement(new PolicyStatementProps
                 {
-                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable" },
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
                     Resources = new[]
                     {
                         "*"
@@ -182,7 +182,7 @@ public class LambdaConstruct : Construct
             {
                 new PolicyStatement(new PolicyStatementProps
                 {
-                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable" },
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable", "dynamodb:BatchWriteItem" },
                     Resources = new[]
                     {
                         "*"
@@ -210,7 +210,7 @@ public class LambdaConstruct : Construct
             {
                 new PolicyStatement(new PolicyStatementProps
                 {
-                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable" },
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
                     Resources = new[]
                     {
                         "*"
@@ -239,7 +239,7 @@ public class LambdaConstruct : Construct
             {
                 new PolicyStatement(new PolicyStatementProps
                 {
-                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable" },
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
                     Resources = new[]
                     {
                         "*"
@@ -278,7 +278,7 @@ public class LambdaConstruct : Construct
             {
                 new PolicyStatement(new PolicyStatementProps
                 {
-                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable" },
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
                     Resources = new[]
                     {
                         "*"

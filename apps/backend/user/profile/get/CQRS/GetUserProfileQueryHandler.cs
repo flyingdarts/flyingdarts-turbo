@@ -25,7 +25,7 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, A
         var queryItems = await _dbContext.FromQueryAsync<User>(QueryConfig(request.CognitoUserName), _applicationOptions.ToOperationConfig())
             .GetRemainingAsync(cancellationToken);
         var socketMessage = new SocketMessage<GetUserProfileResponse>();
-        socketMessage.Action = "v2/user/profile/get";
+        socketMessage.Action = "user/profile/get";
         // Handle the query results
         if (queryItems != null && queryItems.Any())
         {

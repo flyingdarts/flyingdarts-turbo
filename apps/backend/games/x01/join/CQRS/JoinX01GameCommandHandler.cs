@@ -11,40 +11,57 @@ using Amazon.ApiGatewayManagementApi.Model;
 using System.IO;
 using System.Text;
 using Amazon.ApiGatewayManagementApi;
+using Flyingdarts.Backend.Shared.Caching;
 using Flyingdarts.Backend.Shared.Dtos;
 using Flyingdarts.Backend.Shared.Models;
 
-public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazonApiGatewayManagementApi ApiGatewayClient) : IRequestHandler<JoinX01GameCommand, APIGatewayProxyResponse>
+public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazonApiGatewayManagementApi ApiGatewayClient, CachingService<X01State> CachingService) : IRequestHandler<JoinX01GameCommand, APIGatewayProxyResponse>
 {
     public async Task<APIGatewayProxyResponse> Handle(JoinX01GameCommand request, CancellationToken cancellationToken)
     {
         var socketMessage = new SocketMessage<JoinX01GameCommand>
         {
-            Action = "v2/games/x01/join",
+            Action = "games/x01/join",
             Message = request
         };
 
         await UpdateConnectionId(socketMessage, cancellationToken);
+        
+        await CachingService.Load(request.GameId, cancellationToken);
 
-        request.Game = (await DynamoDbService.ReadGameAsync(long.Parse(request.GameId), cancellationToken)).OrderByDescending(x => x.CreationDate).First();
-
+        request.Game = CachingService.State.Game;
+        request.Players = CachingService.State.Players;
+        request.Darts = CachingService.State.Darts;
+        request.Users = CachingService.State.Users;
+        
         if (request.Game is not null)
         {
             var player = GamePlayer.Create(long.Parse(request.GameId), request.PlayerId);
 
             await DynamoDbService.WriteGamePlayerAsync(player, cancellationToken);
+            
+            CachingService.AddPlayer(player);
         }
-
-        request.Players = await DynamoDbService.ReadGamePlayersAsync(long.Parse(request.GameId), cancellationToken);
-
+        
         if (request.Players.Count == 2)
         {
-            await UpdateGameStatus(request.Game, GameStatus.Started, cancellationToken);
+            var game = request.Game!;
+            
+            game.Status = GameStatus.Started;
+            game.LSI1 = $"{GameStatus.Started}#{game.GameId}";
+            game.SortKey = $"{game.GameId}#{GameStatus.Started}";
+            
+            await UpdateGameStatus(game, GameStatus.Started, cancellationToken);
+            
+            CachingService.AddGame(game);
         }
 
-        request.Users = await DynamoDbService.ReadUsersAsync(request.Players.Select(x => x.PlayerId).ToArray(), cancellationToken);
-        request.Darts = await DynamoDbService.ReadGameDartsAsync(long.Parse(request.GameId), cancellationToken);
-
+        if (!CachingService.State.Users.Any())
+            request.Users = await DynamoDbService.ReadUsersAsync(request.Players.Select(x => x.PlayerId).ToArray(),
+                cancellationToken);
+        else
+            request.Users = CachingService.State.Users;
+        
         socketMessage.Metadata = GameHelper.CreateMetaData(request.Game, request.Darts, request.Players, request.Users);
 
         if (GameHelper.HasAnyPlayerWon(request.Darts, request.Game!.X01.Legs, request.Game.X01.Sets, request.Players.Select(x => x.PlayerId.ToString()).ToList()))
@@ -58,6 +75,8 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
             await DynamoDbService.WriteGameAsync(request.Game, cancellationToken);
         }
 
+        await CachingService.Save(cancellationToken);
+        
         await NotifyRoomAsync(socketMessage, cancellationToken);
 
         return new APIGatewayProxyResponse { StatusCode = 200, Body = JsonSerializer.Serialize(socketMessage) };
@@ -65,6 +84,8 @@ public record JoinX01GameCommandHandler(IDynamoDbService DynamoDbService, IAmazo
 
     public async Task UpdateConnectionId(SocketMessage<JoinX01GameCommand> message, CancellationToken cancellationToken)
     {
+        Console.WriteLine(JsonSerializer.Serialize(message));
+        Console.WriteLine(message.Message!.PlayerId);
         var user = await DynamoDbService.ReadUserAsync(message.Message!.PlayerId, cancellationToken);
 
         user.ConnectionId = message.Message.ConnectionId;

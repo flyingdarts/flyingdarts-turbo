@@ -42,4 +42,8 @@
       <PackagePath>\</PackagePath>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
+    <ProjectReference Include="..\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
+  </ItemGroup>
 </Project>

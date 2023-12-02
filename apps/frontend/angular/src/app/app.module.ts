@@ -22,6 +22,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './auth.effects';
 import { StoreModule } from '@ngrx/store';
 import { ApiClient } from './services/api.client';
+import { PreferedX01SettingsService } from './services/prefered-x01-settings.service';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ApiClient } from './services/api.client';
     UserProfileApiService,
     X01ApiService,
     provideComponentStore(AppStore),
-    ApiClient
+    ApiClient,
+    PreferedX01SettingsService
   ],
   bootstrap: [AppComponent],
 })

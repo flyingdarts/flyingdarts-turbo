@@ -31,7 +31,7 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
 
         var socketMessage = new SocketMessage<CreateUserProfileResponse>
         {
-            Action = "v2/user/profile/create",
+            Action = "user/profile/create",
             Message = CreateUserProfileResponse.From(user, userProfile)
         };
 

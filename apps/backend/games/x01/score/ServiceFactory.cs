@@ -29,7 +29,7 @@ public static class ServiceFactory
 
         // Configure AWS services.
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
+        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDbTableName"));
         
         // Setup Redis client
         services.AddStackExchangeRedisCache(options =>

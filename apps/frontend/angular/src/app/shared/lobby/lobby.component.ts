@@ -12,6 +12,8 @@ import { JoinX01QueueCommand } from '../../requests/JoinX01QueueCommand';
 import { AppStore } from 'src/app/app.store';
 import { UserProfileStateService } from '../../services/user-profile-state.service';
 import { Observable } from 'rxjs';
+import { AppState } from 'src/app/app.state';
+import { PreferedX01SettingsService } from 'src/app/services/prefered-x01-settings.service';
 const { v4: uuidv4 } = require('uuid');
 
 @Component({
@@ -20,7 +22,12 @@ const { v4: uuidv4 } = require('uuid');
   styleUrls: ['./lobby.component.scss']
 })
 export class LobbyComponent implements OnInit {
-  public loading$: Observable<boolean> = this.store.select(x=>x.loading);
+  public loading$: Observable<boolean> = this.store.select(x => x.loading);
+  public vm$: Observable<AppState> = this.store.select(
+    (state) => state
+  );
+  public preferedX01Sets: number = 1;
+  public preferedX01Legs: number = 3;
 
   public messages: MessageRequest[] = [];
   public webSocketStatus: WebSocketStatus = WebSocketStatus.Unknown
@@ -38,14 +45,21 @@ export class LobbyComponent implements OnInit {
     private x01ApiService: X01ApiService,
     private router: Router,
     private webSocketService: WebSocketService,
-    private store: AppStore
+    private store: AppStore,
+    private settingsService: PreferedX01SettingsService
   ) {
-    
+
   }
 
   ngOnInit(): void {
-    this.webSocketService.getMessages().subscribe(x=> {
-      switch(x.action) {
+
+    this.vm$.subscribe((x) => {
+      this.preferedX01Sets = x.preferedSettings.x01Sets,
+      this.preferedX01Legs = x.preferedSettings.x01Legs
+    });
+    
+    this.webSocketService.getMessages().subscribe(x => {
+      switch (x.action) {
         case WebSocketActions.Connect:
           this.webSocketStatus = WebSocketStatus.Connected
           break;
@@ -58,7 +72,7 @@ export class LobbyComponent implements OnInit {
         case WebSocketActions.X01JoinQueue:
           this.shouldHideLoader = !this.shouldHideLoader;
           this.router.navigate(['/', 'x01', (x.message as JoinX01QueueCommand).GameId]);
-        break;
+          break;
       }
     })
     this.store.setProfile(this.userProfileService.currentUserProfileDetails);
@@ -68,6 +82,13 @@ export class LobbyComponent implements OnInit {
   public joinX01Queue() {
     this.shouldHideLoader = !this.shouldHideLoader;
     this.x01ApiService.joinQueue(this.clientId);
+  }
+
+  public createX01Game() { 
+    this.shouldHideLoader = !this.shouldHideLoader;
+    var sets = this.settingsService.preferedX01Sets;
+    var legs = this.settingsService.preferedX01Legs;
+    this.x01ApiService.joinQueue(this.clientId, sets, legs)
   }
 
   public shouldShowFriendSettings: boolean = false;
@@ -89,5 +110,35 @@ export class LobbyComponent implements OnInit {
         owner: this.clientId,
       }
     }))
+  }
+
+  public async increaseX01Legs() {
+    if (this.preferedX01Legs < 13) {
+      this.store.increasePreferedX01Legs();
+    }
+  }
+
+  public async decreaseX01Legs() {
+    if (this.preferedX01Legs >= 3) {
+      this.store.decreasePreferedX01Legs();
+    }
+  }
+
+  public async increaseX01Sets() {
+    if (this.preferedX01Sets < 13) {
+      this.store.increasePreferedX01Sets();
+    }
+  }
+
+  public async decreaseX01Sets() {
+    if (this.preferedX01Sets >= 3) {
+      this.store.decreasePreferedX01Sets();
+    }
+  }
+
+  public async saveX01Settings() {
+    this.settingsService.preferedX01Sets = this.preferedX01Sets;
+    this.settingsService.preferedX01Legs = this.preferedX01Legs;
+    this.shouldShowFriendSettings = false;
   }
 }

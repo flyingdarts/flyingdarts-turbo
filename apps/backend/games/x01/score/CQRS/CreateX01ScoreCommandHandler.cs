@@ -21,7 +21,7 @@ public record CreateX01ScoreCommandHandler(IDynamoDbService DynamoDbService, IAm
     {
         var socketMessage = new SocketMessage<CreateX01ScoreCommand>();
         socketMessage.Message = request;
-        socketMessage.Action = "v2/games/x01/score";
+        socketMessage.Action = "games/x01/score";
 
         await UpdateConnectionId(socketMessage, cancellationToken);
 

@@ -38,7 +38,7 @@ public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfile
 
         var socketMessage = new SocketMessage<UpdateUserProfileCommand>();
         socketMessage.Message = request;
-        socketMessage.Action = "v2/user/profile/update";
+        socketMessage.Action = "user/profile/update";
 
         return new APIGatewayProxyResponse
         {

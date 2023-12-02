@@ -5,13 +5,15 @@
       "outputs": [
         "bin/Debug/net6.0/**",
         "obj/Debug/net6.0/**"
-      ]
+      ],
+      "cache": false
     },
     "build:prod": {
       "outputs": [
         "bin/Release/net6.0/**",
         "obj/Release/net6.0/**"
-      ]
+      ],
+      "cache": false
     },
     "deploy": {
       "dependsOn": [
@@ -20,6 +22,12 @@
       "cache": false
     },
     "deploy:development": {
+      "dependsOn": [
+        "build"
+      ],
+      "cache": false
+    },
+    "deploy:production": {
       "dependsOn": [
         "build"
       ],

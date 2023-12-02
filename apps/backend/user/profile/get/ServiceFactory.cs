@@ -14,7 +14,7 @@ public static class ServiceFactory
             .Build();
         var services = new ServiceCollection();
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDb"));
+        services.AddAWSService<IAmazonDynamoDB>(configuration.GetAWSOptions("DynamoDbTableName"));
         services.AddOptions<ApplicationOptions>();
         services.AddTransient<IDynamoDBContext, DynamoDBContext>();
         services.AddValidatorsFromAssemblyContaining<GetUserProfileQueryValidator>();
