@@ -1,0 +1,24 @@
+# melos_managed_dependency_overrides: dartboard,internationalization,keyboard,language,speech,ui,widgetbook,widgetbook_annotation,widgetbook_generator,configuration,configuration_preferences
+dependency_overrides:
+  configuration:
+    path: ../../shared/configuration/core
+  configuration_preferences:
+    path: ../../shared/configuration/preferences
+  dartboard:
+    path: ../dartboard
+  internationalization:
+    path: ../../shared/internationalization
+  keyboard:
+    path: ../keyboard
+  language:
+    path: ../language
+  speech:
+    path: ../speech
+  ui:
+    path: ../../shared/ui
+  widgetbook:
+    path: ../../../dependencies/widgetbook/packages/widgetbook
+  widgetbook_annotation:
+    path: ../../../dependencies/widgetbook/packages/widgetbook_annotation
+  widgetbook_generator:
+    path: ../../../dependencies/widgetbook/packages/widgetbook_generator

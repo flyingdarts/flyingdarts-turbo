@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.flyingdarts.flutter.beta">
    <application
-        android:label="iyltdsu_voice"
+        android:label="flyingdarts"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

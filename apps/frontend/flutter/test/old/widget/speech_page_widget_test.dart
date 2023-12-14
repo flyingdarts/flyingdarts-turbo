@@ -1,17 +1,14 @@
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:appbar/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flyingdarts_core/navigation/navigation_cubit.dart';
-import 'package:flyingdarts_core/widgets/appbar/appbar_widget.dart';
-import 'package:flyingdarts_core/widgets/appbar/button/appbar_button_widget.dart';
-import 'package:flyingdarts_features/language/state/language_cubit.dart';
-import 'package:flyingdarts_features/speech/pages/speech_page.dart';
-import 'package:flyingdarts_features/speech/state/speech_bloc.dart';
-import 'package:flyingdarts_features/speech/widgets/speech_recognition_widget.dart';
-import 'package:iyltdsu_voice/amplifyconfiguration.dart';
-import 'package:iyltdsu_voice/main.dart';
+import 'package:flyingdarts_app/amplifyconfiguration.dart';
+import 'package:flyingdarts_app/main.dart';
+import 'package:language/language.dart';
+import 'package:navigation/navigation.dart';
+import 'package:speech/speech.dart';
 
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();

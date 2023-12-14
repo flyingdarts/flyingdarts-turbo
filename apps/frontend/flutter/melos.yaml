@@ -2,8 +2,13 @@ name: flyingdarts
 
 packages:
   - dependencies/*
-  - packages/*
-
+  - dependencies/**/*
+  - packages/flyingdarts
+  - packages/features/**/*
+  - packages/features/*
+  - packages/shared/**/*
+  - packages/shared/*
+  - ./
 scripts:
   build_runner:
     run: melos exec --order-dependents -- dart run build_runner build --delete-conflicting-outputs

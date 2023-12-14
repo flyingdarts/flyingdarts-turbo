@@ -1,0 +1,8 @@
+# melos_managed_dependency_overrides: widgetbook,widgetbook_annotation,widgetbook_generator
+dependency_overrides:
+  widgetbook:
+    path: ../../../dependencies/widgetbook/packages/widgetbook
+  widgetbook_annotation:
+    path: ../../../dependencies/widgetbook/packages/widgetbook_annotation
+  widgetbook_generator:
+    path: ../../../dependencies/widgetbook/packages/widgetbook_generator

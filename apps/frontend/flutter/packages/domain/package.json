@@ -1,9 +1,0 @@
-{
-	"name": "flyingdarts.frontend.flutter.packages.domain",
-	"version": "1.0.0",
-	"private": true,
-	"scripts": {
-	  "build": "flutter --version",
-	  "build:prod": "flutter --version"
-	}
-  }

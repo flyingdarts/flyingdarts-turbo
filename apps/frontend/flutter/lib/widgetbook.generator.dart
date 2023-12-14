@@ -5,9 +5,12 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
-import 'package:flyingdarts_features/widgetbook.generator.directories.g.dart' as featuresBook;
-import 'package:flyingdarts_core/widgetbook.generator.directories.g.dart' as coreBook;
-import 'package:flyingdarts_shared/widgetbook.generator.directories.g.dart' as sharedBook;
+import 'package:appbar/src/widgetbook.generator.directories.g.dart' as appBarBook;
+import 'package:dartboard/src/widgetbook.generator.directories.g.dart' as dartboardBook;
+import 'package:keyboard/src/widgetbook.generator.directories.g.dart' as keyboardBook;
+import 'package:language/src/widgetbook.generator.directories.g.dart' as languageBook;
+import 'package:profile/src/widgetbook.generator.directories.g.dart' as profileBook;
+import 'package:speech/src/widgetbook.generator.directories.g.dart' as speechBook;
 
 import 'widgetbook.generator.directories.g.dart';
 
@@ -25,9 +28,12 @@ class WidgetbookApp extends StatelessWidget {
       // Use the generated directories variable
       directories: [
         ...directories,
-        ...featuresBook.directories,
-        ...coreBook.directories,
-        ...sharedBook.directories,
+        ...appBarBook.directories,
+        ...dartboardBook.directories,
+        ...keyboardBook.directories,
+        ...languageBook.directories,
+        ...profileBook.directories,
+        ...speechBook.directories
       ],
       addons: [
         TextScaleAddon(

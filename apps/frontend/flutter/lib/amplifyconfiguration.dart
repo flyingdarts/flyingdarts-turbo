@@ -29,37 +29,35 @@ const amplifyconfig = '''{
                         "OAuth": {
                             "WebDomain": "nabzwdf7t9ey-staging.auth.eu-west-1.amazoncognito.com",
                             "AppClientId": "60sev9r9l9mrbo9iv5qt6902b2",
-                            "SignInRedirectURI": "https://flyingdarts.net/login,https://localhost:8000/login",
-                            "SignOutRedirectURI": "https://flyingdarts.net/logout,https://localhost:8000/logout",
+                            "SignInRedirectURI": "flyingdartscontrol://login,https://flyingdarts.net/login,https://staging.flyingdarts.net/login",
+                            "SignOutRedirectURI": "flyingdartscontrol://logout,https://flyingdarts.net/logout,https://staging.flyingdarts.net/logout",
                             "Scopes": [
-                                "phone",
+                                "aws.cognito.signin.user.admin",
                                 "email",
                                 "openid",
-                                "profile",
-                                "aws.cognito.signin.user.admin"
+                                "phone",
+                                "profile"
                             ]
                         },
                         "authenticationFlowType": "USER_SRP_AUTH",
-                        "mfaConfiguration": "OFF",
-                        "mfaTypes": [
-                            "SMS"
-                        ],
-                        "passwordProtectionSettings": {
-                            "passwordPolicyMinLength": 8,
-                            "passwordPolicyCharacters": [
-                                "REQUIRES_LOWERCASE",
-                                "REQUIRES_NUMBERS",
-                                "REQUIRES_SYMBOLS",
-                                "REQUIRES_UPPERCASE"
-                            ]
-                        },
-                        "signupAttributes": [],
                         "socialProviders": [
                             "FACEBOOK"
                         ],
                         "usernameAttributes": [
                             "EMAIL"
                         ],
+                        "signupAttributes": [],
+                        "passwordProtectionSettings": {
+                            "passwordPolicyMinLength": 8,
+                            "passwordPolicyCharacters": [
+                                "REQUIRES_LOWERCASE",
+                                "REQUIRES_UPPERCASE",
+                                "REQUIRES_NUMBERS",
+                                "REQUIRES_SYMBOLS"
+                            ]
+                        },
+                        "mfaConfiguration": "OFF",
+                        "mfaTypes": [],
                         "verificationMechanisms": [
                             "EMAIL"
                         ]

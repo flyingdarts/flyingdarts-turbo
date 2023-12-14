@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flyingdarts_core/navigation/navigation_cubit.dart';
+import 'package:navigation/navigation.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../pages/home/home_page.dart';
@@ -15,7 +15,8 @@ class AppRouter {
       GoRoute(
         path: '/',
         name: AppRoutes.home.name,
-        builder: (context, state) => context.read<NavigationCubit>().state.isLoggedIn ? const MyHomePage() : const LoginPage(),
+        builder: (context, state) =>
+            context.read<NavigationCubit>().state.isLoggedIn ? const MyHomePage() : const LoginPage(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

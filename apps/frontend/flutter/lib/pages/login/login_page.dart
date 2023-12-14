@@ -1,11 +1,11 @@
 import 'dart:developer';
 
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:appbar/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flyingdarts_core/navigation/navigation_cubit.dart';
-import 'package:flyingdarts_core/widgets/appbar/appbar_widget.dart';
-import 'package:flyingdarts_shared/widgets/login_with_facebook_button/login_with_facebook_button.dart';
+import 'package:navigation/navigation.dart';
+import 'package:ui/ui.dart';
 
 typedef SignInCallback = void Function(bool isSignedIn);
 
