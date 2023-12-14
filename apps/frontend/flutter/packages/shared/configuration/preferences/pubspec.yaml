@@ -1,0 +1,21 @@
+name: configuration_preferences
+description: A flutter package containing preferences configuration
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: '>=3.1.3 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.2.2
+  configuration:
+    path: ./../core
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:

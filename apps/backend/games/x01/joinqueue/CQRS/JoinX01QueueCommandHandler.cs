@@ -1,18 +1,16 @@
-﻿using System;
-using System.Linq;
+﻿using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.APIGatewayEvents;
+using Flyingdarts.Backend.Shared.Models;
+using Flyingdarts.Persistence;
+using Flyingdarts.Shared;
+using MediatR;
+using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Flyingdarts.Persistence;
-using MediatR;
-using Amazon.DynamoDBv2.DocumentModel;
-using Amazon.DynamoDBv2.DataModel;
-using Flyingdarts.Shared;
-using Microsoft.Extensions.Options;
-using System.Text.Json;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using Flyingdarts.Backend.Shared.Models;
 
 public class 
     
@@ -20,16 +18,21 @@ public class
 {
     private readonly IDynamoDBContext _dbContext;
     private readonly ApplicationOptions _applicationOptions;
-    public JoinX01QueueCommandHandler(IDynamoDBContext dbContext, IOptions<ApplicationOptions> applicationOptions)
+    private readonly CachingService<X01State> _cachingService;
+
+    public JoinX01QueueCommandHandler(IDynamoDBContext dbContext, IOptions<ApplicationOptions> applicationOptions, CachingService<X01State> cachingService)
     {
         _dbContext = dbContext;
         _applicationOptions = applicationOptions.Value;
+        _cachingService = cachingService;
     }
     public async Task<APIGatewayProxyResponse> Handle(JoinX01QueueCommand request, CancellationToken cancellationToken)
     {
-        var socketMessage = new SocketMessage<JoinX01QueueCommand>();
-        socketMessage.Message = request;
-        socketMessage.Action = "games/x01/joinqueue";
+        var socketMessage = new SocketMessage<JoinX01QueueCommand>
+        {
+            Action = "games/x01/joinqueue",
+            Message = request
+        };
 
         var qualifyingGames = await GetQualifyingGamesAsync(cancellationToken);
 
@@ -65,6 +68,11 @@ public class
     private async Task<Game> CreateGame(int sets, int legs, CancellationToken cancellationToken)
     {
         var game = Game.Create(2, X01GameSettings.Create(sets, legs));
+
+        _cachingService.State = X01State.Create(game.GameId);
+        _cachingService.AddGame(game);
+        await _cachingService.Save(cancellationToken);
+
         var gameWrite = _dbContext.CreateBatchWrite<Game>(_applicationOptions.ToOperationConfig());
         gameWrite.AddPutItem(game);
 

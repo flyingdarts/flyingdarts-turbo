@@ -18,27 +18,59 @@
                                         </li>
                                     </ul>
                                     <div>
-                                        <h1 class="fw-bold my-sign-in-header">configure<br>game<br><h6>best of sets ({{ preferedX01Sets }}) legs ({{ preferedX01Legs }})</h6></h1>
-                                    <div class="game-input">
-                                        <div class="qty mt-5">
-                                            <span class="count title">sets </span>
-                                            <button class="minus bg-dark" (click)="decreaseX01Sets()">-</button>
-                                            <input type="number" class="count" name="qty" value="{{ preferedX01Sets }}">
-                                            <button class="plus bg-dark" (click)="increaseX01Sets()">+</button>
+                                        <h1 class="fw-bold my-sign-in-header">configure<br>game<br>
+                                        <h6>best of sets ({{ preferedX01Sets }}) legs ({{ preferedX01Legs }})</h6>
+                                        </h1>
+                                        <div class="game-input">
+                                            <div class="qty mt-5">
+                                                <span class="count title">sets </span>
+                                                <button class="minus bg-dark" (click)="decreaseX01Sets()">-</button>
+                                                <input type="number" class="count" name="qty"
+                                                    value="{{ preferedX01Sets }}">
+                                                <button class="plus bg-dark" (click)="increaseX01Sets()">+</button>
+                                            </div>
+                                            <div class="qty mt-5">
+                                                <span class="count title">legs </span>
+                                                <button class="minus bg-dark" (click)="decreaseX01Legs()">-</button>
+                                                <input type="number" class="count" name="qty"
+                                                    value="{{ preferedX01Legs }}">
+                                                <button class="plus bg-dark" (click)="increaseX01Legs()">+</button>
+                                            </div>
                                         </div>
-                                        <div class="qty mt-5">
-                                            <span class="count title">legs </span>
-                                            <button class="minus bg-dark" (click)="decreaseX01Legs()">-</button>
-                                            <input type="number" class="count" name="qty" value="{{ preferedX01Legs }}">
-                                            <button class="plus bg-dark" (click)="increaseX01Legs()">+</button>
-                                        </div>
-                                    </div>
                                     </div>
                                     <div class="form-check">
                                         <!-- <input class="form-control room-number-input" placeholder="Enter room number"
                                             type="text" value="" id="roomNumber" checked> -->
                                         <button id="gameWithFriendsButton" class="form-control create-room-button"
                                             (click)="saveX01Settings()">save settings</button>
+                                    </div>
+                                </div>
+                                <div class="lobby-card-overlay w-100 h-100" [class.lobby-card-overlay-hidden]="!shouldShowFriendFaq">
+                                    <ul class="list-inline d-flex justify-content-between mt-3">
+                                        <li class="list-inline-item">
+                                            <a (click)="openFriendFaq()">
+                                                <i class="material-icons">close</i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <h1 class="fw-bold my-sign-in-header">F.A.Q.</h1>
+
+                                        <div class="accordion" id="accordionExample">
+                                            <div class="accordion-item">
+                                              <h2 class="accordion-header">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                    What are the supported game modes?
+                                                </button>
+                                              </h2>
+                                              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                                <div class="accordion-body">
+                                                    The game mode is <strong>'Best of'.</strong> The first player that wins the majority of the sets required, wins the game.
+                                                  To win a <strong>set</strong> you need to win the majority of legs per set required.
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <ul class="list-inline d-flex justify-content-between mt-3">
@@ -48,12 +80,14 @@
                                         </a>
                                     </li>
                                     <li class="list-inline-item">
-                                        <a>
+                                        <a (click)="openFriendFaq()">
                                             <i class="material-icons">question_mark</i>
                                         </a>
                                     </li>
                                 </ul>
-                                <h1 class="fw-bold my-sign-in-header">invite<br>a friend<br>501<br><h6>best of sets ({{ preferedX01Sets }}) legs ({{ preferedX01Legs }})</h6></h1>
+                                <h1 class="fw-bold my-sign-in-header">invite<br>a friend<br>501<br>
+                                    <h6>best of sets ({{ preferedX01Sets }}) legs ({{ preferedX01Legs }})</h6>
+                                </h1>
                                 <div class="form-check">
                                     <!-- <input class="form-control room-number-input" placeholder="Enter room number"
                                         type="text" value="" id="roomNumber" checked> -->
@@ -69,6 +103,18 @@
                         </div>
                         <div *ngIf="!(loading$ | async)" class=" container-auth h-100 w-100">
                             <div class="form-group lobby-card-container">
+                                <div class="lobby-card-overlay w-100 h-100" [class.lobby-card-overlay-hidden]="!shouldShowQueueFaq">
+                                    <ul class="list-inline d-flex justify-content-between mt-3">
+                                        <li class="list-inline-item">
+                                            <a (click)="openQueueFaq()">
+                                                <i class="material-icons">close</i>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <h1 class="fw-bold my-sign-in-header">F.A.Q.</h1>
+                                    </div>
+                                </div>
                                 <ul class="list-inline d-flex justify-content-between mt-3">
                                     <li class="list-inline-item">
                                         <a href="#" style="display:none;">
@@ -76,12 +122,14 @@
                                         </a>
                                     </li>
                                     <li class="list-inline-item">
-                                        <a>
+                                        <a (click)="openQueueFaq()">
                                             <i class="material-icons">question_mark</i>
                                         </a>
                                     </li>
                                 </ul>
-                                <h1 class="fw-bold my-sign-in-header">play<br>ranked<br>501<br><h6>best of sets (1) legs (3)</h6></h1>
+                                <h1 class="fw-bold my-sign-in-header">play<br>ranked<br>501<br>
+                                    <h6>best of sets (1) legs (3)</h6>
+                                </h1>
                                 <div class="form-check">
                                     <!-- <input class="form-control room-number-input" placeholder="Enter room number"
                                         type="text" value="" id="roomNumber" checked> -->

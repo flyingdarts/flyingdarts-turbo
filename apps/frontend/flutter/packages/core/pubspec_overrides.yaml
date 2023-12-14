@@ -1,8 +1,0 @@
-# melos_managed_dependency_overrides: flyingdarts_features,flyingdarts_internationalization,flyingdarts_shared
-dependency_overrides:
-  flyingdarts_features:
-    path: ..\\features
-  flyingdarts_internationalization:
-    path: ..\\internationalization
-  flyingdarts_shared:
-    path: ..\\shared

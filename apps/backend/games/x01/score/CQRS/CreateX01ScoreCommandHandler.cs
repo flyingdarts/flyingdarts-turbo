@@ -1,69 +1,71 @@
-﻿using System;
-using System.Linq;
+﻿using Amazon.ApiGatewayManagementApi;
+using Amazon.ApiGatewayManagementApi.Model;
 using Amazon.Lambda.APIGatewayEvents;
+using Flyingdarts.Backend.Shared.Models;
+using Flyingdarts.Backend.Shared.Services;
 using Flyingdarts.Persistence;
 using MediatR;
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Amazon.ApiGatewayManagementApi.Model;
-using System.IO;
-using System.Text;
-using Amazon.ApiGatewayManagementApi;
-using Flyingdarts.Backend.Shared.Dtos;
-using Flyingdarts.Backend.Shared.Models;
-using static Flyingdarts.Shared.Lambdas.Functions.User;
 
-public record CreateX01ScoreCommandHandler(IDynamoDbService DynamoDbService, IAmazonApiGatewayManagementApi ApiGatewayClient) : IRequestHandler<CreateX01ScoreCommand, APIGatewayProxyResponse>
+public record CreateX01ScoreCommandHandler(
+    IDynamoDbService DynamoDbService, 
+    IAmazonApiGatewayManagementApi ApiGatewayClient,
+    CachingService<X01State> CachingService,
+    X01MetadataService MetadataService,
+    ConnectionService ConnectionService) : IRequestHandler<CreateX01ScoreCommand, APIGatewayProxyResponse>
 {
     public async Task<APIGatewayProxyResponse> Handle(CreateX01ScoreCommand request, CancellationToken cancellationToken)
     {
-        var socketMessage = new SocketMessage<CreateX01ScoreCommand>();
-        socketMessage.Message = request;
-        socketMessage.Action = "games/x01/score";
-
-        await UpdateConnectionId(socketMessage, cancellationToken);
-
-        request.Game = (await DynamoDbService.ReadGameAsync(long.Parse(request.GameId), cancellationToken)).OrderByDescending(x => x.CreationDate).First();
-        request.Players = await DynamoDbService.ReadGamePlayersAsync(long.Parse(request.GameId), cancellationToken);
-        request.Users = await DynamoDbService.ReadUsersAsync(request.Players.Select(x => x.PlayerId).ToArray(), cancellationToken);
-        request.Darts = await DynamoDbService.ReadGameDartsAsync(long.Parse(request.GameId), cancellationToken);
-
-
-        // begin calculate sets and legs possibly close game
-        var currentSet = request.Darts.Select(x => x.Set).DefaultIfEmpty(1).Max();
-        var currentLeg = request.Darts.Select(x => x.Leg).DefaultIfEmpty(1).Max();
-
-        if (request.Darts.Any() && request.Darts.OrderBy(x => x.CreatedAt).Last().GameScore == 0)
+        var socketMessage = new SocketMessage<CreateX01ScoreCommand>
         {
-            currentLeg++;
-            if (currentLeg > request.Game.X01.Legs)
-            {
-                currentLeg = 1;
-                currentSet++;
-            }
+            Action = "games/x01/score",
+            Message = request
+        };
+
+        // Update connectionId
+        await ConnectionService.UpdateConnectionIdAsync(socketMessage.Message.PlayerId, socketMessage.ConnectionId, cancellationToken);
+
+        // Load game state
+        await CachingService.Load(request.GameId, cancellationToken);
+
+        // Create a dart record
+        var setsAndLegs = GetSetsAndLegs();
+        if (setsAndLegs != null) 
+        {
+            var gameDart = GameDart.Create(request.Game.GameId, request.PlayerId, request.Input, request.Score, setsAndLegs.Item1, setsAndLegs.Item2);
+
+            // Write dart to database
+            await DynamoDbService.WriteGameDartAsync(gameDart, cancellationToken);
+
+            // Write dart to cache
+            CachingService.AddDart(gameDart);
         }
-
-        var gameDart = GameDart.Create(request.Game.GameId, request.PlayerId, request.Input, request.Score, currentSet, currentLeg);
-
-        await DynamoDbService.WriteGameDartAsync(gameDart, cancellationToken);
-
-        request.Darts.Add(gameDart);
-
-        socketMessage.Metadata = GameHelper.CreateMetaData(request.Game, request.Darts, request.Players, request.Users);
-
-        if (GameHelper.HasAnyPlayerWon(request.Darts, request.Game!.X01.Legs, request.Game.X01.Sets, request.Players.Select(x => x.PlayerId.ToString()).ToList()))
+       
+        // Game was finished
+        if (socketMessage.Metadata["WinningPlayer"] != null)
         {
-            socketMessage.Metadata!["NextPlayer"] = null;
-            socketMessage.Metadata!["WinningPlayer"] = GameHelper.GetWinningPlayer(request.Darts, request.Game.X01.Legs,
-                request.Game.X01.Sets, request.Players.Select(x => x.PlayerId.ToString()).ToList());
-
             request.Game.Status = GameStatus.Finished;
 
+            // Write game to database
             await DynamoDbService.WriteGameAsync(request.Game, cancellationToken);
+
+            // Write game to cache
+            CachingService.AddGame(request.Game);
         }
 
+        // Get metadata for clients
+        socketMessage.Metadata = (await MetadataService.GetMetadata(request.Game.GameId.ToString(), cancellationToken)).toDictionary();
+
+        // Save new state
+        await CachingService.Save(cancellationToken);
+
+        // Notify people in the room
         await NotifyRoomAsync(socketMessage, cancellationToken);
 
         return new APIGatewayProxyResponse
@@ -72,19 +74,30 @@ public record CreateX01ScoreCommandHandler(IDynamoDbService DynamoDbService, IAm
             Body = JsonSerializer.Serialize(socketMessage)
         };
     }
-    public async Task UpdateConnectionId(SocketMessage<CreateX01ScoreCommand> message, CancellationToken cancellationToken)
+
+    private Tuple<int, int> GetSetsAndLegs()
     {
-        var user = await DynamoDbService.ReadUserAsync(message.Message!.PlayerId, cancellationToken);
+        var currentSet = CachingService.State.Darts.Select(x => x.Set).DefaultIfEmpty(1).Max(); 
+        var currentLeg = CachingService.State.Darts.Select(x => x.Leg).DefaultIfEmpty(1).Max();
 
-        user.ConnectionId = message.Message.ConnectionId;
+        if (CachingService.State.Darts.Any() && CachingService.State.Darts.OrderBy(x => x.CreatedAt).Last().GameScore == 0)
+        {
+            currentLeg++;
+            if (currentLeg > CachingService.State.Game.X01.Legs)
+            {
+                currentLeg = 1;
+                currentSet++;
+            }
+        }
 
-        await DynamoDbService.WriteUserAsync(user, cancellationToken);
-    }
+        return new Tuple<int, int>(currentSet, currentLeg);
+    } 
+
     public async Task NotifyRoomAsync(SocketMessage<CreateX01ScoreCommand> message, CancellationToken cancellationToken)
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message)));
 
-        foreach (var user in message.Message.Users)
+        foreach (var user in CachingService.State.Users)
         {
             if (!string.IsNullOrEmpty(user.ConnectionId))
             {
@@ -100,189 +113,6 @@ public record CreateX01ScoreCommandHandler(IDynamoDbService DynamoDbService, IAm
                 stream.Position = 0;
 
                 await ApiGatewayClient.PostToConnectionAsync(postConnectionRequest, cancellationToken);
-            }
-        }
-    }
-    public async Task UpdateGameStatus(Game game, GameStatus gameStatus, CancellationToken cancellationToken)
-    {
-        game.Status = gameStatus;
-        game.LSI1 = $"{gameStatus}#{game.GameId}";
-        game.SortKey = $"{game.GameId}#{gameStatus}";
-
-        await DynamoDbService.WriteGameAsync(game, cancellationToken);
-    }
-}
-
-public class GameHelper
-{
-    public static string GetWinningPlayer(List<GameDart> darts, int legsRequired, int bestOfSets, List<string> playerIds)
-    {
-        foreach (var playerId in playerIds)
-        {
-            int setsWonByPlayer = CalculateSets(darts, playerId, legsRequired);
-            int setsRequiredToWin = (bestOfSets + 1) / 2;
-
-            // If the player has won the required number of sets in a "best of" scenario, they've won the game.
-            if (setsWonByPlayer >= setsRequiredToWin)
-            {
-                return playerId;
-            }
-        }
-
-        // If no player has won enough sets, return null to indicate that the game is still ongoing.
-        return null;
-    }
-    public static Dictionary<string, object> CreateMetaData(Game game, List<GameDart> darts, List<GamePlayer> players, List<User> users)
-    {
-        Metadata data = new Metadata();
-
-        if (game is not null)
-        {
-            data.Game = new GameDto
-            {
-                Id = game.GameId.ToString(),
-                PlayerCount = game.PlayerCount,
-                Status = (GameStatusDto)(int)game.Status,
-                Type = (GameTypeDto)(int)game.Type,
-                X01 = new X01GameSettingsDto
-                {
-                    DoubleIn = game.X01.DoubleIn,
-                    DoubleOut = game.X01.DoubleOut,
-                    Legs = game.X01.Legs,
-                    Sets = game.X01.Sets,
-                    StartingScore = game.X01.StartingScore
-                }
-            };
-        }
-
-        if (darts is not null)
-        {
-            data.Darts = new();
-            players.ForEach(p =>
-            {
-                data.Darts.Add(p.PlayerId, new());
-                data.Darts[p.PlayerId] = darts
-                    .OrderBy(x => x.CreatedAt)
-                    .Where(x => x.PlayerId == p.PlayerId)
-                    .Select(x => new DartDto
-                    {
-                        Id = x.Id,
-                        Score = x.Score,
-                        GameScore = x.GameScore,
-                        Set = x.Set,
-                        Leg = x.Leg,
-                        CreatedAt = x.CreatedAt.Ticks
-                    })
-                    .ToList();
-            });
-        }
-
-        if (players is not null)
-        {
-            var orderedPlayers = players.Select(x =>
-            {
-                return new PlayerDto
-                {
-                    PlayerId = x.PlayerId,
-                    PlayerName = users.Single(y => y.UserId == x.PlayerId).Profile.UserName,
-                    Country = users.Single(y => y.UserId == x.PlayerId).Profile.Country.ToLower(),
-                    CreatedAt = x.PlayerId,
-                    Legs = CalculateLegs(darts!, x.PlayerId).ToString(),
-                    Sets = CalculateSets(darts!, x.PlayerId, data.Game.X01.Legs).ToString()
-                };
-            }).OrderBy(x => x.CreatedAt);
-
-            data.Players = orderedPlayers;
-        }
-
-        DetermineNextPlayer(data);
-
-        try
-        {
-            var lastFinisher = darts!.OrderBy(x => x.CreatedAt).Last(x => x.GameScore == 0);
-            data.Darts[data.Darts.Keys.First()] =
-                data.Darts[data.Darts.Keys.First()].Where(x => x.CreatedAt > lastFinisher.CreatedAt.Ticks).ToList();
-
-            data.Darts[data.Darts.Keys.Last()] =
-                data.Darts[data.Darts.Keys.Last()].Where(x => x.CreatedAt > lastFinisher.CreatedAt.Ticks).ToList();
-        }
-        catch { }
-
-        return data.toDictionary();
-    }
-    public static int CalculateLegs(List<GameDart> darts, string playerId)
-    {
-        // Group darts by set and then by player.
-        var sets = darts.GroupBy(dart => dart.Set);
-
-        var totalLegsWon = 0;
-
-        // Calculate legs won in each set
-        foreach (var set in sets)
-        {
-            var legsInSet = set.GroupBy(dart => dart.Leg);
-            foreach (var leg in legsInSet)
-            {
-                // Check if the player has won the leg by being the first to finish (score of 0)
-                if (leg.Any(dart => dart.PlayerId == playerId && dart.GameScore == 0))
-                {
-                    totalLegsWon++;
-                }
-            }
-        }
-
-        return totalLegsWon;
-    }
-
-    public static int CalculateSets(List<GameDart> darts, string playerId, int legsPerSet)
-    {
-        // Group darts by set
-        var sets = darts.GroupBy(dart => dart.Set);
-
-        int totalSetsWon = 0;
-
-        // Calculate sets won
-        foreach (var set in sets)
-        {
-            int legsWonInCurrentSet = CalculateLegs(set.ToList(), playerId);
-            if (legsWonInCurrentSet >= ((legsPerSet / 2) + 1)) // If the player has won the majority of the legs in the set
-            {
-                totalSetsWon++;
-            }
-        }
-
-        return totalSetsWon;
-    }
-    public static bool HasAnyPlayerWon(List<GameDart> darts, int legsRequired, int bestOfSets, List<string> playerIds)
-    {
-        foreach (var playerId in playerIds)
-        {
-            int setsWonByPlayer = CalculateSets(darts, playerId, legsRequired);
-            int setsRequiredToWin = (bestOfSets + 1) / 2;
-
-            // If any player has won the required number of sets in a "best of" scenario, the game is won.
-            if (setsWonByPlayer >= setsRequiredToWin)
-            {
-                return true;
-            }
-        }
-
-        // If no player has won enough sets, the game is still ongoing.
-        return false;
-    }
-    public static void DetermineNextPlayer(Metadata metadata)
-    {
-        if (metadata.Players.Count() == 2)
-        {
-            var p1_count = metadata.Darts[metadata.Players.First().PlayerId].Count();
-            var p2_count = metadata.Darts[metadata.Players.Last().PlayerId].Count();
-            if (p1_count > p2_count)
-            {
-                metadata.NextPlayer = metadata.Players.Last().PlayerId;
-            }
-            else
-            {
-                metadata.NextPlayer = metadata.Players.First().PlayerId;
             }
         }
     }

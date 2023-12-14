@@ -1,0 +1,9 @@
+{
+	"name": "flyingdarts.frontend.flutter.packages.shared.ui",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+	  "build": "flutter --version",
+	  "build:prod": "flutter --version"
+	}
+  }

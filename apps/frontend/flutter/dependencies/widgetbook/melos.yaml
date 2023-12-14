@@ -2,30 +2,25 @@ name: widgetbook
 repository: https://github.com/widgetbook/widgetbook
 
 packages:
-  - packages/**/*
+  - packages/**
   - examples/**
   - sandbox/
-  
-scripts:
-  build_runner:
-    run: melos exec --order-dependents -- dart run build_runner build --delete-conflicting-outputs
-    packageFilters:
-      dependsOn: build_runner
-  setup:
-    run: melos bootstrap && melos run build_runner
-  test:
-    run: melos exec -- flutter test --concurrency=6
-    packageFilters:
-      dirExists: test
-  clean_build_runner:
-    run: melos exec -- dart run build_runner clean
-    packageFilters:
-      dependsOn: build_runner
-  analyze-ci:
-    run: melos exec -- flutter analyze --no-fatal-warnings --no-fatal-infos
-  analyze:
-    run: melos exec -- flutter analyze 
+
 command:
-  clean:
-    hooks:
-      post: melos run clean_build_runner
+  version:
+    branch: main
+
+scripts:
+  test-coverage:
+    run: melos exec --dir-exists=test --flutter -- "flutter test --coverage && genhtml ./coverage/lcov.info --output-directory ./coverage/out"
+    description: Run flutter test with coverage and generates coverage report
+
+  generate:
+    run: melos exec $MELOS_FILTERS -c 1 --depends-on="build_runner" -- "dart pub run build_runner build --delete-conflicting-outputs"
+    description: Build all generated files.
+
+  pana:
+    run: melos exec -c 10 -- "../../tool/verify_pub_score.sh"
+    select-package:
+      no-private: true
+    description: Checks if the package meets the pub.dev score requirement.
