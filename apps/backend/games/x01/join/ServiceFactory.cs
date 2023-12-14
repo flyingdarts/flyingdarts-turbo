@@ -5,8 +5,8 @@ using FluentValidation;
 using Flyingdarts.Shared;
 using Microsoft.Extensions.Configuration;
 using Amazon.ApiGatewayManagementApi;
-using Flyingdarts.Backend.Shared.Caching;
 using Flyingdarts.Persistence;
+using Flyingdarts.Backend.Shared.Services;
 
 /// <summary>
 /// Factory class for creating the service provider.
@@ -36,14 +36,21 @@ public static class ServiceFactory
         // Register application options.
         services.AddOptions<ApplicationOptions>();
 
+        // Register DynamoDbContext
         services.AddTransient<IDynamoDBContext, DynamoDBContext>();
 
-        // Register GameService with Reads and Writes.
+        // Register DynaomDbService
         services.AddTransient<IDynamoDbService, DynamoDbService>();
-        
+
         // Register a caching service
         services.AddScoped<CachingService<X01State>>();
-        
+
+        // Register a metadata service
+        services.AddScoped<X01MetadataService>();
+
+        // Register Connection service
+        services.AddScoped<ConnectionService>();
+
         // Register validators from the assembly containing the JoinX01GameCommandValidator.
         services.AddValidatorsFromAssemblyContaining<JoinX01GameCommandValidator>();
 

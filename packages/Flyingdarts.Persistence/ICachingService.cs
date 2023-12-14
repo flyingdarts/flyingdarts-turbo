@@ -1,6 +1,4 @@
-using Flyingdarts.Persistence;
-
-namespace Flyingdarts.Backend.Shared.Caching;
+namespace Flyingdarts.Persistence;
 
 public interface ICachingService<T>
 {

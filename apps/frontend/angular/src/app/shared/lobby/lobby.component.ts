@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth } from 'aws-amplify';
-import { AnimationOptions } from 'ngx-lottie/lib/symbols';
 import { FormControl, FormGroup } from '@angular/forms';
 import { WebSocketService } from '../../infrastructure/websocket/websocket.service';
 import { WebSocketActions } from '../../infrastructure/websocket/websocket.actions.enum';
@@ -14,6 +13,7 @@ import { UserProfileStateService } from '../../services/user-profile-state.servi
 import { Observable } from 'rxjs';
 import { AppState } from 'src/app/app.state';
 import { PreferedX01SettingsService } from 'src/app/services/prefered-x01-settings.service';
+import { AnimationOptions } from 'ngx-lottie';
 const { v4: uuidv4 } = require('uuid');
 
 @Component({
@@ -92,10 +92,23 @@ export class LobbyComponent implements OnInit {
   }
 
   public shouldShowFriendSettings: boolean = false;
-
+  
   public openFriendSettings() {
     this.shouldShowFriendSettings = !this.shouldShowFriendSettings;
   }
+  
+  public shouldShowFriendFaq: boolean = false;
+
+  public openFriendFaq() {
+    this.shouldShowFriendFaq = !this.shouldShowFriendFaq;
+  }
+
+  public shouldShowQueueFaq: boolean = false;
+
+  public openQueueFaq() {
+    this.shouldShowQueueFaq = !this.shouldShowQueueFaq;
+  }
+
   public sendMessage() {
     console.log("Sending message", {
       date: new Date(),

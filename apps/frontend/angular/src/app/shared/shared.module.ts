@@ -3,7 +3,6 @@ import { LoadingComponent } from './loading/loading.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
-import { WebcamModule } from 'ngx-webcam';
 import { CarouselComponent } from './carousel/carousel.component';
 import { LottieModule } from 'ngx-lottie';
 import { lottiePlayerFactory } from './lottiePlayerFactory';
@@ -25,7 +24,6 @@ import { LobbyComponent } from './lobby/lobby.component';
     CommonModule,
     AmplifyAuthenticatorModule,
     HttpClientModule,
-    WebcamModule,
     ReactiveFormsModule,
     LottieModule.forRoot({ player: lottiePlayerFactory }),
     RouterModule

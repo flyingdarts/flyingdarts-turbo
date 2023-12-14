@@ -1,26 +1,33 @@
 using Amazon.DynamoDBv2.DocumentModel;
-using Flyingdarts.Persistence;
+using System.Text.Json;
 
-namespace Flyingdarts.Backend.Shared.Caching;
+namespace Flyingdarts.Persistence;
 
 public class CachingService<T> : ICachingService<T> where T : IGameState
 {
     private IDynamoDBContext DbContext;
-    
+
     public CachingService(IDynamoDBContext dbContext)
     {
         DbContext = dbContext;
     }
 
-    public T State;
+    public T State { get; set; }
 
     public async Task Load(string gameId, CancellationToken cancellationToken)
     {
         var results = await DbContext.FromQueryAsync<T>(Query(gameId), OperationConfig)
             .GetRemainingAsync(cancellationToken);
-        State = results.Single();
+
+        Console.WriteLine(JsonSerializer.Serialize(results));
+
+        if (results.Any())
+        {
+
+            State = results.Single();
+        }
     }
-    
+
     public async Task Save(CancellationToken cancellationToken)
     {
         var stateWrite = DbContext.CreateBatchWrite<T>(OperationConfig);
@@ -29,13 +36,13 @@ public class CachingService<T> : ICachingService<T> where T : IGameState
 
         await stateWrite.ExecuteAsync(cancellationToken);
     }
-    
+
     private static QueryOperationConfig Query(string gameId)
     {
-        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.User);
+        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, "X01State");
         queryFilter.AddCondition("SK", QueryOperator.BeginsWith, gameId);
         return new QueryOperationConfig { Filter = queryFilter };
-    }   
+    }
 
     private DynamoDBOperationConfig OperationConfig
     {
@@ -54,7 +61,8 @@ public class CachingService<T> : ICachingService<T> where T : IGameState
 
     public void AddPlayer(GamePlayer player)
     {
-        State.Players.Add(player);
+        if (!State.Players.Any(x => x.PlayerId == player.PlayerId))
+            State.Players.Add(player);
     }
 
     public void AddDart(GameDart dart)
@@ -64,6 +72,7 @@ public class CachingService<T> : ICachingService<T> where T : IGameState
 
     public void AddUser(User user)
     {
-        State.Users.Add(user);
+        if (!State.Users.Any(x => x.UserId == user.UserId))
+            State.Users.Add(user);
     }
 }
