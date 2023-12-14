@@ -6,7 +6,10 @@ namespace Flyingdarts.Backend.Tournaments.Create.Services
 {
     public class ChallongeTournamentService
     {
-        public void CreateTournament();
+        public void CreateTournament()
+        {
+            
+        }
     }
 
     public enum ChallongeTournamentType

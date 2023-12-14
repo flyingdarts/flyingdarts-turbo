@@ -3,6 +3,7 @@ using Flyingdarts.Backend.Shared.Models;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
+using Flyingdarts.Backend.Tournaments.Create.CQRS;
 
 /// <summary>
 /// Represents the inner handler for processing APIGatewayProxyRequest.
@@ -32,11 +33,11 @@ public class InnerHandler
     /// </summary>
     /// <param name="request">The socket message request containing the CreateX01ScoreCommand.</param>
     /// <returns>The APIGatewayProxyResponse.</returns>
-    public async Task<APIGatewayProxyResponse> Handle(SocketMessage<CreateX01ScoreCommand> request)
+    public async Task<APIGatewayProxyResponse> Handle(SocketMessage<CreateTournamentCommand> request)
     {
         // Check if the request or its message is null
         if (request?.Message is null)
-            throw new BadRequestException("Unable to parse request.", typeof(CreateX01ScoreCommand));
+            throw new BadRequestException("Unable to parse request.", typeof(CreateTournamentCommand));
 
         // Send the message to the mediator for further processing
         return await _mediator.Send(request.Message);

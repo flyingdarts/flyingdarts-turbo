@@ -8,6 +8,7 @@ using Amazon.ApiGatewayManagementApi;
 using Flyingdarts.Persistence;
 using StackExchange.Redis;
 using Flyingdarts.Backend.Shared.Services;
+using Flyingdarts.Backend.Tournaments.Create.CQRS;
 
 /// <summary>
 /// Factory class for creating the service provider.
@@ -59,10 +60,10 @@ public static class ServiceFactory
         services.AddScoped<ConnectionService>();
 
         // Register validators from the assembly containing the CreateX01ScoreCommandValidatorr.
-        services.AddValidatorsFromAssemblyContaining<CreateX01ScoreCommandValidator>();
+        services.AddValidatorsFromAssemblyContaining<CreateTournamentCommandValidator>();
 
         // Register MediatR and register services from the assembly containing CreateX01ScoreCommand.
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateX01ScoreCommand).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateTournamentCommand).Assembly));
 
         // Api Gateway Client.
         services.AddTransient<IAmazonApiGatewayManagementApi>(provider =>

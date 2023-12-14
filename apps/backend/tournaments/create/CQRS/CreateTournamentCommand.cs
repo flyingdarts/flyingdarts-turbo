@@ -6,6 +6,8 @@ namespace Flyingdarts.Backend.Tournaments.Create.CQRS
 {
     public class CreateTournamentCommand : IRequest<APIGatewayProxyResponse>
     {
-        public IGameSettings? X01GameSettings { get; set; }0
+        public IGameSettings? X01GameSettings { get; set; }
+        
+        internal string ConnectionId { get; set; }
     }
 }
