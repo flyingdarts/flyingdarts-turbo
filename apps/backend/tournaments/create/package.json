@@ -1,12 +1,12 @@
 {
-  "name": "flyingdarts.backend.games.x01.score",
+  "name": "flyingdarts.backend.tournaments.create",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "dotnet build -c Debug --no-dependencies",
-    "build:prod": "dotnet build -c Release --no-dependencies",
-    "deploy:development": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Score-Development  -frun dotnet6 -f net6.0 --region eu-west-1",
-    "deploy:production": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Score-Production  -frun dotnet6 -f net6.0 --region eu-west-1"
+    "build:development": "dotnet build -c Debug --no-dependencies",
+    "build:production": "dotnet build -c Release --no-dependencies",
+    "deploy:development": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Tournaments-Create-Development  -frun dotnet6 -f net6.0 --region eu-west-1",
+    "deploy:production": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Tournaments-Create-Production  -frun dotnet6 -f net6.0 --region eu-west-1"
 
   },
   "dependencies": {

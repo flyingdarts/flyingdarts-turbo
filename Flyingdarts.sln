@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Backend.Games.X
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Backend.Games.X01.Join", "apps\backend\games\x01\join\Flyingdarts.Backend.Games.X01.Join.csproj", "{52A9CB76-73EA-4267-A4AE-3ED7256E6164}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Backend.Games.X01.Queue", "apps\backend\games\x01\queuehandler\Flyingdarts.Backend.Games.X01.Queue.csproj", "{D31B518F-6534-45D7-8B24-99B96C893CF4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Backend.Games.X01.Queue", "apps\backend\games\x01\queue\Flyingdarts.Backend.Games.X01.Queue.csproj", "{D31B518F-6534-45D7-8B24-99B96C893CF4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Backend.Games.X01.Create", "apps\backend\games\x01\create\Flyingdarts.Backend.Games.X01.Create.csproj", "{08FF0C92-EC13-4EDA-B06B-A0155E7E3270}"
 EndProject

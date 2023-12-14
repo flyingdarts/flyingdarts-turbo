@@ -1,14 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "build": {
+    "build:development": {
       "outputs": [
         "bin/Debug/net6.0/**",
         "obj/Debug/net6.0/**"
       ],
-      "cache": false
+      "cache": true
     },
-    "build:prod": {
+    "build:production": {
       "outputs": [
         "bin/Release/net6.0/**",
         "obj/Release/net6.0/**"
