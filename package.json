@@ -7,7 +7,7 @@
 		"apps/tools/**"
 	],
 	"dependencies": {
-		"turbo": "latest"
+		"turbo": "^1.11.2"
 	},
 	"packageManager": "npm@9.5.0",
 	"scripts": {
