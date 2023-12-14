@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,6 @@ import 'package:websocket/websocket.dart';
 import 'package:appbar/appbar.dart';
 import 'package:ui/ui.dart';
 import 'package:provider/provider.dart';
-
-final AmplifyLogger _logger = AmplifyLogger('MyApp');
 
 var getIt = GetIt.I;
 
@@ -30,7 +27,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<WebSocketMessage> _receivedMessages = [];
   @override
   void initState() {
-    _fetchAuthSession();
     super.initState();
     if (!kIsWeb) {
       _webSocketService = getIt<WebSocketService>();
@@ -55,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var cubit = context.watch<NavigationCubit>();
     var pages = cubit.state.pages;
-
     return Scaffold(
       appBar: const MyAppBar(),
       body: pages[_currentIndex],
@@ -85,13 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _fetchAuthSession() async {
-    final authSession = await Amplify.Auth.fetchAuthSession();
-    _logger.info(
-      prettyPrintJson(authSession.toJson()),
     );
   }
 }

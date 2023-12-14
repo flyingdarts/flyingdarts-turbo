@@ -54,9 +54,8 @@ Future<void> _configureAmplify() async {
   await Amplify.addPlugins([
     AmplifyAuthCognito(
         secureStorageFactory: AmplifySecureStorage.factoryFrom(
-      iOSOptions: IOSSecureStorageOptions(),
       webOptions: WebSecureStorageOptions(
-        persistenceOption: WebPersistenceOption.indexedDB,
+        persistenceOption: WebPersistenceOption.inMemory,
       ),
     )),
   ]);

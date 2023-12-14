@@ -1,4 +1,4 @@
-library configuration;
+library configuration_core;
 
 export 'src/readable_configuration.dart';
 export 'src/writeable_configuration.dart';
