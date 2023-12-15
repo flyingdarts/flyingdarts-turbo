@@ -1,0 +1,17 @@
+{
+  "name": "flyingdarts.backend.tournaments.participants.create",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:development": "dotnet build -c Debug --no-dependencies",
+    "build:production": "dotnet build -c Release --no-dependencies",
+    "deploy:development": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Tournaments-Participants-Create-Development  -frun dotnet6 -f net6.0 --region eu-west-1",
+    "deploy:production": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Tournaments-Participants-Create-Production  -frun dotnet6 -f net6.0 --region eu-west-1"
+
+  },
+  "dependencies": {
+    "flyingdarts.shared": "*",
+    "flyingdarts.backend.shared": "*",
+    "flyingdarts.persistence": "*"
+  }
+}

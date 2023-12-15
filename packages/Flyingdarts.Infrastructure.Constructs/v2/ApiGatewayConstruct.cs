@@ -54,7 +54,15 @@ public class ApiGatewayConstruct : Construct
             } 
         });
 
-        RestApi.Root.AddResource("tournaments").AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsCreate, new LambdaIntegrationOptions { Proxy = true })) ;
+        var tournaments = RestApi.Root.AddResource("tournaments");
+            tournaments.AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsCreate, new LambdaIntegrationOptions { Proxy = true }));
+            tournaments.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.TournamentsStart, new LambdaIntegrationOptions { Proxy = true }));
+
+        var particpants = tournaments.AddResource("participants");
+            particpants.AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsParticipantsCreate, new LambdaIntegrationOptions { Proxy = true }));
+
+        var matches = tournaments.AddResource("matches");
+            matches.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.TournamentsMatchesUpdate, new LambdaIntegrationOptions { Proxy = true }));
 
         WebSocketApi = new WebSocketApi(this, $"Flyingdarts-Backend-Api-{environment}", new WebSocketApiProps
         {

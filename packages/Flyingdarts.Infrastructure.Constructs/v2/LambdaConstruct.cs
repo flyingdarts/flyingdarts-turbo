@@ -15,6 +15,9 @@ public class LambdaConstruct : Construct
     public Function ProfileUpdate { get; }
     public Function ProfileVerifyEmail { get; }
     public Function TournamentsCreate { get; }
+    public Function TournamentsStart { get; }
+    public Function TournamentsParticipantsCreate { get; }
+    public Function TournamentsMatchesUpdate { get; }
 
     public LambdaConstruct(Construct scope, string id, string environment, DynamoDbConstruct dynamoDbConstruct,
         QueueConstruct queueConstruct) : base(scope, id)
@@ -348,13 +351,13 @@ public class LambdaConstruct : Construct
         dynamoDbConstruct.ApplicationTable.GrantFullAccess(ProfileVerifyEmail);
 
         #endregion
-        
+
         #region Tournament functions
-        
+
         TournamentsCreate = new Function(this, $"Flyingdarts-Backend-Tournaments-Create-{environment}", new FunctionProps
         {
             FunctionName = $"Flyingdarts-Backend-Tournaments-Create-{environment}",
-            Handler = "Flyingdarts.Backend.Tournaments-Create",
+            Handler = "Flyingdarts.Backend.Tournaments.Create",
             Code = Code.FromAsset("lambda.zip"),
             Runtime = new Runtime("dotnet6"),
             Timeout = Duration.Seconds(30),
@@ -378,7 +381,91 @@ public class LambdaConstruct : Construct
             }
         });
         dynamoDbConstruct.ApplicationTable.GrantFullAccess(TournamentsCreate);
-        
+
+        TournamentsStart = new Function(this, $"Flyingdarts-Backend-Tournaments-Start-{environment}", new FunctionProps
+        {
+            FunctionName = $"Flyingdarts-Backend-Tournaments-Start-{environment}",
+            Handler = "Flyingdarts.Backend.Tournaments.Start",
+            Code = Code.FromAsset("lambda.zip"),
+            Runtime = new Runtime("dotnet6"),
+            Timeout = Duration.Seconds(30),
+            MemorySize = 256,
+            Environment = new Dictionary<string, string>
+            {
+                { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
+                { "LAMBDA_NET_SERIALIZER_DEBUG", "true" },
+                { "EnvironmentName", "Development" }
+            },
+            InitialPolicy = new[]
+            {
+                new PolicyStatement(new PolicyStatementProps
+                {
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
+                    Resources = new[]
+                    {
+                        "*"
+                    }
+                })
+            }
+        });
+        dynamoDbConstruct.ApplicationTable.GrantFullAccess(TournamentsStart);
+
+        TournamentsParticipantsCreate = new Function(this, $"Flyingdarts-Backend-Tournaments-Participants-Create-{environment}", new FunctionProps
+        {
+            FunctionName = $"Flyingdarts-Backend-Tournaments-Participants-Create-{environment}",
+            Handler = "Flyingdarts.Backend.Tournaments.Participants.Create",
+            Code = Code.FromAsset("lambda.zip"),
+            Runtime = new Runtime("dotnet6"),
+            Timeout = Duration.Seconds(30),
+            MemorySize = 256,
+            Environment = new Dictionary<string, string>
+            {
+                { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
+                { "LAMBDA_NET_SERIALIZER_DEBUG", "true" },
+                { "EnvironmentName", "Development" }
+            },
+            InitialPolicy = new[]
+            {
+                new PolicyStatement(new PolicyStatementProps
+                {
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
+                    Resources = new[]
+                    {
+                        "*"
+                    }
+                })
+            }
+        });
+        dynamoDbConstruct.ApplicationTable.GrantFullAccess(TournamentsParticipantsCreate);
+
+        TournamentsMatchesUpdate = new Function(this, $"Flyingdarts-Backend-Tournaments-Matches-Update-{environment}", new FunctionProps
+        {
+            FunctionName = $"Flyingdarts-Backend-Tournaments-Matches-Update-{environment}",
+            Handler = "Flyingdarts.Backend.Tournaments.Matches.Update",
+            Code = Code.FromAsset("lambda.zip"),
+            Runtime = new Runtime("dotnet6"),
+            Timeout = Duration.Seconds(30),
+            MemorySize = 256,
+            Environment = new Dictionary<string, string>
+            {
+                { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
+                { "LAMBDA_NET_SERIALIZER_DEBUG", "true" },
+                { "EnvironmentName", "Development" }
+            },
+            InitialPolicy = new[]
+            {
+                new PolicyStatement(new PolicyStatementProps
+                {
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
+                    Resources = new[]
+                    {
+                        "*"
+                    }
+                })
+            }
+        });
+        dynamoDbConstruct.ApplicationTable.GrantFullAccess(TournamentsMatchesUpdate);
+
         #endregion
     }
 }
