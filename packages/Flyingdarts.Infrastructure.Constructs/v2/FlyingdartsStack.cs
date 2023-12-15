@@ -19,7 +19,7 @@ public class FlyingdartsStack : Stack
             ExportName = $"WebSocketApiUrl{environment}",
             Value = ApiGatewayConstruct.WebSocketStage.Url
         });
-        
+
         new StringParameter(this, $"SignallingTable-DynamoDb-StringParameter-{environment}", new StringParameterProps
         {
             StringValue = DynamoDbConstruct.SignallingTable.TableName,

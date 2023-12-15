@@ -15,21 +15,15 @@
       ],
       "cache": false
     },
-    "deploy": {
-      "dependsOn": [
-        "build"
-      ],
-      "cache": false
-    },
     "deploy:development": {
       "dependsOn": [
-        "build"
+        "build:development"
       ],
       "cache": false
     },
     "deploy:production": {
       "dependsOn": [
-        "build"
+        "build:production"
       ],
       "cache": false
     },
@@ -39,7 +33,7 @@
     },
     "dockerize": {
       "dependsOn": [
-        "build"
+        "build:production"
       ],
       "cache": false
     }

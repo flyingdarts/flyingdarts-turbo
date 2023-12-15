@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "dotnet build -c Debug --no-dependencies",
-    "build:prod": "dotnet build -c Release --no-dependencies",
-    "deploy": "cdk deploy"
+    "build:development": "dotnet build src/Flyingdarts.Infrastructure -c Debug --no-dependencies",
+    "build:production": "dotnet build src/Flyingdarts.Infrastructure -c Release --no-dependencies",
+    "deploy:development": "cdk deploy FD-Stack-Development",
+    "deploy:production": "cdk deploy FD-Stack-Production"
   }
 }

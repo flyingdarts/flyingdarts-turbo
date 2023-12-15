@@ -18,14 +18,16 @@ var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensit
 // Define the Lambda function handler
 var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
-    // Convert the APIGatewayProxyRequest to the specified CreateX01ScoreCommand type using the serializer
-    var socketRequest = request.To<CreateTournamentCommand>(serializer);
+    //// Convert the APIGatewayProxyRequest to the specified CreateX01ScoreCommand type using the serializer
+    //var command = request.ToRequest<CreateTournamentCommand>(serializer);
 
-    // Add the connectionId to the request.
-    socketRequest.Message.ConnectionId = request.RequestContext.ConnectionId;
-    
-    // Handle the socketRequest using the innerHandler
-    return await innerHandler.Handle(socketRequest);
+    //// Handle the socketRequest using the innerHandler
+    //return await innerHandler.Handle(command);
+    return new APIGatewayProxyResponse
+    {
+        StatusCode = 200,
+        Body = "A yeet"
+    };
 };
 
 // Create and run the Lambda function

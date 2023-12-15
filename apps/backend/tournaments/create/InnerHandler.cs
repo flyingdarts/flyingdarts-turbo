@@ -33,13 +33,9 @@ public class InnerHandler
     /// </summary>
     /// <param name="request">The socket message request containing the CreateX01ScoreCommand.</param>
     /// <returns>The APIGatewayProxyResponse.</returns>
-    public async Task<APIGatewayProxyResponse> Handle(SocketMessage<CreateTournamentCommand> request)
+    public async Task<APIGatewayProxyResponse> Handle(CreateTournamentCommand request)
     {
-        // Check if the request or its message is null
-        if (request?.Message is null)
-            throw new BadRequestException("Unable to parse request.", typeof(CreateTournamentCommand));
-
         // Send the message to the mediator for further processing
-        return await _mediator.Send(request.Message);
+        return await _mediator.Send(request);
     }
 }
