@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dio: ^4.0.6
+  dio: ^5.0.0
   flutter_secure_storage: ^9.0.0
   shared_preferences: ^2.0.15
   get_it: ^7.6.0
