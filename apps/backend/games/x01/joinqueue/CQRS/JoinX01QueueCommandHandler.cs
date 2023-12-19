@@ -1,19 +1,24 @@
 ﻿using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.APIGatewayEvents;
+using Amazon.SQS;
+using Amazon.SQS.Model;
+using Flyingdarts.Backend.Games.X01.JoinQueue;
 using Flyingdarts.Backend.Shared.Models;
 using Flyingdarts.Persistence;
 using Flyingdarts.Shared;
 using MediatR;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using static Flyingdarts.Shared.Lambdas.Functions.User;
 
-public class 
-    
+public class
+
     JoinX01QueueCommandHandler : IRequestHandler<JoinX01QueueCommand, APIGatewayProxyResponse>
 {
     private readonly IDynamoDBContext _dbContext;
@@ -34,13 +39,13 @@ public class
             Message = request
         };
 
-        var qualifyingGames = await GetQualifyingGamesAsync(cancellationToken);
+        var queueState = X01Queue.Create(request.PlayerId, -1, request.ConnectionId, X01GameSettings.Create(request.Sets, request.Legs));
 
-        var game = qualifyingGames.Any()
-            ? qualifyingGames.First()
-            : await CreateGame(request.Sets, request.Legs, cancellationToken);
+        var queueWrite = _dbContext.CreateBatchWrite<X01Queue>(OperationConfig);
 
-        socketMessage.Message!.GameId = game.GameId.ToString();
+        queueWrite.AddPutItem(queueState);
+
+        await queueWrite.ExecuteAsync(cancellationToken);
 
         return new APIGatewayProxyResponse
         {
@@ -49,40 +54,12 @@ public class
         };
     }
 
-    private async Task<List<Game>> GetQualifyingGamesAsync(CancellationToken cancellationToken)
+    private DynamoDBOperationConfig OperationConfig
     {
-        var qualifyingGames = await _dbContext.FromQueryAsync<Game>(X01GamesQueryConfig(), _applicationOptions.ToOperationConfig())
-            .GetRemainingAsync(cancellationToken);
-
-        var groupedGames = qualifyingGames.GroupBy(x => x.GameId);
-
-        var qualifyingGamesToReturn = groupedGames
-            .Where(group => group.Count() == 1) // Filter out groups with more than one item
-            .Select(group => group.Single()) // Select the single item in each group
-            .ToList();
-
-        return qualifyingGamesToReturn;
-    }
-
-
-    private async Task<Game> CreateGame(int sets, int legs, CancellationToken cancellationToken)
-    {
-        var game = Game.Create(2, X01GameSettings.Create(sets, legs));
-
-        _cachingService.State = X01State.Create(game.GameId);
-        _cachingService.AddGame(game);
-        await _cachingService.Save(cancellationToken);
-
-        var gameWrite = _dbContext.CreateBatchWrite<Game>(_applicationOptions.ToOperationConfig());
-        gameWrite.AddPutItem(game);
-
-        await gameWrite.ExecuteAsync(cancellationToken);
-        return game;
-    }
-
-    private static QueryOperationConfig X01GamesQueryConfig()
-    {
-        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.Game);
-        return new QueryOperationConfig { Filter = queryFilter };
+        get
+        {
+            var tableName = $"Flyingdarts-X01Queue-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}";
+            return new DynamoDBOperationConfig { OverrideTableName = tableName };
+        }
     }
 }

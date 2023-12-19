@@ -22,7 +22,7 @@
 		"build-infrastructure-production": "turbo run build:production --log-order=grouped --filter=./apps/tools/infrastructure/**",
 		"deploy-signalling-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/signalling/** --concurrency=1",
 		"deploy-signalling-production": "turbo run deploy:production --log-order=stream --filter=./apps/backend/signalling/** --concurrency=1",
-		"deploy-games-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/games/** --concurrency=1",
+		"deploy-games-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/games/** --concurrency=5",
 		"deploy-games-production": "turbo run deploy:production --log-order=stream --filter=./apps/backend/games/** --concurrency=1",
 		"deploy-user-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/user/** --concurrency=1",
 		"deploy-user-production": "turbo run deploy:production --log-order=stream --filter=./apps/backend/user/** --concurrency=1",

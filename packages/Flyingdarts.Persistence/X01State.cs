@@ -1,7 +1,7 @@
 
 using Flyingdarts.Persistence;
 
-public class X01State : IGameState, IPrimaryKeyItem, ISortKeyItem
+public class X01State : IGameState<X01State>, IPrimaryKeyItem, ISortKeyItem
 {
     [DynamoDBHashKey("PK")]
     public string PrimaryKey { get; set; } = $"X01State";
@@ -27,4 +27,3 @@ public class X01State : IGameState, IPrimaryKeyItem, ISortKeyItem
         };
     }
 }
-

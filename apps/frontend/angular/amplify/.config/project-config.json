@@ -9,7 +9,7 @@
     "framework": "angular",
     "config": {
       "SourceDir": "src",
-      "DistributionDir": "dist/web-socket-frontend",
+      "DistributionDir": "dist/flyingdarts",
       "BuildCommand": "npm.cmd run-script build",
       "StartCommand": "ng serve"
     }

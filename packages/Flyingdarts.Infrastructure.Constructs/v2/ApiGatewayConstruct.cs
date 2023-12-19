@@ -92,7 +92,19 @@ public class ApiGatewayConstruct : Construct
         WebSocketStage.GrantManagementApiAccess(lambdaConstruct.SignallingOnDefault);
         lambdaConstruct.SignallingOnDefault.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
 
-        // Game routes
+        // For the x01 queue to notify players
+        lambdaConstruct.GamesX01Queue.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
+
+        // create game (to play with friends)
+        WebSocketApi.AddRoute("games/x01/create", new WebSocketRouteOptions
+        {
+            Integration = new WebSocketLambdaIntegration($"Games-Create-Integration-{environment}", lambdaConstruct.GamesX01Create),
+            ReturnResponse = true
+        });
+        WebSocketStage.GrantManagementApiAccess(lambdaConstruct.GamesX01Create);
+        lambdaConstruct.GamesX01Create.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
+
+        // join game (called when game is opened on client)
         WebSocketApi.AddRoute("games/x01/join", new WebSocketRouteOptions
         {
             Integration = new WebSocketLambdaIntegration($"Games-Join-Integration-{environment}", lambdaConstruct.GamesX01Join),
@@ -101,11 +113,13 @@ public class ApiGatewayConstruct : Construct
         WebSocketStage.GrantManagementApiAccess(lambdaConstruct.GamesX01Join);
         lambdaConstruct.GamesX01Join.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
 
+        // join queue (players join an actual fifo queue)
         WebSocketApi.AddRoute("games/x01/joinqueue", new WebSocketRouteOptions
         {
             Integration = new WebSocketLambdaIntegration($"Games-JoinQueue-Integration-{environment}", lambdaConstruct.GamesX01JoinQueue),
             ReturnResponse = true
         });
+
         WebSocketStage.GrantManagementApiAccess(lambdaConstruct.GamesX01JoinQueue);
         lambdaConstruct.GamesX01JoinQueue.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
 

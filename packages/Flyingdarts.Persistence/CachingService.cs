@@ -1,9 +1,10 @@
 using Amazon.DynamoDBv2.DocumentModel;
 using System.Text.Json;
+using static Flyingdarts.Shared.Lambdas.Functions.User;
 
 namespace Flyingdarts.Persistence;
 
-public class CachingService<T> : ICachingService<T> where T : IGameState
+public class CachingService<T> : ICachingService<T> where T : IGameState<T>
 {
     private IDynamoDBContext DbContext;
 
@@ -52,6 +53,12 @@ public class CachingService<T> : ICachingService<T> where T : IGameState
             var tableName = $"Flyingdarts-{stateType}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}";
             return new DynamoDBOperationConfig { OverrideTableName = tableName };
         }
+    }
+
+    public void CreateInitial(T state, Game game)
+    {
+        State = state;
+        AddGame(game);
     }
 
     public void AddGame(Game game)

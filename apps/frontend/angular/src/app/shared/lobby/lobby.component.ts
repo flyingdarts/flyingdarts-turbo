@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 import { AppState } from 'src/app/app.state';
 import { PreferedX01SettingsService } from 'src/app/services/prefered-x01-settings.service';
 import { AnimationOptions } from 'ngx-lottie';
+import { CreateX01GameCommand } from 'src/app/requests/CreateX01GameCommand';
 const { v4: uuidv4 } = require('uuid');
 
 @Component({
@@ -55,9 +56,9 @@ export class LobbyComponent implements OnInit {
 
     this.vm$.subscribe((x) => {
       this.preferedX01Sets = x.preferedSettings.x01Sets,
-      this.preferedX01Legs = x.preferedSettings.x01Legs
+        this.preferedX01Legs = x.preferedSettings.x01Legs
     });
-    
+
     this.webSocketService.getMessages().subscribe(x => {
       switch (x.action) {
         case WebSocketActions.Connect:
@@ -69,9 +70,13 @@ export class LobbyComponent implements OnInit {
         case WebSocketActions.Disconnect:
           this.webSocketStatus = WebSocketStatus.Disconnected
           break;
+        case WebSocketActions.X01Create:
+          this.shouldHideLoader = !this.shouldHideLoader;
+          this.router.navigate(['/', 'x01', (x.message as CreateX01GameCommand).GameId!]);
+          break;
         case WebSocketActions.X01JoinQueue:
           this.shouldHideLoader = !this.shouldHideLoader;
-          this.router.navigate(['/', 'x01', (x.message as JoinX01QueueCommand).GameId]);
+          this.router.navigate(['/', 'queue', 'x01',]);
           break;
       }
     })
@@ -84,19 +89,19 @@ export class LobbyComponent implements OnInit {
     this.x01ApiService.joinQueue(this.clientId);
   }
 
-  public createX01Game() { 
+  public createX01Game() {
     this.shouldHideLoader = !this.shouldHideLoader;
     var sets = this.settingsService.preferedX01Sets;
     var legs = this.settingsService.preferedX01Legs;
-    this.x01ApiService.joinQueue(this.clientId, sets, legs)
+    this.x01ApiService.createGame(this.clientId, sets, legs)
   }
 
   public shouldShowFriendSettings: boolean = false;
-  
+
   public openFriendSettings() {
     this.shouldShowFriendSettings = !this.shouldShowFriendSettings;
   }
-  
+
   public shouldShowFriendFaq: boolean = false;
 
   public openFriendFaq() {

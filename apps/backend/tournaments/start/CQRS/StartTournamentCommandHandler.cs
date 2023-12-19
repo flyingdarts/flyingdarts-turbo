@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Flyingdarts.Backend.Tournaments.Create.CQRS
+namespace Flyingdarts.Backend.Tournaments.Start.CQRS
 {
     internal class StartTournamentCommandHandler : IRequestHandler<StartTournamentCommand, APIGatewayProxyResponse>
     {

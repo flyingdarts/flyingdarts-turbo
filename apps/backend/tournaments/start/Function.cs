@@ -2,9 +2,6 @@ using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
-using Flyingdarts.Backend.Shared;
-using Flyingdarts.Backend.Shared.Extensions;
-using Flyingdarts.Backend.Tournaments.Create.CQRS;
 
 // Get the service provider
 var services = ServiceFactory.GetServiceProvider();

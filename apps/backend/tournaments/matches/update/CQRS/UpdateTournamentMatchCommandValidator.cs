@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Flyingdarts.Backend.Tournaments.Create.CQRS
+namespace Flyingdarts.Backend.Tournaments.Matches.Update.CQRS
 {
     public class UpdateTournamentMatchCommandValidator : AbstractValidator<UpdateTournamentMatchCommand>
     {

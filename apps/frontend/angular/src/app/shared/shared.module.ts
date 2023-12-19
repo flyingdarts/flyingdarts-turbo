@@ -4,13 +4,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { CarouselComponent } from './carousel/carousel.component';
-import { LottieModule } from 'ngx-lottie';
 import { lottiePlayerFactory } from './lottiePlayerFactory';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DartboardComponent } from './dartboard/dartboard.component';
 import { LobbyComponent } from './lobby/lobby.component';
+import { LottieModule } from 'ngx-lottie';
 
 @NgModule({
   declarations: [

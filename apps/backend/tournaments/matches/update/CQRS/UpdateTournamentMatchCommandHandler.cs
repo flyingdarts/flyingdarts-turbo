@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Flyingdarts.Backend.Tournaments.Create.CQRS
+namespace Flyingdarts.Backend.Tournaments.Matches.Update.CQRS
 {
     internal class UpdateTournamentMatchCommandHandler : IRequestHandler<UpdateTournamentMatchCommand, APIGatewayProxyResponse>
     {

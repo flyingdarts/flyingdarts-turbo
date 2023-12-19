@@ -3,7 +3,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "./dist/web-socket-frontend",
+    "outDir": "./dist/flyingdarts",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,

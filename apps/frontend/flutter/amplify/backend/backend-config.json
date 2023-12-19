@@ -1,0 +1,101 @@
+{
+  "auth": {
+    "flyingdartsmobile": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_flyingdartsmobile_allowUnauthenticatedIdentities": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_authRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_authRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_identityPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_identityPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_unauthRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_unauthRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    },
+    "AMPLIFY_auth_flyingdartsmobile_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "flyingdartsmobile"
+        }
+      ]
+    }
+  }
+}

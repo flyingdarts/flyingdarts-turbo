@@ -23,6 +23,7 @@ import { AuthEffects } from './auth.effects';
 import { StoreModule } from '@ngrx/store';
 import { ApiClient } from './services/api.client';
 import { PreferedX01SettingsService } from './services/prefered-x01-settings.service';
+import { QueueComponent } from './games/queue/queue.component';
 
 @NgModule({
   declarations: [

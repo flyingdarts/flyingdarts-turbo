@@ -1,3 +1,4 @@
+using Flyingdarts.Backend.Shared.Services;
 /// <summary>
 /// Factory class for creating the service provider.
 /// </summary>
@@ -28,8 +29,14 @@ public static class ServiceFactory
 
         services.AddTransient<IDynamoDBContext, DynamoDBContext>();
 
-        // Register GameService with Reads and Writes.
-        services.AddTransient<IDynamoDbService, DynamoDbService>();
+        // Register a caching service
+        services.AddScoped<CachingService<X01State>>();
+
+        // Register a metadata service
+        services.AddScoped<X01MetadataService>();
+
+        // Register Connection service
+        services.AddScoped<ConnectionService>();
 
         // Register validators from the assembly containing the JoinX01GameCommandValidator.
         services.AddValidatorsFromAssemblyContaining<CreateX01GameCommandValidator>();

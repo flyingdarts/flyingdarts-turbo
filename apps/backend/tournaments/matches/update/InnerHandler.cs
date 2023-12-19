@@ -3,7 +3,7 @@ using Flyingdarts.Backend.Shared.Models;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
-using Flyingdarts.Backend.Tournaments.Create.CQRS;
+using Flyingdarts.Backend.Tournaments.Matches.Update.CQRS;
 
 /// <summary>
 /// Represents the inner handler for processing APIGatewayProxyRequest.

@@ -10,6 +10,23 @@
       "StackName": "amplify-amplify0e5b517b56684-staging-165927",
       "StackId": "arn:aws:cloudformation:eu-west-1:561462764262:stack/amplify-amplify0e5b517b56684-staging-165927/d5a2bb90-8633-11ee-8294-02a917fd0055",
       "AmplifyAppId": "d2n67kzf0xo4x7"
+    },
+    "categories": {
+      "auth": {
+        "flyingdartsmobile": {
+          "allowUnauthenticatedIdentities": false,
+          "authRoleArn": "arn:aws:iam::561462764262:role/amplify-flyingdarts-production-24329-authRole",
+          "authRoleName": "amplify-flyingdarts-production-24329-authRole",
+          "identityPoolId": "eu-west-1:e2168b52-d7c1-452b-bc05-0e4d06bcba71",
+          "identityPoolName": "testAuthIdentityPool__production",
+          "nativeClientId": "7duge0a35ki8fvq8ip8v4miop6",
+          "unauthRoleArn": "arn:aws:iam::561462764262:role/amplify-flyingdarts-production-24329-unauthRole",
+          "unauthRoleName": "amplify-flyingdarts-production-24329-unauthRole",
+          "userPoolId": "eu-west-1_gInTJENXg",
+          "userPoolName": "Flyingdarts-production",
+          "webClientId": "7duge0a35ki8fvq8ip8v4miop6"
+        }
+      }
     }
   }
 }

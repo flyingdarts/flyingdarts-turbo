@@ -41,6 +41,15 @@ testem.log
 .DS_Store
 Thumbs.db
 
+*.pem
+*.crt
+*.key
+.vscode
+e2e/**/**.*.js
+e2e/local.properties
+e2e/.env
+.turbo
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -62,11 +71,3 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
-*.pem
-*.crt
-*.key
-.vscode
-e2e/**/**.*.js
-e2e/local.properties
-e2e/.env
-.turbo

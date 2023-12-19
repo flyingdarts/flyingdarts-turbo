@@ -7,6 +7,7 @@ export enum WebSocketActions {
   UserProfileUpdate = "user/profile/update",
   UserProfileGet = "user/profile/get",
   X01Create = "games/x01/create",
+  X01Queue = "games/x01/queue",
   X01JoinQueue = "games/x01/joinqueue",
   X01Score = "games/x01/score",
   X01Join = "games/x01/join",

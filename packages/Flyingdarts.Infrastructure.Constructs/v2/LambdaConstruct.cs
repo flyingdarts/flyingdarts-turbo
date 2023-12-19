@@ -1,3 +1,5 @@
+using Amazon.CDK.AWS.Lambda.EventSources;
+using Amazon.CDK.AWS.SES.Actions;
 using Flyingdarts.Infrastructure.Constructs.v2;
 
 public class LambdaConstruct : Construct
@@ -5,7 +7,7 @@ public class LambdaConstruct : Construct
     public Function SignallingOnConnect { get; }
     public Function SignallingOnDefault { get; }
     public Function SignallingOnDisconnect { get; }
-    public Function GamesX01Create { get;  }
+    public Function GamesX01Create { get; }
     public Function GamesX01Join { get; }
     public Function GamesX01JoinQueue { get; }
     public Function GamesX01Queue { get; }
@@ -22,7 +24,7 @@ public class LambdaConstruct : Construct
     public LambdaConstruct(Construct scope, string id, string environment, DynamoDbConstruct dynamoDbConstruct,
         QueueConstruct queueConstruct) : base(scope, id)
     {
-        if (dynamoDbConstruct is null)  
+        if (dynamoDbConstruct is null)
             throw new Exception("Where the tables at?");
 
         #region Signalling functions
@@ -82,7 +84,7 @@ public class LambdaConstruct : Construct
 
         #region X01 game functions
 
-        GamesX01Create= new Function(this, $"Flyingdarts-Backend-Games-X01-Create-{environment}", new FunctionProps
+        GamesX01Create = new Function(this, $"Flyingdarts-Backend-Games-X01-Create-{environment}", new FunctionProps
         {
             FunctionName = $"Flyingdarts-Backend-Games-X01-Create-{environment}",
             Handler = "Flyingdarts.Backend.Games.X01.Create",
@@ -109,7 +111,7 @@ public class LambdaConstruct : Construct
             }
         });
         dynamoDbConstruct.ApplicationTable.GrantFullAccess(GamesX01Create);
-        
+
         GamesX01Join = new Function(this, $"Flyingdarts-Backend-Games-X01-Join-{environment}", new FunctionProps
         {
             FunctionName = $"Flyingdarts-Backend-Games-X01-Join-{environment}",
@@ -165,7 +167,8 @@ public class LambdaConstruct : Construct
             }
         });
         dynamoDbConstruct.ApplicationTable.GrantFullAccess(GamesX01JoinQueue);
-        
+        dynamoDbConstruct.X01QueueTable.GrantFullAccess(GamesX01JoinQueue);
+
         GamesX01Queue = new Function(this, $"Flyingdarts-Backend-Games-X01-Queue-{environment}", new FunctionProps
         {
             FunctionName = $"Flyingdarts-Backend-Games-X01-Queue-{environment}",
@@ -176,7 +179,6 @@ public class LambdaConstruct : Construct
             MemorySize = 256,
             Environment = new Dictionary<string, string>
             {
-                { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
                 { "LAMBDA_NET_SERIALIZER_DEBUG", "true" },
                 { "EnvironmentName", "Development" }
             },
@@ -193,7 +195,13 @@ public class LambdaConstruct : Construct
             }
         });
         dynamoDbConstruct.ApplicationTable.GrantFullAccess(GamesX01Queue);
-        
+        dynamoDbConstruct.X01QueueTable.GrantStreamRead(GamesX01Queue);
+        // Add DynamoDB stream trigger to Lambda
+        GamesX01Queue.AddEventSource(new DynamoEventSource(dynamoDbConstruct.X01QueueTable, new DynamoEventSourceProps
+        {
+            BatchSize = 100, // Set the batch size as needed
+            StartingPosition = StartingPosition.TRIM_HORIZON, // Set the starting position as needed
+        }));
         GamesX01Score = new Function(this, $"Flyingdarts-Backend-Games-X01-Score-{environment}", new FunctionProps
         {
             FunctionName = $"Flyingdarts-Backend-Games-X01-Score-{environment}",

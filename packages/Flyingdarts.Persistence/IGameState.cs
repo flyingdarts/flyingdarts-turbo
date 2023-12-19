@@ -1,6 +1,6 @@
 namespace Flyingdarts.Persistence;
 
-public interface IGameState
+public interface IGameState<TState>
 {
     public Game Game { get; set; }
     public List<GameDart> Darts { get; set; }

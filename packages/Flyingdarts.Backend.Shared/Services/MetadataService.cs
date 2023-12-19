@@ -2,7 +2,7 @@
 
 namespace Flyingdarts.Backend.Shared.Services
 {
-    public abstract class MetadataService<T> where T : IGameState
+    public abstract class MetadataService<T> where T : IGameState<T>
     {
         private readonly CachingService<T> _cachingService;
 

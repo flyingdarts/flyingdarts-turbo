@@ -1,35 +1,10 @@
-﻿using System;
-using System.ComponentModel;
+﻿using Flyingdarts.Backend.Tournaments.Challonge.Models;
+using System;
 using System.Text.Json.Serialization;
 
-namespace Flyingdarts.Backend.Tournaments.Create.Services
+namespace Flyingdarts.Backend.Tournaments.Challonge.Requests
 {
-    public class ChallongeTournamentService
-    {
-        public void CreateTournament()
-        {
-            
-        }
-    }
-
-    public enum ChallongeTournamentType
-    {
-        SingleElemination,
-        DoubleElemination,
-        RoundRobin,
-        Swiss
-    }
-
-    public class ChallongeRequest
-    {
-        /// <summary>
-        /// Your API key (required unless you're using HTTP basic authentication)
-        /// </summary>
-        [JsonPropertyName("api_key")]
-        public string ApiKey { get; set; }
-    }
-
-    public class CreateChallongeTournamentRequest : ChallongeRequest
+    public class CreateTournament : ChallongeRequest
     {
         /// <summary>
         /// Your event's name/title (Max: 60 characters)
@@ -41,7 +16,7 @@ namespace Flyingdarts.Backend.Tournaments.Create.Services
         /// Single elimination (default), double elimination, round robin, swiss
         /// </summary>
         [JsonPropertyName("tournament_type")]
-        public ChallongeTournamentType TournamentType { get; set; }
+        public TournamentType TournamentType { get; set; }
 
         /// <summary>
         /// challonge.com/url (letters, numbers, and underscores only); when blank on create, a random URL will be generated for you
@@ -114,7 +89,7 @@ namespace Flyingdarts.Backend.Tournaments.Create.Services
         /// One of the following: 'match wins', 'game wins', 'points scored', 'points difference', 'custom'
         /// </summary>
         [JsonPropertyName("ranked_by")]
-        public ChallongeTournamentRankedBy RankedBy { get; set; }
+        public RankedBy RankedBy { get; set; }
 
         /// <summary>
         /// Decimal (to the nearest tenth) - Round Robin "custom only" - default: 1.0
@@ -200,20 +175,5 @@ namespace Flyingdarts.Backend.Tournaments.Create.Services
         /// </summary>
         [JsonPropertyName("grand_finals_modifier")]
         public string GrandFinalsModifier { get; set; }
-    }
-
-
-    public enum ChallongeTournamentRankedBy
-    {
-        [Description("match wins")]
-        MatchWins,
-        [Description("game wins")]
-        GameWins,
-        [Description("points scored")]
-        PointsScored,
-        [Description("points difference")]
-        PointsDifference,
-        [Description("custom")]
-        Custom
     }
 }

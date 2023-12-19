@@ -8,7 +8,7 @@ using Amazon.ApiGatewayManagementApi;
 using Flyingdarts.Persistence;
 using StackExchange.Redis;
 using Flyingdarts.Backend.Shared.Services;
-using Flyingdarts.Backend.Tournaments.Create.CQRS;
+using Flyingdarts.Backend.Tournaments.Participants.Create.CQRS;
 
 /// <summary>
 /// Factory class for creating the service provider.

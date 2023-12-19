@@ -7,11 +7,6 @@ public class QueueConstruct : Construct
 
     public QueueConstruct(Construct scope, string id, string environment) : base(scope, id)
     {
-        X01GameQueue = new Queue(this, $"Flyingdarts-Backend-User-Profile-{environment}", new QueueProps {
-            QueueName = $"FlyingdartsBackendX01GameQueue{environment}",
-            RetentionPeriod = Duration.Seconds(60)
-        });
-        
         VerifyEmailQueue = new Queue(this, $"Flyingdarts-Backend-User-Profile-VerifyEmail-Queue-{environment}",
             new QueueProps
             {

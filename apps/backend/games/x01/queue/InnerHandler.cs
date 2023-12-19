@@ -31,9 +31,9 @@ public class InnerHandler
     /// </summary>
     /// <param name="request">The socket message request containing the SendVerifyUserEmailCommand.</param>
     /// <returns>The APIGatewayProxyResponse.</returns>
-    public async Task Handle(HandleQueueCommand command, ILambdaContext context)
+    public async Task Handle(HandleX01QueueCommand queueMessage, ILambdaContext context)
     {
         // Send the message to the mediator for further processing
-        await _mediator.Send(command);
+        await _mediator.Send(queueMessage);
     }
 }

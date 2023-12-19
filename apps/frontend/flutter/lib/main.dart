@@ -59,5 +59,11 @@ Future<void> _configureAmplify() async {
       ),
     )),
   ]);
-  await Amplify.configure(amplifyconfig);
+
+  // HACK: this is because of how AWS Amplify works.
+  // Or should i say, does not work...
+  const amplifyConfiguration = amplifyconfig;
+  amplifyConfiguration.replaceFirst(',https://flyingdarts.net/login', '');
+  amplifyConfiguration.replaceFirst(',https://flyingdarts.net/logout', '');
+  await Amplify.configure(amplifyConfiguration);
 }

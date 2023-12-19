@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'stats',
     loadChildren: () => import('./stats/stats.module').then(mod=> mod.StatsModule)
+  },
+  {
+    path: 'queue',
+    loadChildren: () => import('./games/queue/queue.module').then(mod => mod.QueueModule)
   }
 ];
 
