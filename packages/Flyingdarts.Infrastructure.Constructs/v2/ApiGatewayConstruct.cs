@@ -93,6 +93,7 @@ public class ApiGatewayConstruct : Construct
         lambdaConstruct.SignallingOnDefault.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
 
         // For the x01 queue to notify players
+        WebSocketStage.GrantManagementApiAccess(lambdaConstruct.GamesX01Queue);
         lambdaConstruct.GamesX01Queue.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
 
         // create game (to play with friends)

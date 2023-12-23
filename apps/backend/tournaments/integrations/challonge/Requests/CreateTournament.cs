@@ -16,7 +16,7 @@ namespace Flyingdarts.Backend.Tournaments.Challonge.Requests
         /// Single elimination (default), double elimination, round robin, swiss
         /// </summary>
         [JsonPropertyName("tournament_type")]
-        public TournamentType TournamentType { get; set; }
+        public ChallongeTournamentType TournamentType { get; set; }
 
         /// <summary>
         /// challonge.com/url (letters, numbers, and underscores only); when blank on create, a random URL will be generated for you
@@ -89,7 +89,7 @@ namespace Flyingdarts.Backend.Tournaments.Challonge.Requests
         /// One of the following: 'match wins', 'game wins', 'points scored', 'points difference', 'custom'
         /// </summary>
         [JsonPropertyName("ranked_by")]
-        public RankedBy RankedBy { get; set; }
+        public ChallongeRankedBy RankedBy { get; set; }
 
         /// <summary>
         /// Decimal (to the nearest tenth) - Round Robin "custom only" - default: 1.0

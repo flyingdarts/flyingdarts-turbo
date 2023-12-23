@@ -8,6 +8,7 @@ using Flyingdarts.Backend.Shared.Services;
 using Amazon.ApiGatewayManagementApi;
 using Amazon.SQS;
 using Amazon.SQS.Model;
+using Amazon.Runtime.Internal;
 
 namespace Flyingdarts.Backend.Games.X01.Queue.CQRS;
 class Range
@@ -32,77 +33,52 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
     private readonly IAmazonApiGatewayManagementApi ApiGatewayClient;
     private readonly IDynamoDbService DynamoDbService;
     private readonly X01MetadataService MetadataService;
-    public HandleX01QueueCommandHandler(CachingService<X01State> cachingService, X01MetadataService metadataService, IDynamoDbService dynamoDbService, IAmazonApiGatewayManagementApi apiGatewayClient)
+    private readonly QueueService<X01Queue> QueueService;
+    public HandleX01QueueCommandHandler(CachingService<X01State> cachingService, X01MetadataService metadataService, IDynamoDbService dynamoDbService, IAmazonApiGatewayManagementApi apiGatewayClient, QueueService<X01Queue> queueService)
     {
         CachingService = cachingService;
         ApiGatewayClient = apiGatewayClient;
         DynamoDbService = dynamoDbService;
         MetadataService = metadataService;
+        QueueService = queueService;    
     }
     public async Task Handle(HandleX01QueueCommand request, CancellationToken cancellationToken)
     {
-        X01Queue FindMatchingQueue(List<X01Queue> records, int targetAverage)
-        {
-            foreach (var x01Queue in records)
-            {
-                if (x01Queue.Average == targetAverage)
-                {
-                    return x01Queue;
-                }
-            }
-
-            // Return null if no match is found
-            return null;
-        }
-
-        X01Queue FindMatchingQueueByRange(List<X01Queue> records, int targetAverage, List<Range> ranges)
-        {
-            foreach (var x01Queue in records)
-            {
-                foreach (var range in ranges)
-                {
-                    if (range.IsInRange(x01Queue.Average) && x01Queue.Average == targetAverage)
-                    {
-                        return x01Queue;
-                    }
-                }
-            }
-
-            // Return null if no match is found within the specified range
-            return null;
-        }
-
-        // average ranges
-        List<Range> ranges = new List<Range> {
-            new Range (10, 19),
-            new Range(20,29),
-            new Range(30,39),
-            new Range(40,49),
-            new Range(50,59),
-            new Range(60,69),
-            new Range(70,79),
-            new Range(80,89),
-            new Range(90,99)
-        };
-
         // Look for match
-        X01Queue? match = FindMatchingQueueByRange(request.Records, request.Owner.Average, ranges);
+        var records = await QueueService.GetRecords(cancellationToken);
+
+        var match = FindMatch(records, request.Owner.PlayerId);
 
         // if match found
         if (match != null)
         {
             // get game settings
             var settings = match.X01;
-            var playerIds = new[] { match.PlayerId, request.Owner.PlayerId };
+            var playerIds = records.Select(x=>x.PlayerId).ToArray();
+            var connectionIds = records.Select(x => x.ConnectionId).ToArray();
 
             // Creates game and game player objects
             await InitializeGame(settings, playerIds, cancellationToken);
 
             // Sends response to clients
-            await HandleResponseBack(cancellationToken);
+            await HandleResponseBack(connectionIds, cancellationToken);
+
+            await QueueService.DeleteRecords(records, cancellationToken);
         }
     }
-    private async Task HandleResponseBack(CancellationToken cancellationToken)
+    private X01Queue FindMatch(List<X01Queue> records, string playerId)
+    {
+        foreach (var record in records.Where(x=>x.PlayerId != playerId))
+        {
+            if (record.PlayerId != playerId)
+            {
+                return record;
+            }
+        }
+
+        throw new Exception("No match found");
+    }
+    private async Task HandleResponseBack(string[] connectionIds, CancellationToken cancellationToken)
     {
         var message = new SocketMessage<HandleQueueResponse>
         {
@@ -111,10 +87,9 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
             {
                 GameId = CachingService.State.Game.GameId.ToString(),
             },
-            Metadata = (await MetadataService.GetMetadata(CachingService.State.Game.GameId.ToString(), cancellationToken)).toDictionary()
         };
 
-        await NotifyRoomAsync(message, cancellationToken);
+        await NotifyRoomAsync(message, connectionIds, cancellationToken);
     }
 
     private async Task InitializeGame(X01GameSettings settings, string[] playerIds, CancellationToken cancellationToken)
@@ -131,7 +106,10 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
         await DynamoDbService.WriteGameAsync(game, cancellationToken);
 
         // initialize state in cache
-        CachingService.CreateInitial(X01State.Create(game.GameId), game);
+        CachingService.State = X01State.Create(game.GameId);
+        CachingService.AddGame(game);
+
+        await CachingService.Save(cancellationToken);
 
         // Create player records for the game
         foreach (var playerId in playerIds)
@@ -156,16 +134,14 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
         await CachingService.Save(cancellationToken);
     }
 
-    public async Task NotifyRoomAsync(SocketMessage<HandleQueueResponse> request, CancellationToken cancellationToken)
+    public async Task NotifyRoomAsync(SocketMessage<HandleQueueResponse> request, string[] connectionIds, CancellationToken cancellationToken)
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
 
-        foreach (var user in CachingService.State.Users)
+        foreach (var connectionId in connectionIds)
         {
-            if (!string.IsNullOrEmpty(user.ConnectionId))
+            if (!string.IsNullOrEmpty(connectionId))
             {
-                var connectionId = user.ConnectionId;
-
                 var postConnectionRequest = new PostToConnectionRequest
                 {
                     ConnectionId = connectionId,

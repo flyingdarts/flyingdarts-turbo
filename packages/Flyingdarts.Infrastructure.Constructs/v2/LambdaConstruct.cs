@@ -179,6 +179,7 @@ public class LambdaConstruct : Construct
             MemorySize = 256,
             Environment = new Dictionary<string, string>
             {
+                { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
                 { "LAMBDA_NET_SERIALIZER_DEBUG", "true" },
                 { "EnvironmentName", "Development" }
             },

@@ -102,7 +102,8 @@ namespace Flyingdarts.Backend.Shared.Services
                 data.Players = orderedPlayers;
             }
 
-            DetermineNextPlayer(data);
+            if (darts is not null && darts.Any() && players is not null && players.Any())
+                DetermineNextPlayer(data);
 
             try
             {

@@ -1,6 +1,6 @@
 ﻿namespace Flyingdarts.Backend.Tournaments.Challonge.Models
 {
-    public enum TournamentType
+    public enum ChallongeTournamentType
     {
         SingleElemination,
         DoubleElemination,

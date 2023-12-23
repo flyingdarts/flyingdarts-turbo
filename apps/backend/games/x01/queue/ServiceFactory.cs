@@ -41,6 +41,8 @@ public static class ServiceFactory
         services.AddScoped<CachingService<X01State>>();
         // Register a metadata service
         services.AddScoped<X01MetadataService>();
+        // Register queue service
+        services.AddScoped<QueueService<X01Queue>>();
 
         // Register Connection service
         services.AddScoped<ConnectionService>();

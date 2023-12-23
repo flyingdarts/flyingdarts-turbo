@@ -2,7 +2,8 @@
 
 namespace Flyingdarts.Backend.Tournaments.Challonge.Models
 {
-    public enum RankedBy
+    // TODO: create description converter
+    public enum ChallongeRankedBy
     {
         [Description("match wins")]
         MatchWins,

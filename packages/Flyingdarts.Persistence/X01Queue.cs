@@ -1,4 +1,4 @@
-﻿namespace Flyingdarts.Persistence;
+﻿using Flyingdarts.Persistence;
 
 public class X01Queue : IGameQueue<X01Queue>, IPrimaryKeyItem, ISortKeyItem
 {
@@ -30,7 +30,9 @@ public class X01Queue : IGameQueue<X01Queue>, IPrimaryKeyItem, ISortKeyItem
             SortKey = $"{playerId}",
             Average = average,
             ConnectionId = connectionId,
-            X01 = x01
+            PlayerId= playerId,
+            X01 = x01,
+            Joined = DateTime.UtcNow,
         };
     }
 }
