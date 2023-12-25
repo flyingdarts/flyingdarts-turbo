@@ -1,11 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import { UserProfileStateService } from '../services/user-profile-state.service';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { ApiClient } from '../services/api.client';
 import { AmplifyAuthService } from '../services/amplify-auth.service';
-import { GetUserProfileCommand } from '../requests/GetUserProfileCommand';
-import { UserProfileDetails } from '../shared/models/user-profile-details.model';
 
 @Injectable({
   providedIn: 'root'

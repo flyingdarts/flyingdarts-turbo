@@ -102,8 +102,7 @@ namespace Flyingdarts.Backend.Shared.Services
                 data.Players = orderedPlayers;
             }
 
-            if (darts is not null && darts.Any() && players is not null && players.Any())
-                DetermineNextPlayer(data);
+            DetermineNextPlayer(data);
 
             try
             {
@@ -202,6 +201,11 @@ namespace Flyingdarts.Backend.Shared.Services
         {
             if (metadata.Players != null && metadata.Players.Any() && metadata.Players.Count() == 2)
             {
+                if (metadata.Darts == null || !metadata.Darts.Any())
+                {
+                    metadata.NextPlayer = metadata.Players.OrderBy(x=>x.CreatedAt).First().PlayerId;
+                    return;
+                }
                 var p1_count = metadata.Darts[metadata.Players.First().PlayerId].Count();
                 var p2_count = metadata.Darts[metadata.Players.Last().PlayerId].Count();
                 if (p1_count > p2_count)

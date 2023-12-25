@@ -15,11 +15,8 @@ public class InnerHandler
     {
         _mediator = serviceProvider.GetRequiredService<IMediator>();
     }
-    public async Task<APIGatewayProxyResponse> Handle(SocketMessage<UpdateUserProfileCommand> request)
+    public async Task<APIGatewayProxyResponse> Handle(UpdateUserProfileCommand request)
     {
-        if (request?.Message is null)
-            throw new BadRequestException("Unable to parse request.", typeof(UpdateUserProfileCommand));
-        
-        return await _mediator.Send(request.Message);
+        return await _mediator.Send(request);
     }
 }

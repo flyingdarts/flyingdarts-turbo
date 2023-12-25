@@ -95,22 +95,26 @@ export class X01Component implements OnInit {
       this.x01Store.setCurrentPlayer(metadata.NextPlayer);
       this.x01Store.setWinningPlayer(metadata.WinningPlayer);
       var player = metadata.Players.filter(x => x.PlayerId == this.clientId!)[0];
-      var playerDarts = metadata.Darts[this.clientId!];
       this.x01Store.setPlayerName(player.PlayerName);
-      this.x01Store.setPlayerHistory(playerDarts.map(x => x.Score));
       this.x01Store.setPlayerCountry(player.Country);
-      this.x01Store.setPlayerScore(metadata.Game.X01.StartingScore - this._sumOfHistory(playerDarts))
       this.x01Store.setPlayerLegs(Number(player.Legs));
       this.x01Store.setPlayerSets(Number(player.Sets));
-      if (Object.keys(metadata.Darts).length == 2) {
+      if (metadata.Darts != null) {
+        var playerDarts = metadata.Darts[this.clientId!];
+        this.x01Store.setPlayerScore(metadata.Game.X01.StartingScore - this._sumOfHistory(playerDarts))
+        this.x01Store.setPlayerHistory(playerDarts.map(x => x.Score));
+      }
+      if (Object.keys(metadata.Players).length == 2) {
         var opponent = metadata.Players.filter(x => x.PlayerId != this.clientId!)[0];
-        var opponentDarts = metadata.Darts[opponent.PlayerId];
         this.x01Store.setOpponentName(opponent.PlayerName);
-        this.x01Store.setOpponentHistory(opponentDarts.map(x => x.Score));
         this.x01Store.setOpponentCountry(opponent.Country);
-        this.x01Store.setOpponentScore(metadata.Game.X01.StartingScore - this._sumOfHistory(opponentDarts))
         this.x01Store.setOpponentLegs(Number(opponent.Legs));
         this.x01Store.setOpponentSets(Number(opponent.Sets));
+        if (metadata.Darts != null) {
+          var opponentDarts = metadata.Darts[opponent.PlayerId];
+          this.x01Store.setOpponentScore(metadata.Game.X01.StartingScore - this._sumOfHistory(opponentDarts))
+          this.x01Store.setOpponentHistory(opponentDarts.map(x => x.Score));
+        }
       }
     } else {
       console.log("couldnt parse metadata from ", message);

@@ -7,10 +7,6 @@ import { UserProfileApiService } from 'src/app/services/user-profile-api.service
 import { UserProfileStateService } from 'src/app/services/user-profile-state.service';
 import { UserProfileDetails } from 'src/app/shared/models/user-profile-details.model';
 import { isNullOrUndefined } from 'src/app/app.component';
-import { WebSocketService } from 'src/app/infrastructure/websocket/websocket.service';
-import { WebSocketActions } from 'src/app/infrastructure/websocket/websocket.actions.enum';
-import { CreateX01ScoreCommand } from 'src/app/requests/CreateX01ScoreCommand';
-import { JoinGameCommand } from 'src/app/requests/JoinGameCommand';
 
 @Component({
   selector: 'app-camera',
@@ -24,7 +20,6 @@ export class CameraComponent implements OnInit {
     private webcamService: WebcamService,
     private userProfileService: UserProfileApiService,
     private userProfileStateService: UserProfileStateService,
-    private webSocketService: WebSocketService,
     private router: Router,
     private appStore: AppStore) {
 
@@ -39,9 +34,12 @@ export class CameraComponent implements OnInit {
   saveCamera() {
     console.log(this.userProfileDetails);
     if (!isNullOrUndefined(this.userProfileDetails)) {
-      console.log('saving profile on the onboarding-camera page:', this.userProfileDetails);
-      this.userProfileService.createUserProfile(this.userProfileDetails!.CognitoUserId!, this.userProfileDetails!.CognitoUserName!, this.userProfileDetails!.Email, this.userProfileDetails!.UserName, this.userProfileDetails!.Country);
-      this.userProfileStateService.currentUserProfileDetails = this.userProfileDetails;
+      this.userProfileService.createUserProfile(this.userProfileDetails!.CognitoUserId!, this.userProfileDetails!.CognitoUserName!, this.userProfileDetails!.Email, this.userProfileDetails!.UserName, this.userProfileDetails!.Country).subscribe(x=> {
+        if (x != null) {
+          this.userProfileStateService.currentUserProfileDetails = this.userProfileDetails;
+          this.router.navigate(['/', 'lobby'])
+        }
+      });
     }
   }
 

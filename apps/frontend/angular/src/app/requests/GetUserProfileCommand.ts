@@ -1,4 +1,4 @@
 
-export interface GetUserProfileCommand {
+export interface GetUserProfileQuery {
   CognitoUserName: string;
 }

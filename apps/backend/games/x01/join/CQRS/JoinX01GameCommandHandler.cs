@@ -33,6 +33,10 @@ public record JoinX01GameCommandHandler(
         // Load game state
         await CachingService.Load(request.GameId, cancellationToken);
 
+        if (CachingService.State.Users.Any(x=>x.UserId == request.PlayerId))
+            CachingService.State.Users.Single(x=>x.UserId== request.PlayerId).ConnectionId = socketMessage.ConnectionId;
+        await CachingService.Save(cancellationToken);
+
         // Keep track of gamn in request, doesn't make sense i know
         request.Game = CachingService.State.Game;
         
@@ -70,25 +74,21 @@ public record JoinX01GameCommandHandler(
         socketMessage.Metadata = (await MetadataService.GetMetadata(request.Game.GameId.ToString(), cancellationToken)).toDictionary();       
 
         // Notify people in the room
-        await NotifyRoomAsync(socketMessage, cancellationToken);
+        await NotifyRoomAsync(socketMessage, CachingService.State.Users.Select(x=>x.ConnectionId).ToArray(),  cancellationToken);
          
         return new APIGatewayProxyResponse { 
             StatusCode = 200,
             Body = JsonSerializer.Serialize(socketMessage) 
         };
     }
-
-    public async Task NotifyRoomAsync(SocketMessage<JoinX01GameCommand> message, CancellationToken cancellationToken)
+    public async Task NotifyRoomAsync(SocketMessage<JoinX01GameCommand> request, string[] connectionIds, CancellationToken cancellationToken)
     {
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message)));
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
 
-        foreach (var user in CachingService.State.Users)
+        foreach (var connectionId in connectionIds)
         {
-            if (!string.IsNullOrEmpty(user.ConnectionId))
+            if (!string.IsNullOrEmpty(connectionId))
             {
-                var connectionId = user.UserId == message.Message.PlayerId
-                    ? message.Message.ConnectionId : user.ConnectionId;
-
                 var postConnectionRequest = new PostToConnectionRequest
                 {
                     ConnectionId = connectionId,

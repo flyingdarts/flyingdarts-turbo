@@ -9,7 +9,8 @@
                         </div>
                         <div *ngIf="!(loading$ | async)" class="container-auth h-100 w-100">
                             <div class="form-group lobby-card-container">
-                                <div class="lobby-card-overlay w-100 h-100" [class.lobby-card-overlay-hidden]="!shouldShowFriendSettings">
+                                <div class="lobby-card-overlay w-100 h-100"
+                                    [class.lobby-card-overlay-hidden]="!shouldShowFriendSettings">
                                     <ul class="list-inline d-flex justify-content-between mt-3">
                                         <li class="list-inline-item">
                                             <a (click)="openFriendSettings()">
@@ -19,7 +20,7 @@
                                     </ul>
                                     <div>
                                         <h1 class="fw-bold my-sign-in-header">configure<br>game<br>
-                                        <h6>best of sets ({{ preferedX01Sets }}) legs ({{ preferedX01Legs }})</h6>
+                                            <h6>best of sets ({{ preferedX01Sets }}) legs ({{ preferedX01Legs }})</h6>
                                         </h1>
                                         <div class="game-input">
                                             <div class="qty mt-5">
@@ -45,7 +46,8 @@
                                             (click)="saveX01Settings()">save settings</button>
                                     </div>
                                 </div>
-                                <div class="lobby-card-overlay w-100 h-100" [class.lobby-card-overlay-hidden]="!shouldShowFriendFaq">
+                                <div class="lobby-card-overlay w-100 h-100"
+                                    [class.lobby-card-overlay-hidden]="!shouldShowFriendFaq">
                                     <ul class="list-inline d-flex justify-content-between mt-3">
                                         <li class="list-inline-item">
                                             <a (click)="openFriendFaq()">
@@ -55,20 +57,40 @@
                                     </ul>
                                     <div>
                                         <h1 class="fw-bold my-sign-in-header">F.A.Q.</h1>
-
-                                        <div class="accordion" id="accordionExample">
-                                            <div class="accordion-item">
-                                              <h2 class="accordion-header">
-                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                                    What are the supported game modes?
-                                                </button>
-                                              </h2>
-                                              <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                                                <div class="accordion-body">
-                                                    The game mode is <strong>'Best of'.</strong> The first player that wins the majority of the sets required, wins the game.
-                                                  To win a <strong>set</strong> you need to win the majority of legs per set required.
+                                        <div class="container-fluid">
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                            aria-expanded="true" aria-controls="collapseOne">
+                                                            How can i select sets or legs?
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                                        data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <p>You can choose game settings by clicking the <i
+                                                                    class="material-icons">settings</i> icon.</p>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                              </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                            aria-expanded="false" aria-controls="collapseTwo">
+                                                            How can i play with a friend?
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseTwo" class="accordion-collapse collapse"
+                                                        data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <p>Once you have created a game, copy the url in the address bar
+                                                                and send that to your friend!</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -103,7 +125,8 @@
                         </div>
                         <div *ngIf="!(loading$ | async)" class=" container-auth h-100 w-100">
                             <div class="form-group lobby-card-container">
-                                <div class="lobby-card-overlay w-100 h-100" [class.lobby-card-overlay-hidden]="!shouldShowQueueFaq">
+                                <div class="lobby-card-overlay w-100 h-100"
+                                    [class.lobby-card-overlay-hidden]="!shouldShowQueueFaq">
                                     <ul class="list-inline d-flex justify-content-between mt-3">
                                         <li class="list-inline-item">
                                             <a (click)="openQueueFaq()">
@@ -113,6 +136,55 @@
                                     </ul>
                                     <div>
                                         <h1 class="fw-bold my-sign-in-header">F.A.Q.</h1>
+                                        <div class="container-fluid">
+                                            <div class="accordion" id="accordionExample">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                                                            aria-expanded="true" aria-controls="collapseOne">
+                                                            How does this work?
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseOne" class="accordion-collapse collapse show"
+                                                        data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <p>You will be randomly matched.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                            aria-expanded="false" aria-controls="collapseTwo">
+                                                            How is my opponent determined?
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseTwo" class="accordion-collapse collapse"
+                                                        data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <p>At the momement there is no special filtering on average or elo rating.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                            aria-expanded="false" aria-controls="collapseTwo">
+                                                            Can i choose sets or legs?
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseTwo" class="accordion-collapse collapse"
+                                                        data-bs-parent="#accordionExample">
+                                                        <div class="accordion-body">
+                                                            <p>At the momement it is not possible to configure game settings for this game mode.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <ul class="list-inline d-flex justify-content-between mt-3">

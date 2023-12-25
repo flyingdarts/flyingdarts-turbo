@@ -35,8 +35,7 @@ export class ProfileComponent implements OnInit {
   ];
   constructor(private formBuilder: FormBuilder,
     private apiService: UserProfileApiService,
-    private userProfileService: UserProfileStateService,
-    private authService: AmplifyAuthService) {
+    private userProfileService: UserProfileStateService) {
     this.profileForm = new FormGroup({
       userName: new FormControl('', Validators.required),
       country: new FormControl('', Validators.required),
@@ -62,12 +61,14 @@ export class ProfileComponent implements OnInit {
   updateProfile() {
     if (this.profileForm.valid) {
       this.loadingTitle = "Updating your profile";
+      this.isLoading = true;
       this.apiService.updateUserProfile(
         this.userProfileService.currentUserProfileDetails.UserId!,
         this.profileForm.value.email,
         this.profileForm.value.userName,
-        this.profileForm.value.country);
-      this.isLoading = true;
+        this.profileForm.value.country).subscribe(x=> {
+          this.isLoading = false;
+        });
     }
   }
 }

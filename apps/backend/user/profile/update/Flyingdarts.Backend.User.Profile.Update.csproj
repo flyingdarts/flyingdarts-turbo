@@ -27,5 +27,6 @@
     <ProjectReference Include="..\..\..\..\..\packages\Flyingdarts.Backend.Shared\Flyingdarts.Backend.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\..\packages\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
     <ProjectReference Include="..\..\..\..\..\packages\Flyingdarts.Shared\Flyingdarts.Shared.csproj" />
+    <ProjectReference Include="..\..\Flyingdarts.Backend.User\Flyingdarts.Backend.User.csproj" />
   </ItemGroup>
 </Project>

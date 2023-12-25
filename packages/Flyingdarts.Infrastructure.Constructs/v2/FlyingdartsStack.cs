@@ -20,6 +20,18 @@ public class FlyingdartsStack : Stack
             Value = ApiGatewayConstruct.WebSocketStage.Url
         });
 
+        new CfnOutput(this, $"Users-RestApi-Url-Output-{environment}", new CfnOutputProps
+        {
+            ExportName = $"UsersRestApiUrl{environment}",
+            Value = ApiGatewayConstruct.UsersApi.Url
+        });
+
+        new CfnOutput(this, $"Tournaments-RestApi-Url-Output-{environment}", new CfnOutputProps
+        {
+            ExportName = $"TournamentsRestApiUrl{environment}",
+            Value = ApiGatewayConstruct.TournamentsApi.Url
+        });
+
         new StringParameter(this, $"SignallingTable-DynamoDb-StringParameter-{environment}", new StringParameterProps
         {
             StringValue = DynamoDbConstruct.SignallingTable.TableName,

@@ -38,15 +38,21 @@ public record CreateX01ScoreCommandHandler(
         var setsAndLegs = GetSetsAndLegs();
         if (setsAndLegs != null) 
         {
-            var gameDart = GameDart.Create(request.Game.GameId, request.PlayerId, request.Input, request.Score, setsAndLegs.Item1, setsAndLegs.Item2);
+            var gameDart = GameDart.Create(long.Parse(request.GameId), request.PlayerId, request.Input, request.Score, setsAndLegs.Item1, setsAndLegs.Item2);
 
             // Write dart to database
             await DynamoDbService.WriteGameDartAsync(gameDart, cancellationToken);
 
             // Write dart to cache
             CachingService.AddDart(gameDart);
+
+            // Save new state
+            await CachingService.Save(cancellationToken);
         }
-       
+
+        // Get metadata for clients
+        socketMessage.Metadata = (await MetadataService.GetMetadata(request.GameId, cancellationToken)).toDictionary();
+
         // Game was finished
         if (socketMessage.Metadata["WinningPlayer"] != null)
         {
@@ -57,16 +63,13 @@ public record CreateX01ScoreCommandHandler(
 
             // Write game to cache
             CachingService.AddGame(request.Game);
+
+            // Save new state
+            await CachingService.Save(cancellationToken);
         }
 
-        // Get metadata for clients
-        socketMessage.Metadata = (await MetadataService.GetMetadata(request.Game.GameId.ToString(), cancellationToken)).toDictionary();
-
-        // Save new state
-        await CachingService.Save(cancellationToken);
-
         // Notify people in the room
-        await NotifyRoomAsync(socketMessage, cancellationToken);
+        await NotifyRoomAsync(socketMessage, CachingService.State.Users.Select(x => x.ConnectionId).ToArray(), cancellationToken);
 
         return new APIGatewayProxyResponse
         {
@@ -91,19 +94,16 @@ public record CreateX01ScoreCommandHandler(
         }
 
         return new Tuple<int, int>(currentSet, currentLeg);
-    } 
+    }
 
-    public async Task NotifyRoomAsync(SocketMessage<CreateX01ScoreCommand> message, CancellationToken cancellationToken)
+    public async Task NotifyRoomAsync(SocketMessage<CreateX01ScoreCommand> request, string[] connectionIds, CancellationToken cancellationToken)
     {
-        var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message)));
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
 
-        foreach (var user in CachingService.State.Users)
+        foreach (var connectionId in connectionIds)
         {
-            if (!string.IsNullOrEmpty(user.ConnectionId))
+            if (!string.IsNullOrEmpty(connectionId))
             {
-                var connectionId = user.UserId == message.Message.PlayerId
-                    ? message.Message.ConnectionId : user.ConnectionId;
-
                 var postConnectionRequest = new PostToConnectionRequest
                 {
                     ConnectionId = connectionId,

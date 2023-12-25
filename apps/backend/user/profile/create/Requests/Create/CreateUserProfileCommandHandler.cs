@@ -3,11 +3,8 @@ using Amazon.Lambda.APIGatewayEvents;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
-using Flyingdarts.Persistence;
 using MediatR;
 using Microsoft.Extensions.Options;
-using ApplicationOptions = Flyingdarts.Shared.ApplicationOptions;
-using Flyingdarts.Backend.Shared.Models;
 
 public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfileCommand, APIGatewayProxyResponse>
 {
@@ -29,35 +26,16 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
 
         await userWrite.ExecuteAsync(cancellationToken);
 
-        var socketMessage = new SocketMessage<CreateUserProfileResponse>
-        {
-            Action = "user/profile/create",
-            Message = CreateUserProfileResponse.From(user, userProfile)
-        };
-
         return new APIGatewayProxyResponse
         {
             StatusCode = 200,
-            Body = JsonSerializer.Serialize(socketMessage)
-        };
-    }
-
-    class CreateUserProfileResponse
-    {
-        public string UserId { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string Country { get; set; }
-
-        public static CreateUserProfileResponse From(User user, UserProfile userProfile)
-        {
-            return new CreateUserProfileResponse
+            Body = JsonSerializer.Serialize(new UserProfileDto
             {
-                UserId = user.UserId.ToString(),
-                UserName = userProfile.UserName,
-                Email = userProfile.Email,
-                Country = userProfile.Country
-            };
-        }
+                UserId = user.UserId,
+                Country = user.Profile.Country,
+                Email= user.Profile.Email,
+                UserName = user.Profile.UserName
+            })
+        };
     }
 }

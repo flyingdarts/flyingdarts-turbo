@@ -3,14 +3,10 @@ using Amazon.Lambda.APIGatewayEvents;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
-using Flyingdarts.Persistence;
-using Flyingdarts.Shared;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Amazon.DynamoDBv2.DocumentModel;
 using System.Linq;
-using Flyingdarts.Backend.Shared.Models;
-using Flyingdarts.Backend.User.Dtos;
 
 public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfileCommand, APIGatewayProxyResponse>
 {
@@ -58,7 +54,7 @@ public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfile
     }
     private static QueryOperationConfig QueryConfig(string userId) 
     {
-        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.User);
+        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, "FD#USER");
         queryFilter.AddCondition("SK", QueryOperator.BeginsWith, userId);
         return new QueryOperationConfig { Filter = queryFilter };
     }

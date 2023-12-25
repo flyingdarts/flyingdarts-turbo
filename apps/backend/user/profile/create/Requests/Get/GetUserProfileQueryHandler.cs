@@ -5,11 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
-using Flyingdarts.Persistence;
-using Flyingdarts.Shared;
 using MediatR;
 using Microsoft.Extensions.Options;
-using Flyingdarts.Backend.User.Dtos;
 
 public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, APIGatewayProxyResponse>
 {
@@ -53,7 +50,7 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, A
     }
     private static QueryOperationConfig QueryConfig(string userName)
     {
-        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.User);
+        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, "FD#USER");
         queryFilter.AddCondition("LSI1", QueryOperator.BeginsWith, userName);
         return new QueryOperationConfig { Filter = queryFilter };
     }

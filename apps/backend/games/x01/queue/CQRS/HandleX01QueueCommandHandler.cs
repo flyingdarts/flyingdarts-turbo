@@ -1,14 +1,11 @@
+using Amazon.ApiGatewayManagementApi;
 using Amazon.ApiGatewayManagementApi.Model;
 using Flyingdarts.Backend.Shared.Models;
+using Flyingdarts.Backend.Shared.Services;
 using Flyingdarts.Persistence;
 using MediatR;
-using System.Text.Json;
 using System.Text;
-using Flyingdarts.Backend.Shared.Services;
-using Amazon.ApiGatewayManagementApi;
-using Amazon.SQS;
-using Amazon.SQS.Model;
-using Amazon.Runtime.Internal;
+using System.Text.Json;
 
 namespace Flyingdarts.Backend.Games.X01.Queue.CQRS;
 class Range
