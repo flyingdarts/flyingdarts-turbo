@@ -1,5 +1,4 @@
 ﻿using Amazon.CDK;
-using Flyingdarts.Infrastructure.Constructs;
 using Flyingdarts.Infrastructure.Constructs.v2;
 
 namespace Flyingdarts.Infrastructure

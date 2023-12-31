@@ -1,8 +1,3 @@
-using Amazon.Lambda.Core;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
-
 /// <summary>
 /// Represents the inner handler for processing APIGatewayProxyRequest.
 /// </summary>

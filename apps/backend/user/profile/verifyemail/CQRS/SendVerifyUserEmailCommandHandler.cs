@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Amazon.SimpleEmail;
-using Amazon.SimpleEmail.Model;
-using MediatR;
-
-public class SendVerifyUserEmailCommandHandler : IRequestHandler<SendVerifyUserEmailCommand>
+﻿public class SendVerifyUserEmailCommandHandler : IRequestHandler<SendVerifyUserEmailCommand>
 {
     private readonly IAmazonSimpleEmailService _emailService;
     public SendVerifyUserEmailCommandHandler(IAmazonSimpleEmailService emailService)

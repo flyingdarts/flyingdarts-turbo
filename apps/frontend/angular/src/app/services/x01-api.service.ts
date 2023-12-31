@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { WebSocketService } from "../infrastructure/websocket/websocket.service";
 import { WebSocketActions } from '../infrastructure/websocket/websocket.actions.enum';
 import { WebSocketMessage } from './../infrastructure/websocket/websocket.message.model';
 import { CreateX01ScoreCommand } from './../requests/CreateX01ScoreCommand';
@@ -31,7 +30,6 @@ export class X01ApiService {
   }
 
   public joinGame(gameId: string, playerId: string, playerName: string) {
-    console.log("join x01 game");
     var message: JoinGameCommand = {
         GameId: gameId,
         PlayerId: playerId,
@@ -41,7 +39,6 @@ export class X01ApiService {
         action: WebSocketActions.X01Join,
         message: message
     };
-    console.log(body);
     this.webSocketMessageService.sendMessage(JSON.stringify(body));
   }
 

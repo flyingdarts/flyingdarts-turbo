@@ -40,7 +40,6 @@ export class LoginComponent implements OnInit {
     this.authService.signIn();
   }
   async ngOnInit() {
-    console.log("public login oninit")
     this.store.setLoading(true);
     if (this.stateService.currentUserProfileDetails) {
       this.store.setLoading(false);
@@ -49,39 +48,24 @@ export class LoginComponent implements OnInit {
     try {
       var cognitoId = await this.authService.getCognitoId();
       var cognitoName = await this.authService.getCognitoName();
+      var token = await this.authService.getIdToken();
       if (!isNullOrUndefined(cognitoId) && !isNullOrUndefined(cognitoName)) {
-        var params = { "cognitoUserName": cognitoName }; // Use the retrieved cognitoUserId in your request parameters
-        try {
-          var userProfile = await this.apiClient.get<UserProfileDetails>("https://l43qmknl6op6tr7mrwfivpegvm0xvxpr.lambda-url.eu-west-1.on.aws", params);
-          userProfile.subscribe((x: UserProfileDetails) => {
-            console.log('resolving profile', x);
-            if (x == null) {
-              console.log('x was null');
-            }
-          });
-        } catch(err) {
-          console.log(err);
-        }
-        console.log('getting profile for', cognitoId, cognitoName);
+        this.stateService.idToken = token;
         this.apiService.getUserProfile(cognitoName);
         this.store.profile$.subscribe(async x=> {
           if (isNullOrUndefined(x)) {
-            console.log('profile was null')
             this.store.setProfile({CognitoUserId: cognitoId, CognitoUserName: cognitoName, UserName: '', Email: '', Country: ''})
             await this.router.navigate(['/', 'onboarding', { outlets: { 'onboarding-outlet': ['profile'] } }])
           } else if (x?.UserId != null)  {
-            console.log('found profile, routing to lobby')
+            this.stateService.currentUserProfileDetails = x!;
             this.store.setProfile(x!);
             await this.router.navigate(['lobby'])
           }
         })
       } else {
-        console.log('something null or undefined in login oninit')
         this.store.setLoading(false)
       }
     } catch(err){
-      console.log('error during oninit login')
-      console.log(err)
       this.store.setLoading(false)
     }
   }

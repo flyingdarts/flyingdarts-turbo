@@ -29,7 +29,6 @@ export class AppComponent implements OnInit {
   }
 
   onAnimate(animationItem: AnimationItem): void {
-    console.log(animationItem);
   }
 
   title = 'Flyingdarts';

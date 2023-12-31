@@ -8,6 +8,8 @@ import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './login/login.component';
 import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HomeComponent } from './home/home.component';
+import { LobbyComponent } from './lobby/lobby.component';
 
 @NgModule({
   declarations: [
@@ -15,13 +17,15 @@ import { ReactiveFormsModule } from '@angular/forms';
     PrivacyPolicyComponent, 
     TermsOfServiceComponent,
     LoginComponent,
+    HomeComponent,
+    LobbyComponent
   ],
   imports: [
     CommonModule,
     PublicRoutingModule,
     AmplifyAuthenticatorModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ]
 })
 export class PublicModule { }

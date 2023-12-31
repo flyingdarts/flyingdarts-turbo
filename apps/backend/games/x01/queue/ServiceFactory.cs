@@ -1,11 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
-using Flyingdarts.Backend.Games.X01.Queue.CQRS;
-using Amazon.ApiGatewayManagementApi;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2;
-using Flyingdarts.Backend.Shared.Services;
-using Flyingdarts.Persistence;
-using Flyingdarts.Shared;
+using Flyingdarts.Backend.Games.X01.Services.Connection;
 using Microsoft.Extensions.Configuration;
 
 /// <summary>

@@ -1,8 +1,5 @@
 using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DataModel;
 using Microsoft.Extensions.DependencyInjection;
-using FluentValidation;
-using Flyingdarts.Shared;
 
 public static class ServiceFactory
 {

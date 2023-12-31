@@ -5,15 +5,16 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { LoginComponent } from './login/login.component';
 import { LoginGuard } from '../guards/login.guard';
-import { LobbyComponent } from '../shared/lobby/lobby.component';
+import { LobbyComponent } from './lobby/lobby.component';
 import { AuthorizationGuard } from '../guards/authorization.guard';
 import { ProfileResolver } from '../resolvers/profile.resolver';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
     path: '',
     resolve: { profile: ProfileResolver },
-    component: LobbyComponent
+    component: HomeComponent
   },
   {
     path: 'lobby',

@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using Amazon.Lambda.APIGatewayEvents;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using MediatR;
 
 public class OnDisconnectCommandHandler : IRequestHandler<OnDisconnectCommand, APIGatewayProxyResponse>
 {

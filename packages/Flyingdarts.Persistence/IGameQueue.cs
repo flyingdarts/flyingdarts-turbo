@@ -1,6 +1,3 @@
-using static Flyingdarts.Shared.Lambdas.Functions.User;
-using System.Threading;
-
 namespace Flyingdarts.Persistence;
 
 public interface IGameQueue<TState>

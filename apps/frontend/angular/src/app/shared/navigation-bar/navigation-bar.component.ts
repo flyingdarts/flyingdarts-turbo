@@ -3,9 +3,7 @@ import { Router } from '@angular/router';
 import { AmplifyAuthService } from './../../services/amplify-auth.service';
 import { UserProfileStateService } from './../../services/user-profile-state.service';
 import { AnimationOptions } from 'ngx-lottie';
-import { WebSocketService } from "./../../infrastructure/websocket/websocket.service";
 import { isNullOrUndefined } from 'src/app/app.component';
-import { AppState } from 'src/app/app.state';
 import { Observable } from 'rxjs';
 import { AppStore } from 'src/app/app.store';
 
@@ -31,7 +29,6 @@ export class NavigationBarComponent implements OnInit {
     public router: Router,
     public amplifyAuthService: AmplifyAuthService,
     public userProfileService: UserProfileStateService,
-    public webSocketService: WebSocketService,
     private appStore: AppStore
   ) {
 

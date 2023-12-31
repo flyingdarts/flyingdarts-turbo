@@ -1,6 +1,4 @@
-﻿using System;
-
-public abstract class ChallongeConvertible
+﻿public abstract class ChallongeConvertible
 {
     public Dictionary<string, object> ToChallongeDictionary()
     {

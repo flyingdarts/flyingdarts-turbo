@@ -3,12 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticatorService } from '@aws-amplify/ui-angular';
 import { AmplifyAuthService } from './../../services/amplify-auth.service';
-import { UserProfileApiService } from './../../services/user-profile-api.service';
 import { CarouselModel } from './../../shared/carousel/carousel.component';
-import { WebSocketService } from 'src/app/infrastructure/websocket/websocket.service';
-import { WebSocketActions } from 'src/app/infrastructure/websocket/websocket.actions.enum';
 import { UserProfileStateService } from 'src/app/services/user-profile-state.service';
-import { UserProfileDetails } from 'src/app/shared/models/user-profile-details.model';
 import { AppStore } from 'src/app/app.store';
 import { isNullOrUndefined } from 'src/app/app.component';
 import { Observable } from 'rxjs';
@@ -63,7 +59,6 @@ export class ProfileComponent implements OnInit {
     if (this.profileForm.valid) {
       var userId = await this.authService.getCognitoUserId();
       var userName = await this.authService.getCognitoName();
-      console.log(`patching profile state for user ${userId}:${userName}`);
       this.appStore.patchProfileState({
         UserName: this.profileForm.value.userName,
         Email: this.profileForm.value.email,

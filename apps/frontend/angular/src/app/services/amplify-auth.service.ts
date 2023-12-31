@@ -26,6 +26,19 @@ export class AmplifyAuthService {
     var userInfo = await Auth.currentAuthenticatedUser();
     return userInfo["username"]
   }
+
+  public async getAccessToken(): Promise<string> {
+    var session = await Auth.currentSession()
+    var token = session.getAccessToken().getJwtToken();
+    return token;
+  }
+
+  public async getIdToken(): Promise<string> {
+    var session = await Auth.currentSession()
+    var token = session.getIdToken().getJwtToken();
+    return token;
+  }
+  
   public signIn(): void {
     Auth.federatedSignIn();
   }

@@ -1,12 +1,4 @@
-using System.Text.Json;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
-using Amazon.Lambda.Core;
-using Amazon.Lambda.DynamoDBEvents;
-using Amazon.Lambda.RuntimeSupport;
-using Amazon.Lambda.Serialization.SystemTextJson;
-using Flyingdarts.Backend.Games.X01.Queue.CQRS;
-using Flyingdarts.Persistence;
+
 
 // Get the service provider
 var services = ServiceFactory.GetServiceProvider();

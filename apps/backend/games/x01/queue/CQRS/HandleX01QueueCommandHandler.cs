@@ -1,12 +1,3 @@
-using Amazon.ApiGatewayManagementApi;
-using Amazon.ApiGatewayManagementApi.Model;
-using Flyingdarts.Backend.Shared.Models;
-using Flyingdarts.Backend.Shared.Services;
-using Flyingdarts.Persistence;
-using MediatR;
-using System.Text;
-using System.Text.Json;
-
 namespace Flyingdarts.Backend.Games.X01.Queue.CQRS;
 class Range
 {
@@ -29,14 +20,12 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
     private readonly CachingService<X01State> CachingService;
     private readonly IAmazonApiGatewayManagementApi ApiGatewayClient;
     private readonly IDynamoDbService DynamoDbService;
-    private readonly X01MetadataService MetadataService;
     private readonly QueueService<X01Queue> QueueService;
-    public HandleX01QueueCommandHandler(CachingService<X01State> cachingService, X01MetadataService metadataService, IDynamoDbService dynamoDbService, IAmazonApiGatewayManagementApi apiGatewayClient, QueueService<X01Queue> queueService)
+    public HandleX01QueueCommandHandler(CachingService<X01State> cachingService, IDynamoDbService dynamoDbService, IAmazonApiGatewayManagementApi apiGatewayClient, QueueService<X01Queue> queueService)
     {
         CachingService = cachingService;
         ApiGatewayClient = apiGatewayClient;
         DynamoDbService = dynamoDbService;
-        MetadataService = metadataService;
         QueueService = queueService;    
     }
     public async Task Handle(HandleX01QueueCommand request, CancellationToken cancellationToken)
@@ -49,11 +38,14 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
         // if match found
         if (match != null)
         {
+            Console.WriteLine("Match found");
             // get game settings
             var settings = match.X01;
             var playerIds = records.Select(x=>x.PlayerId).ToArray();
-            var connectionIds = records.Select(x => x.ConnectionId).ToArray();
-
+            var users = await DynamoDbService.ReadUsersAsync(playerIds, cancellationToken);
+            var connectionIds = users.Select(x => x.ConnectionId).ToArray();
+            Console.WriteLine("Players " + string.Join(" ", playerIds));
+            Console.WriteLine("ConnectionIds " + string.Join(" ", connectionIds));
             // Creates game and game player objects
             await InitializeGame(settings, playerIds, cancellationToken);
 
@@ -63,7 +55,7 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
             await QueueService.DeleteRecords(records, cancellationToken);
         }
     }
-    private X01Queue FindMatch(List<X01Queue> records, string playerId)
+    private X01Queue? FindMatch(List<X01Queue> records, string playerId)
     {
         foreach (var record in records.Where(x=>x.PlayerId != playerId))
         {
@@ -73,7 +65,7 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
             }
         }
 
-        throw new Exception("No match found");
+        return null;
     }
     private async Task HandleResponseBack(string[] connectionIds, CancellationToken cancellationToken)
     {
@@ -146,7 +138,7 @@ public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueComman
                 };
 
                 stream.Position = 0;
-
+                Console.WriteLine("Sending websocket message to: " + connectionId);
                 await ApiGatewayClient.PostToConnectionAsync(postConnectionRequest, cancellationToken);
             }
         }

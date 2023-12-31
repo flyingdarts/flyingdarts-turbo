@@ -1,29 +1,29 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "build:development": {
+    "build:dev": {
       "outputs": [
         "bin/Debug/net6.0/**",
         "obj/Debug/net6.0/**"
       ],
       "cache": true
     },
-    "build:production": {
+    "build:prod": {
       "outputs": [
         "bin/Release/net6.0/**",
         "obj/Release/net6.0/**"
       ],
       "cache": false
     },
-    "deploy:development": {
+    "deploy:dev": {
       "dependsOn": [
-        "build:development"
+        "build:dev"
       ],
       "cache": false
     },
-    "deploy:production": {
+    "deploy:prod": {
       "dependsOn": [
-        "build:production"
+        "build:prod"
       ],
       "cache": false
     },
@@ -33,7 +33,7 @@
     },
     "dockerize": {
       "dependsOn": [
-        "build:production"
+        "build:prod"
       ],
       "cache": false
     }

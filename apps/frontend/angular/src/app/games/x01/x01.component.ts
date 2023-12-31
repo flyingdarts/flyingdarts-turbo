@@ -62,7 +62,6 @@ export class X01Component implements OnInit {
     this.gameId = this.route.snapshot.paramMap.get('id')!;
     this.clientId = this.userProfileService.currentUserProfileDetails.UserId!;
     this.componentStore.setState(initialX01State);
-    // this.jitsiService.moveRoom(this.gameId, false);
     this.webSocketService.connected$.subscribe((connected) => {
       if (connected) {
         this.userProfileService.userName$.subscribe((userName) => {

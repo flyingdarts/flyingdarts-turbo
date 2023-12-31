@@ -1,5 +1,3 @@
-using Flyingdarts.Backend.Shared.Models;
-
 public class InnerHandler
 {
     private readonly IMediator _mediator;

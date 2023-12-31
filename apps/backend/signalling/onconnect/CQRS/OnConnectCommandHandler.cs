@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Text.Json;
-using Amazon.Lambda.APIGatewayEvents;
+﻿using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
-using MediatR;
-using Flyingdarts.Backend.Shared.Models;
 
 public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGatewayProxyResponse>
 {
@@ -22,8 +18,12 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
 
         if (request != null)
             await CreateSignallingRecord(request.ConnectionId);
-
-        return Responses.Created(JsonSerializer.Serialize(request));
+        
+        return new APIGatewayProxyResponse
+        {
+            StatusCode = 201,
+            Body = JsonSerializer.Serialize(request)
+        };
     }
     private async Task CreateSignallingRecord(string connectionId)
     {

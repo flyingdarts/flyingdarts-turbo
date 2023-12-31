@@ -1,5 +1,4 @@
 ﻿using Flyingdarts.Backend.Tournaments.Challonge.Models;
-using System;
 using System.Text.Json.Serialization;
 
 namespace Flyingdarts.Backend.Tournaments.Challonge.Requests

@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Text.Json.Serialization;
-using Flyingdarts.Backend.Tournaments.Challonge.Interfaces;
+﻿using Flyingdarts.Backend.Tournaments.Challonge.Interfaces;
 using Flyingdarts.Backend.Tournaments.Challonge.Models;
 
 namespace Flyingdarts.Backend.Tournaments.Challonge.Requests

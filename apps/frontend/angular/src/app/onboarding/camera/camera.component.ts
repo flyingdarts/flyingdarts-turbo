@@ -32,11 +32,11 @@ export class CameraComponent implements OnInit {
   }
 
   saveCamera() {
-    console.log(this.userProfileDetails);
     if (!isNullOrUndefined(this.userProfileDetails)) {
       this.userProfileService.createUserProfile(this.userProfileDetails!.CognitoUserId!, this.userProfileDetails!.CognitoUserName!, this.userProfileDetails!.Email, this.userProfileDetails!.UserName, this.userProfileDetails!.Country).subscribe(x=> {
         if (x != null) {
           this.userProfileStateService.currentUserProfileDetails = this.userProfileDetails;
+          this.appStore.setProfile(x);
           this.router.navigate(['/', 'lobby'])
         }
       });

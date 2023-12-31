@@ -1,6 +1,5 @@
 using Amazon.DynamoDBv2;
 using Microsoft.Extensions.DependencyInjection;
-using FluentValidation;
 
 public static class ServiceFactory
 {

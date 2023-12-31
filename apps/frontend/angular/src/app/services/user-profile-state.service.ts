@@ -30,4 +30,15 @@ export class UserProfileStateService {
   public get isRegistered$():Observable<boolean> {
     return of(!!this.currentUserProfileDetails);
   }
+
+  public set idToken(value: string) {
+    const key = "UserStateService.idToken";
+    this.storage.setItem(key, value);
+  }
+
+  public get idToken(): string {
+    const key = "UserStateService.idToken";
+    var value = this.storage.getItem(key)!;
+    return value;
+}
 }

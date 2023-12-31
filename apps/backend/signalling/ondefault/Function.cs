@@ -1,5 +1,3 @@
-using Flyingdarts.Backend.Shared.Extensions;
-
 var services = ServiceFactory.GetServiceProvider();
 var innerHandler = new InnerHandler(services);
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);

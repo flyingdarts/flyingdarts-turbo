@@ -7,6 +7,8 @@ import { UserProfileApiService } from './../../services/user-profile-api.service
 import { UserProfileStateService } from './../../services/user-profile-state.service';
 import { CarouselModel } from './../../shared/carousel/carousel.component';
 import { UserProfileDetails } from './../../shared/models/user-profile-details.model';
+import { Router } from '@angular/router';
+import { AppStore } from 'src/app/app.store';
 
 @Component({
   selector: 'app-profile',
@@ -35,7 +37,9 @@ export class ProfileComponent implements OnInit {
   ];
   constructor(private formBuilder: FormBuilder,
     private apiService: UserProfileApiService,
-    private userProfileService: UserProfileStateService) {
+    private userProfileService: UserProfileStateService,
+    private appStore: AppStore,
+    private router: Router) {
     this.profileForm = new FormGroup({
       userName: new FormControl('', Validators.required),
       country: new FormControl('', Validators.required),
@@ -67,7 +71,10 @@ export class ProfileComponent implements OnInit {
         this.profileForm.value.email,
         this.profileForm.value.userName,
         this.profileForm.value.country).subscribe(x=> {
+          this.appStore.setProfile(x);
+          this.userProfileService.currentUserProfileDetails = x;
           this.isLoading = false;
+          this.router.navigate(['/', 'lobby'])
         });
     }
   }

@@ -1,8 +1,5 @@
-using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
-using Flyingdarts.Backend.Shared.Models;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 var services = ServiceFactory.GetServiceProvider();

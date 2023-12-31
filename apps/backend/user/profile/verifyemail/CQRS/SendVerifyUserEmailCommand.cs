@@ -1,7 +1,4 @@
-﻿using Amazon.Lambda.Core;
-using MediatR;
-
-public class SendVerifyUserEmailCommand : IRequest
+﻿public class SendVerifyUserEmailCommand : IRequest
 {
     public string Email { get; set; }
     public string Subject { get; set; }

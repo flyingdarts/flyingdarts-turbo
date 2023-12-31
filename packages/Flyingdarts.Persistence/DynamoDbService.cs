@@ -1,5 +1,3 @@
-using Flyingdarts.Shared;
-
 namespace Flyingdarts.Persistence;
 public class DynamoDbService : IDynamoDbService
 {

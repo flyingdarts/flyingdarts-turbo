@@ -7,31 +7,17 @@
 		"apps/tools/**"
 	],
 	"dependencies": {
+		"aws-sdk": "^2.1528.0",
 		"turbo": "^1.11.2"
 	},
 	"packageManager": "npm@9.5.0",
 	"scripts": {
 		"generate-files": "turbo run generate --log-order=grouped --filter=./apps/frontend/flutter/**",
-		"build-packages-development": "turbo run build:development --log-order=stream --filter=./packages/** --concurrency=1",
-		"build-packages-production": "turbo run build:production --log-order=stream --filter=./packages/** --concurrency=1",
-		"build-backend-development": "turbo run build:development --log-order=grouped --filter=./apps/backend/**",
-		"build-backend-production": "turbo run build:production --log-order=grouped --filter=./apps/backend/**",
-		"build-frontend-development": "turbo run build:development --log-order=grouped --filter=./apps/frontend/**",
-		"build-frontend-production": "turbo run build:production --log-order=grouped --filter=./apps/frontend/**",
-		"build-infrastructure-development": "turbo run build:development --log-order=grouped --filter=./apps/tools/infrastructure/**",
-		"build-infrastructure-production": "turbo run build:production --log-order=grouped --filter=./apps/tools/infrastructure/**",
-		"deploy-signalling-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/signalling/** --concurrency=1",
-		"deploy-signalling-production": "turbo run deploy:production --log-order=stream --filter=./apps/backend/signalling/** --concurrency=1",
-		"deploy-games-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/games/** --concurrency=1",
-		"deploy-games-production": "turbo run deploy:production --log-order=stream --filter=./apps/backend/games/** --concurrency=1",
-		"deploy-user-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/user/** --concurrency=1",
-		"deploy-user-production": "turbo run deploy:production --log-order=stream --filter=./apps/backend/user/** --concurrency=1",
-		"deploy-tournaments-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/tournaments/** --concurrency=1",
-		"deploy-tournaments-production": "turbo run deploy:production --log-order=stream --filter=./apps/backend/tournaments/** --concurrency=1",
-		"deploy-backend-development": "turbo run deploy:development --log-order=stream --filter=./apps/backend/** --concurrency=1",
-		"deploy-backend-production": "turbo run deploy:production --log-order=stream --filter=./apps/backend/** --concurrency=1",
-		"deploy-infrastructure-development": "turbo run deploy:development --log-order=stream --filter=./apps/tools/infrastructure/**",
-		"deploy-infrastructure-production": "turbo run deploy:production --log-order=stream --filter=./apps/tools/infrastructure/**",
+		"build-apis-dev": "turbo run build:dev --log-order=stream --filter=./apps/backend/** --concurrency=1",
+		"build-apis-prod": "turbo run build:prod --log-order=stream --filter=./apps/backend/** --concurrency=1",
+		"deploy-apis-dev": "turbo run deploy:dev --log-order=stream --filter=./apps/backend/** --concurrency=1",
+		"deploy-apis-prod": "turbo run deploy:prod --log-order=stream --filter=./apps/backend/** --concurrency=1",
+		"deploy-auth-dev": "turbo run deploy:dev --filter=flyingdarts.backend.auth...",
 		"serve-angular": "turbo run serve --log-order=stream --filter=./apps/frontend/angular",
 		"serve-flutter": "turbo run serve --log-order=stream --filter=./apps/frontend/flutter",
 		"dockerize": "turbo run dockerize --log-order=grouped --filter=flyingdarts.frontend.flutter..."
@@ -39,5 +25,10 @@
 	"repository": {
 		"url": "https://github.com/flyingdarts/flyingdarts-turbo",
 		"type": "git"
+	},
+	"devDependencies": {
+		"@types/aws-lambda": "^8.10.130",
+		"@types/node": "^20.10.6",
+		"typescript": "^5.3.3"
 	}
 }

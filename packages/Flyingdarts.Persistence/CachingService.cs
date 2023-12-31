@@ -1,6 +1,4 @@
-using Amazon.DynamoDBv2.DocumentModel;
 using System.Text.Json;
-using static Flyingdarts.Shared.Lambdas.Functions.User;
 
 namespace Flyingdarts.Persistence;
 

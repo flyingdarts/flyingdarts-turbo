@@ -21,7 +21,6 @@ export class ApiService {
             action: WebSocketActions.X01Join,
             message: message
         };
-        console.log(body);
         this.webSocketService.postMessage(JSON.stringify(body));
     }
 }

@@ -1,12 +1,3 @@
-using Amazon;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.DataModel;
-using Microsoft.Extensions.DependencyInjection;
-using FluentValidation;
-using Flyingdarts.Shared;
-using Microsoft.Extensions.Configuration;
-using Amazon.SimpleEmail;
-
 /// <summary>
 /// Factory class for creating the service provider.
 /// </summary>

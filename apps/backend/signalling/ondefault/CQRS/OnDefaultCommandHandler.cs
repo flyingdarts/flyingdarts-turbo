@@ -1,6 +1,4 @@
-﻿using Flyingdarts.Backend.Shared.Models;
-
-public class OnDefaultCommandHandler : IRequestHandler<OnDefaultCommand, APIGatewayProxyResponse>
+﻿public class OnDefaultCommandHandler : IRequestHandler<OnDefaultCommand, APIGatewayProxyResponse>
 {
     private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;

@@ -7,7 +7,6 @@ import { AmplifyAuthService } from './services/amplify-auth.service';
 import { ApiService } from './services/room-api.service';
 import { JitsiService } from './services/jitsi.service';
 import { LoadingService } from './services/loading.service';
-import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { WebcamService } from './services/webcam.service';
 import { UserProfileApiService } from './services/user-profile-api.service';
 import { UserProfileStateService } from './services/user-profile-state.service';
@@ -24,6 +23,8 @@ import { StoreModule } from '@ngrx/store';
 import { ApiClient } from './services/api.client';
 import { PreferedX01SettingsService } from './services/prefered-x01-settings.service';
 import { QueueComponent } from './games/queue/queue.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UserTokenInterceptor } from './interceptors/user-token-interceptor';
 
 @NgModule({
   declarations: [
@@ -37,10 +38,11 @@ import { QueueComponent } from './games/queue/queue.component';
     StoreModule.forRoot({}),
     EffectsModule.forRoot([AuthEffects]),
     HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {
-      provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+      provide: HTTP_INTERCEPTORS, useClass: UserTokenInterceptor, multi: true
     },
     WebSocketService,
     WebSocketMessageService,

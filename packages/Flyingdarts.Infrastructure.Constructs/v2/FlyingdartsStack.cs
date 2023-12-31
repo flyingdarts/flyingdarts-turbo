@@ -6,13 +6,15 @@ public class FlyingdartsStack : Stack
     private QueueConstruct QueueConstruct { get; }
     private LambdaConstruct LambdaConstruct { get; }
     private ApiGatewayConstruct ApiGatewayConstruct { get; }
+    private AuthorizersConstruct AuthorizersConstruct { get; }
     
     public FlyingdartsStack(Construct scope, string environment, IStackProps props) : base(scope, $"FD-Stack-{environment}", props)
     {
         DynamoDbConstruct = new DynamoDbConstruct(this, $"Tables-{environment}", environment);
         QueueConstruct = new QueueConstruct(this, $"Queues-{environment}", environment);
         LambdaConstruct = new LambdaConstruct(this, $"Lambdas-{environment}", environment, DynamoDbConstruct, QueueConstruct);
-        ApiGatewayConstruct = new ApiGatewayConstruct(this, $"Apis-{environment}", environment, LambdaConstruct);
+        AuthorizersConstruct = new AuthorizersConstruct(this, $"Authorizers-{environment}", environment, LambdaConstruct);
+        ApiGatewayConstruct = new ApiGatewayConstruct(this, $"Apis-{environment}", environment, LambdaConstruct, AuthorizersConstruct);
         
         new CfnOutput(this, $"WebSocket-Api-Url-Output-{environment}", new CfnOutputProps
         {
@@ -52,5 +54,7 @@ public class FlyingdartsStack : Stack
         
         Aspects.Of(this).Add(new Tag("Environment", environment));
         Aspects.Of(this).Add(new Tag("App", "FD-V1"));
+        Aspects.Of(this).Add(new AddEnvironmentVariableToLambdaAspect("EnvironmentName", environment));
+        Aspects.Of(this).Add(new AddEnvironmentVariableToLambdaAspect("LAMBDA_NET_SERIALIZER_DEBUG", "true"));
     }
 }

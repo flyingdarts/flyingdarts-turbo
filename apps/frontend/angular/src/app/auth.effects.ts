@@ -16,7 +16,6 @@ export class AuthEffects {
         Hub.listen('auth', async ({ payload: { event } }) => {
           switch (event) {
             case 'signIn':
-              console.log('ti signin hallo', event);
               var cognitoName = await this.authService.getCognitoName();
               if (!isNullOrUndefined(cognitoName)) {
                 this.apiService.getUserProfile(cognitoName);

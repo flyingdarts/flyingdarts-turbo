@@ -9,7 +9,6 @@ import { NavigationBarComponent } from './navigation-bar/navigation-bar.componen
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DartboardComponent } from './dartboard/dartboard.component';
-import { LobbyComponent } from './lobby/lobby.component';
 import { LottieModule } from 'ngx-lottie';
 
 @NgModule({
@@ -17,8 +16,7 @@ import { LottieModule } from 'ngx-lottie';
     LoadingComponent,
     CarouselComponent,
     NavigationBarComponent,
-    DartboardComponent,
-    LobbyComponent
+    DartboardComponent
   ],
   imports: [
     CommonModule,
