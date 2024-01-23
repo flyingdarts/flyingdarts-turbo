@@ -23,45 +23,30 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
             : apiGatewayEvent.Headers["Authorization"];
     }
 
-    async Task<bool> ValidateToken(string token)
+    async Task<string> ValidateToken(string token)
     {
-        try
-        {
-            var authressSettings = new AuthressSettings { ApiBasePath = Environment.GetEnvironmentVariable("AuthressApiBasePath") };
-            var tokenProvider = new ManualTokenProvider();
-            tokenProvider.SetToken(token);
-            var authressClient = new AuthressClient(tokenProvider, authressSettings);
-            var result = await authressClient.GetUserResources(GetUserId(token), Environment.GetEnvironmentVariable("AuthressResourceGroupId"), "flyingdarts");
-            return result != null;
-        }
-        catch (NotAuthorizedException ex)
-        {
-            Console.WriteLine(ex);
-            return false;
-        }
+        var authressSettings = new AuthressSettings { ApiBasePath = Environment.GetEnvironmentVariable("AuthressApiBasePath") };
+        var tokenProvider = new ManualTokenProvider();
+        tokenProvider.SetToken(token);
+        var authressClient = new AuthressClient(tokenProvider, authressSettings);
+        var authressIdentity = await authressClient.VerifyToken(token);
+        return authressIdentity.UserId;
     }
-
-    string GetUserId(string token)
-    {
-        var jwt = JsonConvert.DeserializeObject<JWT>(Base64UrlEncoder.Decode(token.Split('.')[1]));
-        return jwt!.sub; // Assuming 'sub' is the correct field for user ID
-    }
-
+    
     try
     {
-        var token = ExtractToken();
-        var isValidToken = await ValidateToken(token);
+        var userId = await ValidateToken(ExtractToken());
 
         return new APIGatewayCustomAuthorizerResponse
         {
-            PrincipalID = !isValidToken ? "401" : GetUserId(token),
+            PrincipalID =  userId,
             PolicyDocument = new APIGatewayCustomAuthorizerPolicy
             {
                 Statement = new List<APIGatewayCustomAuthorizerPolicy.IAMPolicyStatement>
                 {
                     new()
                     {
-                        Effect = !isValidToken ? "Deny" : "Allow",
+                        Effect = "Allow",
                         Resource = new HashSet<string> { apiGatewayEvent.MethodArn },
                         Action = new HashSet<string> { "execute-api:Invoke" }
                     }
@@ -69,7 +54,7 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
             },
             Context = new APIGatewayCustomAuthorizerContextOutput
             {
-                { "UserId", GetUserId(token) }
+                { "UserId", userId }
             }
         };
     }
