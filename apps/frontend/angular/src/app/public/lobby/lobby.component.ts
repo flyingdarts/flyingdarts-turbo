@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup } from '@angular/forms';
 import { WebSocketService } from '../../infrastructure/websocket/websocket.service';
 import { WebSocketActions } from '../../infrastructure/websocket/websocket.actions.enum';
@@ -14,6 +14,7 @@ import { PreferedX01SettingsService } from 'src/app/services/prefered-x01-settin
 import { AnimationOptions } from 'ngx-lottie';
 import { CreateX01GameCommand } from 'src/app/requests/CreateX01GameCommand';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { isNullOrUndefined } from 'src/app/app.component';
 const { v4: uuidv4 } = require('uuid');
 
 @Component({
@@ -72,16 +73,29 @@ export class LobbyComponent implements OnInit {
     private router: Router,
     private webSocketService: WebSocketService,
     private store: AppStore,
-    private settingsService: PreferedX01SettingsService
+    private settingsService: PreferedX01SettingsService,
+    private route: ActivatedRoute
   ) {
 
   }
 
   ngOnInit(): void {
+    try {
+      this.route.data.subscribe((({profileDetails }) => {
+        this.userProfileService.currentUserProfileDetails = profileDetails;
+      }))
+
+      if (!isNullOrUndefined(this.settingsService.preferedX01Legs)) {
+        this.settingsService.preferedX01Legs = 3;
+        this.settingsService.preferedX01Sets = 1;
+      }
+    } catch(error) {
+      console.log(error);
+    }
 
     this.vm$.subscribe((x) => {
       this.preferedX01Sets = x.preferedSettings.x01Sets,
-        this.preferedX01Legs = x.preferedSettings.x01Legs
+      this.preferedX01Legs = x.preferedSettings.x01Legs
     });
 
     this.webSocketService.getMessages().subscribe(x => {
@@ -105,7 +119,7 @@ export class LobbyComponent implements OnInit {
           break;
       }
     })
-    this.store.setProfile(this.userProfileService.currentUserProfileDetails);
+    // this.store.setProfile(this.userProfileService.currentUserProfileDetails);
     this.clientId = this.userProfileService.currentUserProfileDetails.UserId!;
   }
 

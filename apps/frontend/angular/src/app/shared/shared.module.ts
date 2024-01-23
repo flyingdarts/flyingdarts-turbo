@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { LoadingComponent } from './loading/loading.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { CarouselComponent } from './carousel/carousel.component';
 import { lottiePlayerFactory } from './lottiePlayerFactory';
 import { NavigationBarComponent } from './navigation-bar/navigation-bar.component';
@@ -20,7 +19,6 @@ import { LottieModule } from 'ngx-lottie';
   ],
   imports: [
     CommonModule,
-    AmplifyAuthenticatorModule,
     HttpClientModule,
     ReactiveFormsModule,
     LottieModule.forRoot({ player: lottiePlayerFactory }),

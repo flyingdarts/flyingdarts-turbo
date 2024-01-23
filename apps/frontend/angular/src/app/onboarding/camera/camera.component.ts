@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthenticatorService } from '@aws-amplify/ui-angular';
 import { WebcamService } from './../../services/webcam.service';
 import { AppStore } from 'src/app/app.store';
 import { UserProfileApiService } from 'src/app/services/user-profile-api.service';
@@ -13,16 +12,18 @@ import { isNullOrUndefined } from 'src/app/app.component';
   templateUrl: './camera.component.html',
   styleUrls: ['./camera.component.scss']
 })
-export class CameraComponent implements OnInit {
+export class CameraComponent implements OnInit, OnDestroy {
   private userProfileDetails: UserProfileDetails | null = null;
   constructor(
-    public authenticator: AuthenticatorService,
     private webcamService: WebcamService,
     private userProfileService: UserProfileApiService,
     private userProfileStateService: UserProfileStateService,
     private router: Router,
     private appStore: AppStore) {
 
+  }
+  ngOnDestroy(): void {
+    this.webcamService.disposeWebcamStream();
   }
   ngOnInit(): void {
     this.appStore.profile$.subscribe(x => {
@@ -33,7 +34,7 @@ export class CameraComponent implements OnInit {
 
   saveCamera() {
     if (!isNullOrUndefined(this.userProfileDetails)) {
-      this.userProfileService.createUserProfile(this.userProfileDetails!.CognitoUserId!, this.userProfileDetails!.CognitoUserName!, this.userProfileDetails!.Email, this.userProfileDetails!.UserName, this.userProfileDetails!.Country).subscribe(x=> {
+      this.userProfileService.createUserProfile(this.userProfileDetails!.AuthProviderUserId!, this.userProfileDetails!.Email, this.userProfileDetails!.UserName, this.userProfileDetails!.Country).subscribe(x=> {
         if (x != null) {
           this.userProfileStateService.currentUserProfileDetails = this.userProfileDetails;
           this.appStore.setProfile(x);

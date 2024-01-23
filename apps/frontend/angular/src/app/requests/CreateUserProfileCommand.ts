@@ -1,7 +1,6 @@
 
 export interface CreateUserProfileCommand {
-  CognitoUserId: string;
-  CognitoUserName: string;
+  AuthProviderUserId: string;
   UserName: string;
   Email: string;
   Country: string;

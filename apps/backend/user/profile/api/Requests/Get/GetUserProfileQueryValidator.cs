@@ -2,6 +2,6 @@
 {
     public GetUserProfileQueryValidator()
     {
-        RuleFor(x => x.CognitoUserName).NotNull().NotEmpty();
+        RuleFor(x => x.AuthProviderUserId).NotNull().NotEmpty();
     }
 }

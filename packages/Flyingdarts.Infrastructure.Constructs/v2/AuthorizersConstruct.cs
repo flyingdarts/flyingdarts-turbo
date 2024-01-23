@@ -1,36 +1,26 @@
-using Amazon.CDK.AWS.Cognito;
-
 namespace Flyingdarts.Infrastructure.Constructs.v2;
 
 public class AuthorizersConstruct : Construct
 {
-    private IUserPool CognitoUserPool { get; }
-    public CognitoUserPoolsAuthorizer UsersApiAuthorizer { get; }
-    public CognitoUserPoolsAuthorizer TournamentsApiAuthorizer { get; }
-    
     public WebSocketLambdaAuthorizer WebSocketApiConnectAuthorizer { get; }
+    public RequestAuthorizer UsersAuthorizer { get; }
+    public RequestAuthorizer TournamentsAuthorizer { get; }
     
     public AuthorizersConstruct(Construct scope, string id, string environment,LambdaConstruct lambdaConstruct) : base(scope, id)
     {
-        CognitoUserPool = UserPool.FromUserPoolArn(this, $"Flyingdarts-{environment}-Pool",
-            $"arn:aws:cognito-idp:{System.Environment.GetEnvironmentVariable("AWS_REGION")!}:{System.Environment.GetEnvironmentVariable("AWS_ACCOUNT")!}:userpool/{System.Environment.GetEnvironmentVariable("AWS_REGION")!}_eJ59ibbay");
-        
-        UsersApiAuthorizer = new CognitoUserPoolsAuthorizer(this,
-            $"Flyingdarts-Backend-Users-RestApi-Cognito-Authorizer-{environment}",
-            new CognitoUserPoolsAuthorizerProps
+        UsersAuthorizer = new RequestAuthorizer(this, $"Flyingdarts-Backend-Api-UsersAuthorizer-{environment}-v2",
+            new RequestAuthorizerProps
             {
-                IdentitySource = IdentitySource.Header("Authorization"),
-                AuthorizerName = $"FlyingdartsBackendUsersRestApiCognitoAuthorizer{environment}",
-                CognitoUserPools = new []{ CognitoUserPool }
+                AuthorizerName = $"FlyingdartsBackendApiUsersAuthorizer{environment}",
+                Handler = lambdaConstruct.AuthLambda,
+                IdentitySources = new[] { IdentitySource.Header("Authorization") }
             });
-        
-        TournamentsApiAuthorizer = new CognitoUserPoolsAuthorizer(this,
-            $"Flyingdarts-Backend-Tournaments-RestApi-Cognito-Authorizer-{environment}",
-            new CognitoUserPoolsAuthorizerProps
+        TournamentsAuthorizer = new RequestAuthorizer(this, $"Flyingdarts-Backend-Api-TournamentsAuthorizer-{environment}-v2",
+            new RequestAuthorizerProps
             {
-                IdentitySource = IdentitySource.Header("Authorization"),
-                AuthorizerName = $"FlyingdartsBackendTournementsRestApiCognitoAuthorizer{environment}",
-                CognitoUserPools = new []{ CognitoUserPool }
+                AuthorizerName = $"FlyingdartsBackendApiTournamentsAuthorizerAuthorizer{environment}",
+                Handler = lambdaConstruct.AuthLambda,
+                IdentitySources = new[] { IdentitySource.Header("Authorization") }
             });
 
         WebSocketApiConnectAuthorizer = new WebSocketLambdaAuthorizer(

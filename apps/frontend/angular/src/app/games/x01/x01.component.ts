@@ -5,11 +5,8 @@ import { Observable, first } from 'rxjs';
 import { X01Input } from './x01.input';
 import { WebSocketService } from 'src/app/infrastructure/websocket/websocket.service';
 import { WebSocketActions } from 'src/app/infrastructure/websocket/websocket.actions.enum';
-import { JoinGameCommand } from 'src/app/requests/JoinGameCommand';
-import { CreateX01ScoreCommand } from 'src/app/requests/CreateX01ScoreCommand';
 import { X01ApiService } from 'src/app/services/x01-api.service';
 import { ActivatedRoute } from '@angular/router';
-import { AmplifyAuthService } from 'src/app/services/amplify-auth.service';
 import { UserProfileStateService } from 'src/app/services/user-profile-state.service';
 import { isNullOrUndefined } from 'src/app/app.component';
 import { JitsiService } from 'src/app/services/jitsi.service';
@@ -50,7 +47,6 @@ export class X01Component implements OnInit {
   constructor(
     private componentStore: X01Store,
     private webSocketService: WebSocketService,
-    private authService: AmplifyAuthService,
     private x01ApiService: X01ApiService,
     private route: ActivatedRoute,
     private userProfileService: UserProfileStateService,

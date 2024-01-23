@@ -6,7 +6,6 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './login/login.component';
-import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { LobbyComponent } from './lobby/lobby.component';
@@ -23,7 +22,6 @@ import { LobbyComponent } from './lobby/lobby.component';
   imports: [
     CommonModule,
     PublicRoutingModule,
-    AmplifyAuthenticatorModule,
     SharedModule,
     ReactiveFormsModule,
   ]

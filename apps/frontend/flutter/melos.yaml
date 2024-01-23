@@ -3,6 +3,7 @@ name: flyingdarts
 packages:
   - dependencies/*
   - dependencies/**/*
+  - packages/api/sdk/*
   - packages/flyingdarts
   - packages/features/**/*
   - packages/features/*
@@ -31,4 +32,4 @@ scripts:
 command:
   clean:
     hooks:
-      post: melos run clean_build_runner
+      pre: melos run clean_build_runner

@@ -1,7 +1,14 @@
+# melos_managed_dependency_overrides: flyingdarts_sdk,configuration,configuration_secrets
 # melos_managed_dependency_overrides: amplify,ui,websocket,widgetbook,widgetbook_annotation,widgetbook_generator,internationalization
 dependency_overrides:
   amplify:
     path: ../../shared/amplify
+  configuration:
+    path: ..\\..\\shared\\configuration\\core
+  configuration_secrets:
+    path: ..\\..\\shared\\configuration\\secrets
+  flyingdarts_sdk:
+    path: ..\\..\\api\\sdk\\flyingdarts
   internationalization:
     path: ../../shared/internationalization
   ui:

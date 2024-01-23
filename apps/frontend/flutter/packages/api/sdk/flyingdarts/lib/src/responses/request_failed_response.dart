@@ -1,0 +1,3 @@
+class RequestFailedResponse {
+  const RequestFailedResponse();
+}

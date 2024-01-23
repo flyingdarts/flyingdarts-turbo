@@ -3,19 +3,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
 import { CameraComponent } from './camera/camera.component';
 import { OnboardingRootComponent } from './onboarding-root/onboarding-root.component';
-import { ProfileResolver } from '../resolvers/profile.resolver';
-import { OnboardingGuard } from './onboarding.guard';
+import { ProfileDetailsResolver } from '../resolvers/profile.resolver';
 
 const routes: Routes = [
   {
     path: "",
     component: OnboardingRootComponent,
+    resolve: { 
+      userProfileDetails: ProfileDetailsResolver 
+    },
     children: [
       {
         path: "profile",
         component: ProfileComponent,
         outlet: "onboarding-outlet",
-        canActivate: [OnboardingGuard]
       },
       {
         path: "camera",

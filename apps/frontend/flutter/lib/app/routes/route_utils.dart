@@ -10,9 +10,9 @@ extension AppRoutesExtension on AppRoutes {
       case AppRoutes.splash:
         return '/';
       case AppRoutes.home:
-        return 'home';
+        return '/home';
       case AppRoutes.login:
-        return 'login';
+        return '/login';
     }
   }
 

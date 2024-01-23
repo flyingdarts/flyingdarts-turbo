@@ -7,7 +7,7 @@
     "email"
   ],
   "authProvidersUserPool": [
-    "Facebook"
+    "Google"
   ],
   "requiredAttributes": [],
   "passwordPolicyMinLength": 8,

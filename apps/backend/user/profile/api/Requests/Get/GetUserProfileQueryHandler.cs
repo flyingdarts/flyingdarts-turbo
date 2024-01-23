@@ -12,7 +12,7 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, A
     }
     public async Task<APIGatewayProxyResponse> Handle(GetUserProfileQuery request, CancellationToken cancellationToken)
     {
-        var queryItems = await _dbContext.FromQueryAsync<User>(QueryConfig(request.CognitoUserName), _applicationOptions.ToOperationConfig())
+        var queryItems = await _dbContext.FromQueryAsync<User>(QueryConfig(request.AuthProviderUserId), _applicationOptions.ToOperationConfig())
             .GetRemainingAsync(cancellationToken);
 
         // Handle the query results
@@ -33,9 +33,9 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, A
                     UserName = result.Profile.UserName,
                 }),
                 Headers = new Dictionary<string, string>() {
-                    { "Access-Control-Allow-Headers", "Content-Type" },
                     { "Access-Control-Allow-Origin", "*" },
-                    { "Access-Control-Allow-Methods", "OPTIONS,POST" } 
+                    { "Access-Control-Allow-Methods", "*" },
+                    { "Access-Control-Allow-Headers", "Content-Type" }
                 }
             };
         }

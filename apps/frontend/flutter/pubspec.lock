@@ -320,7 +320,7 @@ packages:
     source: hosted
     version: "1.17.2"
   configuration:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: "packages/shared/configuration/core"
       relative: true
@@ -330,6 +330,13 @@ packages:
     dependency: "direct overridden"
     description:
       path: "packages/shared/configuration/preferences"
+      relative: true
+    source: path
+    version: "0.0.1"
+  configuration_secrets:
+    dependency: "direct main"
+    description:
+      path: "packages/shared/configuration/secrets"
       relative: true
     source: path
     version: "0.0.1"
@@ -444,6 +451,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.6"
+  dio_smart_retry:
+    dependency: transitive
+    description:
+      name: dio_smart_retry
+      sha256: "7c008542f7a5c5552a0757c7cd0e8c7b3131617120ee3e48456425f673f8ff09"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   drift:
     dependency: transitive
     description:
@@ -609,6 +624,13 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/flyingdarts"
+      relative: true
+    source: path
+    version: "0.0.1"
+  flyingdarts_sdk:
+    dependency: "direct overridden"
+    description:
+      path: "packages/api/sdk/flyingdarts"
       relative: true
     source: path
     version: "0.0.1"
@@ -1326,6 +1348,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  splash:
+    dependency: "direct main"
+    description:
+      path: "packages/features/splash"
+      relative: true
+    source: path
+    version: "0.0.1"
   sprintf:
     dependency: transitive
     description:

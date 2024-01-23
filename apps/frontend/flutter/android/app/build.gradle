@@ -70,6 +70,7 @@ android {
         targetSdkVersion flutterTargetSdkVersion.toInteger()
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [appAuthRedirectScheme: 'flyingdartscontrol']
     }
 
     signingConfigs {

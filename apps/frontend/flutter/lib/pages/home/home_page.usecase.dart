@@ -5,11 +5,11 @@ import 'package:navigation/navigation.dart';
 import 'package:ui/ui.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import 'home_page.dart';
+import 'home_screen.dart';
 
 @widgetbook.UseCase(
   name: 'The home page in the app',
-  type: MyHomePage,
+  type: HomeScreen,
 )
 Widget defaultHomePage(BuildContext context) {
   return createDefaultMaterialWidget(
@@ -21,7 +21,7 @@ Widget defaultHomePage(BuildContext context) {
         ),
         BlocProvider(create: (ctx) => KeyboardCubit()),
       ],
-      child: const MyHomePage(),
+      child: const HomeScreen(),
     ),
   );
 }

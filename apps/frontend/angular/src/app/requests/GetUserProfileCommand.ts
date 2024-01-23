@@ -1,4 +1,4 @@
 
 export interface GetUserProfileQuery {
-  CognitoUserName: string;
+  AuthProviderUserId: string;
 }

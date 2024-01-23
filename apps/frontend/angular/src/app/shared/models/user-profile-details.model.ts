@@ -8,6 +8,5 @@ export interface UserProfileDetails {
     isRegistered?: boolean;
     cameraPermissionGranted?: boolean;
     
-    CognitoUserId?: string;
-    CognitoUserName?: string;
+    AuthProviderUserId?: string;
 }

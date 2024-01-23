@@ -1,9 +1,14 @@
-﻿using Amazon.CognitoIdentityProvider;
-using Amazon.CognitoIdentityProvider.Model;
-using Amazon.Lambda.APIGatewayEvents;
+﻿using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
+using Authress.SDK;
+using Authress.SDK.Client;
+using Flyingdarts.Backend.Auth;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+
+// Import statements are organized and simplified
 
 // Create a serializer for JSON serialization and deserialization
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
@@ -11,20 +16,23 @@ var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensit
 // Define the Lambda function handler
 var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaContext context) =>
 {
+    string ExtractToken()
+    {
+        return apiGatewayEvent.QueryStringParameters.ContainsKey("token") 
+            ? apiGatewayEvent.QueryStringParameters["token"] 
+            : apiGatewayEvent.Headers["Authorization"];
+    }
+
     async Task<bool> ValidateToken(string token)
     {
-        // Use the AWS Cognito SDK or any other authentication service to validate the token
         try
         {
-            var request = new GetUserRequest
-            {
-                AccessToken = token,
-            };
-
-            var response = await new AmazonCognitoIdentityProviderClient().GetUserAsync(request);
-            
-            // If the call is successful, the token is valid
-            return true;
+            var authressSettings = new AuthressSettings { ApiBasePath = Environment.GetEnvironmentVariable("AuthressApiBasePath") };
+            var tokenProvider = new ManualTokenProvider();
+            tokenProvider.SetToken(token);
+            var authressClient = new AuthressClient(tokenProvider, authressSettings);
+            var result = await authressClient.GetUserResources(GetUserId(token), Environment.GetEnvironmentVariable("AuthressResourceGroupId"), "flyingdarts");
+            return result != null;
         }
         catch (NotAuthorizedException ex)
         {
@@ -33,29 +41,60 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
         }
     }
 
-    var token = apiGatewayEvent.QueryStringParameters["token"];
-    var methodArn = System.Environment.GetEnvironmentVariable("ConnectMethodArn");
-
-    return new APIGatewayCustomAuthorizerResponse()
+    string GetUserId(string token)
     {
-        PrincipalID = string.IsNullOrEmpty(token) || !await ValidateToken(token) ? "401" : "user",
-        PolicyDocument = new APIGatewayCustomAuthorizerPolicy()
+        var jwt = JsonConvert.DeserializeObject<JWT>(Base64UrlEncoder.Decode(token.Split('.')[1]));
+        return jwt!.sub; // Assuming 'sub' is the correct field for user ID
+    }
+
+    try
+    {
+        var token = ExtractToken();
+        var isValidToken = await ValidateToken(token);
+
+        return new APIGatewayCustomAuthorizerResponse
         {
-            Statement = new List<APIGatewayCustomAuthorizerPolicy.IAMPolicyStatement>
+            PrincipalID = !isValidToken ? "401" : GetUserId(token),
+            PolicyDocument = new APIGatewayCustomAuthorizerPolicy
             {
-                new APIGatewayCustomAuthorizerPolicy.IAMPolicyStatement()
+                Statement = new List<APIGatewayCustomAuthorizerPolicy.IAMPolicyStatement>
                 {
-                    Effect = string.IsNullOrEmpty(token) || !await ValidateToken(token) ? "Deny" : "Allow",
-                    Resource = new HashSet<string> { methodArn },
-                    Action = new HashSet<string> { "execute-api:Invoke" }
+                    new()
+                    {
+                        Effect = !isValidToken ? "Deny" : "Allow",
+                        Resource = new HashSet<string> { apiGatewayEvent.MethodArn },
+                        Action = new HashSet<string> { "execute-api:Invoke" }
+                    }
+                }
+            },
+            Context = new APIGatewayCustomAuthorizerContextOutput
+            {
+                { "UserId", GetUserId(token) }
+            }
+        };
+    }
+    catch
+    {
+        return new APIGatewayCustomAuthorizerResponse
+        {
+            PrincipalID = "401",
+            PolicyDocument = new APIGatewayCustomAuthorizerPolicy
+            {
+                Statement = new List<APIGatewayCustomAuthorizerPolicy.IAMPolicyStatement>
+                {
+                    new()
+                    {
+                        Effect = "Deny",
+                        Resource = new HashSet<string> { apiGatewayEvent.MethodArn },
+                        Action = new HashSet<string> { "execute-api:Invoke" }
+                    }
                 }
             }
-        }
-    };
+        };
+    }
 };
 
-// Create and run the Lambda function
+// Create and run the Lambda function (kept as per your original structure)
 await LambdaBootstrapBuilder.Create(handler, serializer)
     .Build()
     .RunAsync();
-

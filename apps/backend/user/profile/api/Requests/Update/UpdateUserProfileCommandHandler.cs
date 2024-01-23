@@ -37,9 +37,9 @@ public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfile
                 UserName = user.Profile.UserName
             }),
             Headers = new Dictionary<string, string>() {
-                    { "Access-Control-Allow-Headers", "Content-Type" },
-                    { "Access-Control-Allow-Origin", "*" },
-                    { "Access-Control-Allow-Methods", "OPTIONS,POST" }
+                { "Access-Control-Allow-Origin", "*" },
+                { "Access-Control-Allow-Methods", "*" },
+                { "Access-Control-Allow-Headers", "Content-Type" }
                 }
         };
     }

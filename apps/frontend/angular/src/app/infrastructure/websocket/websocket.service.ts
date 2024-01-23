@@ -4,7 +4,8 @@ import { environment } from './../../../environments/environment';
 import { WebSocketActions } from './websocket.actions.enum';
 import { WebSocketMessage } from './websocket.message.model';
 import { WebSocketRequest } from './websocket.request.model';
-import { AmplifyAuthService } from 'src/app/services/amplify-auth.service';
+import { LoginClient } from '@authress/login';
+import { isNullOrUndefined } from 'src/app/app.component';
 
 @Injectable({ providedIn: 'root' })
 export class WebSocketService<T = WebSocketRequest> {
@@ -12,24 +13,20 @@ export class WebSocketService<T = WebSocketRequest> {
   private connectedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public connected$: Observable<boolean> = this.connectedSubject.asObservable();
   private messages = new Subject<WebSocketMessage<T>>();
+  private loginClient: LoginClient = new LoginClient({authressLoginHostUrl: "https://authress.flyingdarts.net/", applicationId: "app_2YKyhM6M31XVtuCeuDsSJ2"});
 
-  constructor(private amplifyAuthService: AmplifyAuthService) {
+  constructor() {
     this.initialize();
   }
 
-  private initialize(): void {
+  private async initialize() {
     let wsUrl = environment.webSocketUrl;
-    this.amplifyAuthService.getAccessToken()
-      .then((result) => {
-        // The code here will be executed after someAsyncFunction resolves
-        wsUrl += `?token=${encodeURIComponent(result)}`;
-        this.socket = new WebSocket(wsUrl);
-        this.connect();
-      })
-      .catch((error) => {
-        console.log('cant get auth token');
-        console.error(error);
-      });
+    const userToken = await this.loginClient.ensureToken();
+    if (!isNullOrUndefined(userToken)) {
+      wsUrl += `?token=${encodeURIComponent(userToken)}`;
+      this.socket = new WebSocket(wsUrl);
+      this.connect();
+    }
   }
 
   private connect(): void {

@@ -9,8 +9,8 @@
             </div>
             <div *ngIf="!(loading$ | async)" class=" container-auth h-100 login-container">
               <h1 class="fw-bold my-sign-in-header">Login</h1>
-              <button id="loginButton" class="btn btn-facebook-login" [disabled]="!canLogin" (click)="login()">
-                <i class="fa-brands fa-square-facebook"></i> Login with Facebook
+              <button class="btn btn-google-login" [disabled]="!canLogin" (click)="login()">
+                Click here to login!
               </button>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" (value)="accepted" (change)="accept()"

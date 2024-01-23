@@ -14,17 +14,17 @@
     "categories": {
       "auth": {
         "flyingdartsmobile": {
+          "userPoolId": "eu-west-1_eJ59ibbay",
+          "userPoolName": "Flyingdarts-staging",
+          "webClientId": "3diop17a8v6tvdg053iqgh2akh",
+          "nativeClientId": "60sev9r9l9mrbo9iv5qt6902b2",
+          "identityPoolId": "eu-west-1:6e03ae81-c695-45de-82f1-6e1398f6ad30",
+          "identityPoolName": "testAuthIdentityPool__staging",
           "allowUnauthenticatedIdentities": false,
-          "authRoleArn": "arn:aws:iam::561462764262:role/amplify-flyingdarts-production-24329-authRole",
-          "authRoleName": "amplify-flyingdarts-production-24329-authRole",
-          "identityPoolId": "eu-west-1:e2168b52-d7c1-452b-bc05-0e4d06bcba71",
-          "identityPoolName": "testAuthIdentityPool__production",
-          "nativeClientId": "7duge0a35ki8fvq8ip8v4miop6",
-          "unauthRoleArn": "arn:aws:iam::561462764262:role/amplify-flyingdarts-production-24329-unauthRole",
-          "unauthRoleName": "amplify-flyingdarts-production-24329-unauthRole",
-          "userPoolId": "eu-west-1_gInTJENXg",
-          "userPoolName": "Flyingdarts-production",
-          "webClientId": "7duge0a35ki8fvq8ip8v4miop6"
+          "authRoleArn": "arn:aws:iam::561462764262:role/amplify-flyingdarts-staging-100723-authRole",
+          "authRoleName": "amplify-flyingdarts-staging-100723-authRole",
+          "unauthRoleArn": "arn:aws:iam::561462764262:role/amplify-flyingdarts-staging-100723-unauthRole",
+          "unauthRoleName": "amplify-flyingdarts-staging-100723-unauthRole"
         }
       }
     }

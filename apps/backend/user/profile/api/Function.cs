@@ -14,7 +14,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             switch (request.HttpMethod)
             {
                 case "GET":
-                    return await innerHandler.Handle(new GetUserProfileQuery { CognitoUserName = request.QueryStringParameters["cognitoUserName"] });
+                    return await innerHandler.Handle(new GetUserProfileQuery { AuthProviderUserId = request.RequestContext.Authorizer.GetValueOrDefault("UserId").ToString() });
                 case "POST":
                     return await innerHandler.Handle(JsonSerializer.Deserialize<CreateUserProfileCommand>(request.Body));
                 case "PUT":
@@ -27,7 +27,7 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         return new APIGatewayProxyResponse
         {
             StatusCode = 400,
-            Body = ex.Message
+            Body = $"{ex.Message}\n {ex.StackTrace}"
         };
     }
 

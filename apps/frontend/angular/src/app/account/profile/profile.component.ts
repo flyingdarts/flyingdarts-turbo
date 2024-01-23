@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AnimationOptions } from 'ngx-lottie';
 //import { WebSocketActions } from './../../infrastructure/websocket/websocket.actions.enum';
-import { AmplifyAuthService } from './../../services/amplify-auth.service';
 import { UserProfileApiService } from './../../services/user-profile-api.service';
 import { UserProfileStateService } from './../../services/user-profile-state.service';
 import { CarouselModel } from './../../shared/carousel/carousel.component';
-import { UserProfileDetails } from './../../shared/models/user-profile-details.model';
 import { Router } from '@angular/router';
 import { AppStore } from 'src/app/app.store';
 
@@ -35,6 +33,7 @@ export class ProfileComponent implements OnInit {
       description: 'Go to the settings page for camera configuration.'
     }
   ];
+  
   constructor(private formBuilder: FormBuilder,
     private apiService: UserProfileApiService,
     private userProfileService: UserProfileStateService,
@@ -46,6 +45,7 @@ export class ProfileComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email])
     });
   }
+
   public lottieOptions: AnimationOptions = {
     path: '/assets/animations/flyingdarts_icon.json',
     loop: true
@@ -70,12 +70,8 @@ export class ProfileComponent implements OnInit {
         this.userProfileService.currentUserProfileDetails.UserId!,
         this.profileForm.value.email,
         this.profileForm.value.userName,
-        this.profileForm.value.country).subscribe(x=> {
-          this.appStore.setProfile(x);
-          this.userProfileService.currentUserProfileDetails = x;
-          this.isLoading = false;
-          this.router.navigate(['/', 'lobby'])
-        });
+        this.profileForm.value.country)
+        this.router.navigate(['/', 'lobby'])
     }
   }
 }

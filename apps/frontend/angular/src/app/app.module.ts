@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { AmplifyAuthService } from './services/amplify-auth.service';
 import { ApiService } from './services/room-api.service';
 import { JitsiService } from './services/jitsi.service';
 import { LoadingService } from './services/loading.service';
@@ -17,14 +16,11 @@ import { WebSocketService } from './infrastructure/websocket/websocket.service';
 import { WebSocketMessageService } from './infrastructure/websocket/websocket-message.service';
 import { provideComponentStore } from '@ngrx/component-store';
 import { AppStore } from './app.store';
-import { EffectsModule } from '@ngrx/effects';
-import { AuthEffects } from './auth.effects';
 import { StoreModule } from '@ngrx/store';
 import { ApiClient } from './services/api.client';
 import { PreferedX01SettingsService } from './services/prefered-x01-settings.service';
-import { QueueComponent } from './games/queue/queue.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserTokenInterceptor } from './interceptors/user-token-interceptor';
+import { AuthressService } from './services/authress_service';
 
 @NgModule({
   declarations: [
@@ -36,19 +32,14 @@ import { UserTokenInterceptor } from './interceptors/user-token-interceptor';
     ReactiveFormsModule,
     SharedModule,
     StoreModule.forRoot({}),
-    EffectsModule.forRoot([AuthEffects]),
     HttpClientModule,
     BrowserAnimationsModule
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS, useClass: UserTokenInterceptor, multi: true
-    },
     WebSocketService,
     WebSocketMessageService,
     ApiService,
     LoadingService,
-    AmplifyAuthService,
     JitsiService,
     WebcamService,
     UserProfileStateService,
@@ -56,7 +47,8 @@ import { UserTokenInterceptor } from './interceptors/user-token-interceptor';
     X01ApiService,
     provideComponentStore(AppStore),
     ApiClient,
-    PreferedX01SettingsService
+    PreferedX01SettingsService,
+    AuthressService
   ],
   bootstrap: [AppComponent],
 })

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:amplify/amplify.dart';
+import 'package:get_it/get_it.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -15,12 +17,18 @@ class WebSocketService {
   Stream<WebSocketMessage> get messages => _messages.stream;
   late String _websocketUri;
 
+  final AmplifyService _amplifyService = GetIt.I<AmplifyService>();
+
   WebSocketService(String websocketUri) {
     _websocketUri = websocketUri;
   }
 
-  void initialize() {
-    _socket = IOWebSocketChannel.connect(_websocketUri);
+  void initialize() async {
+    log('init websocket service');
+    if (await _amplifyService.getAccessToken() == null) {
+      return;
+    }
+    _socket = IOWebSocketChannel.connect('${_websocketUri}?token=${(await _amplifyService.getAccessToken())}');
     _connectedSubject.add(true);
     _connect();
   }

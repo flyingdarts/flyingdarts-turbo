@@ -238,6 +238,15 @@ public class LambdaConstruct : Construct
                         "*"
                     }
                 })
+            },
+            Environment = new Dictionary<string, string>
+            {
+                {
+                    "AuthressApiBasePath", System.Environment.GetEnvironmentVariable("AuthressApiBasePath")!
+                },
+                {
+                    "AuthressResourceGroupId", System.Environment.GetEnvironmentVariable("AuthressResourceGroupId")!
+                }
             }
         });
     }

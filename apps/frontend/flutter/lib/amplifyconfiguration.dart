@@ -12,25 +12,25 @@ const amplifyconfig = '''{
                 "CredentialsProvider": {
                     "CognitoIdentity": {
                         "Default": {
-                            "PoolId": "eu-west-1:e2168b52-d7c1-452b-bc05-0e4d06bcba71",
+                            "PoolId": "eu-west-1:6e03ae81-c695-45de-82f1-6e1398f6ad30",
                             "Region": "eu-west-1"
                         }
                     }
                 },
                 "CognitoUserPool": {
                     "Default": {
-                        "PoolId": "eu-west-1_gInTJENXg",
-                        "AppClientId": "7duge0a35ki8fvq8ip8v4miop6",
+                        "PoolId": "eu-west-1_eJ59ibbay",
+                        "AppClientId": "60sev9r9l9mrbo9iv5qt6902b2",
                         "Region": "eu-west-1"
                     }
                 },
                 "Auth": {
                     "Default": {
                         "OAuth": {
-                            "WebDomain": "nabzwdf7t9ey-production.auth.eu-west-1.amazoncognito.com",
-                            "AppClientId": "7duge0a35ki8fvq8ip8v4miop6",
-                            "SignInRedirectURI": "flyingdartscontrol://login,https://flyingdarts.net/login",
-                            "SignOutRedirectURI": "flyingdartscontrol://logout,https://flyingdarts.net/logout",
+                            "WebDomain": "nabzwdf7t9ey-staging.auth.eu-west-1.amazoncognito.com",
+                            "AppClientId": "60sev9r9l9mrbo9iv5qt6902b2",
+                            "SignInRedirectURI": "flyingdartscontrol://login,https://staging.flyingdarts.net/login",
+                            "SignOutRedirectURI": "flyingdartscontrol://logout,https://staging.flyingdarts.net/logout",
                             "Scopes": [
                                 "aws.cognito.signin.user.admin",
                                 "email",
@@ -41,7 +41,7 @@ const amplifyconfig = '''{
                         },
                         "authenticationFlowType": "USER_SRP_AUTH",
                         "socialProviders": [
-                            "FACEBOOK"
+                            "GOOGLE"
                         ],
                         "usernameAttributes": [
                             "EMAIL"

@@ -10,6 +10,7 @@ export class UserProfileStateService {
 
   public clear(): void {
     this.storage.removeItem('UserStateService.UserProfileDetails');
+    this.storage.removeItem('UserStateService.Token');
   }
 
   public get currentUserProfileDetails(): UserProfileDetails {
@@ -32,12 +33,12 @@ export class UserProfileStateService {
   }
 
   public set idToken(value: string) {
-    const key = "UserStateService.idToken";
+    const key = "UserStateService.Token";
     this.storage.setItem(key, value);
   }
 
   public get idToken(): string {
-    const key = "UserStateService.idToken";
+    const key = "UserStateService.Token";
     var value = this.storage.getItem(key)!;
     return value;
 }

@@ -105,6 +105,17 @@ a {
     }
 }
 
+.btn-google-login {
+    background: $flyingdarts-secundary;
+    margin: 0 auto;
+    color: white;
+    margin-bottom: 20px;
+    i {
+        margin-right: 5px;
+        color: white;
+    }
+}
+
 .login-container { 
     display: flex;
     justify-content: start;

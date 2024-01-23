@@ -2,7 +2,7 @@ name: flyingdarts_app
 description: A flutter app to send score to Flyingdarts.net
 publish_to: none
 
-version: 1.3.8+2
+version: 1.3.9+1
 
 environment:
   sdk: ">=2.18.2 <3.0.0"
@@ -27,7 +27,12 @@ dependencies:
     path: ./packages/features/profile
   speech:
     path: ./packages/features/speech
-
+  splash:
+    path: ./packages/features/splash
+  configuration: 
+    path: ./packages/shared/configuration/core
+  configuration_secrets:
+    path: ./packages/shared/configuration/secrets
   internationalization:
     path: ./packages/shared/internationalization
   websocket:
@@ -93,7 +98,7 @@ flutter:
   assets:
     - assets/icons/dartboard_icon.svg
     - assets/icons/dartboard_icon_outlined.svg
-
+    - assets/icons/fd_icon.svg
   fonts:
     - family: Poppins
       fonts:

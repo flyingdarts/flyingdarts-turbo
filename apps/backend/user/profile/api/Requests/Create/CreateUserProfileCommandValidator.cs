@@ -2,9 +2,6 @@
 {
     public CreateUserProfileCommandValidator()
     {
-        RuleFor(x => x.CognitoUserId)
-            .Must(x => x.Contains("facebook"));
-
         RuleFor(x => x.UserName)
             .MinimumLength(2)
             .MaximumLength(32);

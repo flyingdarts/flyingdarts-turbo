@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthenticatorService } from '@aws-amplify/ui-angular';
-import { AmplifyAuthService } from './../../services/amplify-auth.service';
 import { CarouselModel } from './../../shared/carousel/carousel.component';
 import { UserProfileStateService } from 'src/app/services/user-profile-state.service';
 import { AppStore } from 'src/app/app.store';
 import { isNullOrUndefined } from 'src/app/app.component';
 import { Observable } from 'rxjs';
+import { LoginClient } from '@authress/login';
 
 @Component({
   selector: 'app-profile',
@@ -37,10 +36,8 @@ export class ProfileComponent implements OnInit {
   ];
   constructor(
     private router: Router,
-    public authenticator: AuthenticatorService,
     private userProfileStateService: UserProfileStateService,
-    private appStore: AppStore,
-    private authService: AmplifyAuthService,) {
+    private appStore: AppStore,) {
 
     this.profileForm = new FormGroup({
       userName: new FormControl('', Validators.required),
@@ -55,16 +52,18 @@ export class ProfileComponent implements OnInit {
       this.appStore.setLoading(false);
     }
   }
+
+  private loginClient: LoginClient = new LoginClient({authressLoginHostUrl: "https://authress.flyingdarts.net/", applicationId: "app_2YKyhM6M31XVtuCeuDsSJ2"});
+
   async submitForm() {
     if (this.profileForm.valid) {
-      var userId = await this.authService.getCognitoUserId();
-      var userName = await this.authService.getCognitoName();
+      var userIdentity = await this.loginClient.getUserIdentity();
+      var userId: string = userIdentity["userId"] as string;
       this.appStore.patchProfileState({
         UserName: this.profileForm.value.userName,
         Email: this.profileForm.value.email,
         Country: this.profileForm.value.country,
-        CognitoUserId: await this.authService.getCognitoUserId(),
-        CognitoUserName: await this.authService.getCognitoName(),
+        AuthProviderUserId: userId,
       });
       this.router.navigate(['/', 'onboarding', { outlets: { 'onboarding-outlet': ['camera'] } }])
     }

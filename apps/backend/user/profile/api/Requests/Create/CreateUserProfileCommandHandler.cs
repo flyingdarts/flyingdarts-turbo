@@ -11,7 +11,7 @@
     public async Task<APIGatewayProxyResponse> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
     {
         var userProfile = UserProfile.Create(request.UserName, request.Email, request.Country);
-        var user = User.Create(request.CognitoUserId, request.CognitoUserName, request.ConnectionId, userProfile);
+        var user = User.Create(request.AuthProviderUserId, request.ConnectionId, userProfile);
 
         var userWrite = _dbContext.CreateBatchWrite<User>(_applicationOptions.Value.ToOperationConfig());
         userWrite.AddPutItem(user);
@@ -29,9 +29,9 @@
                 UserName = user.Profile.UserName
             }),
             Headers = new Dictionary<string, string>() {
-                    { "Access-Control-Allow-Headers", "Content-Type" },
-                    { "Access-Control-Allow-Origin", "*" },
-                    { "Access-Control-Allow-Methods", "OPTIONS,POST" }
+                { "Access-Control-Allow-Origin", "*" },
+                { "Access-Control-Allow-Methods", "*" },
+                { "Access-Control-Allow-Headers", "Content-Type" }
                 }
         };
     }

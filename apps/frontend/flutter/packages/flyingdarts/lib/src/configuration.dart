@@ -1,5 +1,7 @@
 import 'package:configuration/configuration.dart';
 import 'package:configuration_preferences/preferences.dart';
+import 'package:configuration_secrets/secrets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,5 +19,13 @@ abstract class ConfigurationModule {
   }
 
   @injectable
-  ReadableConfiguration<LanguageConfig> readableCredentials(WriteableConfiguration<LanguageConfig> config) => config;
+  ReadableConfiguration<LanguageConfig> readableLanguageConfig(WriteableConfiguration<LanguageConfig> config) => config;
+
+  @preResolve
+  Future<WriteableConfiguration<Credentials>> secretsConfiguration(FlutterSecureStorage flutterSecureStorage) async {
+    final config = SecretConfiguration<Credentials>(flutterSecureStorage, Credentials.fromJson);
+    config.setDefault(Credentials(accessToken: '', idToken: '', refreshToken: ''));
+    await config.load();
+    return config;
+  }
 }

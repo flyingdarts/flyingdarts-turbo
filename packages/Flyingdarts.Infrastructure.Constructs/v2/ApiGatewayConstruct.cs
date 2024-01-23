@@ -1,5 +1,3 @@
-using Amazon.CDK.AWS.Cognito;
-
 public class ApiGatewayConstruct : Construct
 {
     public RestApi UsersApi { get; }
@@ -16,7 +14,7 @@ public class ApiGatewayConstruct : Construct
     public ApiGatewayConstruct(Construct scope, string id, string environment, LambdaConstruct lambdaConstruct, AuthorizersConstruct authorizersConstruct) : base(scope, id)
     {
         
-         #region Users
+        #region Users
         UsersApi = new RestApi(this, $"Flyingdarts-Backend-Users-RestApi-{environment}", new RestApiProps
         {
             RestApiName = $"Flyingdarts.Backend.Users.RestApi.{environment}",
@@ -24,7 +22,8 @@ public class ApiGatewayConstruct : Construct
             DefaultCorsPreflightOptions = new CorsOptions
             {
                 AllowOrigins = Cors.ALL_ORIGINS,
-                AllowMethods = Cors.ALL_METHODS
+                AllowMethods = Cors.ALL_METHODS,
+                AllowHeaders = new []{"Content-Type", "Authorization"}
             }
         });
 
@@ -65,18 +64,18 @@ public class ApiGatewayConstruct : Construct
         
         profile.AddMethod("GET", new LambdaIntegration(lambdaConstruct.ProfileApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
-            AuthorizationType = AuthorizationType.COGNITO,
-            Authorizer = authorizersConstruct.UsersApiAuthorizer
+            AuthorizationType = AuthorizationType.CUSTOM,
+            Authorizer = authorizersConstruct.UsersAuthorizer
         });
         profile.AddMethod("POST", new LambdaIntegration(lambdaConstruct.ProfileApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
-            AuthorizationType = AuthorizationType.COGNITO,
-            Authorizer = authorizersConstruct.UsersApiAuthorizer
+            AuthorizationType = AuthorizationType.CUSTOM,
+            Authorizer = authorizersConstruct.UsersAuthorizer
         });
         profile.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.ProfileApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
-            AuthorizationType = AuthorizationType.COGNITO,
-            Authorizer = authorizersConstruct.UsersApiAuthorizer
+            AuthorizationType = AuthorizationType.CUSTOM,
+            Authorizer = authorizersConstruct.UsersAuthorizer
         });
 
         #endregion
@@ -122,27 +121,27 @@ public class ApiGatewayConstruct : Construct
         var tournaments = TournamentsApi.Root.AddResource("tournaments");
             tournaments.AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
-            AuthorizationType = AuthorizationType.COGNITO,
-            Authorizer = authorizersConstruct.TournamentsApiAuthorizer
+            AuthorizationType = AuthorizationType.CUSTOM,
+            Authorizer = authorizersConstruct.TournamentsAuthorizer
         });
             tournaments.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
-            AuthorizationType = AuthorizationType.COGNITO,
-            Authorizer = authorizersConstruct.TournamentsApiAuthorizer
+            AuthorizationType = AuthorizationType.CUSTOM,
+            Authorizer = authorizersConstruct.TournamentsAuthorizer
         });
 
         var particpants = tournaments.AddResource("participants");
             particpants.AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
-            AuthorizationType = AuthorizationType.COGNITO,
-            Authorizer = authorizersConstruct.TournamentsApiAuthorizer
+            AuthorizationType = AuthorizationType.CUSTOM,
+            Authorizer = authorizersConstruct.TournamentsAuthorizer
         });
 
         var matches = tournaments.AddResource("matches");
             matches.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
-            AuthorizationType = AuthorizationType.COGNITO,
-            Authorizer = authorizersConstruct.TournamentsApiAuthorizer
+            AuthorizationType = AuthorizationType.CUSTOM,
+            Authorizer = authorizersConstruct.TournamentsAuthorizer
         });
 
         #endregion

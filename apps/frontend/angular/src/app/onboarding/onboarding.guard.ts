@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 import { ApiClient } from '../services/api.client';
-import { AmplifyAuthService } from '../services/amplify-auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,6 @@ export class OnboardingGuard implements CanActivate {
   constructor(
     private router: Router,
     private apiClient: ApiClient,
-    private authService: AmplifyAuthService
   ) {
 
   }

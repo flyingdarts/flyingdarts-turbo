@@ -1,3 +1,4 @@
+# melos_managed_dependency_overrides: flyingdarts_sdk,configuration_secrets
 # melos_managed_dependency_overrides: amplify,dartboard,internationalization,keyboard,language,navigation,profile,speech,ui,websocket,widgetbook,widgetbook_annotation,widgetbook_generator,configuration,configuration_preferences
 dependency_overrides:
   amplify:
@@ -6,8 +7,12 @@ dependency_overrides:
     path: ../../shared/configuration/core
   configuration_preferences:
     path: ../../shared/configuration/preferences
+  configuration_secrets:
+    path: ..\\..\\shared\\configuration\\secrets
   dartboard:
     path: ../dartboard
+  flyingdarts_sdk:
+    path: ..\\..\\api\\sdk\\flyingdarts
   internationalization:
     path: ../../shared/internationalization
   keyboard:

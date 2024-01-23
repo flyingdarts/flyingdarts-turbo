@@ -14,8 +14,7 @@
         public string UserId { get; set; }
         public string ConnectionId { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string CognitoUserId { get; set; }
-        public string CognitoUserName { get; set; }
+        public string AuthProviderUserId { get; set; }
         public UserProfile Profile { get; set; }
 
         public User()
@@ -25,17 +24,16 @@
             PrimaryKey = Constants.User;
         }
 
-        public static User Create(string cognitoUserId, string cognitoUserName, string connectionId, UserProfile userProfile)
+        public static User Create(string authProviderUserId, string connectionId, UserProfile userProfile)
         {
             var user = new User()
             {
-                CognitoUserId = cognitoUserId,
-                CognitoUserName = cognitoUserName,
+                AuthProviderUserId = authProviderUserId,
                 ConnectionId = connectionId,
                 Profile = userProfile
             };
             user.SortKey = $"{user.UserId}#{userProfile.Country}";
-            user.LSI1 = $"{user.CognitoUserName}#{user.CreatedAt}";
+            user.LSI1 = $"{user.AuthProviderUserId}#{user.CreatedAt}";
             return user;
         }
     }

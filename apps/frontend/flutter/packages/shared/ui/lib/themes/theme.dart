@@ -32,6 +32,7 @@ var myTheme = ThemeData(
   useMaterial3: false,
   primaryColor: MyTheme.secondaryColor,
   scaffoldBackgroundColor: MyTheme.primaryColor,
+  primaryColorLight: const Color(0xff7B81D8),
   primaryColorDark: const Color(0xff3C46A7),
   brightness: Brightness.dark,
   fontFamily: 'Poppins',

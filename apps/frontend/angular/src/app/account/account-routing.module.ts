@@ -4,12 +4,16 @@ import { AccountRootComponent } from './account-root/account-root.component';
 import { AuthorizationGuard } from '../guards/authorization.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ProfileDetailsResolver } from '../resolvers/profile.resolver';
 
 const routes: Routes = [
   {
     path: "",
     component: AccountRootComponent,
     canActivate: [AuthorizationGuard],
+    resolve: { 
+      userProfileDetails: ProfileDetailsResolver
+    },
     children: [
       {
         path: "profile",

@@ -4,27 +4,26 @@ import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { LoginComponent } from './login/login.component';
-import { LoginGuard } from '../guards/login.guard';
 import { LobbyComponent } from './lobby/lobby.component';
 import { AuthorizationGuard } from '../guards/authorization.guard';
-import { ProfileResolver } from '../resolvers/profile.resolver';
-import { HomeComponent } from './home/home.component';
+import { ProfileDetailsResolver } from '../resolvers/profile.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    resolve: { profile: ProfileResolver },
-    component: HomeComponent
+    component: LoginComponent
   },
   {
     path: 'lobby',
     canActivate: [AuthorizationGuard],
-    component: LobbyComponent
+    component: LobbyComponent,
+    resolve: {
+      profileDetails: ProfileDetailsResolver
+    }
   },
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [LoginGuard],
   },
   {
     path: 'terms-of-service',

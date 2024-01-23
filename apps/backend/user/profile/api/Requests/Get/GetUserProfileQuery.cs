@@ -1,4 +1,4 @@
 ﻿public class GetUserProfileQuery : IRequest<APIGatewayProxyResponse>
 {
-    public string CognitoUserName { get; set; }
+    public string AuthProviderUserId { get; set; }
 }
