@@ -30,4 +30,8 @@ export class AuthressService {
     public signout(): Promise<void> {
         return this.loginClient.logout(window.location.href)
     }
+
+    public isUserLoggedIn(): Promise<boolean> {
+        return this.loginClient.userSessionExists();
+    }
 }

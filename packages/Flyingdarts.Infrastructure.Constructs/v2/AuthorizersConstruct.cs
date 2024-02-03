@@ -4,6 +4,7 @@ public class AuthorizersConstruct : Construct
 {
     public WebSocketLambdaAuthorizer WebSocketApiConnectAuthorizer { get; }
     public RequestAuthorizer UsersAuthorizer { get; }
+    public RequestAuthorizer StatsAuthorizer { get; }
     public RequestAuthorizer TournamentsAuthorizer { get; }
     
     public AuthorizersConstruct(Construct scope, string id, string environment,LambdaConstruct lambdaConstruct) : base(scope, id)
@@ -12,6 +13,13 @@ public class AuthorizersConstruct : Construct
             new RequestAuthorizerProps
             {
                 AuthorizerName = $"FlyingdartsBackendApiUsersAuthorizer{environment}",
+                Handler = lambdaConstruct.AuthLambda,
+                IdentitySources = new[] { IdentitySource.Header("Authorization") }
+            });
+        StatsAuthorizer = new RequestAuthorizer(this, $"Flyingdarts-Backend-Api-StatsAuthorizer-{environment}-v2",
+            new RequestAuthorizerProps
+            {
+                AuthorizerName = $"FlyingdartsBackendApiStatsAuthorizer{environment}",
                 Handler = lambdaConstruct.AuthLambda,
                 IdentitySources = new[] { IdentitySource.Header("Authorization") }
             });

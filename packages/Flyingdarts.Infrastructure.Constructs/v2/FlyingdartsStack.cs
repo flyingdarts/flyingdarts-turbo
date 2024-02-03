@@ -21,7 +21,11 @@ public class FlyingdartsStack : Stack
             ExportName = $"WebSocketApiUrl{environment}",
             Value = ApiGatewayConstruct.WebSocketStage.Url
         });
-
+        new CfnOutput(this, $"Stats-RestApi-Url-Output-{environment}", new CfnOutputProps
+        {
+            ExportName = $"StatsRestApiUrl{environment}",
+            Value = ApiGatewayConstruct.StatsApi.Url
+        });
         new CfnOutput(this, $"Users-RestApi-Url-Output-{environment}", new CfnOutputProps
         {
             ExportName = $"UsersRestApiUrl{environment}",

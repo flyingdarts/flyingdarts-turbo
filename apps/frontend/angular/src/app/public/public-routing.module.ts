@@ -11,15 +11,15 @@ import { ProfileDetailsResolver } from '../resolvers/profile.resolver';
 const routes: Routes = [
   {
     path: '',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'lobby',
     canActivate: [AuthorizationGuard],
     component: LobbyComponent,
-    resolve: {
-      profileDetails: ProfileDetailsResolver
-    }
+    resolve: { 
+      userProfileDetails: ProfileDetailsResolver
+    },
   },
   {
     path: 'login',

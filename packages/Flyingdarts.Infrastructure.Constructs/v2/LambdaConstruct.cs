@@ -6,6 +6,7 @@ public class LambdaConstruct : Construct
     public Function GamesX01Api { get; }
     public Function GamesX01Queue { get; }
     public Function ProfileApi { get; }
+    public Function StatsApi { get; }
     private Function ProfileVerifyEmail { get; }
     public Function TournamentsApi { get; }
     public Function AuthLambda { get; }
@@ -125,7 +126,32 @@ public class LambdaConstruct : Construct
             StartingPosition = StartingPosition.TRIM_HORIZON, // Set the starting position as needed
         }));
         #endregion
-
+        StatsApi = new Function(this, $"Flyingdarts-Backend-Stats-Api-{environment}", new FunctionProps
+        {
+            FunctionName = $"Flyingdarts-Backend-Stats-Api-{environment}",
+            Handler = "Flyingdarts.Backend.Stats.Api",
+            Code = Code.FromAsset("lambda.zip"),
+            Runtime = new Runtime("dotnet6"),
+            Timeout = Duration.Seconds(30),
+            MemorySize = 256,
+            Environment = new Dictionary<string, string>
+            {
+                { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
+            },
+            InitialPolicy = new[]
+            {
+                new PolicyStatement(new PolicyStatementProps
+                {
+                    Actions = new[] { "ssm:GetParametersByPath", "dynamodb:DescribeTable", "dynamodb:BatchWriteItem" },
+                    Resources = new[]
+                    {
+                        "*"
+                    }
+                })
+            }
+        });
+        dynamoDbConstruct.ApplicationTable.GrantFullAccess(StatsApi);
+        
         #region User profile functions
 
         ProfileApi = new Function(this, $"Flyingdarts-Backend-User-Profile-Api-{environment}", new FunctionProps

@@ -112,7 +112,7 @@ export class X01Component implements OnInit {
         }
       }
     } else {
-      console.log("couldnt parse metadata from ", message);
+      console.log("couldnt parse metadata");
     }
   }
   private _sumOfHistory(darts: DartDto[]): number {
@@ -137,7 +137,8 @@ export class X01Component implements OnInit {
         this.shouldDisableInput = true;
       } else {
         // Handle invalid score here (e.g., show an error message)
-        console.log('Invalid score: Cannot go below 0');
+        alert('Invalid score');
+        return;
       }
     });
   }

@@ -7,13 +7,15 @@ import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { StatsComponent } from './stats/stats.component';
 
 
 @NgModule({
   declarations: [
     AccountRootComponent,
     ProfileComponent,
-    SettingsComponent
+    SettingsComponent,
+    StatsComponent
   ],
   imports: [
     CommonModule,

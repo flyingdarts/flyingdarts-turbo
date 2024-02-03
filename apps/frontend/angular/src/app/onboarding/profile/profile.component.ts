@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CarouselModel } from './../../shared/carousel/carousel.component';
 import { UserProfileStateService } from 'src/app/services/user-profile-state.service';
 import { AppStore } from 'src/app/app.store';
@@ -37,7 +37,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private router: Router,
     private userProfileStateService: UserProfileStateService,
-    private appStore: AppStore,) {
+    private appStore: AppStore,
+    private activatedRoute: ActivatedRoute) {
 
     this.profileForm = new FormGroup({
       userName: new FormControl('', Validators.required),
@@ -46,11 +47,17 @@ export class ProfileComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    if (!isNullOrUndefined(this.userProfileStateService.currentUserProfileDetails)) {
-      this.router.navigate(['/', 'lobby'])
-    } else {
-      this.appStore.setLoading(false);
-    }
+    this.activatedRoute.data.subscribe(({ userProfileDetails }) => {
+      console.log(userProfileDetails)
+
+      if (!isNullOrUndefined(userProfileDetails)) {
+        this.userProfileStateService.currentUserProfileDetails = userProfileDetails;
+        console.log(userProfileDetails)
+        this.router.navigate(['/', 'lobby'])
+      }
+    });
+
+    this.appStore.setLoading(false);
   }
 
   private loginClient: LoginClient = new LoginClient({authressLoginHostUrl: "https://authress.flyingdarts.net/", applicationId: "app_2YKyhM6M31XVtuCeuDsSJ2"});

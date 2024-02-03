@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ApiService } from './services/room-api.service';
 import { JitsiService } from './services/jitsi.service';
 import { LoadingService } from './services/loading.service';
 import { WebcamService } from './services/webcam.service';
@@ -38,7 +37,6 @@ import { AuthressService } from './services/authress_service';
   providers: [
     WebSocketService,
     WebSocketMessageService,
-    ApiService,
     LoadingService,
     JitsiService,
     WebcamService,

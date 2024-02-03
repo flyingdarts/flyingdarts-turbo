@@ -12,7 +12,9 @@ export class UserProfileStateService {
     this.storage.removeItem('UserStateService.UserProfileDetails');
     this.storage.removeItem('UserStateService.Token');
   }
-
+  public get authToken(): string | null {
+    return JSON.parse(this.storage.getItem("AuthenticationCredentialsStorage")?? "")
+  }
   public get currentUserProfileDetails(): UserProfileDetails {
     const key = 'UserStateService.UserProfileDetails';
     const serializedRequest = JSON.parse(this.storage.getItem(key)!);

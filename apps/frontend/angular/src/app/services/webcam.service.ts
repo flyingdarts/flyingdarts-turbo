@@ -37,7 +37,6 @@ export class WebcamService implements OnDestroy {
       const tracks = this.cameraStream.getTracks();
       tracks.forEach(track => track.stop()); // Stop all tracks in the stream
       this.cameraStream = null; // Clear the stored stream
-      console.log('Camera stream disposed');
     }
   }
 }

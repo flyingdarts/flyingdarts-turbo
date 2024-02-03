@@ -80,22 +80,25 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    try {
-      this.route.data.subscribe((({profileDetails }) => {
-        this.userProfileService.currentUserProfileDetails = profileDetails;
-      }))
+    console.log('ayeet')
+    this.store.setLoading(false)
+    this.route.data.subscribe(({ userProfileDetails }) => {
+      console.log(userProfileDetails)
+      if (!isNullOrUndefined(userProfileDetails)) {
+        this.userProfileService.currentUserProfileDetails = userProfileDetails;
+        this.clientId = this.userProfileService.currentUserProfileDetails.UserId!;
 
-      if (!isNullOrUndefined(this.settingsService.preferedX01Legs)) {
-        this.settingsService.preferedX01Legs = 3;
-        this.settingsService.preferedX01Sets = 1;
       }
-    } catch(error) {
-      console.log(error);
+    });
+    if (!isNullOrUndefined(this.settingsService.preferedX01Legs)) {
+      this.settingsService.preferedX01Legs = 3;
+      this.settingsService.preferedX01Sets = 1;
     }
+
 
     this.vm$.subscribe((x) => {
       this.preferedX01Sets = x.preferedSettings.x01Sets,
-      this.preferedX01Legs = x.preferedSettings.x01Legs
+        this.preferedX01Legs = x.preferedSettings.x01Legs
     });
 
     this.webSocketService.getMessages().subscribe(x => {
@@ -120,7 +123,8 @@ export class LobbyComponent implements OnInit {
       }
     })
     // this.store.setProfile(this.userProfileService.currentUserProfileDetails);
-    this.clientId = this.userProfileService.currentUserProfileDetails.UserId!;
+
+
   }
 
   public joinX01Queue() {
@@ -153,7 +157,7 @@ export class LobbyComponent implements OnInit {
     this.shouldShowQueueFaq = !this.shouldShowQueueFaq;
   }
 
-  public sendMessage() {  
+  public sendMessage() {
     this.webSocketService.postMessage(JSON.stringify({
       action: "message",
       message: {

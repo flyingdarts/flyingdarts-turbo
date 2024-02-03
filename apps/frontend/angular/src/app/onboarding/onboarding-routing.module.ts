@@ -9,14 +9,14 @@ const routes: Routes = [
   {
     path: "",
     component: OnboardingRootComponent,
-    resolve: { 
-      userProfileDetails: ProfileDetailsResolver 
-    },
     children: [
       {
         path: "profile",
         component: ProfileComponent,
         outlet: "onboarding-outlet",
+        resolve: { 
+          userProfileDetails: ProfileDetailsResolver
+        },
       },
       {
         path: "camera",

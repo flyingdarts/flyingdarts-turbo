@@ -1,9 +1,9 @@
 
 export interface UserProfileDetails {
+    UserId?: string;
     UserName: string;
     Country: string;
     Email: string;
-    UserId?: string;
 
     isRegistered?: boolean;
     cameraPermissionGranted?: boolean;

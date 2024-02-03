@@ -9,6 +9,7 @@ import { UserProfileApiService } from 'src/app/services/user-profile-api.service
 import { LoginClient } from '@authress/login';
 import { UserProfileDetails } from '../models/user-profile-details.model';
 import { profile } from 'console';
+import { AuthressService } from 'src/app/services/authress_service';
 
 @Component({
   selector: 'app-navigation-bar',
@@ -24,13 +25,14 @@ export class NavigationBarComponent implements OnInit {
   public userName: string = ''; // Initial value is an empty string
   public isAuthenticated!: boolean; // Initial value is false
   public isRegistered!: boolean; // Initial value is false
-  private loginClient: LoginClient = new LoginClient({authressLoginHostUrl: "https://authress.flyingdarts.net/", applicationId: "app_2YKyhM6M31XVtuCeuDsSJ2"});
 
   constructor(
     public router: Router,
     public userProfileService: UserProfileStateService,
     public userApiService: UserProfileApiService,
     private appStore: AppStore,
+    private authressService: AuthressService,
+    private activatedRoute: ActivatedRoute
   ) {
 
   }
@@ -38,18 +40,22 @@ export class NavigationBarComponent implements OnInit {
   async ngOnInit() {
     this.appStore.profile$.subscribe((profileDetails) => {
       if (profileDetails !== null) {
-        console.log(profileDetails);
         this.isRegistered = true;
         this.isAuthenticated = true;
         this.userName = profileDetails.UserName
       }
     });
+
+    var details = this.userProfileService.currentUserProfileDetails;
+    if (!isNullOrUndefined(details)) {
+      this.appStore.setProfile(details);
+    }
   }
 
   title = 'flyingdarts';
 
   public async signOut() {
     this.userProfileService.clear();
-    await this.loginClient.logout();
+    await this.authressService.signout();
   }
 }

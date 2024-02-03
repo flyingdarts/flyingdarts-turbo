@@ -4,6 +4,12 @@ public class ApiGatewayConstruct : Construct
     public Deployment UsersDeployment { get; }
     public Stage UsersStage { get; }
 
+    public RestApi StatsApi { get; }
+    
+    public Deployment StatsDeployment { get; }
+    
+    public Stage StatsStage { get; }
+    
     public RestApi TournamentsApi { get; }
     public Deployment TournamentsDeployment { get; }
     public Stage TournamentsStage { get; }
@@ -40,13 +46,6 @@ public class ApiGatewayConstruct : Construct
             StageName = environment,
         });
 
-
-        UsersApi.AddApiKey($"Flyingdarts-Angular-Frontend-Users-ApiKey-{environment}", new ApiKeyOptions
-        {
-            ApiKeyName = $"AngularFrontend{environment}UsersApiKey",
-            Value = environment == "Development" ? "6de6d6d76ce00be4d0b143b2d9694eb9" : "80031499b8fd6270417763a1d978bd41"
-        });
-
         UsersApi.AddUsagePlan($"Flyingdarts-Backend-Users-RestApi-UsagePlan-{environment}", new UsagePlanProps
         {
             ApiStages = new[]
@@ -80,6 +79,53 @@ public class ApiGatewayConstruct : Construct
 
         #endregion
 
+        #region Stats
+
+        StatsApi = new RestApi(this, $"Flyingdarts-Backend-Stats-RestApi-{environment}", new RestApiProps
+        {
+            RestApiName = $"Flyingdarts.Backend.Stats.RestApi.{environment}",
+            ApiKeySourceType = ApiKeySourceType.HEADER,
+            DefaultCorsPreflightOptions = new CorsOptions
+            {
+                AllowOrigins = Cors.ALL_ORIGINS,
+                AllowMethods = Cors.ALL_METHODS,
+                AllowHeaders = new []{"Content-Type", "Authorization"}
+            }
+        });
+
+        StatsDeployment = new Deployment(this, $"Flyingdarts-Backend-Stats-RestApi-Deployment-{environment}", new DeploymentProps
+        {
+            Api = StatsApi,
+            Description = $"A restfull {environment} Stats api for flyingdarts",
+        });
+
+        StatsStage = new Stage(this, $"Flyingdarts-Backend-Stats-RestApi-Stage-{environment}", new StageProps
+        {
+            Deployment = StatsDeployment,
+            Description = $"deployment for the restull {environment} Stats api",
+            StageName = environment,
+        });
+
+        StatsApi.AddUsagePlan($"Flyingdarts-Backend-Stats-RestApi-UsagePlan-{environment}", new UsagePlanProps
+        {
+            ApiStages = new[]
+            {
+                new UsagePlanPerApiStage
+                {
+                    Api = StatsApi,
+                    Stage = StatsStage,
+                }
+            }
+        });
+        var stats = StatsApi.Root.AddResource("stats");
+        
+        stats.AddMethod("GET", new LambdaIntegration(lambdaConstruct.StatsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
+        {
+            AuthorizationType = AuthorizationType.CUSTOM,
+            Authorizer = authorizersConstruct.StatsAuthorizer
+        });
+
+            #endregion
         #region Tournaments
         
         TournamentsApi = new RestApi(this, $"Flyingdarts-Backend-Tournaments-RestApi-{environment}", new RestApiProps

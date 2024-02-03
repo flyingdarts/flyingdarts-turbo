@@ -89,7 +89,6 @@ export class CameraComponent implements OnInit, OnDestroy {
       option.text = device.label || `Camera ${selectElement.options.length + 1}`;
       selectElement.appendChild(option);
     });
-    console.log(videoDevices);
     // Return the list of video devices
     return videoDevices;
   }

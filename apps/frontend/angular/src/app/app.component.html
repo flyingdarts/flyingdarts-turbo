@@ -1,10 +1,26 @@
-<div class="container-fluid body-content px-0">
-  <div class="card">
+<div class="container-fluid body-content h-100">
+  <div class="card h-100">
     <app-navigation-bar></app-navigation-bar>
     <div class="card-body">
-      <div class="container-fluid px-0 h-100">
+      <div *ngIf="!(loading$ | async)" class="container-fluid px-0 h-100">
         <router-outlet></router-outlet>
       </div>
+      <div *ngIf="(loading$ | async)"  class="container-fluid body-content h-100">
+        <div class="card h-100">
+          <div class="card-body">
+            <div class="container-fluid px-0 h-100">
+              <div class="flyingdarts-login-container d-flex">
+                <div class="col-sm-12 col-md-12 col-lg-4 p-0 flyingdarts-mobile-container">
+                  <div class="container-auth h-100">
+                    <app-loading [title]="loadingTitle" [subtitle]="loadingSubtitle"></app-loading>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </div>
     <div class="card-footer">
       <div class="d-flex hide-mobile">

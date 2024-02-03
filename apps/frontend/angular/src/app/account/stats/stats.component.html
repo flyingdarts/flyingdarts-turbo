@@ -1,0 +1,21 @@
+<div class="container-fluid body-content h-100">
+    <div class="card h-100">
+        <div class="card-body">
+            <div class="container-fluid px-0 h-100">
+                <div class="flyingdarts-login-container d-flex h-100">
+                    <div class="container-fluid" >
+                        <div *ngIf="(loading$ | async)">
+                            <app-loading [title]="loadingTitle" [subtitle]="loadingSubtitle"></app-loading>
+                        </div>
+                        <div id="plot">
+                            <!-- Your plot content here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+</script>

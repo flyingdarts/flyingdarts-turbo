@@ -20,10 +20,6 @@ const routes: Routes = [
     loadChildren: () => import('./games/x01/x01.module').then(mod => mod.X01Module)
   },
   {
-    path: 'stats',
-    loadChildren: () => import('./stats/stats.module').then(mod=> mod.StatsModule)
-  },
-  {
     path: 'queue',
     loadChildren: () => import('./games/queue/queue.module').then(mod => mod.QueueModule)
   }

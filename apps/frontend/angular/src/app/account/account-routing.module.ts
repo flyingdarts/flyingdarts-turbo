@@ -5,6 +5,7 @@ import { AuthorizationGuard } from '../guards/authorization.guard';
 import { ProfileComponent } from './profile/profile.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ProfileDetailsResolver } from '../resolvers/profile.resolver';
+import { StatsComponent } from './stats/stats.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,11 @@ const routes: Routes = [
       {
         path: "settings",
         component: SettingsComponent,
+        outlet: "account-outlet"
+      },
+      {
+        path: "stats",
+        component: StatsComponent,
         outlet: "account-outlet"
       }
     ]
