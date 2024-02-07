@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { StatsDart } from './stats-state.service';
 import { UserProfileStateService } from 'src/app/services/user-profile-state.service';
+import { of } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class StatsApiService {
@@ -12,9 +13,14 @@ export class StatsApiService {
     this.baseHref = environment.statsApi;
   }
   public getStats() {
-    var headers = { Authorization: this.stateService.idToken };
+    try {
+      var headers = { Authorization: this.stateService.idToken };
 
-    return this.httpClient.get<Array<StatsDart>>('stats', { headers: headers })
+      return this.httpClient.get<Array<Array<number>>>('stats', { headers: headers })
+    } catch (error) {
+      console.error(error);
+      return of(Array<Array<number>>());
+    }
   }
 }
 

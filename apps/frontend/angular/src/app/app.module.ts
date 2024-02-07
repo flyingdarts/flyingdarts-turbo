@@ -20,6 +20,8 @@ import { ApiClient } from './services/api.client';
 import { PreferedX01SettingsService } from './services/prefered-x01-settings.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthressService } from './services/authress_service';
+import { StatsApiService } from './account/stats/stats-api.service';
+import { StatsStateService } from './account/stats/stats-state.service';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,9 @@ import { AuthressService } from './services/authress_service';
     provideComponentStore(AppStore),
     ApiClient,
     PreferedX01SettingsService,
-    AuthressService
+    AuthressService,
+    StatsApiService,
+    StatsStateService
   ],
   bootstrap: [AppComponent],
 })

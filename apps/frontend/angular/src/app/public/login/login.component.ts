@@ -53,6 +53,9 @@ export class LoginComponent implements OnInit {
     try {
       var token = await this.authressService.getToken();
       var userId = this.authressService.getUserId();
+      if (token.indexOf("user=") > -1) {
+        token = token.substring(5)
+      }
       this.stateService.idToken = token;
       if (!isNullOrUndefined(userId)) {
         if (isNullOrUndefined(this.stateService.currentUserProfileDetails)) {

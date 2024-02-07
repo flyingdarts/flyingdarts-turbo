@@ -17,15 +17,15 @@ export class StatsStateService {
 
   // Key used to store and retrieve the StatsDart array from localStorage
   private readonly statsDartKey = 'StatsStateService.Darts';
-
+  private readonly lastUpdatedKey = 'StatsStateService.LastUpdated'
   // Clears all stored StatsDart objects and other related data
   public clear(): void {
-    this.storage.removeItem('StatsStateService.LastUpdated');
+    this.storage.removeItem(this.lastUpdatedKey);
     this.storage.removeItem(this.statsDartKey);
   }
 
   // Retrieves the stored array of StatsDart objects
-  public get darts(): Array<StatsDart> {
+  public get darts(): Array<Array<number>> {
     const serializedDarts = this.storage.getItem(this.statsDartKey);
     if (serializedDarts) {
       return JSON.parse(serializedDarts);
@@ -35,9 +35,14 @@ export class StatsStateService {
   }
 
   // Saves the provided array of StatsDart objects to localStorage
-  public set darts(value: Array<StatsDart>) {
+  public set darts(value: Array<Array<number>>) {
     this.storage.setItem(this.statsDartKey, JSON.stringify(value));
     // Optionally, update the last updated timestamp or other relevant metadata
-    this.storage.setItem('StatsStateService.LastUpdated', new Date().toISOString());
+    this.storage.setItem(this.lastUpdatedKey, new Date().getTime().toString());
+  }
+
+  public get lastUpdated(): Date {
+    var serializedData = this.storage.getItem(this.lastUpdatedKey);
+    return new Date(serializedData!);
   }
 }
