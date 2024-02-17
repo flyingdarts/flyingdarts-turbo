@@ -8,6 +8,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { StatsComponent } from './stats/stats.component';
+import { LoadingComponent } from '../shared/loading/loading.component';
+import { LottieComponent } from 'ngx-lottie';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { StatsComponent } from './stats/stats.component';
     CommonModule,
     AccountRoutingModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    LoadingComponent,
+    LottieComponent
   ]
 })
 export class AccountModule { }

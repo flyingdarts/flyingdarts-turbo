@@ -1,5 +1,3 @@
-import player from 'lottie-web';
-
 export function lottiePlayerFactory(): any {
-  return player;
+  return import('lottie-web');
 }

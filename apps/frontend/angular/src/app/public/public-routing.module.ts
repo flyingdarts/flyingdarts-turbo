@@ -5,25 +5,27 @@ import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.componen
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';
 import { LoginComponent } from './login/login.component';
 import { LobbyComponent } from './lobby/lobby.component';
-import { AuthorizationGuard } from '../guards/authorization.guard';
-import { ProfileDetailsResolver } from '../resolvers/profile.resolver';
+import { canActivateLobby } from '../guards/lobby.guard';
+import { canActivateLogin } from '../guards/login.guard';
+import { userProfileResolver } from '../resolvers/user-profile.resolver';
 
 const routes: Routes = [
   {
     path: '',
     component: LoginComponent,
-  },
-  {
-    path: 'lobby',
-    canActivate: [AuthorizationGuard],
-    component: LobbyComponent,
-    resolve: { 
-      userProfileDetails: ProfileDetailsResolver
-    },
+    canActivate: [canActivateLogin]
   },
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [canActivateLogin]
+  },
+  {
+    path: 'lobby',
+    component: LobbyComponent,
+    canActivate: [canActivateLobby],
+    resolve: {userProfile: userProfileResolver},
+
   },
   {
     path: 'terms-of-service',

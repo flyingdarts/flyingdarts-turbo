@@ -33,9 +33,7 @@ export class X01Component implements OnInit {
   }
   public input: X01Input = new X01Input(0, "");
 
-  public vm$: Observable<X01State> = this.componentStore.select(
-    (state) => state
-  );
+  public vm$: Observable<X01State>;
 
   private gameId?: string;
 
@@ -52,7 +50,12 @@ export class X01Component implements OnInit {
     private userProfileService: UserProfileStateService,
     private jitsiService: JitsiService,
     private x01Store: X01Store
-  ) { }
+  ) {
+
+    this.vm$ = this.componentStore.select(
+    (state) => state
+  );
+   }
 
   async ngOnInit() {
     this.gameId = this.route.snapshot.paramMap.get('id')!;

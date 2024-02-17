@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CreateUserProfileCommand } from './../requests/CreateUserProfileCommand';
-import { GetUserProfileQuery } from './../requests/GetUserProfileCommand';
 import { UpdateUserProfileCommand } from './../requests/UpdateUserProfileCommand';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { UserProfileDetails } from '../shared/models/user-profile-details.model';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
-import { UserProfileStateService } from './user-profile-state.service';
+
 @Injectable({ providedIn: 'root' })
 export class UserProfileApiService {
   private baseHref = "";
-  constructor(private httpClient: HttpClient, private router: Router, private stateService: UserProfileStateService) {
+  constructor(private httpClient: HttpClient) {
     this.baseHref = environment.usersApi;
   }
   public createUserProfile(authProviderUserId: string, email: string, userName: string, country: string): Observable<UserProfileDetails> {
@@ -21,27 +19,31 @@ export class UserProfileApiService {
       Email: email,
       Country: country
     };
-    var headers = { Authorization: this.stateService.idToken };
 
-    return this.httpClient.post<UserProfileDetails>(`${this.baseHref}/users/profile`, command, { headers: headers});
+    return this.httpClient.post<UserProfileDetails>(`${this.baseHref}/users/profile`, command);
   }
 
-  public getUserProfile(): Observable<UserProfileDetails> {
-    var headers = { Authorization: this.stateService.idToken };
-
-    return this.httpClient.get<UserProfileDetails>(`${this.baseHref}/users/profile`, { headers: headers });
+  public getUserProfile(): Observable<UserProfileDetails | null> {
+    return this.httpClient.get<UserProfileDetails>(`${this.baseHref}/users/profile`).pipe(
+      catchError((error) => {
+        if (error.status === 404) {
+          // Return null or an Observable of null when the error is a 404
+          return of(null);
+        }
+        // Re-throw the error for any other error types
+        throw error;
+      })
+    );
   }
 
-  public updateUserProfile(userId: string, email: string, userName: string, country: string): Observable<UserProfileDetails> {
+  public updateUserProfile(email: string, userName: string, country: string): Observable<UserProfileDetails> {
     var command: UpdateUserProfileCommand = {
-      UserId: userId,
       UserName: userName,
       Email: email,
       Country: country
     };
-    var headers = { Authorization: this.stateService.idToken };
-
-    return this.httpClient.put<UserProfileDetails>(`${this.baseHref}/users/profile`, command, { headers: headers });
+  
+    return this.httpClient.put<UserProfileDetails>(`${this.baseHref}/users/profile`, command);
   }
 }
 

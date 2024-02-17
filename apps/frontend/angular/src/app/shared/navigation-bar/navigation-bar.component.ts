@@ -3,12 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UserProfileStateService } from './../../services/user-profile-state.service';
 import { AnimationOptions } from 'ngx-lottie';
 import { isNullOrUndefined } from 'src/app/app.component';
-import { Observable } from 'rxjs';
 import { AppStore } from 'src/app/app.store';
 import { UserProfileApiService } from 'src/app/services/user-profile-api.service';
-import { LoginClient } from '@authress/login';
-import { UserProfileDetails } from '../models/user-profile-details.model';
-import { profile } from 'console';
 import { AuthressService } from 'src/app/services/authress_service';
 
 @Component({

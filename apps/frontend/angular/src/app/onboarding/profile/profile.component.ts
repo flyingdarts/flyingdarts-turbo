@@ -14,7 +14,7 @@ import { LoginClient } from '@authress/login';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  public loading$: Observable<boolean> = this.appStore.select(x=>x.loading);
+  public loading$: Observable<boolean>;
 
   public profileForm: FormGroup;
   carouselItems: CarouselModel[] = [
@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
     private userProfileStateService: UserProfileStateService,
     private appStore: AppStore,
     private activatedRoute: ActivatedRoute) {
-
+      this.loading$ = this.appStore.select(x=>x.loading);
     this.profileForm = new FormGroup({
       userName: new FormControl('', Validators.required),
       country: new FormControl('', Validators.required),

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, catchError, of } from 'rxjs';
 import { isNullOrUndefined } from 'src/app/app.component';
 import { AppStore } from 'src/app/app.store';
 import { UserProfileStateService } from 'src/app/services/user-profile-state.service';
@@ -14,7 +14,7 @@ import { UserProfileApiService } from 'src/app/services/user-profile-api.service
 })
 export class LoginComponent implements OnInit {
 
-  public loading$: Observable<boolean> = this.store.select(x => x.loading);
+  public loading$: Observable<boolean>;
   public loadingTitle: string = 'Hang on!';
   public loadingSubtitle: string = 'Baking cookies...'
   public canLogin: boolean = false;
@@ -24,8 +24,10 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private authressService: AuthressService,
     private stateService: UserProfileStateService,
+    private apiService: UserProfileApiService,
     private activatedRoute: ActivatedRoute
-    ) {
+  ) {
+    this.loading$ =  this.store.select(x => x.loading);
 
   }
   accept() {
@@ -43,40 +45,39 @@ export class LoginComponent implements OnInit {
 
     this.loadingTitle = this.getRandomTitle();
     this.loadingSubtitle = this.getRandomSubtitle();
-    
-    this.activatedRoute.data.subscribe(({ userProfileDetails }) => {
-      if (!isNullOrUndefined(userProfileDetails)) {
-        this.stateService.currentUserProfileDetails = userProfileDetails;
-      }
-    });
 
-    try {
-      var token = await this.authressService.getToken();
-      var userId = this.authressService.getUserId();
-      if (token.indexOf("user=") > -1) {
-        token = token.substring(5)
-      }
-      this.stateService.idToken = token;
-      if (!isNullOrUndefined(userId)) {
-        if (isNullOrUndefined(this.stateService.currentUserProfileDetails)) {
-          this.router.navigate(['/', 'onboarding', { outlets: { 'onboarding-outlet': ['profile'] } }])
-        } else {
-          this.router.navigate(['/', 'lobby'])
-        }
-      }
-    } catch(error) {
-      console.log(error);
-      this.store.setLoading(false);
-    }
+    this.handleAuthCallback();
+  }
+  handleAuthCallback() {
+    // Retrieve the token using AuthressService
+    this.authressService.getToken().then(token => {
+      this.stateService.idToken = token; // Store the token
+      this.checkUserProfileAndRoute(); // Proceed to check user profile
+    });
   }
 
+  checkUserProfileAndRoute() {
+    if (this.stateService.currentUserProfileDetails != null) {
+      this.router.navigate(['/', 'lobby']);
+    }
+    this.apiService.getUserProfile().subscribe(profile => {
+      if (!isNullOrUndefined(profile)) {
+        this.stateService.currentUserProfileDetails = profile!;
+        this.store.setProfile(profile!)
+        this.router.navigate(['/', 'lobby']);
+      } else {
+        console.log('no profile found')
+        this.router.navigate(['/', 'onboarding', { outlets: { 'onboarding-outlet': ['profile'] } }])
+      }
+    })
+  }
   getRandomTitle(): string {
-    var random= Math.floor(Math.random() * this.loadingTexts.length);
+    var random = Math.floor(Math.random() * this.loadingTexts.length);
     return this.loadingTexts[random].title;
   }
 
   getRandomSubtitle() {
-    var random= Math.floor(Math.random() * this.loadingTexts.length);
+    var random = Math.floor(Math.random() * this.loadingTexts.length);
     return this.loadingTexts[random].subtitle;
   }
 
@@ -161,5 +162,5 @@ export class LoginComponent implements OnInit {
       "title": "Ready to throw!",
       "subtitle": "Ensuring a fair play..."
     }
-  ];  
+  ];
 }

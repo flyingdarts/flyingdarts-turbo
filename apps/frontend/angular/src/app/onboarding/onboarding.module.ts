@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { OnboardingRootComponent } from './onboarding-root/onboarding-root.component';
 import { SharedModule } from '../shared/shared.module';
 import { UserProfileApiService } from '../services/user-profile-api.service';
+import { LoadingComponent } from '../shared/loading/loading.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { UserProfileApiService } from '../services/user-profile-api.service';
     CommonModule,
     ReactiveFormsModule,
     OnboardingRoutingModule,
-    SharedModule
+    SharedModule,
+    LoadingComponent
   ],
   providers: [
     UserProfileApiService,

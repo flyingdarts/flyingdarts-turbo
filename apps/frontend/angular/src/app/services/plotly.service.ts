@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-var Plotly = require('plotly.js-dist-min');
+import * as Plotly from 'plotly.js-dist-min';
 
 @Injectable({
   providedIn: 'root'

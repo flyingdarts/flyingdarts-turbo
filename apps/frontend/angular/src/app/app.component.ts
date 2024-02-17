@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   public currentYear: number = new Date().getFullYear();
   public currentVersion: string = "";
-  public loading$: Observable<boolean> = this.appStore.select(x => x.loading);
+  public loading$: Observable<boolean>;
   public loadingTitle: string = 'Hang on!';
   public loadingSubtitle: string = 'Baking cookies...'
   
@@ -27,25 +27,15 @@ export class AppComponent implements OnInit {
   };
 
   constructor(
-    private store: Store,
-    private appStore: AppStore,
-    private router: Router,
-    private authressService: AuthressService) {
+    private appStore: AppStore,) {
+      this.loading$ = this.appStore.select(x => x.loading);
     this.currentVersion = packageJson.version;
   }
   
   async ngOnInit() {
     this.appStore.setLoading(false);
-
-    this.store.dispatch(AuthActions.listenForAuthEvents());
-
     this.loadingTitle = this.getRandomTitle();
     this.loadingSubtitle = this.getRandomSubtitle();
-    if (await this.authressService.isUserLoggedIn()) {
-      this.router.navigate(['/', 'lobby'])
-    } else {
-      this.router.navigate(['/', 'login'])
-    }
   }
 
   onAnimate(animationItem: AnimationItem): void {

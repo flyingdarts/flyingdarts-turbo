@@ -15,7 +15,6 @@ import { AnimationOptions } from 'ngx-lottie';
 import { CreateX01GameCommand } from 'src/app/requests/CreateX01GameCommand';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { isNullOrUndefined } from 'src/app/app.component';
-const { v4: uuidv4 } = require('uuid');
 
 @Component({
   selector: 'app-lobby',
@@ -49,10 +48,8 @@ const { v4: uuidv4 } = require('uuid');
   ]
 })
 export class LobbyComponent implements OnInit {
-  public loading$: Observable<boolean> = this.store.select(x => x.loading);
-  public vm$: Observable<AppState> = this.store.select(
-    (state) => state
-  );
+  public loading$: Observable<boolean>;
+  public vm$: Observable<AppState>;
   public preferedX01Sets: number = 1;
   public preferedX01Legs: number = 3;
 
@@ -74,22 +71,17 @@ export class LobbyComponent implements OnInit {
     private webSocketService: WebSocketService,
     private store: AppStore,
     private settingsService: PreferedX01SettingsService,
-    private route: ActivatedRoute
+    private activatedRoute: ActivatedRoute
   ) {
-
+    this.loading$ = this.store.select(x => x.loading);
+    this.vm$ = this.store.select(
+      (state) => state
+    );
   }
 
   ngOnInit(): void {
     console.log('ayeet')
     this.store.setLoading(false)
-    this.route.data.subscribe(({ userProfileDetails }) => {
-      console.log(userProfileDetails)
-      if (!isNullOrUndefined(userProfileDetails)) {
-        this.userProfileService.currentUserProfileDetails = userProfileDetails;
-        this.clientId = this.userProfileService.currentUserProfileDetails.UserId!;
-
-      }
-    });
     if (!isNullOrUndefined(this.settingsService.preferedX01Legs)) {
       this.settingsService.preferedX01Legs = 3;
       this.settingsService.preferedX01Sets = 1;
@@ -98,7 +90,7 @@ export class LobbyComponent implements OnInit {
 
     this.vm$.subscribe((x) => {
       this.preferedX01Sets = x.preferedSettings.x01Sets,
-        this.preferedX01Legs = x.preferedSettings.x01Legs
+      this.preferedX01Legs = x.preferedSettings.x01Legs
     });
 
     this.webSocketService.getMessages().subscribe(x => {
@@ -122,21 +114,29 @@ export class LobbyComponent implements OnInit {
           break;
       }
     })
-    // this.store.setProfile(this.userProfileService.currentUserProfileDetails);
 
+    this.activatedRoute.data.subscribe(({ userProfile }) => {
+      console.log(userProfile)
 
+      if (!isNullOrUndefined(userProfile)) {
+        this.userProfileService.currentUserProfileDetails = userProfile;
+        this.store.setProfile(userProfile);
+      }
+    });
   }
 
   public joinX01Queue() {
+    const userId = this.userProfileService.currentUserProfileDetails.UserId!
     this.shouldHideLoader = !this.shouldHideLoader;
-    this.x01ApiService.joinQueue(this.clientId);
+    this.x01ApiService.joinQueue(userId);
   }
 
   public createX01Game() {
+    const userId = this.userProfileService.currentUserProfileDetails.UserId!
     this.shouldHideLoader = !this.shouldHideLoader;
     var sets = this.settingsService.preferedX01Sets;
     var legs = this.settingsService.preferedX01Legs;
-    this.x01ApiService.createGame(this.clientId, sets, legs)
+    this.x01ApiService.createGame(userId, sets, legs)
   }
 
   public shouldShowFriendSettings: boolean = false;

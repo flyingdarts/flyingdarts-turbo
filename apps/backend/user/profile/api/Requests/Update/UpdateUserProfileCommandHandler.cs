@@ -1,4 +1,5 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
+using System;
 using System.Linq;
 
 public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfileCommand, APIGatewayProxyResponse>
@@ -13,35 +14,50 @@ public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfile
     }
     public async Task<APIGatewayProxyResponse> Handle(UpdateUserProfileCommand request, CancellationToken cancellationToken)
     {
-        var user = await GetUserAsync(request.UserId, cancellationToken);
-
-        user.ConnectionId = request.ConnectionId;
-        user.Profile.Country = request.Country;
-        user.Profile.Email = request.Email;
-        user.Profile.UserName = request.UserName;
-
-        var userWrite = _dbContext.CreateBatchWrite<User>(_options.Value.ToOperationConfig()); 
-        
-        userWrite.AddPutItem(user);
-
-        await userWrite.ExecuteAsync(cancellationToken);
-
-        return new APIGatewayProxyResponse
+       try
         {
-            StatusCode = 200,
-            Body = JsonSerializer.Serialize(new UserProfileDto
+            var user = await GetUserAsync(request.UserId, cancellationToken);
+
+            user.ConnectionId = request.ConnectionId;
+            user.Profile.Country = request.Country;
+            user.Profile.Email = request.Email;
+            user.Profile.UserName = request.UserName;
+
+            var userWrite = _dbContext.CreateBatchWrite<User>(_options.Value.ToOperationConfig());
+
+            userWrite.AddPutItem(user);
+
+            await userWrite.ExecuteAsync(cancellationToken);
+
+            return new APIGatewayProxyResponse
             {
-                UserId = user.UserId,
-                Country = user.Profile.Country,
-                Email = user.Profile.Email,
-                UserName = user.Profile.UserName
-            }),
-            Headers = new Dictionary<string, string>() {
-                { "Access-Control-Allow-Origin", "*" },
-                { "Access-Control-Allow-Methods", "*" },
-                { "Access-Control-Allow-Headers", "Content-Type" }
+                StatusCode = 200,
+                Body = JsonSerializer.Serialize(new UserProfileDto
+                {
+                    Country = user.Profile.Country,
+                    Email = user.Profile.Email,
+                    UserName = user.Profile.UserName
+                }),
+                Headers = new Dictionary<string, string>() {
+                    { "Access-Control-Allow-Origin", "*" },
+                    { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
                 }
-        };
+            };
+        }
+        catch (Exception ex)
+        {
+            return new APIGatewayProxyResponse
+            {
+                StatusCode = 400,
+                Body = JsonSerializer.Serialize(ex),
+                Headers = new Dictionary<string, string>() {
+                    { "Access-Control-Allow-Origin", "*" },
+                    { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+                }
+            };
+        }
     }
 
     private async Task<User> GetUserAsync(string userId, CancellationToken cancellationToken) 
@@ -53,7 +69,7 @@ public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfile
     private static QueryOperationConfig QueryConfig(string userId) 
     {
         var queryFilter = new QueryFilter("PK", QueryOperator.Equal, "FD#USER");
-        queryFilter.AddCondition("SK", QueryOperator.BeginsWith, userId);
+        queryFilter.AddCondition("LSI1", QueryOperator.BeginsWith, userId);
         return new QueryOperationConfig { Filter = queryFilter };
     }
 }

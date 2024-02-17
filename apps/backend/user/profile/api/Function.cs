@@ -9,16 +9,20 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
 {
     try
     {
+        var userId = request.RequestContext.Authorizer.GetValueOrDefault("UserId").ToString();
         if (request.Resource == "/users/profile")
         {
             switch (request.HttpMethod)
             {
                 case "GET":
-                    return await innerHandler.Handle(new GetUserProfileQuery { AuthProviderUserId = request.RequestContext.Authorizer.GetValueOrDefault("UserId").ToString() });
+                    return await innerHandler.Handle(new GetUserProfileQuery { AuthProviderUserId = userId });
                 case "POST":
                     return await innerHandler.Handle(JsonSerializer.Deserialize<CreateUserProfileCommand>(request.Body));
                 case "PUT":
-                    return await innerHandler.Handle(JsonSerializer.Deserialize<UpdateUserProfileCommand>(request.Body));
+                    var command = JsonSerializer.Deserialize<UpdateUserProfileCommand>(request.Body);
+                    command.UserId = userId;
+                    Console.WriteLine(command);
+                    return await innerHandler.Handle(command);
             }
         }
     }
@@ -27,14 +31,24 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         return new APIGatewayProxyResponse
         {
             StatusCode = 400,
-            Body = $"{ex.Message}\n {ex.StackTrace}"
+            Body = $"{ex.Message}\n {ex.StackTrace}",
+            Headers = new Dictionary<string, string>() {
+                    { "Access-Control-Allow-Origin", "*" },
+                    { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+                }
         };
     }
 
     return new APIGatewayProxyResponse
     {
         StatusCode = 404,
-        Body = "Resource not found"
+        Body = "Resource not found",
+        Headers = new Dictionary<string, string>() {
+                    { "Access-Control-Allow-Origin", "*" },
+                    { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+                }
     };
 };
 

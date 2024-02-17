@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
 import { CameraComponent } from './camera/camera.component';
 import { OnboardingRootComponent } from './onboarding-root/onboarding-root.component';
-import { ProfileDetailsResolver } from '../resolvers/profile.resolver';
 
 const routes: Routes = [
   {
@@ -14,9 +13,6 @@ const routes: Routes = [
         path: "profile",
         component: ProfileComponent,
         outlet: "onboarding-outlet",
-        resolve: { 
-          userProfileDetails: ProfileDetailsResolver
-        },
       },
       {
         path: "camera",

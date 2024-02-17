@@ -6,7 +6,8 @@ import { SharedModule } from '../../shared/shared.module';
 import { ComponentStore } from '@ngrx/component-store';
 import { X01RootComponent } from './x01-root.component';
 import { FormsModule } from '@angular/forms';
-import { LottieModule } from 'ngx-lottie';
+import { LoadingComponent } from 'src/app/shared/loading/loading.component';
+import { LottieComponent, provideLottieOptions } from 'ngx-lottie';
 import { lottiePlayerFactory } from 'src/app/shared/lottiePlayerFactory';
 
 @NgModule({
@@ -19,8 +20,10 @@ import { lottiePlayerFactory } from 'src/app/shared/lottiePlayerFactory';
     X01RoutingModule,
     SharedModule,
     FormsModule, // Add FormsModule to the imports array
-    LottieModule.forRoot({ player: lottiePlayerFactory }),
+    LottieComponent,
+    LoadingComponent
   ],
-  providers: [ComponentStore]
+  providers: [ComponentStore, 
+  provideLottieOptions(lottiePlayerFactory())]
 })
 export class X01Module { }

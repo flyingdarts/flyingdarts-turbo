@@ -65,9 +65,6 @@
             ],
             "styles": [
               "src/styles.scss"
-            ],
-            "scripts": [  
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.js"
             ]
           },
           "configurations": {

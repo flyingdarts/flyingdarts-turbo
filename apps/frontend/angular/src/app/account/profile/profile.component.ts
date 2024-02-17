@@ -67,11 +67,14 @@ export class ProfileComponent implements OnInit {
       this.loadingTitle = "Updating your profile";
       this.isLoading = true;
       this.apiService.updateUserProfile(
-        this.userProfileService.currentUserProfileDetails.UserId!,
         this.profileForm.value.email,
         this.profileForm.value.userName,
-        this.profileForm.value.country)
-        this.router.navigate(['/', 'lobby'])
+        this.profileForm.value.country).subscribe(profile => {
+          this.appStore.setProfile(profile!);
+          this.userProfileService.currentUserProfileDetails = profile!;
+          this.router.navigate(['/', 'lobby'])
+        })
+        
     }
   }
 }

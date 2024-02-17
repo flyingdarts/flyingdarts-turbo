@@ -7,8 +7,8 @@ import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.com
 import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HomeComponent } from './home/home.component';
 import { LobbyComponent } from './lobby/lobby.component';
+import { LoadingComponent } from '../shared/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -16,14 +16,14 @@ import { LobbyComponent } from './lobby/lobby.component';
     PrivacyPolicyComponent, 
     TermsOfServiceComponent,
     LoginComponent,
-    HomeComponent,
-    LobbyComponent
+    LobbyComponent,
   ],
   imports: [
     CommonModule,
     PublicRoutingModule,
     SharedModule,
     ReactiveFormsModule,
+    LoadingComponent
   ]
 })
 export class PublicModule { }

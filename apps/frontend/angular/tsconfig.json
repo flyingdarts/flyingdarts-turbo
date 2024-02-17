@@ -18,14 +18,15 @@
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
-    "target": "ES2020",
-    "module": "ES2020",
+    "target": "ES2022",
+    "module": "ES2022",
     "lib": [
-      "ES2020",
+      "ES2022",
       "dom"
     ],
     "types": [
-      "@wdio/globals"
+      "@wdio/globals",
+      "node"
     ]
   },
   "angularCompilerOptions": {

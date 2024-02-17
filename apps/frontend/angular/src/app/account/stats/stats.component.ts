@@ -12,11 +12,11 @@ import { isNullOrUndefined } from 'src/app/app.component';
   styleUrls: ['./stats.component.scss']
 })
 export class StatsComponent implements OnInit {
-  public loading$: Observable<boolean> = this.appStore.select(x => x.loading);
+  public loading$: Observable<boolean>;
   public loadingTitle: string = 'Hang on!';
   public loadingSubtitle: string = 'Baking cookies...'
   public showNoData = false;
-  constructor(private plot: PlotlyService, private appStore: AppStore, private apiService: StatsApiService, private stateService: StatsStateService) { }
+  constructor(private plot: PlotlyService, private appStore: AppStore, private apiService: StatsApiService, private stateService: StatsStateService) { this.loading$ = this.appStore.select(x => x.loading); }
 
   addHoursToDate(date: Date, hoursToAdd: number): Date {
     const result = new Date(date);

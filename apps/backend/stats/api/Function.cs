@@ -15,22 +15,19 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             switch (request.HttpMethod)
             {
                 case "GET":
-                    static (DateTime StartDate, DateTime EndDate, int Year, int Month) GetCurrentMonthDateRange()
+                    (DateTime StartDate, DateTime EndDate) GetCurrentMonthDateRange()
                     {
-                        var today = DateTime.Today;
-                        var startDate = new DateTime(today.Year, today.Month, 1);
-                        var endDate = startDate.AddMonths(1).AddDays(-1);
-                        return (startDate, endDate, today.Year, today.Month);
+                        var startDate = DateTime.Parse(request.QueryStringParameters["startDate"]);
+                        var endDate = DateTime.Parse(request.QueryStringParameters["endDate"]);
+                        return (startDate, endDate);
                     }
-                    var (startDate, endDate, year, month) = GetCurrentMonthDateRange();
+                    var (startDate, endDate) = GetCurrentMonthDateRange();
                     
                     return await innerHandler.Handle(new GetStatsQuery()
                     {
                         UserId = request.RequestContext.Authorizer.GetValueOrDefault("UserId").ToString(), 
                         StartDate = startDate, 
-                        EndDate = endDate,
-                        Year = year,
-                        Month = month
+                        EndDate = endDate
                     });
                }
         }

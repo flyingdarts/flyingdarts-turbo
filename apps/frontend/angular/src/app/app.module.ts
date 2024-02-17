@@ -22,6 +22,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthressService } from './services/authress_service';
 import { StatsApiService } from './account/stats/stats-api.service';
 import { StatsStateService } from './account/stats/stats-state.service';
+import { LoadingComponent } from './shared/loading/loading.component';
+import { provideLottieOptions } from 'ngx-lottie';
+import { lottiePlayerFactory } from './shared/lottiePlayerFactory';
+import { LobbyPermissionsService } from './guards/lobby.guard';
+import { AuthenticationInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -34,7 +39,8 @@ import { StatsStateService } from './account/stats/stats-state.service';
     SharedModule,
     StoreModule.forRoot({}),
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    LoadingComponent
   ],
   providers: [
     WebSocketService,
@@ -50,7 +56,15 @@ import { StatsStateService } from './account/stats/stats-state.service';
     PreferedX01SettingsService,
     AuthressService,
     StatsApiService,
-    StatsStateService
+    StatsStateService,
+    provideLottieOptions({player: lottiePlayerFactory }),
+    LobbyPermissionsService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthenticationInterceptor,
+      multi: true,
+    }
+
   ],
   bootstrap: [AppComponent],
 })

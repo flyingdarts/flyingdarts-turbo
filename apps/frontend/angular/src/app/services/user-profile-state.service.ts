@@ -12,9 +12,7 @@ export class UserProfileStateService {
     this.storage.removeItem('UserStateService.UserProfileDetails');
     this.storage.removeItem('UserStateService.Token');
   }
-  public get authToken(): string | null {
-    return JSON.parse(this.storage.getItem("AuthenticationCredentialsStorage")?? "")
-  }
+
   public get currentUserProfileDetails(): UserProfileDetails {
     const key = 'UserStateService.UserProfileDetails';
     const serializedRequest = JSON.parse(this.storage.getItem(key)!);
@@ -41,7 +39,13 @@ export class UserProfileStateService {
 
   public get idToken(): string {
     const key = "UserStateService.Token";
-    var value = this.storage.getItem(key)!;
+    var value = this.storage.getItem(key);
+    if (value == null) {
+      const authressCredentialsStorage = "AuthenticationCredentialsStorage";
+      const idToken = JSON.parse(this.storage.getItem(authressCredentialsStorage)!)["idToken"]
+      this.idToken = idToken;
+      return idToken;
+    }
     return value;
 }
 }
