@@ -66,7 +66,6 @@ export class LoginComponent implements OnInit {
         this.store.setProfile(profile!)
         this.router.navigate(['/', 'lobby']);
       } else {
-        console.log('no profile found')
         this.router.navigate(['/', 'onboarding', { outlets: { 'onboarding-outlet': ['profile'] } }])
       }
     })

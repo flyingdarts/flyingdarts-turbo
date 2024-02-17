@@ -80,7 +80,6 @@ export class LobbyComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('ayeet')
     this.store.setLoading(false)
     if (!isNullOrUndefined(this.settingsService.preferedX01Legs)) {
       this.settingsService.preferedX01Legs = 3;
@@ -116,8 +115,6 @@ export class LobbyComponent implements OnInit {
     })
 
     this.activatedRoute.data.subscribe(({ userProfile }) => {
-      console.log(userProfile)
-
       if (!isNullOrUndefined(userProfile)) {
         this.userProfileService.currentUserProfileDetails = userProfile;
         this.store.setProfile(userProfile);

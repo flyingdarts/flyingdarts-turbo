@@ -47,16 +47,6 @@ export class ProfileComponent implements OnInit {
     })
   }
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ userProfileDetails }) => {
-      console.log(userProfileDetails)
-
-      if (!isNullOrUndefined(userProfileDetails)) {
-        this.userProfileStateService.currentUserProfileDetails = userProfileDetails;
-        console.log(userProfileDetails)
-        this.router.navigate(['/', 'lobby'])
-      }
-    });
-
     this.appStore.setLoading(false);
   }
 
