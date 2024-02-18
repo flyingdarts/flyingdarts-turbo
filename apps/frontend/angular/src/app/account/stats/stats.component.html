@@ -3,18 +3,9 @@
         <div class="card-body">
             <div class="container-fluid px-0 h-100">
                 <div class="flyingdarts-login-container d-flex h-100">
-                    <div class="container-fluid" >
-                        <div *ngIf="!showNoData">
-                            <div *ngIf="(loading$ | async)">
-                                <app-loading [title]="loadingTitle" [subtitle]="loadingSubtitle"></app-loading>
-                            </div>
-                            <div id="plot">
-                                <!-- Your plot content here -->
-                            </div>
-                            </div>
-                        <div *ngIf="showNoData">
-                            <h1>Couldnt find any darts. Did you play a game yet?</h1>
-                            <button (click)="refreshStats()">Yes i did, fetch my stats again.</button>
+                    <div class="container-fluid">
+                        <div id="plot">
+                            <!-- Your plot content here -->
                         </div>
                     </div>
                 </div>
@@ -22,6 +13,3 @@
         </div>
     </div>
 </div>
-
-<script>
-</script>

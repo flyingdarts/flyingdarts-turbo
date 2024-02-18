@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountRootComponent } from './account-root/account-root.component';
 import { ProfileComponent } from './profile/profile.component';
-import { SettingsComponent } from './settings/settings.component';
 import { StatsComponent } from './stats/stats.component';
 
 const routes: Routes = [
@@ -13,11 +12,6 @@ const routes: Routes = [
       {
         path: "profile",
         component: ProfileComponent,
-        outlet: "account-outlet"
-      },
-      {
-        path: "settings",
-        component: SettingsComponent,
         outlet: "account-outlet"
       },
       {

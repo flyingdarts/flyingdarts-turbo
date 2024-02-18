@@ -4,9 +4,6 @@ using Amazon.Lambda.RuntimeSupport;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Authress.SDK;
 using Authress.SDK.Client;
-using Flyingdarts.Backend.Auth;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 
 // Import statements are organized and simplified
 
@@ -18,9 +15,11 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
 {
     string ExtractToken()
     {
-        return apiGatewayEvent.QueryStringParameters.ContainsKey("token") 
-            ? apiGatewayEvent.QueryStringParameters["token"] 
-            : apiGatewayEvent.Headers["Authorization"];
+        if (string.IsNullOrEmpty(apiGatewayEvent.RequestContext.ConnectionId))
+        {
+            return apiGatewayEvent.Headers["Authorization"];
+        }
+        return apiGatewayEvent.QueryStringParameters["token"];           
     }
 
     async Task<string> ValidateToken(string token)
@@ -36,6 +35,7 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
     try
     {
         var userId = await ValidateToken(ExtractToken());
+        var connectionId = apiGatewayEvent.RequestContext.ConnectionId;
 
         return new APIGatewayCustomAuthorizerResponse
         {
@@ -47,14 +47,15 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
                     new()
                     {
                         Effect = "Allow",
-                        Resource = new HashSet<string> { apiGatewayEvent.MethodArn },
+                        Resource = new HashSet<string> { "*" },
                         Action = new HashSet<string> { "execute-api:Invoke" }
                     }
                 }
             },
             Context = new APIGatewayCustomAuthorizerContextOutput
             {
-                { "UserId", userId }
+                { "UserId", userId },
+                { "ConnectionId", connectionId }
             }
         };
     }

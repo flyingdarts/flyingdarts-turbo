@@ -13,7 +13,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr [class.throwing]="(vm$ | async)?.currentPlayer == clientId!">
+                            <tr class="throwing">
                                 <td id="playerNameField" class="text-start">
                                     {{ (vm$ | async)?.player?.name }}
                                 </td>
@@ -36,7 +36,7 @@
                                     {{ (vm$ | async)?.player?.scores!.join(" ") }}
                                 </td>
                             </tr>
-                            <tr [class.throwing]="(vm$ | async)?.currentPlayer != clientId!">
+                            <tr>
                                 <td id="opponentNameField" class="text-start">{{ (vm$ |
                                     async)?.opponent?.name }}</td>
                                 <td><span [class]="'flags fi fi-' + (vm$ | async)?.opponent?.country + ' fis'"></span>
@@ -66,12 +66,13 @@
                 <p>Waiting...</p>
             </div>
             <div *ngIf="(vm$ | async)?.currentPlayer == clientId!" class="calculator">
-                <div class="row">
+
+                <div class="top-container">
                     <a id="calcButtonClear" (click)="clearScore()" class="btn button clear-button">CLEAR</a>
                     <a id="calcInputField" class="btn button input">{{ (vm$ | async)?.currentInput }}</a>
                     <a id="calcButtonCheck" (click)="check()" class="btn button check-button disabled">CHECK</a>
                 </div>
-                <div class="row">
+                <div class="middle-container">
                     <a (disabled)="shouldDisableShortcuts" (click)="inputScore(26)" id="calcButton26"
                         class="btn button">26</a>
                     <a (click)="inputScore(1)" id="calcButton1" class="btn button">1</a>
@@ -79,8 +80,7 @@
                     <a (click)="inputScore(3)" id="calcButton3" class="btn button">3</a>
                     <a (disabled)="shouldDisableShortcuts" (click)="inputScore(41)" id="calcButton41"
                         class="btn button">41</a>
-                </div>
-                <div class="row">
+                
                     <a (disabled)="shouldDisableShortcuts" (click)="inputScore(45)" id="calcButton45"
                         class="btn button">45</a>
                     <a (click)="inputScore(4)" id="calcButton4" class="btn button">4</a>
@@ -88,8 +88,7 @@
                     <a (click)="inputScore(6)" id="calcButton6" class="btn button">6</a>
                     <a (disabled)="shouldDisableShortcuts" (click)="inputScore(60)" id="calcButton60"
                         class="btn button">60</a>
-                </div>
-                <div class="row">
+            
                     <a (disabled)="shouldDisableShortcuts" (click)="inputScore(85)" id="calcButton85"
                         class="btn button">85</a>
                     <a (click)="inputScore(7)" id="calcButton7" class="btn button">7</a>
@@ -98,13 +97,15 @@
                     <a (disabled)="shouldDisableShortcuts" (click)="inputScore(100)" id="calcButton100"
                         class="btn button">100</a>
                 </div>
-                <div class="row">
+                <div class="bottom-container">
                     <a (click)="noScore()" id="calcButtonNOSCORE" class="btn button no-score-button">NO SCORE</a>
                     <a (click)="inputScore(0)" id="calcButton0" class="btn button">0</a>
                     <a (click)="ok()" id="calcButtonOK" class="btn button ok-button">OK</a>
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-8 p-0 hide-mobile jitsi-container" id="jitsi-iframe"></div>
+        <div class="col-sm-12 col-md-12 col-lg-8 p-0 hide-mobile jitsi-container" id="jitsi-iframe">
+            <app-video [nextPlayer]="(vm$ | async)?.currentPlayer!" ></app-video>
+        </div>
     </div>
 </div>

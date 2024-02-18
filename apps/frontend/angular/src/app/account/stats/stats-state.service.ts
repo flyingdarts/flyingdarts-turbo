@@ -25,7 +25,7 @@ export class StatsStateService {
   }
 
   // Retrieves the stored array of StatsDart objects
-  public get darts(): Array<Array<number>> {
+  public get darts(): Array<Stats> {
     const serializedDarts = this.storage.getItem(this.statsDartKey);
     if (serializedDarts) {
       return JSON.parse(serializedDarts);
@@ -35,7 +35,7 @@ export class StatsStateService {
   }
 
   // Saves the provided array of StatsDart objects to localStorage
-  public set darts(value: Array<Array<number>>) {
+  public set darts(value: Array<Stats>) {
     this.storage.setItem(this.statsDartKey, JSON.stringify(value));
     // Optionally, update the last updated timestamp or other relevant metadata
     this.storage.setItem(this.lastUpdatedKey, new Date().getTime().toString());

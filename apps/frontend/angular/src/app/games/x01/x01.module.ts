@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { LoadingComponent } from 'src/app/shared/loading/loading.component';
 import { LottieComponent, provideLottieOptions } from 'ngx-lottie';
 import { lottiePlayerFactory } from 'src/app/shared/lottiePlayerFactory';
+import { VideoComponent } from 'src/app/shared/video/video.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { lottiePlayerFactory } from 'src/app/shared/lottiePlayerFactory';
     SharedModule,
     FormsModule, // Add FormsModule to the imports array
     LottieComponent,
-    LoadingComponent
+    LoadingComponent,
+    VideoComponent
   ],
   providers: [ComponentStore, 
   provideLottieOptions(lottiePlayerFactory())]

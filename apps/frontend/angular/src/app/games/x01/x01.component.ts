@@ -43,7 +43,6 @@ export class X01Component implements OnInit {
   public shouldDisableShortcuts: boolean = false;
   public currentPlayer?: string;
   constructor(
-    private componentStore: X01Store,
     private webSocketService: WebSocketService,
     private x01ApiService: X01ApiService,
     private route: ActivatedRoute,
@@ -52,7 +51,7 @@ export class X01Component implements OnInit {
     private x01Store: X01Store
   ) {
 
-    this.vm$ = this.componentStore.select(
+    this.vm$ = this.x01Store.select(
     (state) => state
   );
    }
@@ -60,7 +59,7 @@ export class X01Component implements OnInit {
   async ngOnInit() {
     this.gameId = this.route.snapshot.paramMap.get('id')!;
     this.clientId = this.userProfileService.currentUserProfileDetails.UserId!;
-    this.componentStore.setState(initialX01State);
+    this.x01Store.setState(initialX01State);
     this.webSocketService.connected$.subscribe((connected) => {
       if (connected) {
         this.userProfileService.userName$.subscribe((userName) => {
@@ -76,15 +75,9 @@ export class X01Component implements OnInit {
           break;
       }
     });
-    if (environment.production) {
-      this.jitsiService.namePrincipalRoom = `Flyingdarts ${this.gameId!}`;
-      this.jitsiService.moveRoom(this.jitsiService.namePrincipalRoom, true);
-      this.jitsiService.user.setName(this.userProfileService.currentUserProfileDetails.UserName!);
-    }
-
   }
   private handleMetadata(message: any) {
-    this.componentStore.setLoading(false);
+    this.x01Store.setLoading(false);
 
     var metadata: Metadata = message.metadata;
     if (!isNullOrUndefined(metadata)) {
@@ -93,6 +86,7 @@ export class X01Component implements OnInit {
       this.x01Store.setCurrentPlayer(metadata.NextPlayer);
       this.x01Store.setWinningPlayer(metadata.WinningPlayer);
       var player = metadata.Players.filter(x => x.PlayerId == this.clientId!)[0];
+      this.x01Store.setPlayerId(player.PlayerId);
       this.x01Store.setPlayerName(player.PlayerName);
       this.x01Store.setPlayerCountry(player.Country);
       this.x01Store.setPlayerLegs(Number(player.Legs));
@@ -104,6 +98,7 @@ export class X01Component implements OnInit {
       }
       if (Object.keys(metadata.Players).length == 2) {
         var opponent = metadata.Players.filter(x => x.PlayerId != this.clientId!)[0];
+        this.x01Store.setOpponentId(opponent.PlayerId);
         this.x01Store.setOpponentName(opponent.PlayerName);
         this.x01Store.setOpponentCountry(opponent.Country);
         this.x01Store.setOpponentLegs(Number(opponent.Legs));
@@ -126,8 +121,8 @@ export class X01Component implements OnInit {
     return sum;
   }
   public sendScore() {
-    this.componentStore.setLoading(true);
-    this.componentStore.playerScore$.pipe(first()).subscribe((score: number) => {
+    this.x01Store.setLoading(true);
+    this.x01Store.playerScore$.pipe(first()).subscribe((score: number) => {
       const newScore = score - this.input.Sum;
 
       if (newScore >= 0) {

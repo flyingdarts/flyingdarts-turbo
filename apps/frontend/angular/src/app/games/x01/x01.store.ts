@@ -64,4 +64,18 @@ export class X01Store extends ComponentStore<X01State> {
   readonly setPlayerCountry = this.updater((state, value: string) => ({ ...state, player: { ...state.player, country: value } }))
   readonly setOpponentCountry = this.updater((state, value: string) => ({ ...state, opponent: { ...state.opponent, country: value } }))
 
+    readonly setPlayerId = this.updater((state, value: string) => ({...state, player: { ...state.player, id: value }}));
+    readonly setOpponentId = this.updater((state, value: string) => ({...state, opponent: { ...state.opponent, id: value }}));
+
+    getPlayerId(): string {
+      return this.get(state => state.player.id);
+    }
+
+    getOpponentId(): string { 
+      return this.get(state => state.opponent.id);
+    }
+
+    getCurrentPlayer(): string { 
+      return this.get(state=> state.currentPlayer);
+    }
 }

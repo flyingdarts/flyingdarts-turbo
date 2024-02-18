@@ -11,4 +11,6 @@ export enum WebSocketActions {
   X01JoinQueue = "games/x01/joinqueue",
   X01Score = "games/x01/score",
   X01Join = "games/x01/join",
+  X01WebRTC = "games/x01/webrtc",
+  X01WebRTCCandidate = "games/x01/webrtc/candidate"
 }

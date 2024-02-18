@@ -2,7 +2,7 @@
     <div class="card h-100">
         <div class="card-body">
             <div class="container-fluid px-0 h-100">
-                <div class="flyingdarts-login-container d-flex">
+                <div class="row flyingdarts-login-container d-flex">
                     <div *ngIf="(loading$ | async)" class="col-sm-12 col-md-8 col-lg-4 p-0 flyingdarts-mobile-container">
                         <app-loading></app-loading>
                     </div>
@@ -119,7 +119,7 @@
                                     <!-- <input class="form-control room-number-input" placeholder="Enter room number"
                                         type="text" value="" id="roomNumber" checked> -->
                                     <button id="gameWithFriendsButton" class="form-control create-room-button"
-                                        (click)="createX01Game()">create room</button>
+                                        (click)="createX01Game()">play</button>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +213,7 @@
                                     <!-- <input class="form-control room-number-input" placeholder="Enter room number"
                                         type="text" value="" id="roomNumber" checked> -->
                                     <button id="gameWithFriendsButton" class="form-control create-room-button"
-                                        (click)="joinX01Queue()">play now!</button>
+                                        (click)="joinX01Queue()">join</button>
                                 </div>
                             </div>
                         </div>

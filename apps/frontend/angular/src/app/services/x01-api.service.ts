@@ -6,6 +6,7 @@ import { JoinX01QueueCommand } from './../requests/JoinX01QueueCommand';
 import { JoinGameCommand } from './../requests/JoinGameCommand';
 import { WebSocketMessageService } from '../infrastructure/websocket/websocket-message.service';
 import { CreateX01GameCommand } from '../requests/CreateX01GameCommand';
+import { WebRPCCandidateVideoCommand, WebRPCVideoCommand } from '../shared/video/video.component';
 
 @Injectable({ providedIn: 'root' })
 export class X01ApiService {
@@ -67,6 +68,32 @@ export class X01ApiService {
     };
     let body: WebSocketMessage<CreateX01ScoreCommand> = {
       action: WebSocketActions.X01Score,
+      message: message
+    };
+    this.webSocketMessageService.sendMessage(JSON.stringify(body));
+  }
+
+  public webrtc(type: string, sdp: string, toUser: string, fromUser: string) {
+    var message: WebRPCVideoCommand = {
+      type: type, 
+      sdp: sdp, 
+      toUser: toUser,
+      fromUser: fromUser
+    }
+    let body: WebSocketMessage<WebRPCVideoCommand> = {
+      action: WebSocketActions.X01WebRTC,
+      message: message
+    };
+    this.webSocketMessageService.sendMessage(JSON.stringify(body));
+  }
+
+  public webrtccandidate(candidate: string, toUser: string) {
+    var message: WebRPCCandidateVideoCommand = {
+      candidate: candidate,
+      toUser: toUser
+    };
+    let body: WebSocketMessage<WebRPCCandidateVideoCommand> = {
+      action: WebSocketActions.X01WebRTCCandidate,
       message: message
     };
     this.webSocketMessageService.sendMessage(JSON.stringify(body));

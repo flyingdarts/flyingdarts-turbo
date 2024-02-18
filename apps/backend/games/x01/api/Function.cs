@@ -1,6 +1,8 @@
 
 
 // Get the service provider
+using Flyingdarts.Backend.Games.X01.Api.Requests.WebRPC;
+
 var services = ServiceFactory.GetServiceProvider();
 
 // Create an instance of the InnerHandler using the service provider
@@ -15,6 +17,14 @@ var handler = async (APIGatewayProxyRequest request) =>
     // Convert the APIGatewayProxyRequest to the specified JoinX01QueueCommand type using the serializer
     switch (request.RequestContext.RouteKey)
     {
+        case "games/x01/webrtc":
+            var webrpc = request.To<WebRPCVideoCommand>(serializer);
+            webrpc.Message!.ConnectionId = request.RequestContext.ConnectionId;
+            return await innerHandler.Handle(webrpc.Message!);
+        case "games/x01/webrtc/candidate":
+            var candidate = request.To<WebRPCCandidateVideoCommand>(serializer);
+            candidate.Message!.ConnectionId = request.RequestContext.ConnectionId;
+            return await innerHandler.Handle(candidate.Message);
         case "games/x01/create":
             var create = request.To<CreateX01GameCommand>(serializer);
             create.Message!.ConnectionId = request.RequestContext.ConnectionId;

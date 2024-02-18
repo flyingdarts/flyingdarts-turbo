@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserProfileDetails } from '../shared/models/user-profile-details.model';
 import { Observable, of } from 'rxjs';
+import { isNullOrUndefined } from '../app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -37,14 +38,17 @@ export class UserProfileStateService {
     this.storage.setItem(key, value);
   }
 
-  public get idToken(): string {
+  public get idToken(): string | undefined | null{
     const key = "UserStateService.Token";
     var value = this.storage.getItem(key);
     if (value == null) {
       const authressCredentialsStorage = "AuthenticationCredentialsStorage";
-      const idToken = JSON.parse(this.storage.getItem(authressCredentialsStorage)!)["idToken"]
-      this.idToken = idToken;
-      return idToken;
+      const authressCredentialsValue = this.storage.getItem(authressCredentialsStorage);
+      if (!isNullOrUndefined(authressCredentialsValue)) { 
+       var token = JSON.parse(authressCredentialsValue!)["idToken"]
+       this.idToken = token;
+      return token;
+      }
     }
     return value;
 }

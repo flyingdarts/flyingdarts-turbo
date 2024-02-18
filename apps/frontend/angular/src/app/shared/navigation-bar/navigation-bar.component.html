@@ -14,10 +14,7 @@
           <a id="profileButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['profile']}}]">
             <i class="fa-solid fa-user-circle"></i>
           </a>
-          <a id="settingsButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['settings']}}]">
-            <i class="fa-solid fa-cog"></i>
-          </a>
-          <a id="settingsButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['stats']}}]">
+          <a id="statsButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['stats']}}]">
             <i class="fa-solid fa-chart-simple"></i>
                     </a>
           <a class="nav-link" href="#" (click)="signOut()">

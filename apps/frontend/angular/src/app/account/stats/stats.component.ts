@@ -15,60 +15,35 @@ export class StatsComponent implements OnInit {
   public loading$: Observable<boolean>;
   public loadingTitle: string = 'Hang on!';
   public loadingSubtitle: string = 'Baking cookies...'
-  public showNoData = false;
+  public showPlot = false;
   constructor(private plot: PlotlyService, private appStore: AppStore, private apiService: StatsApiService, private stateService: StatsStateService) { this.loading$ = this.appStore.select(x => x.loading); }
 
-  addHoursToDate(date: Date, hoursToAdd: number): Date {
-    const result = new Date(date);
-    result.setHours(result.getHours() + hoursToAdd);
-    return result;
-  }
 
   ngOnInit(): void {
-    var now = new Date();
-    var nextDate = this.addHoursToDate(this.stateService.lastUpdated, 1);
-    if (nextDate <= now) {
-      this.stateService.darts = [];
-      this.apiService.getStats().subscribe((statsArray: Array<Array<number>>) => {
-        if (!isNullOrUndefined(statsArray)) {
-          this.stateService.darts = statsArray;
-          this.setPlot();
-        }
-      })
-    } else {
-      if (this.stateService.darts.length == 0) {
-        this.showNoData = true;
-      } else {
-        this.setPlot();
-      }
-    }
-
-
     this.loadingTitle = this.getRandomTitle();
     this.loadingSubtitle = this.getRandomSubtitle();
+    if (this.stateService.darts.length > 0) {
+      this.showPlot = true;
+      this.setPlot();
+    }
   }
-  refreshStats() {
-    this.apiService.getStats().subscribe((statsArray: Array<Array<number>>) => {
+
+  _loadStats(startDate: Date, endDate: Date) { 
+    this.apiService.getStats(startDate, endDate).subscribe((statsArray: Array<Stats>) => {
       if (!isNullOrUndefined(statsArray)) {
         this.stateService.darts = statsArray;
+        this.showPlot = true;
         this.setPlot();
       }
     })
   }
-  setPlot() {
-    const days = this.stateService.darts.map((x) => x[0])
-    // const days = Array.from({ length: 30 }, (_, i) => i + 1);
+  refreshStats() {
     const now = new Date();
-    const startDate = new Date(`${now.getFullYear()}-${now.getMonth()}-01`); // Starting from February 1, 2024
-    // const averages = [53, 50, 51, 54, 47, 53, 49, 46, 54, 52, 48, 54, 46, 49, 54, 48, 51, 55, 47, 50, 55, 47, 51, 55, 49, 48, 54, 48]; // Use your provided values
-    const averages = this.stateService.darts.map((x) => x[1]);
-
-    const dataModel = averages.map((average, index) => {
-      const date = new Date(startDate);
-      date.setDate(startDate.getDate() + index);
-      return { average, date };
-    });
-    this.plot.plotLine("Last 30 day average", "plot", dataModel);
+    const endDate  = this.addHoursToDate(now, 24 * 7);
+    this._loadStats(now, endDate);
+  }
+  setPlot() {
+    this.plot.plotLine("Last 30 day average", "plot", this.stateService.darts);
     this.appStore.setLoading(false)
   }
   getRandomTitle(): string {
@@ -81,6 +56,11 @@ export class StatsComponent implements OnInit {
     return this.loadingTexts[random].subtitle;
   }
 
+  addHoursToDate(date: Date, hoursToAdd: number): Date {
+    const result = new Date(date);
+    result.setHours(result.getHours() + hoursToAdd);
+    return result;
+  }
   loadingTexts = [
     {
       "title": "Hang on!",

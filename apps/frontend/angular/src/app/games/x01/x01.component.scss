@@ -432,35 +432,56 @@ th, td:nth-of-type(1) {
 }
 .calculator {
     max-width: 636px;
-    .row {
+    .button {
+        font-size: 32px;
+        font-weight: 700;
+        cursor: pointer;
+        background-color: #FC3C60;
+        border-radius: 7px;
+        color: #E5E5E5;
         display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        padding: 0 !important;
-       
-        .button {
-            width: 110px;
-            height: 80px;
-            font-size: 32px;
-            font-weight: 700;
-            text-align: center;
-            line-height: 70px;
-            cursor: pointer;
-            background-color: #FC3C60;
-            border-radius: 7px;
-            color: #E5E5E5;
-            
-        }
+        justify-content: center; /* Centers content horizontally */
+        align-items: center;     /* Centers content vertically */
+        width: 100%;             /* Adjust the width as needed, could be a fixed width or full width */
+        padding: 10px 20px;         /* Adjust the horizontal padding as needed */
+        margin: 0;               /* Keeps default margins out */
+    }
+    .top-container { 
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Creates 5 columns with equal width */
+        grid-template-rows: repeat(1, auto); /* Creates 3 rows, height depends on content */
+        gap: 10px; /* Adjust the gap between buttons as needed */
+        justify-content: center; /* Centers the grid horizontally */
+        align-items: center; /* Centers the grid items vertically */
         .clear-button, .check-button {
             background-color: #3C46A7;
-            width: 30%
         }
+        margin-bottom: 10px;
+    }
+    .middle-container {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr); /* Creates 5 columns with equal width */
+        grid-template-rows: repeat(3, auto); /* Creates 3 rows, height depends on content */
+        gap: 10px; /* Adjust the gap between buttons as needed */
+        justify-content: center; /* Centers the grid horizontally */
+        align-items: center; /* Centers the grid items vertically */
+    }
+    .bottom-container { 
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); /* Creates 5 columns with equal width */
+        grid-template-rows: repeat(1, auto); /* Creates 3 rows, height depends on content */
+        gap: 10px; /* Adjust the gap between buttons as needed */
+        justify-content: center; /* Centers the grid horizontally */
+        align-items: center; /* Centers the grid items vertically */
 
         .no-score-button, .ok-button {
             background-color: #3C46A7;
-            width: 39%
         }
-
+        .no-score-button {
+            font-size: 24px;
+            padding: 17px 20px;
+        }
     }
     .input {
         background: none !important;

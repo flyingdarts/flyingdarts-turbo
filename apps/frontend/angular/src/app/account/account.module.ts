@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { AccountRoutingModule } from './account-routing.module';
 import { AccountRootComponent } from './account-root/account-root.component';
 import { ProfileComponent } from './profile/profile.component';
-import { SettingsComponent } from './settings/settings.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { StatsComponent } from './stats/stats.component';
@@ -16,7 +15,6 @@ import { LottieComponent } from 'ngx-lottie';
   declarations: [
     AccountRootComponent,
     ProfileComponent,
-    SettingsComponent,
     StatsComponent
   ],
   imports: [

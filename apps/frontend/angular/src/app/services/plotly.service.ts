@@ -7,9 +7,11 @@ import * as Plotly from 'plotly.js-dist-min';
 export class PlotlyService {
   constructor() { }
 
-  plotLine(title: string, plotDiv: string, data: { average: number, date: Date }[]) {
-    const x = data.map(item => item.date.toISOString().substring(0, 10)); // Format date as 'YYYY-MM-DD'
-    const y = data.map(item => item.average);
+  plotLine(title: string, plotDiv: string, data: Array<Stats>) {
+    var first = data[0];
+    console.log(first.Day!);
+    const x = data.map(item => item.Day); // Format date as 'YYYY-MM-DD'
+    const y = data.map(item => item.Average);
   
     let trace = {
       x: x,
@@ -26,10 +28,8 @@ export class PlotlyService {
       }
     };
   
-    const startDateStr = data[0].date.toISOString().substring(0, 10);
-    const endDate = new Date(data[data.length - 1].date);
-    endDate.setDate(endDate.getDate() + 1); // Ensure the end date is included
-    const endDateStr = endDate.toISOString().substring(0, 10);
+    const startDateStr = data[0].Day;
+    const endDateStr = data[data.length-1].Day;
   
     let layout = {
       title: title,
@@ -41,12 +41,14 @@ export class PlotlyService {
       xaxis: {
         range: [startDateStr, endDateStr], // Explicitly set the range of the x-axis
         tickvals: x, // Specify tick values to correspond with each date
-        ticktext: x.map(date => new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })), // Customize tick labels
+        ticktext: x.map(date => date!.toString().substring(0, 10)), // Customize tick labels
         tickangle: -45,
       },
       // Other layout customizations...
     };
-  
+    console.log(plotDiv);
+    console.log(trace);
+    console.log(layout);
     Plotly.newPlot(plotDiv, [trace], layout);
   }
   

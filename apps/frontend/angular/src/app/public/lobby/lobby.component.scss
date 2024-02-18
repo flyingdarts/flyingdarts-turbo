@@ -213,3 +213,25 @@ input::-webkit-inner-spin-button {
     color: white;
     font-weight: bold;
 }
+
+/* Media Query for Tablets Ipads portrait mode */
+@media (min-width: 768px) and (max-width: 1024px) {}
+
+/* Media Query for Laptops and Desktops */
+@media (min-width: 1025px) and (max-width: 1280px) {
+    h1 {
+        margin: 0 !important;
+        font-size: 32px;
+    }
+    .form-check {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .create-room-button {
+        width: 60% !important;
+        margin: 0 auto !important;
+        margin-bottom: 10px !important;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}

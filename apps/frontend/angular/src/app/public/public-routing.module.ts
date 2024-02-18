@@ -25,7 +25,6 @@ const routes: Routes = [
     component: LobbyComponent,
     canActivate: [canActivateLobby],
     resolve: {userProfile: userProfileResolver},
-
   },
   {
     path: 'terms-of-service',

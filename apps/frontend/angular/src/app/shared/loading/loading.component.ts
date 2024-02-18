@@ -19,7 +19,7 @@ export class LoadingComponent implements OnInit {
   @Input() title!: string;
   @Input() subtitle!: string;
   @Input() lottieOptions: AnimationOptions = {
-    path: '/assets/animations/flyingdarts_header.json'
+    path: '/assets/animations/flyingdarts_header.json',
   };
   public options: AnimationOptions;
   constructor(public loader: LoadingService) {

@@ -2,28 +2,16 @@
   <div class="card h-100">
     <app-navigation-bar></app-navigation-bar>
     <div class="card-body">
-      <div *ngIf="!(loading$ | async)" class="container-fluid px-0 h-100">
-        <router-outlet></router-outlet>
-      </div>
-      <div *ngIf="(loading$ | async)"  class="container-fluid body-content h-100">
-        <div class="card h-100">
-          <div class="card-body">
-            <div class="container-fluid px-0 h-100">
-              <div class="flyingdarts-login-container d-flex">
-                <div class="col-sm-12 col-md-12 col-lg-4 p-0 flyingdarts-mobile-container">
-                  <div class="container-auth h-100">
-                    <app-loading [title]="loadingTitle" [subtitle]="loadingSubtitle"></app-loading>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      @if ((loading$ | async)) {
+        <app-loading [title]="loadingTitle" [subtitle]="loadingSubtitle"></app-loading>
+      } @else {
+        <div class="container-fluid px-0 h-100">
+          <router-outlet></router-outlet>
         </div>
-      </div>
-      
+      }
     </div>
     <div class="card-footer">
-      <div class="d-flex hide-mobile">
+      <div class="d-flex">
         <p class="footer-copy pe-1">© Flyingdarts {{currentYear}} - v{{currentVersion}}</p>
         <p class="footer-copy">-</p>
         <p class="footer-copy footer-pp-and-tos ps-1 pe-1" id="pp-link" aria-current="page" href="#" routerLink="/privacy-policy">Privacy policy</p>
@@ -39,4 +27,7 @@
       </div>
     </div>
   </div>
+</div>
+<div class="hide-mobile">
+  
 </div>

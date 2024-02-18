@@ -3,20 +3,18 @@ import { CanActivateFn, ActivatedRouteSnapshot, RouterStateSnapshot, Router } fr
 import { isNullOrUndefined } from "../app.component";
 import { UserProfileStateService } from "../services/user-profile-state.service";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class LoginPermissionsService {
     constructor(private stateService: UserProfileStateService, private router: Router) { }
 
     canActivate(): boolean {
-        try {
-            if (!isNullOrUndefined(this.stateService.idToken)) {
-                this.router.navigate(['/', 'lobby']);
-                return false;
-            }
-            return true;
-        } catch {
-            return true;
+        if (!isNullOrUndefined(this.stateService.idToken)) {
+            console.log('has token, going to lobby')
+            this.router.navigate(['/', 'lobby']);
+            return false;
         }
+        return true;
+
     }
 }
 

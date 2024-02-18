@@ -10,6 +10,7 @@ export interface X01State {
 
 
 export interface X01PlayerState {
+  id: string;
   name: string;
   score: number;
   scores: number[];
@@ -26,6 +27,7 @@ export const initialX01State: X01State = {
   loading: false,
   error: '',
   player: {
+    id: '',
     name: 'Player',
     legs: 0,
     sets: 0,
@@ -35,6 +37,7 @@ export const initialX01State: X01State = {
     country: 'nl'
   },
   opponent: {
+    id: '',
     name: 'Waiting...',
     legs: 0,
     sets: 0,

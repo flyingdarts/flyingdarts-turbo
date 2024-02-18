@@ -259,7 +259,17 @@ public class ApiGatewayConstruct : Construct
             Integration = new WebSocketLambdaIntegration($"Games-Score-Integration-{environment}", lambdaConstruct.GamesX01Api),
             ReturnResponse = true
         });
-        
+
+        // use for video streaming
+        WebSocketApi.AddRoute("games/x01/webrtc", new WebSocketRouteOptions
+        {
+            Integration = new WebSocketLambdaIntegration($"Games-WebRTC-Integration-{environment}", lambdaConstruct.GamesX01Api),
+        });
+        WebSocketApi.AddRoute("games/x01/webrtc/candidate", new WebSocketRouteOptions
+        {
+            Integration = new WebSocketLambdaIntegration($"Games-WebRTC-Candidate-Integration-{environment}", lambdaConstruct.GamesX01Api)
+        });
+
         WebSocketStage.GrantManagementApiAccess(lambdaConstruct.GamesX01Api);
         lambdaConstruct.GamesX01Api.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
         
