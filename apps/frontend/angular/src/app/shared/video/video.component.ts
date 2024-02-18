@@ -20,7 +20,7 @@ export class VideoComponent implements OnInit, OnChanges, AfterViewInit {
   public showPip = true;
 
   private localStream!: MediaStream;
-  private peerConnection!: RTCPeerConnection;
+  private peerConnection?: RTCPeerConnection;
   private opponent!: string;
   private player!: string;
 
@@ -65,7 +65,7 @@ export class VideoComponent implements OnInit, OnChanges, AfterViewInit {
 
     this.peerConnection = new RTCPeerConnection();
     this.localStream.getTracks().forEach(track => {
-      this.peerConnection.addTrack(track, this.localStream);
+      this.peerConnection?.addTrack(track, this.localStream);
     })
 
     this.peerConnection.ontrack = event => {
@@ -112,14 +112,60 @@ export class VideoComponent implements OnInit, OnChanges, AfterViewInit {
       this.opponent = player.id;
     })
   }
-  handleNewIceCandidate(candidate: RTCIceCandidate): void {
-    // Uncomment the line below if you want to log candidate information.
-    // console.log('Handling candidate', candidate);
+  handleNewIceCandidate(candidate: RTCIceCandidate) {
+    // console.log('Handling candidate', candidate)
     this.addIceCandidateWithRetry(candidate);
   }
+
+  handleReceivedAnswer(answer: RTCSessionDescriptionInit, fromUser: string) {
+    this.peerConnection?.setRemoteDescription(new RTCSessionDescription(answer))
+      .catch(error => {
+        console.error('Error setting remote description from answer:', error);
+              // Retry signaling after a delay, or reset the whole process based on your app's logic:
+      setTimeout(() => {
+        this.retrySignalingProcess();
+      }, 5000);
+      });
+  }
+  retrySignalingProcess() {
+    // Your logic for restarting or resetting the signaling process goes here
+    // E.g., create a new offer and reinitiate the signaling process
   
+    // Notify users about the retry
+    // this.notifyUsers("We encountered an issue with your video call. Retrying...");
+  
+    // Clean up if needed
+    this.cleanupPeerConnection();
+  
+    // Start fresh
+    this.connect();
+  }
+
+  cleanupPeerConnection() {
+    // Close and nullify the peer connection if needed
+    if (this.peerConnection) {
+      this.peerConnection.close();
+      this.peerConnection = undefined;
+    }
+  }
+
+  handleReceivedOffer(offer: RTCSessionDescriptionInit, fromUser: string) {
+    const remoteDesc = new RTCSessionDescription(offer);
+    this.peerConnection?.setRemoteDescription(remoteDesc)
+      .then(() => this.peerConnection!.createAnswer())
+      .then(answer => this.peerConnection!.setLocalDescription(answer))
+      .then(() => {
+        var toUser = this.x01Store.getPlayerId();
+        this.sendAnswer(this.peerConnection!.localDescription!, toUser, fromUser);
+      }).catch(error => {
+        console.error('Error during offer-answer handling:', error);
+        setTimeout(() => {
+          this.retrySignalingProcess();
+        }, 5000);
+      });
+  }
   addIceCandidateWithRetry(candidate: RTCIceCandidate, retries = 3) {
-    this.peerConnection.addIceCandidate(candidate).catch(error => {
+    this.peerConnection?.addIceCandidate(candidate).catch(error => {
       if (retries > 0) {
         console.warn(`Retry ${4 - retries} failed, retrying...`);
         setTimeout(() => this.addIceCandidateWithRetry(candidate, retries - 1), 1000);
@@ -129,54 +175,20 @@ export class VideoComponent implements OnInit, OnChanges, AfterViewInit {
       }
     });
   }
-  
-  handleReceivedOffer(offer: RTCSessionDescriptionInit, fromUser: string) {
-    const remoteDesc = new RTCSessionDescription(offer);
-    if (this.peerConnection.signalingState !== 'stable') {
-      console.warn('Received offer in unexpected state:', this.peerConnection.signalingState);
-      return; // Consider queuing this offer to handle later or signaling an error back.
-    }
-    this.peerConnection.setRemoteDescription(remoteDesc)
-    .then(() => this.peerConnection.createAnswer())
-    .then(answer => {
-      return this.peerConnection.setLocalDescription(answer).then(() => answer);
-    })
-    .then(answer => {
-      const toUser = this.x01Store.getPlayerId();
-      this.sendAnswer(answer, toUser, fromUser);
-    })
-    .catch(error => {
-      console.error('Error during offer handling:', error);
-      // Implement retry or error signaling back to the offerer as needed.
-    });
-  }
-  
-  handleReceivedAnswer(answer: RTCSessionDescriptionInit, fromUser: string) {
-    if (["have-local-offer", "have-remote-pranswer"].indexOf(this.peerConnection.signalingState) === -1) {
-      console.warn('Received answer in unexpected state:', this.peerConnection.signalingState);
-      return; // Consider handling this situation more gracefully.
-    }
-    this.peerConnection.setRemoteDescription(new RTCSessionDescription(answer))
-      .catch(error => {
-        console.error(`Error setting remote description from ${fromUser}:`, error);
-        // Implement a recovery mechanism or notify users as needed.
-      });
-  }
-
-  connect(): void {
-    console.log('Making the offer');
-    this.peerConnection.createOffer().then(offer => {
-      this.peerConnection.setLocalDescription(offer).then(() => {
-        const toUser = this.x01Store.getOpponentId();
-        const fromUser = this.x01Store.getPlayerId();
-        this.sendOffer(offer, toUser, fromUser);
-      }).catch(error => {
-        console.error('Error during setLocalDescription:', error);
-      });
+connect(): void {
+  console.log('Making the offer');
+  this.peerConnection?.createOffer().then(offer => {
+    this.peerConnection!.setLocalDescription(offer).then(() => {
+      const toUser = this.x01Store.getOpponentId();
+      const fromUser = this.x01Store.getPlayerId();
+      this.sendOffer(offer, toUser, fromUser);
     }).catch(error => {
-      console.error('Error during createOffer:', error);
+      console.error('Error during setLocalDescription:', error);
     });
-  }
+  }).catch(error => {
+    console.error('Error during createOffer:', error);
+  });
+}
 
   sendAnswer(answer: RTCSessionDescriptionInit, toUser: string, fromUser: string) {
     // console.log("sending answer", answer);
