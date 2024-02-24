@@ -2,26 +2,36 @@
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid justify-content-space-between flyingdarts-nav">
       <a class="nav-link" href="/">Flyingdarts</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fa-solid fa-angle-down"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul *ngIf="isRegistered" class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <a id="loggedInUserName" class="nav-link"> 
-            {{ userName }}
-          </a>
-          <a id="profileButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['profile']}}]">
-            <i class="fa-solid fa-user-circle"></i>
-          </a>
-          <a id="statsButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['stats']}}]">
-            <i class="fa-solid fa-chart-simple"></i>
-                    </a>
-          <a class="nav-link" href="#" (click)="signOut()">
-            <i class="fa-solid fa-sign-out"></i>
-          </a>
+      <div class="mx-auto">
+        <a id="copyLink" class="nav-link copy-link" href="/"></a>
+      </div>    
+
+      <!-- Collapsible content removed -->
+
+      <!-- This assumes isRegistered is always true for the sake of this example -->
+      <!-- Otherwise, you'd need to adjust it according to your business logic -->
+      @if(isRegistered) {
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a id="loggedInUserName" class="nav-link">{{ userName }}</a>
+          </li>
+          <li class="nav-item">
+            <a id="profileButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['profile']}}]">
+              <i class="fa-solid fa-user-circle"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a id="statsButton" class="nav-link" href="#" [routerLink]="['/', 'account', { outlets: { 'account-outlet': ['stats']}}]">
+              <i class="fa-solid fa-chart-simple"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" (click)="signOut()">
+              <i class="fa-solid fa-sign-out"></i>
+            </a>
+          </li>
         </ul>
-      </div>
+      }
     </div>
   </nav>
 </div>

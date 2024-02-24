@@ -9,7 +9,9 @@
                                 <th class="text-start" colspan="2">{{ title }}</th>
                                 <th>Sets</th>
                                 <th>Legs</th>
-                                <th colspan="3"></th>
+                                <th colspan="3">
+                                   
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,28 +38,30 @@
                                     {{ (vm$ | async)?.player?.scores!.join(" ") }}
                                 </td>
                             </tr>
-                            <tr>
-                                <td id="opponentNameField" class="text-start">{{ (vm$ |
-                                    async)?.opponent?.name }}</td>
-                                <td><span [class]="'flags fi fi-' + (vm$ | async)?.opponent?.country + ' fis'"></span>
-                                </td>
-                                <td id="opponentSetsField">{{ (vm$ | async)?.opponent?.sets }}</td>
-                                <td id="opponentLegsField">{{ (vm$ | async)?.opponent?.legs }}</td>
-                                <td id="opponentScoreField">{{ (vm$ | async)?.opponent?.score }}</td>
-                                <td style="width: 50px; padding: none; margin: none;">
-                                    <div *ngIf="(vm$ | async)?.currentPlayer != clientId! && (vm$ | async)?.currentPlayer != null" class="loading-animation">
-                                        <ng-lottie [options]="currentPlayerAnimation"></ng-lottie>
-                                    </div>
-                                    <div *ngIf="(vm$ | async)?.winningPlayer != null && (vm$ | async)?.winningPlayer != clientId!">
-                                        <i class='fa-solid fa-crown'></i>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="history" colspan="5">
-                                    {{ (vm$ | async)?.opponent?.scores!.join(" ") }}
-                                </td>
-                            </tr>
+                            @if(hasOpponent) {
+                                <tr>
+                                    <td id="opponentNameField" class="text-start">{{ (vm$ |
+                                        async)?.opponent?.name }}</td>
+                                    <td><span [class]="'flags fi fi-' + (vm$ | async)?.opponent?.country + ' fis'"></span>
+                                    </td>
+                                    <td id="opponentSetsField">{{ (vm$ | async)?.opponent?.sets }}</td>
+                                    <td id="opponentLegsField">{{ (vm$ | async)?.opponent?.legs }}</td>
+                                    <td id="opponentScoreField">{{ (vm$ | async)?.opponent?.score }}</td>
+                                    <td style="width: 50px; padding: none; margin: none;">
+                                        <div *ngIf="(vm$ | async)?.currentPlayer != clientId! && (vm$ | async)?.currentPlayer != null" class="loading-animation">
+                                            <ng-lottie [options]="currentPlayerAnimation"></ng-lottie>
+                                        </div>
+                                        <div *ngIf="(vm$ | async)?.winningPlayer != null && (vm$ | async)?.winningPlayer != clientId!">
+                                            <i class='fa-solid fa-crown'></i>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="history" colspan="5">
+                                        {{ (vm$ | async)?.opponent?.scores!.join(" ") }}
+                                    </td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

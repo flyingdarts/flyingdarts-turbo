@@ -28,7 +28,6 @@ export class NavigationBarComponent implements OnInit {
     public userApiService: UserProfileApiService,
     private appStore: AppStore,
     private authressService: AuthressService,
-    private activatedRoute: ActivatedRoute
   ) {
 
   }

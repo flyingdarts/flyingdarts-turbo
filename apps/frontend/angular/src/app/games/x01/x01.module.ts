@@ -23,7 +23,7 @@ import { VideoComponent } from 'src/app/shared/video/video.component';
     FormsModule, // Add FormsModule to the imports array
     LottieComponent,
     LoadingComponent,
-    VideoComponent
+    VideoComponent,
   ],
   providers: [ComponentStore, 
   provideLottieOptions(lottiePlayerFactory())]

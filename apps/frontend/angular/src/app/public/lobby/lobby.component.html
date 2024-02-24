@@ -3,10 +3,15 @@
         <div class="card-body">
             <div class="container-fluid px-0 h-100">
                 <div class="row flyingdarts-login-container d-flex">
-                    <div *ngIf="(loading$ | async)" class="col-sm-12 col-md-8 col-lg-4 p-0 flyingdarts-mobile-container">
-                        <app-loading></app-loading>
+                    @if((loading)) {
+                    <div class="col-sm-12 col-md-8 col-lg-4 p-0 flyingdarts-mobile-container">
+                        <div class="h-100 w-100 d-flex align-items-center justify-content-center">
+                            <app-loading [title]="loadingTitle" [subtitle]="loadingSubtitle"></app-loading>
+                        </div>
                     </div>
-                    <div *ngIf="!(loading$ | async)" class="col-sm-12 col-md-6 col-lg-2 p-0 flyingdarts-mobile-container">
+                    }
+                    @else {
+                    <div class="col-sm-12 col-md-6 col-lg-2 p-0 flyingdarts-mobile-container">
                         <div class="container-auth h-100 w-100">
                             <div class="form-group lobby-card-container">
                                 <div class="lobby-card-overlay w-100 h-100"
@@ -43,7 +48,7 @@
                                     </div>
                                     <div class="form-check">
                                         <!-- <input class="form-control room-number-input" placeholder="Enter room number"
-                                            type="text" value="" id="roomNumber" checked> -->
+                                                type="text" value="" id="roomNumber" checked> -->
                                         <button id="gameWithFriendsButton" class="form-control create-room-button"
                                             (click)="saveX01Settings()">save settings</button>
                                     </div>
@@ -117,18 +122,17 @@
                                 </h1>
                                 <div class="form-check">
                                     <!-- <input class="form-control room-number-input" placeholder="Enter room number"
-                                        type="text" value="" id="roomNumber" checked> -->
+                                            type="text" value="" id="roomNumber" checked> -->
                                     <button id="gameWithFriendsButton" class="form-control create-room-button"
                                         (click)="createX01Game()">play</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="!(loading$ | async)" class="col-sm-12 col-md-6 col-lg-2 p-0 flyingdarts-mobile-container">
+                    <div class="col-sm-12 col-md-6 col-lg-2 p-0 flyingdarts-mobile-container">
                         <div class=" container-auth h-100 w-100">
                             <div class="form-group lobby-card-container">
                                 <div class="lobby-card-overlay w-100 h-100"
-                                
                                     [class.lobby-card-overlay-hidden]="!shouldShowQueueFaq"
                                     [@leftToRight]="shouldShowFriendFaq ? 'in' : 'out'">
 
@@ -211,13 +215,14 @@
                                 </h1>
                                 <div class="form-check">
                                     <!-- <input class="form-control room-number-input" placeholder="Enter room number"
-                                        type="text" value="" id="roomNumber" checked> -->
+                                            type="text" value="" id="roomNumber" checked> -->
                                     <button id="gameWithFriendsButton" class="form-control create-room-button"
                                         (click)="joinX01Queue()">join</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    }
                 </div>
             </div>
         </div>

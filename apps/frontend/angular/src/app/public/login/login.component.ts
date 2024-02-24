@@ -14,7 +14,7 @@ import { UserProfileApiService } from 'src/app/services/user-profile-api.service
 })
 export class LoginComponent implements OnInit {
 
-  public loading$: Observable<boolean>;
+  public loading!: boolean;
   public loadingTitle: string = 'Hang on!';
   public loadingSubtitle: string = 'Baking cookies...'
   public canLogin: boolean = false;
@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
     private apiService: UserProfileApiService,
     private activatedRoute: ActivatedRoute
   ) {
-    this.loading$ =  this.store.select(x => x.loading);
 
   }
   accept() {
@@ -37,35 +36,47 @@ export class LoginComponent implements OnInit {
 
 
   async login() {
+    this.loading = true;
     await this.authressService.authenticate();
   }
 
   async ngOnInit() {
-    this.store.setLoading(false)
+    this.loading = true;
 
     this.loadingTitle = this.getRandomTitle();
     this.loadingSubtitle = this.getRandomSubtitle();
 
     this.handleAuthCallback();
   }
+
+  
   handleAuthCallback() {
     // Retrieve the token using AuthressService
     this.authressService.getToken().then(token => {
-      this.stateService.idToken = token; // Store the token
+      if (isNullOrUndefined(token)) {
+        console.log('[Login] no token found, showing login')
+        this.loading = false;
+        return;
+      }
+      this.stateService.idToken = token!; // Store the token
       this.checkUserProfileAndRoute(); // Proceed to check user profile
     });
   }
 
   checkUserProfileAndRoute() {
     if (this.stateService.currentUserProfileDetails != null) {
+      console.log('[Login] profile found, navigating to lobby')
       this.router.navigate(['/', 'lobby']);
     }
+    console.log('[Login] token found, determining registration status')
     this.apiService.getUserProfile().subscribe(profile => {
       if (!isNullOrUndefined(profile)) {
         this.stateService.currentUserProfileDetails = profile!;
         this.store.setProfile(profile!)
+        console.log('[Login] profile found, navigating to lobby')
         this.router.navigate(['/', 'lobby']);
       } else {
+        console.log('[Login] profile not found, navigating to onboarding')
         this.router.navigate(['/', 'onboarding', { outlets: { 'onboarding-outlet': ['profile'] } }])
       }
     })

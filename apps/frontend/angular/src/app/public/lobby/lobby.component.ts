@@ -48,7 +48,7 @@ import { isNullOrUndefined } from 'src/app/app.component';
   ]
 })
 export class LobbyComponent implements OnInit {
-  public loading$: Observable<boolean>;
+  public loading!: boolean;
   public vm$: Observable<AppState>;
   public preferedX01Sets: number = 1;
   public preferedX01Legs: number = 3;
@@ -73,14 +73,17 @@ export class LobbyComponent implements OnInit {
     private settingsService: PreferedX01SettingsService,
     private activatedRoute: ActivatedRoute
   ) {
-    this.loading$ = this.store.select(x => x.loading);
+    this.store.select(x => x.loading).subscribe(x=> this.loading = x);
     this.vm$ = this.store.select(
       (state) => state
     );
   }
 
   ngOnInit(): void {
-    this.store.setLoading(false)
+    this.loading = true;
+    this.loadingTitle = this.getRandomTitle();
+    this.loadingSubtitle = this.getRandomSubtitle();
+    
     if (!isNullOrUndefined(this.settingsService.preferedX01Legs)) {
       this.settingsService.preferedX01Legs = 3;
       this.settingsService.preferedX01Sets = 1;
@@ -118,10 +121,11 @@ export class LobbyComponent implements OnInit {
       if (!isNullOrUndefined(userProfile)) {
         this.userProfileService.currentUserProfileDetails = userProfile;
         this.store.setProfile(userProfile);
+        this.loading = false;
       }
     });
   }
-
+  
   public joinX01Queue() {
     const userId = this.userProfileService.currentUserProfileDetails.UserId!
     this.shouldHideLoader = !this.shouldHideLoader;
@@ -164,7 +168,101 @@ export class LobbyComponent implements OnInit {
       }
     }))
   }
+  public loadingTitle: string = 'Hang on!';
+  public loadingSubtitle: string = 'Baking cookies...'
 
+    getRandomTitle(): string {
+      var random = Math.floor(Math.random() * this.loadingTexts.length);
+      return this.loadingTexts[random].title;
+    }
+  
+    getRandomSubtitle() {
+      var random = Math.floor(Math.random() * this.loadingTexts.length);
+      return this.loadingTexts[random].subtitle;
+    }
+  
+    loadingTexts = [
+      {
+        "title": "Hang on!",
+        "subtitle": "Sharpening the darts..."
+      },
+      {
+        "title": "Almost there!",
+        "subtitle": "Polishing the dartboard..."
+      },
+      {
+        "title": "Hold tight!",
+        "subtitle": "Aligning the scorecard..."
+      },
+      {
+        "title": "Just a moment!",
+        "subtitle": "Calibrating the oche..."
+      },
+      {
+        "title": "One second!",
+        "subtitle": "Gathering the flights..."
+      },
+      {
+        "title": "Patience is key!",
+        "subtitle": "Checking the bullseye..."
+      },
+      {
+        "title": "Ready soon!",
+        "subtitle": "Lacing up the dart shoes..."
+      },
+      {
+        "title": "Almost ready!",
+        "subtitle": "Preparing the chalk..."
+      },
+      {
+        "title": "Hang in there!",
+        "subtitle": "Finalizing the throw line..."
+      },
+      {
+        "title": "Preparing!",
+        "subtitle": "Setting up the lighting..."
+      },
+      {
+        "title": "Getting close!",
+        "subtitle": "Organizing the darts league..."
+      },
+      {
+        "title": "Finishing touches!",
+        "subtitle": "Testing the scoreboard..."
+      },
+      {
+        "title": "Bear with us!",
+        "subtitle": "Selecting the music playlist..."
+      },
+      {
+        "title": "Stay tuned!",
+        "subtitle": "Adjusting the dart grip..."
+      },
+      {
+        "title": "Wrapping up!",
+        "subtitle": "Checking the dart weights..."
+      },
+      {
+        "title": "Countdown!",
+        "subtitle": "Planning the victory celebration..."
+      },
+      {
+        "title": "Finalizing!",
+        "subtitle": "Reviewing the rules..."
+      },
+      {
+        "title": "Almost done!",
+        "subtitle": "Warming up the players..."
+      },
+      {
+        "title": "Preparing the stage!",
+        "subtitle": "Securing the dart cases..."
+      },
+      {
+        "title": "Ready to throw!",
+        "subtitle": "Ensuring a fair play..."
+      }
+    ];
   public async increaseX01Legs() {
     if (this.preferedX01Legs < 13) {
       this.store.increasePreferedX01Legs();

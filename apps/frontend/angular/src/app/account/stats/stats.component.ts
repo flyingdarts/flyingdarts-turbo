@@ -12,19 +12,27 @@ import { isNullOrUndefined } from 'src/app/app.component';
   styleUrls: ['./stats.component.scss']
 })
 export class StatsComponent implements OnInit {
-  public loading$: Observable<boolean>;
+  public loading!: boolean;
   public loadingTitle: string = 'Hang on!';
   public loadingSubtitle: string = 'Baking cookies...'
   public showPlot = false;
-  constructor(private plot: PlotlyService, private appStore: AppStore, private apiService: StatsApiService, private stateService: StatsStateService) { this.loading$ = this.appStore.select(x => x.loading); }
+  constructor(private plot: PlotlyService, private appStore: AppStore, private apiService: StatsApiService, private stateService: StatsStateService) {  }
 
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadingTitle = this.getRandomTitle();
     this.loadingSubtitle = this.getRandomSubtitle();
+    console.log('[StatsComponent] Initiated')
     if (this.stateService.darts.length > 0) {
+      console.log('[StatsComponent] State has darts', this.stateService.darts)
       this.showPlot = true;
       this.setPlot();
+      this.loading = false;
+    } else {
+      console.log('[StatsComponent] Fetching darts', this.stateService.darts)
+      this.refreshStats();
+      this.loading = false;
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { X01State, initialX01State } from './x01.state';
 import { X01Store } from './x01.store';
 import { Observable, first } from 'rxjs';
@@ -42,6 +42,8 @@ export class X01Component implements OnInit {
   public shouldDisableInput: boolean = false;
   public shouldDisableShortcuts: boolean = false;
   public currentPlayer?: string;
+  public hasOpponent: boolean = false;
+
   constructor(
     private webSocketService: WebSocketService,
     private x01ApiService: X01ApiService,
@@ -67,6 +69,7 @@ export class X01Component implements OnInit {
         });
       }
     });
+
     this.webSocketService.getMessages().subscribe((x) => {
       switch (x.action) {
         case WebSocketActions.X01Join:
@@ -75,6 +78,18 @@ export class X01Component implements OnInit {
           break;
       }
     });
+    this.setNavbarLink();
+  }
+  setNavbarLink() {
+    let element = document.getElementById("copyLink");
+    if (!isNullOrUndefined(element)) { 
+      var copyString = 'Share this link (click to copy): ';
+          copyString += window.location.toString().split('/')[window.location.toString().split('/').length-1];
+          copyString += ' <i class="fa-regular fa-copy"></i>';
+      element!.innerHTML = copyString;
+      element!.onclick = this.copyLocationToClipboard
+      element!.removeAttribute("href")
+    }
   }
   private handleMetadata(message: any) {
     this.x01Store.setLoading(false);
@@ -97,6 +112,7 @@ export class X01Component implements OnInit {
         this.x01Store.setPlayerHistory(playerDarts.map(x => x.Score));
       }
       if (Object.keys(metadata.Players).length == 2) {
+        this.hasOpponent = true;
         var opponent = metadata.Players.filter(x => x.PlayerId != this.clientId!)[0];
         this.x01Store.setOpponentId(opponent.PlayerId);
         this.x01Store.setOpponentName(opponent.PlayerName);
@@ -119,6 +135,39 @@ export class X01Component implements OnInit {
       sum += darts.map(x => x.Score)[i];
     }
     return sum;
+  }
+  public copyLink() {
+    this.copyLocationToClipboard();
+  }
+  copyLocationToClipboard() {
+    console.log('copy to clipboard')
+    // Create a temporary input element to hold the URL
+    const tempInput = document.createElement('input');
+    
+    // Append it to the body
+    document.body.appendChild(tempInput);
+    
+    // Set its value to the current location's href
+    tempInput.value = window.location.href;
+    
+    // Select the value
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // For mobile devices
+    
+    // Execute the copy command
+    try {
+      const successful = document.execCommand('copy');
+      if (successful) {
+        alert('URL copied to clipboard.');
+      } else {
+        alert('Failed to copy URL.');
+      }
+    } catch (err) {
+      alert('Failed to copy URL. Error: ' + err);
+    }
+    
+    // Remove the temporary input from the document
+    document.body.removeChild(tempInput);
   }
   public sendScore() {
     this.x01Store.setLoading(true);

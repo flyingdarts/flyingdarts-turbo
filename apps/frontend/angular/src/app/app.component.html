@@ -2,21 +2,19 @@
   <div class="card h-100">
     <app-navigation-bar></app-navigation-bar>
     <div class="card-body">
-      @if ((loading$ | async)) {
-        <app-loading [title]="loadingTitle" [subtitle]="loadingSubtitle"></app-loading>
-      } @else {
-        <div class="container-fluid px-0 h-100">
-          <router-outlet></router-outlet>
-        </div>
-      }
+      <div class="container-fluid px-0 h-100">
+        <router-outlet></router-outlet>
+      </div>
     </div>
     <div class="card-footer">
       <div class="d-flex">
         <p class="footer-copy pe-1">© Flyingdarts {{currentYear}} - v{{currentVersion}}</p>
         <p class="footer-copy">-</p>
-        <p class="footer-copy footer-pp-and-tos ps-1 pe-1" id="pp-link" aria-current="page" href="#" routerLink="/privacy-policy">Privacy policy</p>
+        <p class="footer-copy footer-pp-and-tos ps-1 pe-1" id="pp-link" aria-current="page" href="#"
+          routerLink="/privacy-policy">Privacy policy</p>
         <p class="footer-copy">-</p>
-        <p class="footer-copy footer-pp-and-tos ps-1" id="tos-link" aria-current="page" href="#" routerLink="/terms-of-service">Terms of service</p>
+        <p class="footer-copy footer-pp-and-tos ps-1" id="tos-link" aria-current="page" href="#"
+          routerLink="/terms-of-service">Terms of service</p>
       </div>
       <div class="d-flex align-items-center">
         <a href="https://github.com/flyingdarts" class="github-link"><img clas="footer-github-icon"
@@ -29,5 +27,5 @@
   </div>
 </div>
 <div class="hide-mobile">
-  
+
 </div>

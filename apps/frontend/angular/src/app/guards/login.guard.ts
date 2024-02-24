@@ -9,10 +9,11 @@ export class LoginPermissionsService {
 
     canActivate(): boolean {
         if (!isNullOrUndefined(this.stateService.idToken)) {
-            console.log('has token, going to lobby')
+            console.log('[LoginGuard] Token found, navigating to lobby')
             this.router.navigate(['/', 'lobby']);
             return false;
         }
+        console.log('[LoginGuard] Token not found, navigating to login')
         return true;
 
     }

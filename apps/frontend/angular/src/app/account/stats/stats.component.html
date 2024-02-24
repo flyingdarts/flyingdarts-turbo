@@ -4,6 +4,9 @@
             <div class="container-fluid px-0 h-100">
                 <div class="flyingdarts-login-container d-flex h-100">
                     <div class="container-fluid">
+                        @if(loading) {
+                        <app-loading></app-loading>
+                        }
                         <div id="plot">
                             <!-- Your plot content here -->
                         </div>

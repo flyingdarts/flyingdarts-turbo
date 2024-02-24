@@ -4,10 +4,12 @@
       <div class="container-fluid px-0 h-100">
         <div class="flyingdarts-login-container d-flex">
           <div class="col-sm-12 col-md-12 col-lg-4 p-0 flyingdarts-mobile-container">
-            <div *ngIf="(loading$ | async)" class="container-auth h-100">
+            @if (loading) {
+            <div class="container-auth h-100">
               <app-loading [title]="loadingTitle" [subtitle]="loadingSubtitle"></app-loading>
             </div>
-            <div *ngIf="!(loading$ | async)" class=" container-auth h-100 login-container">
+            } @else {
+            <div class=" container-auth h-100 login-container">
               <h1 class="fw-bold my-sign-in-header">Login</h1>
               <button class="btn btn-google-login" [disabled]="!canLogin" (click)="login()">
                 Click here to login!
@@ -23,6 +25,7 @@
                 </label>
               </div>
             </div>
+            }
           </div>
         </div>
       </div>

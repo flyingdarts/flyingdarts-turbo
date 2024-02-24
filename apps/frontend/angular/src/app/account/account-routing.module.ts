@@ -8,16 +8,19 @@ const routes: Routes = [
   {
     path: "",
     component: AccountRootComponent,
+    title: 'Flyingdarts - account',
     children: [
       {
         path: "profile",
         component: ProfileComponent,
-        outlet: "account-outlet"
+        outlet: "account-outlet",
+        title: 'Flyingdarts - profile'
       },
       {
         path: "stats",
         component: StatsComponent,
-        outlet: "account-outlet"
+        outlet: "account-outlet",
+        title: 'Flyingdarts - stats'
       }
     ]
   }

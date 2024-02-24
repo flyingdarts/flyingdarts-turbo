@@ -11,13 +11,14 @@ export class LobbyPermissionsService {
     canActivate(): boolean {
         try {
             if (isNullOrUndefined(this.stateService.idToken)) {
-                console.log('doesnt have token');
+                console.log('[LobbyGuard] Not authenticated, navigating to login')
                 this.router.navigate(['/', 'login']);
                 return false;
             }
-            console.log('going to lobby');
+            console.log('[LobbyGuard] Authenticated, navigating to lobby')
             return true;
         } catch {
+            console.log('[LobbyGuard] Error during authentication, navigating to login')
             this.router.navigate(['/', 'login']);
             return false;
         }

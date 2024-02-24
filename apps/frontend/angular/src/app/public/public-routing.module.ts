@@ -18,25 +18,30 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [canActivateLogin]
+    canActivate: [canActivateLogin],
+    title: 'Flyingdarts - login',
   },
   {
     path: 'lobby',
     component: LobbyComponent,
     canActivate: [canActivateLobby],
     resolve: {userProfile: userProfileResolver},
+    title: 'Flyingdarts - lobby'
   },
   {
     path: 'terms-of-service',
-    component: TermsOfServiceComponent
+    component: TermsOfServiceComponent,
+    title: 'Flyingdarts - terms of service'
   },
   {
     path: 'privacy-policy',
-    component: PrivacyPolicyComponent
+    component: PrivacyPolicyComponent,
+    title: 'Flyingdarts - privacy policy'
   },
   {
     path: 'leaderboard',
-    component: LeaderboardComponent
+    component: LeaderboardComponent,
+    title: 'Flyingdarts - leaderboard'
   },
 ];
 

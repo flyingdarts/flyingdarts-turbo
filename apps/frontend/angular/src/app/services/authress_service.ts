@@ -17,8 +17,12 @@ export class AuthressService {
         return this.loginClient.authenticate({redirectUrl: window.location.href})
     }
     
-    public async getToken(): Promise<string> {
-        return await this.loginClient.ensureToken();
+    public async getToken(): Promise<string | null> {
+        try { 
+            return await this.loginClient.ensureToken();
+        } catch(err) {
+            return null;
+        }
     }
 
     public getUserId(): string {
