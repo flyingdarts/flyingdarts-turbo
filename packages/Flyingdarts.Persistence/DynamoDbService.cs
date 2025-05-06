@@ -17,6 +17,14 @@ public class DynamoDbService : IDynamoDbService
         return games;
     }
 
+    public async Task<List<Game>> ReadStartedGameAsync(long gameId, CancellationToken cancellationToken)
+    {
+        var games = await DbContext.FromQueryAsync<Game>(QueryStartedGameConfig(gameId.ToString()), ApplicationOptions.Value.ToOperationConfig())
+            .GetRemainingAsync(cancellationToken);
+
+        return games;
+    }
+
     public async Task<List<GamePlayer>> ReadGamePlayersAsync(long gameId, CancellationToken cancellationToken)
     {
         var gamePlayers = await DbContext.FromQueryAsync<GamePlayer>(QueryGamePlayersConfig(gameId.ToString()), ApplicationOptions.Value.ToOperationConfig())
@@ -94,6 +102,13 @@ public class DynamoDbService : IDynamoDbService
     {
         var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.Game);
         queryFilter.AddCondition("SK", QueryOperator.BeginsWith, gameId);
+        return new QueryOperationConfig { Filter = queryFilter };
+    }
+
+    private static QueryOperationConfig QueryStartedGameConfig(string gameId)
+    {
+        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.Game);
+        queryFilter.AddCondition("SK", QueryOperator.BeginsWith, $"{gameId}#Started");
         return new QueryOperationConfig { Filter = queryFilter };
     }
 
