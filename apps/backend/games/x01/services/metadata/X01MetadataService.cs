@@ -165,7 +165,6 @@ public class X01MetadataService : MetadataService<X01State>
 
         foreach (var set in sets)
         {
-            int currentSetNumber = set.Key;
             int legsToWinSet = (bestOfLegs + 1) / 2;
 
             // Calculate legs won for all players in the current set
@@ -186,6 +185,7 @@ public class X01MetadataService : MetadataService<X01State>
 
         return (totalSetsWon, currentLegsWon);
     }
+
 
     private static Dictionary<string, int> CalculateLegsInCurrentSet(List<GameDart> darts)
     {

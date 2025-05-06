@@ -100,12 +100,6 @@
                     {
                         legWinsPerPlayer[playerId] = 0;
                     }
-
-                    // Check if the player has won enough sets to win the game
-                    if (currentSet > setsNeededToWinGame)
-                    {
-                        break; // Game is over
-                    }
                 }
                 else
                 {
