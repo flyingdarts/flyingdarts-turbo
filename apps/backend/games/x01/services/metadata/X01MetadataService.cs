@@ -87,7 +87,6 @@ public class X01MetadataService : MetadataService<X01State>
         {
             var orderedPlayers = players.Select(x =>
             {
-                int currentSet = darts != null && darts.Any() ? darts.Max(d => d.Set) : 1; // Assuming current set is the highest set number
                 var stats = CalculatePlayerStats(darts, x.PlayerId, game.X01.Legs);
                 var newPlayer = new PlayerDto
                 {
@@ -101,11 +100,20 @@ public class X01MetadataService : MetadataService<X01State>
                 return newPlayer;
             }).OrderBy(x => x.CreatedAt);
 
+            if (orderedPlayers.Any((x) => CalculatePlayerStats(darts, x.PlayerId, game.X01.Legs).shouldResetLegs))
+            {
+                foreach (var orderedPlayer in orderedPlayers)
+                {
+                    orderedPlayer.Legs = "0";
+                }
+            }
+
             data.Players = orderedPlayers;
         }
 
+        EnsureLegsReset(data, darts ?? new List<GameDart>());
 
-        DetermineNextPlayer(data);
+        data.NextPlayer = DetermineNextPlayer(players, darts);
 
         try
         {
@@ -120,6 +128,25 @@ public class X01MetadataService : MetadataService<X01State>
 
         return data;
     }
+
+    private static bool HasPlayerWonLastSet(List<GameDart> darts, string playerId, int bestOfLegs)
+    {
+        // Find the last set number
+        int lastSetNumber = darts.Max(dart => dart.Set);
+
+        // Filter darts for the last set
+        var lastSetDarts = darts.Where(dart => dart.Set == lastSetNumber).ToList();
+
+        // Calculate the number of legs needed to win the set
+        int legsToWinSet = (bestOfLegs + 1) / 2;
+
+        // Calculate legs won for all players in the last set
+        var playerLegWins = CalculateLegsInCurrentSet(lastSetDarts);
+
+        // Check if the specified player has won the last set
+        return playerLegWins.ContainsKey(playerId) && playerLegWins[playerId] >= legsToWinSet;
+    }
+
     private static bool HasAnyPlayerWon(List<GameDart> darts, int legsRequired, int bestOfSets, List<string> playerIds)
     {
         foreach (var playerId in playerIds)
@@ -156,12 +183,13 @@ public class X01MetadataService : MetadataService<X01State>
         return null;
     }
 
-    private static (int setsWon, int legsWon) CalculatePlayerStats(List<GameDart> darts, string playerId, int bestOfLegs)
+    private static (int setsWon, int legsWon, bool shouldResetLegs) CalculatePlayerStats(List<GameDart> darts, string playerId, int bestOfLegs)
     {
         var sets = darts.GroupBy(dart => dart.Set);
 
         int totalSetsWon = 0;
         int currentLegsWon = 0;
+        bool shouldResetLegs = false;
 
         foreach (var set in sets)
         {
@@ -175,6 +203,7 @@ public class X01MetadataService : MetadataService<X01State>
             {
                 totalSetsWon++;
                 currentLegsWon = 0; // Reset legs won since the set is won
+                shouldResetLegs = true;
             }
             else
             {
@@ -183,9 +212,8 @@ public class X01MetadataService : MetadataService<X01State>
             }
         }
 
-        return (totalSetsWon, currentLegsWon);
+        return (totalSetsWon, currentLegsWon, shouldResetLegs);
     }
-
 
     private static Dictionary<string, int> CalculateLegsInCurrentSet(List<GameDart> darts)
     {
@@ -213,28 +241,83 @@ public class X01MetadataService : MetadataService<X01State>
     }
 
 
-
-
-    private static void DetermineNextPlayer(Metadata metadata)
+    private static void EnsureLegsReset(Metadata metadata, List<GameDart> gameDarts)
     {
-        if (metadata.Players != null && metadata.Players.Any() && metadata.Players.Count() == 2)
+        // Check if there are players and darts data available
+        if (metadata.Players == null || !metadata.Players.Any() || !gameDarts.Any())
         {
-            if (metadata.Darts == null || !metadata.Darts.Any())
+            return;
+        }
+
+        // Get the list of player IDs
+        var playerIds = metadata.Players.Select(p => p.PlayerId).ToList();
+
+        // Assuming all players have the same game settings, get the first player's game settings
+        var gameSettings = metadata.Game.X01;
+
+        // Iterate over each player to check if they have won the last set
+        foreach (var playerId in playerIds)
+        {
+            // Check if the current player has won the last set
+            if (HasPlayerWonLastSet(gameDarts, playerId, gameSettings.Legs))
             {
-                metadata.NextPlayer = metadata.Players.OrderBy(x => x.CreatedAt).First().PlayerId;
-                return;
-            }
-            var p1_count = metadata.Darts[metadata.Players.First().PlayerId].Count();
-            var p2_count = metadata.Darts[metadata.Players.Last().PlayerId].Count();
-            if (p1_count > p2_count)
-            {
-                metadata.NextPlayer = metadata.Players.Last().PlayerId;
-            }
-            else
-            {
-                metadata.NextPlayer = metadata.Players.First().PlayerId;
+                // Reset the legs for the other player(s)
+                foreach (var otherPlayerId in playerIds.Where(id => id != playerId))
+                {
+                    var playerDto = metadata.Players.FirstOrDefault(p => p.PlayerId == otherPlayerId);
+                    if (playerDto != null)
+                    {
+                        playerDto.Legs = "0";
+                    }
+                }
+                break; // Exit the loop once a winner is found and legs are reset
             }
         }
     }
+
+    private static void SetRandomStartingPlayer(Metadata metadata)
+    {
+        var random = new Random();
+        int index = random.Next(0, 2);
+        metadata.NextPlayer = metadata.Players.ToArray()[index].PlayerId;
+    }
+    private static string DetermineNextPlayer(List<GamePlayer> players, List<GameDart> darts)
+    {
+        string nextPlayer = null;
+        
+        if (players.Any() && players.Count() == 2)
+        {
+            if (!darts.Any())
+            {
+                nextPlayer = players.ToArray()[
+                    new Random().Next(0,2)
+                ].PlayerId;
+            } 
+            else if (darts.Last().GameScore == 0)
+            {
+                var lastDart = darts.Last();
+                var lastSet = lastDart.Set;
+                var lastLeg = lastDart.Leg;
+                var firstDart = darts.First((x) => 
+                    x.Set == lastSet && 
+                    x.Leg == lastLeg
+                );
+                
+                var playerThatStarted = firstDart.PlayerId; 
+                nextPlayer = players.First((x) => x.PlayerId != playerThatStarted)
+                    .PlayerId;
+            }
+            else
+            {
+                var playerThatLastThrew = darts.Last().PlayerId;
+                
+                nextPlayer = players.First((x) => x.PlayerId != playerThatLastThrew)
+                    .PlayerId;
+            }
+
+        }
+        return nextPlayer;
+    }
+
 }
 
