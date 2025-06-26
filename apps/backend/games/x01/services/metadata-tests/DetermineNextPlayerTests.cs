@@ -213,4 +213,28 @@ public class DetermineNextPlayerTests
         var result = CallDetermineNextPlayer(players, darts);
         Assert.Contains(result, expectedNextPlayers);
     }
+
+    public static IEnumerable<object[]> PlayerABegins_BWins_BStartsNextData => new List<object[]>
+    {
+        new object[]
+        {
+            new List<GamePlayer> { GamePlayer.Create(1, "A"), GamePlayer.Create(1, "B") },
+            new List<GameDart>
+            {
+                new GameDart { PlayerId = "A", Set = 1, Leg = 1, CreatedAt = DateTime.UtcNow.AddSeconds(1), GameScore = 501 },
+                new GameDart { PlayerId = "B", Set = 1, Leg = 1, CreatedAt = DateTime.UtcNow.AddSeconds(2), GameScore = 400 },
+                new GameDart { PlayerId = "A", Set = 1, Leg = 1, CreatedAt = DateTime.UtcNow.AddSeconds(3), GameScore = 350 },
+                new GameDart { PlayerId = "B", Set = 1, Leg = 1, CreatedAt = DateTime.UtcNow.AddSeconds(4), GameScore = 0 }, // B wins
+            },
+            "B"
+        }
+    };
+
+    [Theory]
+    [MemberData(nameof(PlayerABegins_BWins_BStartsNextData))]
+    public void PlayerABegins_BWins_BStartsNext(List<GamePlayer> players, List<GameDart> darts, string expectedNextPlayer)
+    {
+        var result = CallDetermineNextPlayer(players, darts);
+        Assert.Equal(expectedNextPlayer, result);
+    }
 } 
