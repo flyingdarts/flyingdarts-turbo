@@ -284,37 +284,43 @@ public class X01MetadataService : MetadataService<X01State>
     private static string DetermineNextPlayer(List<GamePlayer> players, List<GameDart> darts)
     {
         string nextPlayer = null;
-        
-        if (players.Any() && players.Count() == 2)
+
+        if (players.Any() && players.Count == 2)
         {
             if (!darts.Any())
             {
-                nextPlayer = players.ToArray()[
-                    new Random().Next(0,2)
-                ].PlayerId;
-            } 
+                // Game start: pick a random player
+                nextPlayer = players[new Random().Next(0, 2)].PlayerId;
+            }
             else if (darts.Last().GameScore == 0)
             {
+                // Leg just finished
                 var lastDart = darts.Last();
                 var lastSet = lastDart.Set;
                 var lastLeg = lastDart.Leg;
-                var firstDart = darts.First((x) => 
-                    x.Set == lastSet && 
-                    x.Leg == lastLeg
-                );
-                
-                var playerThatStarted = firstDart.PlayerId; 
-                nextPlayer = players.First((x) => x.PlayerId != playerThatStarted)
-                    .PlayerId;
+
+                // All darts in the just-finished leg
+                var dartsInLastLeg = darts.Where(x => x.Set == lastSet && x.Leg == lastLeg).OrderBy(x => x.CreatedAt).ToList();
+                var starterId = dartsInLastLeg.First().PlayerId;
+                var winnerId = dartsInLastLeg.Last(x => x.GameScore == 0).PlayerId;
+
+                if (winnerId == starterId)
+                {
+                    // If winner started, the other player starts next leg
+                    nextPlayer = players.First(x => x.PlayerId != winnerId).PlayerId;
+                }
+                else
+                {
+                    // If winner did not start, winner starts next leg
+                    nextPlayer = winnerId;
+                }
             }
             else
             {
+                // Ongoing leg: alternate
                 var playerThatLastThrew = darts.Last().PlayerId;
-                
-                nextPlayer = players.First((x) => x.PlayerId != playerThatLastThrew)
-                    .PlayerId;
+                nextPlayer = players.First(x => x.PlayerId != playerThatLastThrew).PlayerId;
             }
-
         }
         return nextPlayer;
     }
