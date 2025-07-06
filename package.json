@@ -9,7 +9,6 @@
   ],
   "dependencies": {
     "aws-sdk": "^2.1528.0",
-    "beachball": "^2.54.0",
     "turbo": "^1.11.2"
   },
   "packageManager": "npm@9.5.0",
@@ -42,6 +41,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.130",
     "@types/node": "^20.10.6",
+    "beachball": "^2.54.0",
     "typescript": "^5.3.3"
   }
 }
