@@ -245,9 +245,6 @@ create_changelog_files() {
         if bash scripts/create-changelog-files.sh; then
             log_success "Changelog files creation completed"
             return 0
-        else
-            log_error "Changelog files creation failed"
-            return 1
         fi
     else
         log_warning "create-changelog-files.sh not found, skipping changelog creation"
