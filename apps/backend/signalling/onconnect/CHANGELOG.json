@@ -1,0 +1,11 @@
+{
+  "name": "Flyingdarts.Backend.Signalling.OnConnect",
+  "version": "0.1.0",
+  "changes": [
+    {
+      "type": "added",
+      "description": "Initial changelog setup",
+      "version": "0.1.0"
+    }
+  ]
+}

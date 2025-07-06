@@ -7,8 +7,9 @@
     "apps/frontend/**/*",
     "apps/tools/**/*"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "aws-sdk": "^2.1528.0",
+    "beachball": "2.52.0",
     "turbo": "^1.11.2"
   },
   "packageManager": "npm@9.5.0",

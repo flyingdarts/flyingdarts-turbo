@@ -1,62 +1,202 @@
 #!/bin/bash
 
 # Beachball Setup Script for Flyingdarts Monorepo
-echo "🚀 Setting up Beachball for Flyingdarts..."
+# Enhanced version with better logging, error handling, and modular version checking
 
-# Check if npm is available
-if ! command -v npm &>/dev/null; then
-    echo "❌ npm is not installed. Please install Node.js and npm first."
+# Check if running with bash
+if [ -z "$BASH_VERSION" ]; then
+    echo "❌ ERROR: This script must be run with bash, not sh"
+    echo "   Please run: bash scripts/setup-beachball.sh"
     exit 1
 fi
 
-# Function to get beachball version from package.json
-get_beachball_version() {
-    if [ -f "package.json" ]; then
-        local version=$(grep '"beachball":' package.json | sed 's/.*"beachball": *"\([^"]*\)".*/\1/')
-        if [ -n "$version" ]; then
-            echo "$version"
-            return 0
+set -euo pipefail # Exit on error, undefined vars, pipe failures
+
+# Source shared utilities
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/utils.sh"
+
+# Script configuration
+readonly SCRIPT_NAME="setup-beachball.sh"
+readonly SCRIPT_VERSION="2.0.0"
+readonly REQUIRED_TOOLS=("npm" "node")
+
+# Function to validate required tools
+validate_requirements() {
+    log_step "Validating system requirements..."
+
+    local missing_tools=()
+
+    for tool in "${REQUIRED_TOOLS[@]}"; do
+        if ! command_exists "$tool"; then
+            missing_tools+=("$tool")
+        else
+            local version=$($tool --version 2>/dev/null | head -n1)
+            log_debug "Found $tool: $version"
         fi
+    done
+
+    if [ ${#missing_tools[@]} -gt 0 ]; then
+        log_error "Missing required tools: ${missing_tools[*]}"
+        log_info "Please install Node.js and npm first: https://nodejs.org/"
+        exit 1
     fi
-    # No version found in package.json - package not installed yet
-    return 1
+
+    log_success "All required tools are available"
 }
 
-# Function to check if beachball is installed globally
-check_global_beachball() {
-    if command -v beachball &>/dev/null; then
-        local current_version=$(beachball --version 2>/dev/null | head -n1)
-        echo "🔍 Found global beachball installation: $current_version"
+# Function to get beachball version from package.json using modular script
+get_beachball_version_from_package_json() {
+    log_info "🔍 Searching for beachball version in package.json..."
+
+    if [ ! -f "package.json" ]; then
+        log_warning "package.json not found in current directory"
+        return 1
+    fi
+
+    # Use the modular script to get project version
+    local version
+    if version=$(bash "$SCRIPT_DIR/get-package-version-from-project.sh" "beachball" 2>/dev/null); then
+        log_success "Found beachball version in package.json: '$version'"
+        echo "$version"
         return 0
     else
-        echo "🔍 No global beachball installation found"
+        log_warning "No beachball version found in package.json"
         return 1
     fi
 }
 
-# Function to check if beachball is installed locally
-check_local_beachball() {
-    if [ -f "package.json" ] && npm list beachball --depth=0 &>/dev/null; then
-        local current_version=$(npm list beachball --depth=0 | grep beachball | awk '{print $2}' | sed 's/@//')
-        echo "🔍 Found local beachball installation: $current_version"
+# Function to extract semver from version string (using external script)
+extract_semver() {
+    local version_string="$1"
+
+    # Use the external semver comparison script to extract semver
+    if [ -f "scripts/compare-semver.sh" ]; then
+        # We'll use a temporary approach to extract semver by comparing with itself
+        # and capturing the debug output
+        local temp_output
+        temp_output=$(bash scripts/compare-semver.sh "$version_string" "$version_string" 2>&1 || true)
+
+        # Extract the clean version from debug output
+        local clean_version=$(echo "$temp_output" | grep "→ Result: extracted semver" | sed 's/.*→ Result: extracted semver '\''\([^'\'']*\)'\''.*/\1/')
+
+        if [ -n "$clean_version" ]; then
+            echo "$clean_version"
+            return 0
+        fi
+    fi
+
+    # Fallback: simple extraction for basic cases
+    version_string=$(echo "$version_string" | tr -d '[:space:]' | sed -E 's/(beachball)//Ig')
+
+    if [ -z "$version_string" ] || [ "$version_string" = "null" ]; then
+        echo ""
+        return 1
+    fi
+
+    # Handle semver ranges
+    if [[ "$version_string" == ^* || "$version_string" == ~* ]]; then
+        local clean_version=$(echo "$version_string" | sed -E 's/^[\^~]//')
+        echo "$clean_version"
+        return 0
+    fi
+    if [[ "$version_string" == '>'* || "$version_string" == '<'* || "$version_string" == '='* ]]; then
+        local clean_version=$(echo "$version_string" | sed -E 's/^[><=]+//')
+        echo "$clean_version"
+        return 0
+    fi
+
+    # Handle clean semver
+    if [[ "$version_string" =~ ^([0-9]+\.[0-9]+\.[0-9]+) ]]; then
+        echo "${BASH_REMATCH[1]}"
+        return 0
+    fi
+
+    echo "$version_string"
+    return 1
+}
+
+# Function to check if beachball is installed globally using modular script
+check_global_beachball_installation() {
+    log_info "🔍 Checking global beachball installation..."
+
+    if ! command_exists beachball; then
+        log_warning "Global beachball not found"
+        return 1
+    fi
+
+    # Use the modular script to get global version
+    local version_string
+    if version_string=$(bash "$SCRIPT_DIR/get-package-version-from-global.sh" "beachball" 2>/dev/null); then
+        log_success "Global beachball found: version '$version_string'"
+        echo "$version_string"
         return 0
     else
-        echo "🔍 No local beachball installation found"
+        log_warning "Failed to get global beachball version"
+        return 1
+    fi
+}
+
+# Function to check if beachball is installed locally using modular script
+check_local_beachball_installation() {
+    log_info "🔍 Checking local beachball installation..."
+
+    if [ ! -f "package.json" ]; then
+        log_warning "package.json not found, cannot check local installation"
+        return 1
+    fi
+
+    # Use the modular script to get project version
+    local version_string
+    if version_string=$(bash "$SCRIPT_DIR/get-package-version-from-project.sh" "beachball" 2>/dev/null); then
+        log_success "Local beachball version from package.json: '$version_string'"
+        echo "$version_string"
+        return 0
+    else
+        log_warning "No beachball version found in package.json"
+        return 1
+    fi
+}
+
+# Function to compare versions using external script
+compare_versions() {
+    local version1="$1"
+    local version2="$2"
+
+    log_debug "⚖️  Comparing versions: '$version1' vs '$version2'"
+
+    # Use external semver comparison script if available
+    if [ -f "scripts/compare-semver.sh" ]; then
+        if bash scripts/compare-semver.sh "$version1" "$version2" >/dev/null 2>&1; then
+            log_debug "   → Result: versions are equal ✅"
+            return 0
+        else
+            log_debug "   → Result: versions are different ❌"
+            return 1
+        fi
+    fi
+
+    # Fallback: simple string comparison
+    if [ "$version1" = "$version2" ]; then
+        log_debug "   → Result: versions are equal ✅"
+        return 0
+    else
+        log_debug "   → Result: versions are different ❌"
         return 1
     fi
 }
 
 # Function to prompt user for upgrade
 prompt_for_upgrade() {
-    local installation_type=$1
-    local current_version=$2
-    local target_version=$3
+    local installation_type="$1"
+    local current_version="$2"
+    local target_version="$3"
 
     echo ""
-    echo "🤔 $installation_type beachball is already installed (version: $current_version)"
-    echo "   Target version: $target_version"
+    log_warning "$installation_type beachball is already installed (version: $current_version)"
+    log_info "Target version: $target_version"
     echo ""
-    read -p "   Do you want to upgrade to version $target_version? (y/N): " -n 1 -r
+    read -p "Do you want to upgrade to version $target_version? (y/N): " -n 1 -r
     echo ""
 
     if [[ $REPLY =~ ^[Yy]$ ]]; then
@@ -66,161 +206,136 @@ prompt_for_upgrade() {
     fi
 }
 
-# Get beachball version from package.json
-if get_beachball_version; then
-    beachball_version=$(get_beachball_version)
-    echo "📋 Using beachball version from package.json: $beachball_version"
-else
-    echo "📋 No beachball version found in package.json - will install latest version"
-    beachball_version="latest"
-fi
+# Function to install beachball globally
+install_global_beachball() {
+    local target_version="$1"
 
-# Check and handle global beachball installation
-echo "🔍 Checking global beachball installation..."
-if check_global_beachball; then
-    current_global_version=$(beachball --version 2>/dev/null | head -n1)
-    # Extract just the version number for comparison
-    current_version_clean=$(echo "$current_global_version" | sed 's/beachball\///')
+    log_step "Installing beachball globally (version: $target_version)..."
 
-    # If using "latest" and versions are equal, skip silently
-    if [ "$beachball_version" = "latest" ] && [ "$current_version_clean" = "$(npm view beachball version 2>/dev/null)" ]; then
-        # Do nothing - versions are equal
-        :
+    if npm install -g "beachball@$target_version"; then
+        log_success "Global beachball installation completed"
+        return 0
     else
-        if prompt_for_upgrade "Global" "$current_global_version" "$beachball_version"; then
-            echo "📦 Upgrading global beachball..."
-            npm install -g beachball@$beachball_version
-        else
-            echo "⏭️  Skipping global beachball upgrade"
-        fi
+        log_error "Global beachball installation failed"
+        return 1
     fi
-else
-    echo "📦 Installing beachball globally..."
-    npm install -g beachball@$beachball_version
-fi
-
-# Check and handle local beachball installation
-echo ""
-echo "🔍 Checking local beachball installation..."
-if check_local_beachball; then
-    current_local_version=$(npm list beachball --depth=0 | grep beachball | awk '{print $2}' | sed 's/@//')
-
-    # If using "latest" and versions are equal, skip silently
-    if [ "$beachball_version" = "latest" ] && [ "$current_local_version" = "$(npm view beachball version 2>/dev/null)" ]; then
-        # Do nothing - versions are equal
-        :
-    else
-        if prompt_for_upgrade "Local" "$current_local_version" "$beachball_version"; then
-            echo "📦 Upgrading local beachball..."
-            npm install beachball@$beachball_version --save-dev --no-workspaces
-        else
-            echo "⏭️  Skipping local beachball upgrade"
-        fi
-    fi
-else
-    echo "📦 Installing beachball as dev dependency..."
-    npm install beachball@$beachball_version --save-dev --no-workspaces
-fi
-
-# Find all .csproj files and create changelog files in their directories (only if they don't exist)
-echo ""
-echo "🔍 Finding all .csproj files and creating changelog files..."
-csproj_files=$(find . -name "*.csproj" -type f)
-
-if [ -z "$csproj_files" ]; then
-    echo "⚠️  No .csproj files found in the project"
-else
-    echo "📝 Creating CHANGELOG.md and CHANGELOG.json files for each .csproj project (if they don't exist)..."
-
-    created_count=0
-    skipped_count=0
-
-    while IFS= read -r csproj_file; do
-        # Get the directory containing the .csproj file
-        project_dir=$(dirname "$csproj_file")
-        project_name=$(basename "$csproj_file" .csproj)
-
-        echo "   📁 Processing: $project_name in $project_dir"
-
-        # Check if CHANGELOG.md already exists
-        if [ -f "$project_dir/CHANGELOG.md" ]; then
-            echo "      ⏭️  CHANGELOG.md already exists, skipping..."
-            skipped_count=$((skipped_count + 1))
-        else
-            echo "      ✅ Creating CHANGELOG.md..."
-            # Create CHANGELOG.md
-            cat >"$project_dir/CHANGELOG.md" <<EOF
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [Unreleased]
-
-### Added
-- Initial changelog setup
-
-### Changed
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
-
-EOF
-            created_count=$((created_count + 1))
-        fi
-
-        # Check if CHANGELOG.json already exists
-        if [ -f "$project_dir/CHANGELOG.json" ]; then
-            echo "      ⏭️  CHANGELOG.json already exists, skipping..."
-            skipped_count=$((skipped_count + 1))
-        else
-            echo "      ✅ Creating CHANGELOG.json..."
-            # Create CHANGELOG.json
-            cat >"$project_dir/CHANGELOG.json" <<EOF
-{
-  "name": "$project_name",
-  "version": "0.1.0",
-  "changes": [
-    {
-      "type": "added",
-      "description": "Initial changelog setup",
-      "version": "0.1.0"
-    }
-  ]
 }
-EOF
-            created_count=$((created_count + 1))
+
+# Function to install beachball locally
+install_local_beachball() {
+    local target_version="$1"
+
+    log_step "Installing beachball locally (version: $target_version)..."
+
+    if npm install "beachball@$target_version" --save-dev --no-workspaces; then
+        log_success "Local beachball installation completed"
+        return 0
+    else
+        log_error "Local beachball installation failed"
+        return 1
+    fi
+}
+
+# Function to create changelog files using external script
+create_changelog_files() {
+    log_step "Creating changelog files for .csproj projects..."
+
+    if [ -f "scripts/create-changelog-files.sh" ]; then
+        log_info "Using external changelog creation script..."
+        if bash scripts/create-changelog-files.sh; then
+            log_success "Changelog files creation completed"
+            return 0
+        else
+            log_error "Changelog files creation failed"
+            return 1
         fi
+    else
+        log_warning "create-changelog-files.sh not found, skipping changelog creation"
+        return 0
+    fi
+}
 
-    done <<<"$csproj_files"
-
+# Function to display final summary
+display_summary() {
     echo ""
-    echo "📊 Summary:"
-    echo "   ✅ Created: $created_count files"
-    echo "   ⏭️  Skipped: $skipped_count files (already existed)"
-    echo "   📁 Total projects processed: $(echo "$csproj_files" | wc -l | tr -d ' ')"
-fi
+    log_success "Beachball setup completed successfully! 🎉"
+    echo ""
+    log_info "Next steps:"
+    echo "1. Run 'beachball check' to see current status"
+    echo "2. Run 'beachball change' to create change files"
+    echo "3. Run 'beachball bump' to bump versions"
+    echo "4. Check BEACHBALL.md for detailed usage instructions"
+    echo ""
+    log_info "Available npm scripts:"
+    echo "npm run beachball:check - Check for pending changes"
+    echo "npm run beachball:change - Create change file"
+    echo "npm run beachball:bump - Bump versions"
+    echo "npm run release:patch - Patch release"
+    echo "npm run release:minor - Minor release"
+    echo "npm run release:major - Major release"
+    echo ""
+}
 
-echo ""
-echo "✅ Beachball setup complete!"
-echo ""
-echo "📋 Next steps:"
-echo "1. Run 'beachball check' to see current status"
-echo "2. Run 'beachball change' to create change files"
-echo "3. Run 'beachball bump' to bump versions"
-echo "4. Check BEACHBALL.md for detailed usage instructions"
-echo ""
-echo "🔧 Available npm scripts:"
-echo "  npm run beachball:check    - Check for pending changes"
-echo "  npm run beachball:change   - Create change file"
-echo "  npm run beachball:bump     - Bump versions"
-echo "  npm run release:patch      - Patch release"
-echo "  npm run release:minor      - Minor release"
-echo "  npm run release:major      - Major release"
+# Main execution function
+main() {
+    echo "🚀 $SCRIPT_NAME v$SCRIPT_VERSION - Setting up Beachball for Flyingdarts..."
+    echo ""
+
+    # Validate requirements
+    validate_requirements
+
+    # Get target beachball version from local package.json FIRST
+    local target_beachball_version
+    if target_beachball_version=$(get_beachball_version_from_package_json); then
+        log_info "📦 Using beachball version from local package.json: '$target_beachball_version'"
+    else
+        log_info "📦 No beachball version found in local package.json - will install latest version"
+        target_beachball_version="latest"
+    fi
+
+    # Handle local installation
+    echo ""
+    log_step "Checking local beachball installation..."
+    local current_local_version
+    if current_local_version=$(check_local_beachball_installation); then
+        if compare_versions "$current_local_version" "$target_beachball_version"; then
+            log_success "Local beachball is already up to date (version: '$current_local_version')"
+        else
+            if prompt_for_upgrade "Local" "$current_local_version" "$target_beachball_version"; then
+                install_local_beachball "$target_beachball_version"
+            else
+                log_info "Skipping local beachball upgrade"
+            fi
+        fi
+    else
+        log_info "Installing local beachball (version: '$target_beachball_version')..."
+        install_local_beachball "$target_beachball_version"
+    fi
+
+    # Handle global installation
+    log_step "Checking global beachball installation..."
+    local current_global_version
+    if current_global_version=$(check_global_beachball_installation); then
+        if compare_versions "$current_global_version" "$target_beachball_version"; then
+            log_success "Global beachball is already up to date (version: '$current_global_version')"
+        else
+            if prompt_for_upgrade "Global" "$current_global_version" "$target_beachball_version"; then
+                install_global_beachball "$target_beachball_version"
+            else
+                log_info "Skipping global beachball upgrade"
+            fi
+        fi
+    else
+        log_info "Installing global beachball (version: '$target_beachball_version')..."
+        install_global_beachball "$target_beachball_version"
+    fi
+
+    # Create changelog files
+    create_changelog_files
+
+    # Display summary
+    display_summary
+}
+
+# Run main function
+main "$@"

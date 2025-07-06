@@ -65,7 +65,7 @@ remove_changelog_files() {
     local changelog_count=0
 
     # Find and remove all CHANGELOG.json and CHANGELOG.md files (excluding node_modules)
-    find . \( -name "CHANGELOG.json" -o -name "CHANGELOG.md" \) -type f -not -path "./node_modules/*" 2>/dev/null | while IFS= read -r file; do
+    find . \( -name "CHANGELOG.json" -o -name "CHANGELOG.md" -o -name "changelog.md" \) -type f -not -path "./node_modules/*" 2>/dev/null | while IFS= read -r file; do
         if [[ -f "$file" ]]; then
             rm "$file"
             changelog_count=$((changelog_count + 1))

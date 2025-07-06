@@ -1,0 +1,11 @@
+{
+  "name": "Flyingdarts.Backend.Games.X01.Queue",
+  "version": "0.1.0",
+  "changes": [
+    {
+      "type": "added",
+      "description": "Initial changelog setup",
+      "version": "0.1.0"
+    }
+  ]
+}

@@ -1,7 +1,0 @@
-# Backend Changelog
-
-## [Unreleased]
-
-### Added
-- Initial changelog setup
-
