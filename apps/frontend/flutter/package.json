@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.frontend.flutter",
-  "version": "1.0.1",
+  "version": "0.0.1",
   "private": false,
   "scripts": {
     "build:dev": "flutter build",

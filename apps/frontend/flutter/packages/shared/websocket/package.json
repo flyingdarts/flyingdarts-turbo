@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.frontend.flutter.shared.websocket",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "A new Flutter package project.",
   "private": false,
   "dependencies": {

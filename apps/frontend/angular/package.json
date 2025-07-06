@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.frontend.angular",
-  "version": "1.0.5-beta.135",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

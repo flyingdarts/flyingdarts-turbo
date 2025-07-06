@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.backend.auth",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "build:dev": "dotnet build -c Debug --no-dependencies",
