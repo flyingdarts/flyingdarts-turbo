@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Amazon.DynamoDBv2.DocumentModel;
+using Flyingdarts.Backend.User.Profile.Api.Response;
+
+namespace Flyingdarts.Backend.User.Profile.Api.Requests.Get;
 
 public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, APIGatewayProxyResponse>
 {
@@ -15,8 +18,8 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, A
     {
         try
         {
-            var queryItems = await _dbContext.FromQueryAsync<User>(QueryConfig(request.AuthProviderUserId), _applicationOptions.ToOperationConfig())
-    .GetRemainingAsync(cancellationToken);
+            var queryItems = await _dbContext.FromQueryAsync<Persistence.User>(QueryConfig(request.AuthProviderUserId), _applicationOptions.ToOperationConfig())
+                .GetRemainingAsync(cancellationToken);
 
             // Handle the query results
             if (queryItems != null && queryItems.Any())
@@ -36,10 +39,10 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, A
                         UserName = result.Profile.UserName,
                     }),
                     Headers = new Dictionary<string, string>() {
-                    { "Access-Control-Allow-Origin", "*" },
-                    { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
-                }
+                        { "Access-Control-Allow-Origin", "*" },
+                        { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
+                        { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+                    }
                 };
             }
 
@@ -47,10 +50,10 @@ public class GetUserProfileQueryHandler : IRequestHandler<GetUserProfileQuery, A
             {
                 StatusCode = 404,
                 Headers = new Dictionary<string, string>() {
-                { "Access-Control-Allow-Origin", "*" },
-                { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-                { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
-            }
+                    { "Access-Control-Allow-Origin", "*" },
+                    { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+                }
             };
         }
         catch(Exception ex)

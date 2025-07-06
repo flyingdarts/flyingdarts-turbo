@@ -1,3 +1,7 @@
+using Flyingdarts.Backend.Signalling.OnDefault.Models;
+
+namespace Flyingdarts.Backend.Signalling.OnDefault;
+
 public class InnerHandler
 {
     private readonly IMediator _mediator;

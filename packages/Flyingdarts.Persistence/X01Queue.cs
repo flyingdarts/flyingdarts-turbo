@@ -1,4 +1,4 @@
-﻿using Flyingdarts.Persistence;
+﻿namespace Flyingdarts.Persistence;
 
 public class X01Queue : IGameQueue<X01Queue>, IPrimaryKeyItem, ISortKeyItem
 {

@@ -1,13 +1,8 @@
-﻿using Amazon.Lambda.APIGatewayEvents;
-using Amazon.Lambda.Core;
-using Amazon.Lambda.RuntimeSupport;
-using Amazon.Lambda.Serialization.SystemTextJson;
-using Authress.SDK;
-using Authress.SDK.Client;
-
-// Import statements are organized and simplified
+﻿// Import statements are organized and simplified
 
 // Create a serializer for JSON serialization and deserialization
+
+
 var serializer = new DefaultLambdaJsonSerializer(x => x.PropertyNameCaseInsensitive = true);
 
 // Define the Lambda function handler
@@ -19,19 +14,22 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
         {
             return apiGatewayEvent.Headers["Authorization"];
         }
-        return apiGatewayEvent.QueryStringParameters["token"];           
+        return apiGatewayEvent.QueryStringParameters["token"];
     }
 
     async Task<string> ValidateToken(string token)
     {
-        var authressSettings = new AuthressSettings { ApiBasePath = Environment.GetEnvironmentVariable("AuthressApiBasePath") };
+        var authressSettings = new AuthressSettings
+        {
+            ApiBasePath = Environment.GetEnvironmentVariable("AuthressApiBasePath")
+        };
         var tokenProvider = new ManualTokenProvider();
         tokenProvider.SetToken(token);
         var authressClient = new AuthressClient(tokenProvider, authressSettings);
         var authressIdentity = await authressClient.VerifyToken(token);
         return authressIdentity.UserId;
     }
-    
+
     try
     {
         var userId = await ValidateToken(ExtractToken());
@@ -39,7 +37,7 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
 
         return new APIGatewayCustomAuthorizerResponse
         {
-            PrincipalID =  userId,
+            PrincipalID = userId,
             PolicyDocument = new APIGatewayCustomAuthorizerPolicy
             {
                 Statement = new List<APIGatewayCustomAuthorizerPolicy.IAMPolicyStatement>
@@ -81,6 +79,4 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
 };
 
 // Create and run the Lambda function (kept as per your original structure)
-await LambdaBootstrapBuilder.Create(handler, serializer)
-    .Build()
-    .RunAsync();
+await LambdaBootstrapBuilder.Create(handler, serializer).Build().RunAsync();

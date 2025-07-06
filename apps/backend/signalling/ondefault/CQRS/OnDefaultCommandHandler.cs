@@ -1,11 +1,17 @@
-﻿public class OnDefaultCommandHandler : IRequestHandler<OnDefaultCommand, APIGatewayProxyResponse>
+﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.Model;
+using Flyingdarts.Backend.Signalling.OnDefault.Models;
+
+namespace Flyingdarts.Backend.Signalling.OnDefault.CQRS;
+
+public class OnDefaultCommandHandler : IRequestHandler<OnDefaultCommand, APIGatewayProxyResponse>
 {
     private readonly IAmazonDynamoDB _dynamoDb;
     private readonly string _tableName;
     public OnDefaultCommandHandler(IAmazonDynamoDB dynamoDb)
     {
         _dynamoDb = dynamoDb;
-        _tableName = System.Environment.GetEnvironmentVariable("TableName");
+        _tableName = Environment.GetEnvironmentVariable("TableName");
     }
     public async Task<APIGatewayProxyResponse> Handle(OnDefaultCommand request, CancellationToken cancellationToken)
     {

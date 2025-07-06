@@ -2,9 +2,12 @@ using System.Text.Json;
 
 namespace Flyingdarts.Persistence;
 
-public class CachingService<T> : ICachingService<T> where T : IGameState<T>
+public class CachingService<T> : ICachingService<T>
+    where T : IGameState<T>
 {
     private IDynamoDBContext DbContext;
+
+    public CachingService() { }
 
     public CachingService(IDynamoDBContext dbContext)
     {
@@ -15,14 +18,14 @@ public class CachingService<T> : ICachingService<T> where T : IGameState<T>
 
     public async Task Load(string gameId, CancellationToken cancellationToken)
     {
-        var results = await DbContext.FromQueryAsync<T>(Query(gameId), OperationConfig)
+        var results = await DbContext
+            .FromQueryAsync<T>(Query(gameId), OperationConfig)
             .GetRemainingAsync(cancellationToken);
 
         Console.WriteLine(JsonSerializer.Serialize(results));
 
         if (results.Any())
         {
-
             State = results.Single();
         }
     }
@@ -48,7 +51,8 @@ public class CachingService<T> : ICachingService<T> where T : IGameState<T>
         get
         {
             var stateType = typeof(T);
-            var tableName = $"Flyingdarts-{stateType}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}";
+            var tableName =
+                $"Flyingdarts-{stateType}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}";
             return new DynamoDBOperationConfig { OverrideTableName = tableName };
         }
     }

@@ -1,4 +1,6 @@
-﻿public class SendVerifyUserEmailCommandValidator : AbstractValidator<SendVerifyUserEmailCommand>
+﻿namespace Flyingdarts.Backend.User.Profile.VerifyEmail.CQRS;
+
+public class SendVerifyUserEmailCommandValidator : AbstractValidator<SendVerifyUserEmailCommand>
 {
     public SendVerifyUserEmailCommandValidator()
     {

@@ -16,6 +16,7 @@
         public DateTime CreatedAt { get; set; }
         public string AuthProviderUserId { get; set; }
         public UserProfile Profile { get; set; }
+        public string MeetingIdentifier { get; set; }
 
         public User()
         {

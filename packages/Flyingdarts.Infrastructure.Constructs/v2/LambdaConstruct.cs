@@ -1,3 +1,5 @@
+namespace Flyingdarts.Infrastructure.Constructs.v2;
+
 public class LambdaConstruct : Construct
 {
     public Function SignallingOnConnect { get; }
@@ -23,7 +25,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-Signalling-OnConnect-{environment}",
             Handler = "Flyingdarts.Backend.Signalling.OnConnect",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             Environment = new Dictionary<string, string>
@@ -38,7 +40,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-Signalling-OnDefault-{environment}",
             Handler = "Flyingdarts.Backend.Signalling.OnDefault",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             Environment = new Dictionary<string, string>
@@ -53,7 +55,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-Signalling-OnDisconnect-{environment}",
             Handler = "Flyingdarts.Backend.Signalling.OnDisconnect",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             Environment = new Dictionary<string, string>
@@ -72,7 +74,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-Games-X01-Api-{environment}",
             Handler = "Flyingdarts.Backend.Games.X01.Api",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             Environment = new Dictionary<string, string>
@@ -98,7 +100,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-Games-X01-Queue-{environment}",
             Handler = "Flyingdarts.Backend.Games.X01.Queue",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             Environment = new Dictionary<string, string>
@@ -106,7 +108,7 @@ public class LambdaConstruct : Construct
                 { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
             },
             InitialPolicy = new[]
-           {
+            {
                 new PolicyStatement(new PolicyStatementProps
                 {
                     Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
@@ -131,7 +133,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-Stats-Api-{environment}",
             Handler = "Flyingdarts.Backend.Stats.Api",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             Environment = new Dictionary<string, string>
@@ -159,7 +161,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-User-Profile-Api-{environment}",
             Handler = "Flyingdarts.Backend.User.Profile.Api",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             Environment = new Dictionary<string, string>
@@ -177,7 +179,7 @@ public class LambdaConstruct : Construct
                         "*"
                     }
                 }),
-                 new PolicyStatement(new PolicyStatementProps
+                new PolicyStatement(new PolicyStatementProps
                 {
                     Actions = new[]
                     {
@@ -197,7 +199,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-User-Profile-VerifyEmail-{environment}",
             Handler = "Flyingdarts.Backend.User.Profile.VerifyEmail",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             Environment = new Dictionary<string, string>
@@ -227,7 +229,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-Tournaments-Api-{environment}",
             Handler = "Flyingdarts.Backend.Tournaments.Api",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             InitialPolicy = new[]
@@ -251,7 +253,7 @@ public class LambdaConstruct : Construct
             FunctionName = $"Flyingdarts-Backend-Auth-{environment}",
             Handler = "Flyingdarts.Backend.Auth",
             Code = Code.FromAsset("lambda.zip"),
-            Runtime = new Runtime("dotnet6"),
+            Runtime = new Runtime("dotnet8"),
             Timeout = Duration.Seconds(30),
             MemorySize = 256,
             InitialPolicy = new[]

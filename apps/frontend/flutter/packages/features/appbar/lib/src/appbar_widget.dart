@@ -10,7 +10,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({
     Key? key,
   }) : super(key: key);
-
+  // Some random comment
   @override
   Widget build(BuildContext context) {
     var cubit = Provider.of<NavigationCubit>(context, listen: false);

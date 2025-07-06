@@ -5,8 +5,8 @@ public class DynamoDbService : IDynamoDbService
     private IOptions<ApplicationOptions> ApplicationOptions;
     public DynamoDbService(IDynamoDBContext dbContext, IOptions<ApplicationOptions> applicationOptions)
     {
-        this.DbContext = dbContext;
-        this.ApplicationOptions = applicationOptions;
+        DbContext = dbContext;
+        ApplicationOptions = applicationOptions;
     }
 
     public async Task<List<Game>> ReadGameAsync(long gameId, CancellationToken cancellationToken)
@@ -50,14 +50,16 @@ public class DynamoDbService : IDynamoDbService
         }
         return users;
     }
+
     public async Task<User> ReadUserAsync(string userId, CancellationToken cancellationToken)
     {
-        Console.WriteLine($"User id: {userId}");
-        var results = await DbContext.FromQueryAsync<User>(QueryUserConfig(userId), ApplicationOptions.Value.ToOperationConfig())
-                                     .GetRemainingAsync(cancellationToken);
+        var results = await DbContext
+            .FromQueryAsync<User>(QueryUserConfigByUserId(userId), ApplicationOptions.Value.ToOperationConfig())
+            .GetRemainingAsync(cancellationToken);
 
         return results.First();
     }
+    
     public async Task WriteUserAsync(User user, CancellationToken cancellationToken)
     {
         var userWrite = DbContext.CreateBatchWrite<User>(ApplicationOptions.Value.ToOperationConfig());
@@ -91,10 +93,17 @@ public class DynamoDbService : IDynamoDbService
 
         await write.ExecuteAsync(cancellationToken);
     }
-    private static QueryOperationConfig QueryUserConfig(string userId)
+    private static QueryOperationConfig QueryUserConfigByUserId(string userId)
     {
         var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.User);
         queryFilter.AddCondition("SK", QueryOperator.BeginsWith, userId);
+        return new QueryOperationConfig { Filter = queryFilter };
+    }
+    
+    private static QueryOperationConfig QueryUserConfigByAuthProviderUserId(string authProviderUserId)
+    {
+        var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.User);
+        queryFilter.AddCondition("AuthProviderUserId", QueryOperator.Equal, authProviderUserId);
         return new QueryOperationConfig { Filter = queryFilter };
     }
 

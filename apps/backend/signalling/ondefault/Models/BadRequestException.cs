@@ -1,3 +1,5 @@
+namespace Flyingdarts.Backend.Signalling.OnDefault.Models;
+
 public class BadRequestException : Exception
 {
     public static HttpStatusCode StatusCode => HttpStatusCode.BadRequest;

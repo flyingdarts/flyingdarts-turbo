@@ -1,3 +1,7 @@
+using Flyingdarts.Backend.User.Profile.Api.Requests.Create;
+
+namespace Flyingdarts.Backend.User.Profile.Api;
+
 public static class ServiceFactory
 {
     public static ServiceProvider GetServiceProvider()

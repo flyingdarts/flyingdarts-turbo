@@ -1,5 +1,8 @@
 using System.Threading.Tasks;
-using Amazon.DynamoDBv2;
+using Flyingdarts.Backend.Signalling.OnConnect.CQRS;
+using Flyingdarts.Backend.Signalling.OnConnect.Models;
+
+namespace Flyingdarts.Backend.Signalling.OnConnect;
 
 public class InnerHandler
 {

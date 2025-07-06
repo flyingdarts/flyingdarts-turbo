@@ -16,3 +16,6 @@ global using Flyingdarts.Backend.Games.X01.Queue.CQRS;
 global using Flyingdarts.Persistence;
 global using MediatR;
 global using Microsoft.Extensions.DependencyInjection;
+global using Amazon.DynamoDBv2.DataModel;
+global using Flyingdarts.Metadata.Services;
+global using Microsoft.Extensions.Configuration;

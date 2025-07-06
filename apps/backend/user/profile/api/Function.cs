@@ -1,4 +1,8 @@
 using System;
+using Flyingdarts.Backend.User.Profile.Api;
+using Flyingdarts.Backend.User.Profile.Api.Requests.Create;
+using Flyingdarts.Backend.User.Profile.Api.Requests.Get;
+using Flyingdarts.Backend.User.Profile.Api.Requests.Update;
 
 var services = ServiceFactory.GetServiceProvider();
 var innerHandler = new InnerHandler(services);

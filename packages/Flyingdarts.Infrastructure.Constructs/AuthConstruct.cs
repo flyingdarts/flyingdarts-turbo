@@ -1,4 +1,6 @@
 ﻿
+namespace Flyingdarts.Infrastructure.Constructs;
+
 public class AuthConstruct : Construct
 {
     public OpenIdConnectProvider OIDCProvider { get; }

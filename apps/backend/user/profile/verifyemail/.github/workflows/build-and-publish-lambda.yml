@@ -33,7 +33,7 @@ jobs:
           REPO_NAME_WITH_DASHES=$(echo $REPO_NAME | sed 's/\./\-/g')
           REPO_NAME_WITH_DASHES=$(echo $REPO_NAME_WITH_DASHES | sed 's/flyingdarts\///')
           echo "REPO_NAME_WITHOUT_DASHES=$(echo $REPO_NAME | sed 's/flyingdarts\///')" >> $GITHUB_ENV
-          dotnet lambda deploy-function --function-name $REPO_NAME_WITH_DASHES -frun dotnet6 -f net6.0 --region ${{ secrets.AWS_REGION }}
+          dotnet lambda deploy-function --function-name $REPO_NAME_WITH_DASHES -frun dotnet8 -f net6.0 --region ${{ secrets.AWS_REGION }}
       - name: Get repo name
         run: |
           REPO_NAME=$GITHUB_REPOSITORY

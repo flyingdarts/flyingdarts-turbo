@@ -1,5 +1,7 @@
-﻿using Flyingdarts.Persistence;
-using System;
+﻿using System;
+using Flyingdarts.Backend.User.Profile.Api.Response;
+
+namespace Flyingdarts.Backend.User.Profile.Api.Requests.Create;
 
 public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfileCommand, APIGatewayProxyResponse>
 {
@@ -16,9 +18,9 @@ public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfile
         try
         {
             var userProfile = UserProfile.Create(request.UserName, request.Email, request.Country);
-            var user = User.Create(request.AuthProviderUserId, request.ConnectionId, userProfile);
+            var user = Persistence.User.Create(request.AuthProviderUserId, request.ConnectionId, userProfile);
 
-            var userWrite = _dbContext.CreateBatchWrite<User>(_applicationOptions.Value.ToOperationConfig());
+            var userWrite = _dbContext.CreateBatchWrite<Persistence.User>(_applicationOptions.Value.ToOperationConfig());
             userWrite.AddPutItem(user);
 
             await userWrite.ExecuteAsync(cancellationToken);

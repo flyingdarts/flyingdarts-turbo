@@ -1,3 +1,6 @@
+
+namespace Flyingdarts.Infrastructure.Constructs.v2;
+
 public class DynamoDbConstruct : Construct
 {
     public Table SignallingTable { get; }

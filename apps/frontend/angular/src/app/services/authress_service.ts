@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { LoginClient } from "@authress/login";
+import { LoginClient, Settings } from "@authress/login";
 import { environment } from "src/environments/environment";
 
 @Injectable({providedIn: 'root'})
@@ -7,14 +7,17 @@ export class AuthressService {
     private loginClient: LoginClient;
 
     constructor() {
-        this.loginClient = new LoginClient({
-            authressLoginHostUrl: environment.authLoginUrl, 
+        var loginClientSettings: Settings = {
             applicationId: environment.authApplicationId,
-          });
+            authressApiUrl:environment.authLoginUrl,
+          }
+          this.loginClient = new LoginClient(loginClientSettings);
+      
     }
 
-    public authenticate(): Promise<boolean> {
-        return this.loginClient.authenticate({redirectUrl: window.location.href})
+    public async authenticate(): Promise<boolean> {
+        const response = await this.loginClient.authenticate({redirectUrl: window.location.href});
+        return response !== null;
     }
     
     public async getToken(): Promise<string | null> {

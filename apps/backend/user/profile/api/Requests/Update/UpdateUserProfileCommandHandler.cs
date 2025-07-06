@@ -1,6 +1,9 @@
-﻿using Amazon.DynamoDBv2.DocumentModel;
-using System;
+﻿using System;
 using System.Linq;
+using Amazon.DynamoDBv2.DocumentModel;
+using Flyingdarts.Backend.User.Profile.Api.Response;
+
+namespace Flyingdarts.Backend.User.Profile.Api.Requests.Update;
 
 public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfileCommand, APIGatewayProxyResponse>
 {
@@ -14,7 +17,7 @@ public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfile
     }
     public async Task<APIGatewayProxyResponse> Handle(UpdateUserProfileCommand request, CancellationToken cancellationToken)
     {
-       try
+        try
         {
             var user = await GetUserAsync(request.UserId, cancellationToken);
 
@@ -23,7 +26,7 @@ public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfile
             user.Profile.Email = request.Email;
             user.Profile.UserName = request.UserName;
 
-            var userWrite = _dbContext.CreateBatchWrite<User>(_options.Value.ToOperationConfig());
+            var userWrite = _dbContext.CreateBatchWrite<Persistence.User>(_options.Value.ToOperationConfig());
 
             userWrite.AddPutItem(user);
 
@@ -60,9 +63,9 @@ public class UpdateUserProfileCommandHandler : IRequestHandler<UpdateUserProfile
         }
     }
 
-    private async Task<User> GetUserAsync(string userId, CancellationToken cancellationToken) 
+    private async Task<Persistence.User> GetUserAsync(string userId, CancellationToken cancellationToken) 
     {
-        var results = await _dbContext.FromQueryAsync<User>(QueryConfig(userId), _options.Value.ToOperationConfig()).GetRemainingAsync(cancellationToken);
+        var results = await _dbContext.FromQueryAsync<Persistence.User>(QueryConfig(userId), _options.Value.ToOperationConfig()).GetRemainingAsync(cancellationToken);
 
         return results.Single();
     }

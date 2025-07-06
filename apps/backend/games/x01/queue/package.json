@@ -1,14 +1,14 @@
 {
-    "name": "flyingdarts.backend.games.x01.queue",
-    "version": "1.0.0",
-    "private": true,
-    "scripts": {
-      "build:dev": "dotnet build -c Debug --no-dependencies",
-      "build:prod": "dotnet build -c Release --no-dependencies",
-      "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Queue-Development  -frun dotnet6 -f net6.0 --region eu-west-1",
-      "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Queue-Production  -frun dotnet6 -f net6.0 --region eu-west-1"
-    },
-    "dependencies": {
-      "flyingdarts.persistence": "*"
-    }
+  "name": "flyingdarts.backend.games.x01.queue",
+  "version": "1.0.1",
+  "private": false,
+  "scripts": {
+    "build:dev": "dotnet build -c Debug --no-dependencies",
+    "build:prod": "dotnet build -c Release --no-dependencies",
+    "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Queue-Development  -frun dotnet8 -f net6.0 --region eu-west-1",
+    "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Queue-Production  -frun dotnet8 -f net6.0 --region eu-west-1"
+  },
+  "dependencies": {
+    "flyingdarts.persistence": "*"
   }
+}

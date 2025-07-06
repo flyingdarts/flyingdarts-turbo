@@ -1,3 +1,4 @@
+
 namespace Flyingdarts.Infrastructure.Constructs.v2;
 
 public class FlyingdartsStack : Stack
@@ -56,9 +57,9 @@ public class FlyingdartsStack : Stack
             ParameterName = $"/{environment}/X01State/DynamoDbTableName"
         });
         
-        Aspects.Of(this).Add(new Tag("Environment", environment));
-        Aspects.Of(this).Add(new Tag("App", "FD-V1"));
-        Aspects.Of(this).Add(new AddEnvironmentVariableToLambdaAspect("EnvironmentName", environment));
-        Aspects.Of(this).Add(new AddEnvironmentVariableToLambdaAspect("LAMBDA_NET_SERIALIZER_DEBUG", "true"));
+        AmazonAspect.Of(this).Add(new Tag("Environment", environment));
+        AmazonAspect.Of(this).Add(new Tag("App", "FD-V1"));
+        AmazonAspect.Of(this).Add(new AddEnvironmentVariableToLambdaAspect("EnvironmentName", environment));
+        AmazonAspect.Of(this).Add(new AddEnvironmentVariableToLambdaAspect("LAMBDA_NET_SERIALIZER_DEBUG", "true"));
     }
 }

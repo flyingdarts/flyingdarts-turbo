@@ -1,4 +1,6 @@
-﻿public class SendVerifyUserEmailCommand : IRequest
+﻿namespace Flyingdarts.Backend.User.Profile.VerifyEmail.CQRS;
+
+public class SendVerifyUserEmailCommand : IRequest
 {
     public string Email { get; set; }
     public string Subject { get; set; }

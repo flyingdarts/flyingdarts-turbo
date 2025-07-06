@@ -1,4 +1,6 @@
-﻿public class SocketMessage<TMessage>
+﻿namespace Flyingdarts.Backend.Signalling.OnDefault.Models;
+
+public class SocketMessage<TMessage>
 {
     [JsonPropertyName("action")]
     public string Action { get; set; } = null;

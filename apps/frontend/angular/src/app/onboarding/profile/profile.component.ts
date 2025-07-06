@@ -6,7 +6,7 @@ import { UserProfileStateService } from 'src/app/services/user-profile-state.ser
 import { AppStore } from 'src/app/app.store';
 import { isNullOrUndefined } from 'src/app/app.component';
 import { Observable } from 'rxjs';
-import { LoginClient } from '@authress/login';
+import { LoginClient, Settings } from '@authress/login';
 
 @Component({
   selector: 'app-profile',
@@ -45,12 +45,18 @@ export class ProfileComponent implements OnInit {
       country: new FormControl('', Validators.required),
       email: new FormControl('', [Validators.required, Validators.email])
     })
+
+    var loginClientSettings: Settings = {
+      applicationId: "app_2YKyhM6M31XVtuCeuDsSJ2",
+      authressApiUrl: "https://authress.flyingdarts.net/",
+    }
+    this.loginClient = new LoginClient(loginClientSettings);
   }
   ngOnInit(): void {
     this.appStore.setLoading(false);
   }
 
-  private loginClient: LoginClient = new LoginClient({authressLoginHostUrl: "https://authress.flyingdarts.net/", applicationId: "app_2YKyhM6M31XVtuCeuDsSJ2"});
+  private loginClient: LoginClient;
 
   async submitForm() {
     if (this.profileForm.valid) {

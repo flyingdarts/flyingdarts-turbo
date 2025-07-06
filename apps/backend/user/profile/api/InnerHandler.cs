@@ -1,3 +1,5 @@
+namespace Flyingdarts.Backend.User.Profile.Api;
+
 public class InnerHandler
 {
     private readonly IMediator _mediator;

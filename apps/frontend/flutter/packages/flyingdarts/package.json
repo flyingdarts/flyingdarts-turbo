@@ -1,0 +1,12 @@
+{
+  "name": "flyingdarts.frontend.flutter.core",
+  "version": "0.0.2",
+  "description": "A flutter package used to configure dependencies and modules",
+  "private": false,
+  "dependencies": {
+    "flyingdarts.frontend.flutter.shared.websocket": "*",
+    "flyingdarts.frontend.flutter.shared.configuration": "*",
+    "flyingdarts.frontend.flutter.shared.configuration-preferences": "*",
+    "flyingdarts.frontend.flutter.shared.configuration-secrets": "*"
+  }
+}

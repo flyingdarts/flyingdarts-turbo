@@ -1,6 +1,6 @@
-using Amazon.Lambda.RuntimeSupport;
-using Amazon.Lambda.Serialization.SystemTextJson;
-using Microsoft.Extensions.DependencyInjection;
+using Flyingdarts.Backend.Signalling.OnDisconnect;
+using Flyingdarts.Backend.Signalling.OnDisconnect.CQRS;
+using Flyingdarts.Backend.Signalling.OnDisconnect.Models;
 
 var services = ServiceFactory.GetServiceProvider();
 var innerHandler = new InnerHandler(services.GetRequiredService<IMediator>());

@@ -1,4 +1,6 @@
-﻿public class UpdateUserProfileCommand : IRequest<APIGatewayProxyResponse>
+﻿namespace Flyingdarts.Backend.User.Profile.Api.Requests.Update;
+
+public class UpdateUserProfileCommand : IRequest<APIGatewayProxyResponse>
 {
     public string UserId { get;set;}
     public string UserName { get; set; }

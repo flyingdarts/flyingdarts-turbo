@@ -1,5 +1,5 @@
 
-using Flyingdarts.Persistence;
+namespace Flyingdarts.Persistence;
 
 public class X01State : IGameState<X01State>, IPrimaryKeyItem, ISortKeyItem
 {

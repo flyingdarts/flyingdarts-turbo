@@ -1,4 +1,4 @@
-﻿using Flyingdarts.Persistence;
+﻿namespace Flyingdarts.Persistence;
 
 public interface IDynamoDbService
 {

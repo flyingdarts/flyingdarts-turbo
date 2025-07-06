@@ -1,3 +1,7 @@
+
+
+namespace Flyingdarts.Infrastructure.Constructs.v2;
+
 public class ApiGatewayConstruct : Construct
 {
     public RestApi UsersApi { get; }
@@ -125,7 +129,7 @@ public class ApiGatewayConstruct : Construct
             Authorizer = authorizersConstruct.StatsAuthorizer
         });
 
-            #endregion
+        #endregion
         #region Tournaments
         
         TournamentsApi = new RestApi(this, $"Flyingdarts-Backend-Tournaments-RestApi-{environment}", new RestApiProps
@@ -165,26 +169,26 @@ public class ApiGatewayConstruct : Construct
             } 
         });
         var tournaments = TournamentsApi.Root.AddResource("tournaments");
-            tournaments.AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
+        tournaments.AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
             AuthorizationType = AuthorizationType.CUSTOM,
             Authorizer = authorizersConstruct.TournamentsAuthorizer
         });
-            tournaments.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
+        tournaments.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
             AuthorizationType = AuthorizationType.CUSTOM,
             Authorizer = authorizersConstruct.TournamentsAuthorizer
         });
 
         var particpants = tournaments.AddResource("participants");
-            particpants.AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
+        particpants.AddMethod("POST", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
             AuthorizationType = AuthorizationType.CUSTOM,
             Authorizer = authorizersConstruct.TournamentsAuthorizer
         });
 
         var matches = tournaments.AddResource("matches");
-            matches.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
+        matches.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.TournamentsApi, new LambdaIntegrationOptions { Proxy = true }), new MethodOptions
         {
             AuthorizationType = AuthorizationType.CUSTOM,
             Authorizer = authorizersConstruct.TournamentsAuthorizer
@@ -253,7 +257,7 @@ public class ApiGatewayConstruct : Construct
             ReturnResponse = true
         });
 
-         // send score to this endpoint
+        // send score to this endpoint
         WebSocketApi.AddRoute("games/x01/score", new WebSocketRouteOptions
         {
             Integration = new WebSocketLambdaIntegration($"Games-Score-Integration-{environment}", lambdaConstruct.GamesX01Api),

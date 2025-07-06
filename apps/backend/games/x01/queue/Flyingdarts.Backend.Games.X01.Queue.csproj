@@ -2,9 +2,10 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
         <RootNamespace>Flyingdarts.Backend.Games.X01.Queue</RootNamespace>
     </PropertyGroup>
 
@@ -24,9 +25,9 @@
         <PackageReference Include="AWSSDK.SimpleEmail" Version="3.7.300.5" />
     </ItemGroup>
     <ItemGroup>
+        <ProjectReference Include="..\..\..\..\..\packages\Flyingdarts.Connection.Services\Flyingdarts.Connection.Services.csproj" />
+        <ProjectReference Include="..\..\..\..\..\packages\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services.csproj" />
         <ProjectReference Include="..\..\..\..\..\packages\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
-        <ProjectReference Include="..\services\connection\Flyingdarts.Backend.Games.X01.Services.Connection.csproj" />
-        <ProjectReference Include="..\services\metadata\Flyingdarts.Backend.Games.X01.Services.Metadata.csproj" />
     </ItemGroup>
 
 </Project>

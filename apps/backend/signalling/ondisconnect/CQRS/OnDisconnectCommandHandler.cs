@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
+﻿namespace Flyingdarts.Backend.Signalling.OnDisconnect.CQRS;
 
 public class OnDisconnectCommandHandler : IRequestHandler<OnDisconnectCommand, APIGatewayProxyResponse>
 {
@@ -11,7 +7,7 @@ public class OnDisconnectCommandHandler : IRequestHandler<OnDisconnectCommand, A
     public OnDisconnectCommandHandler(IAmazonDynamoDB dynamoDb)
     {
         _dynamoDb = dynamoDb;
-        _tableName = System.Environment.GetEnvironmentVariable("TableName");
+        _tableName = Environment.GetEnvironmentVariable("TableName");
     }
     public async Task<APIGatewayProxyResponse> Handle(OnDisconnectCommand request, CancellationToken cancellationToken)
     {

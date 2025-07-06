@@ -1,40 +1,32 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "tasks": {
+    "build": {
+      "cache": true
+    },
     "build:dev": {
-      "outputs": [
-        "bin/Debug/net6.0/**",
-        "obj/Debug/net6.0/**"
-      ],
+      "dependsOn": ["build"],
+      "outputs": ["bin/Debug/*/**", "obj/Debug/*/**"],
       "cache": true
     },
     "build:prod": {
-      "outputs": [
-        "bin/Release/net6.0/**",
-        "obj/Release/net6.0/**"
-      ],
+      "dependsOn": ["build"],
+      "outputs": ["bin/Release/*/**", "obj/Release/*/**"],
       "cache": false
     },
     "deploy:dev": {
-      "dependsOn": [
-        "build:dev"
-      ],
+      "dependsOn": ["build:dev"],
       "cache": false
     },
     "deploy:prod": {
-      "dependsOn": [
-        "build:prod"
-      ],
+      "dependsOn": ["build:prod"],
       "cache": false
     },
     "serve": {
-      "outputMode": "full",
       "persistent": true
     },
     "dockerize": {
-      "dependsOn": [
-        "build:prod"
-      ],
+      "dependsOn": ["build:prod"],
       "cache": false
     }
   }

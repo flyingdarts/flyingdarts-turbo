@@ -1,4 +1,6 @@
-﻿public class GetUserProfileQueryValidator : AbstractValidator<GetUserProfileQuery>
+﻿namespace Flyingdarts.Backend.User.Profile.Api.Requests.Get;
+
+public class GetUserProfileQueryValidator : AbstractValidator<GetUserProfileQuery>
 {
     public GetUserProfileQueryValidator()
     {

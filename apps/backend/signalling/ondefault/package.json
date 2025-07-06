@@ -1,14 +1,14 @@
 {
-	"name": "flyingdarts.backend.signalling.ondefault",
-	"version": "1.0.0",
-	"private": true,
-	"scripts": {
-		"build:dev": "dotnet build -c Debug --no-dependencies",
-		"build:prod": "dotnet build -c Release --no-dependencies",
-		"deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnDefault-Development  -frun dotnet6 -f net6.0 --region eu-west-1",
-		"deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnDefault-Production  -frun dotnet6 -f net6.0 --region eu-west-1"
-	},
-	"dependencies": {
-		"flyingdarts.persistence": "*"
-	}
+  "name": "flyingdarts.backend.signalling.ondefault",
+  "version": "1.0.1",
+  "private": false,
+  "scripts": {
+    "build:dev": "dotnet build -c Debug --no-dependencies",
+    "build:prod": "dotnet build -c Release --no-dependencies",
+    "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnDefault-Development  -frun dotnet8 -f net6.0 --region eu-west-1",
+    "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnDefault-Production  -frun dotnet8 -f net6.0 --region eu-west-1"
+  },
+  "dependencies": {
+    "flyingdarts.persistence": "*"
+  }
 }

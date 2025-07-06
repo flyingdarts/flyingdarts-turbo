@@ -1,151 +1,142 @@
+using Flyingdarts.Backend.Games.X01.Queue.Models;
+using Flyingdarts.Metadata.Services.Services.X01;
+
 namespace Flyingdarts.Backend.Games.X01.Queue.CQRS;
-class Range
-{
-    public int Start { get; }
-    public int End { get; }
 
-    public Range(int start, int end)
-    {
-        Start = start;
-        End = end;
-    }
-
-    public bool IsInRange(int value)
-    {
-        return value >= Start && value <= End;
-    }
-}
 public class HandleX01QueueCommandHandler : IRequestHandler<HandleX01QueueCommand>
 {
-    private readonly CachingService<X01State> CachingService;
-    private readonly IAmazonApiGatewayManagementApi ApiGatewayClient;
-    private readonly IDynamoDbService DynamoDbService;
-    private readonly QueueService<X01Queue> QueueService;
-    public HandleX01QueueCommandHandler(CachingService<X01State> cachingService, IDynamoDbService dynamoDbService, IAmazonApiGatewayManagementApi apiGatewayClient, QueueService<X01Queue> queueService)
+    private readonly CachingService<X01State> _cachingService;
+    private readonly IAmazonApiGatewayManagementApi _apiGatewayClient;
+    private readonly IDynamoDbService _dynamoDbService;
+    private readonly QueueService<X01Queue> _queueService;
+    private readonly X01MetadataService _metadataService;
+
+    public HandleX01QueueCommandHandler(
+        CachingService<X01State> cachingService, 
+        IDynamoDbService dynamoDbService, 
+        IAmazonApiGatewayManagementApi apiGatewayClient, 
+        QueueService<X01Queue> queueService,
+        X01MetadataService metadataService)
     {
-        CachingService = cachingService;
-        ApiGatewayClient = apiGatewayClient;
-        DynamoDbService = dynamoDbService;
-        QueueService = queueService;    
+        _cachingService = cachingService;
+        _apiGatewayClient = apiGatewayClient;
+        _dynamoDbService = dynamoDbService;
+        _queueService = queueService;
+        _metadataService = metadataService;
     }
+
     public async Task Handle(HandleX01QueueCommand request, CancellationToken cancellationToken)
     {
-        // Look for match
-        var records = await QueueService.GetRecords(cancellationToken);
+        ArgumentNullException.ThrowIfNull(request);
 
+        // Look for match
+        var records = await _queueService.GetRecords(cancellationToken);
         var match = FindMatch(records, request.Owner.PlayerId);
 
-        // if match found
-        if (match != null)
+        // If match found, handle it
+        if (match is not null)
         {
             Console.WriteLine("Match found");
-            // get game settings
+            
             var settings = match.X01;
-            var playerIds = records.Select(x=>x.PlayerId).ToArray();
-            var users = await DynamoDbService.ReadUsersAsync(playerIds, cancellationToken);
+            var playerIds = records.Select(x => x.PlayerId).ToArray();
+            var users = await _dynamoDbService.ReadUsersAsync(playerIds, cancellationToken);
             var connectionIds = users.Select(x => x.ConnectionId).ToArray();
+            
             Console.WriteLine("Players " + string.Join(" ", playerIds));
             Console.WriteLine("ConnectionIds " + string.Join(" ", connectionIds));
+            
             // Creates game and game player objects
-            await InitializeGame(settings, playerIds, cancellationToken);
+            await InitializeGameAsync(settings, playerIds, cancellationToken);
 
             // Sends response to clients
-            await HandleResponseBack(connectionIds, cancellationToken);
+            await HandleResponseBackAsync(connectionIds, cancellationToken);
 
-            await QueueService.DeleteRecords(records, cancellationToken);
+            await _queueService.DeleteRecords(records, cancellationToken);
         }
     }
-    private X01Queue? FindMatch(List<X01Queue> records, string playerId)
+
+    private static X01Queue? FindMatch(List<X01Queue> records, string playerId)
     {
-        foreach (var record in records.Where(x=>x.PlayerId != playerId))
-        {
-            if (record.PlayerId != playerId)
-            {
-                return record;
-            }
-        }
-
-        return null;
+        return records.FirstOrDefault(x => x.PlayerId != playerId);
     }
-    private async Task HandleResponseBack(string[] connectionIds, CancellationToken cancellationToken)
+
+    private async Task HandleResponseBackAsync(string[] connectionIds, CancellationToken cancellationToken)
     {
         var message = new SocketMessage<HandleQueueResponse>
         {
             Action = "games/x01/queue",
             Message = new()
             {
-                GameId = CachingService.State.Game.GameId.ToString(),
+                GameId = _cachingService.State.Game.GameId.ToString(),
             },
         };
+
+        // Populate metadata as the final step
+        message.Metadata = (await _metadataService.GetMetadataAsync(_cachingService.State.Game.GameId.ToString(), cancellationToken)).ToDictionary();
 
         await NotifyRoomAsync(message, connectionIds, cancellationToken);
     }
 
-    private async Task InitializeGame(X01GameSettings settings, string[] playerIds, CancellationToken cancellationToken)
+    private async Task InitializeGameAsync(X01GameSettings settings, string[] playerIds, CancellationToken cancellationToken)
     {
-        // create game record
+        // Create game record
         var game = Game.Create(2, settings);
 
-        // update game to match state
+        // Update game to match state
         game.Status = GameStatus.Started;
-        game.LSI1 = $"{GameStatus.Started}#{game!.GameId}";
+        game.LSI1 = $"{GameStatus.Started}#{game.GameId}";
         game.SortKey = $"{game.GameId}#{GameStatus.Started}";
 
-        // write game record to database
-        await DynamoDbService.WriteGameAsync(game, cancellationToken);
+        // Write game record to database
+        await _dynamoDbService.WriteGameAsync(game, cancellationToken);
 
-        // initialize state in cache
-        CachingService.State = X01State.Create(game.GameId);
-        CachingService.AddGame(game);
-
-        await CachingService.Save(cancellationToken);
+        // Initialize state in cache
+        _cachingService.State = X01State.Create(game.GameId);
+        _cachingService.AddGame(game);
+        await _cachingService.Save(cancellationToken);
 
         // Create player records for the game
         foreach (var playerId in playerIds)
         {
-            // create game player
+            // Create game player
             var player = GamePlayer.Create(game.GameId, playerId);
 
-            // write game player to database
-            await DynamoDbService.WriteGamePlayerAsync(player, cancellationToken);
+            // Write game player to database
+            await _dynamoDbService.WriteGamePlayerAsync(player, cancellationToken);
 
-            // write game player to cache
-            CachingService.AddPlayer(player);
+            // Write game player to cache
+            _cachingService.AddPlayer(player);
 
-            // get user for game player
-            var user = await DynamoDbService.ReadUserAsync(player.PlayerId, cancellationToken);
+            // Get user for game player
+            var user = await _dynamoDbService.ReadUserAsync(player.PlayerId, cancellationToken);
 
-            // add user to cache
-            CachingService.AddUser(user);
+            // Add user to cache
+            _cachingService.AddUser(user);
         }
 
-        // persist changes to cache
-        await CachingService.Save(cancellationToken);
+        // Persist changes to cache
+        await _cachingService.Save(cancellationToken);
     }
 
-    public async Task NotifyRoomAsync(SocketMessage<HandleQueueResponse> request, string[] connectionIds, CancellationToken cancellationToken)
+    private async Task NotifyRoomAsync(SocketMessage<HandleQueueResponse> request, string[] connectionIds, CancellationToken cancellationToken)
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(request)));
 
         foreach (var connectionId in connectionIds)
         {
-            if (!string.IsNullOrEmpty(connectionId))
-            {
-                var postConnectionRequest = new PostToConnectionRequest
-                {
-                    ConnectionId = connectionId,
-                    Data = stream
-                };
+            if (string.IsNullOrEmpty(connectionId))
+                continue;
 
-                stream.Position = 0;
-                Console.WriteLine("Sending websocket message to: " + connectionId);
-                await ApiGatewayClient.PostToConnectionAsync(postConnectionRequest, cancellationToken);
-            }
+            var postConnectionRequest = new PostToConnectionRequest
+            {
+                ConnectionId = connectionId,
+                Data = stream
+            };
+
+            stream.Position = 0;
+            Console.WriteLine("Sending websocket message to: " + connectionId);
+            await _apiGatewayClient.PostToConnectionAsync(postConnectionRequest, cancellationToken);
         }
     }
-}
-
-public class HandleQueueResponse
-{
-    public string GameId { get; set; }
 }

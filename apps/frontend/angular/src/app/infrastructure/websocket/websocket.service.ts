@@ -4,7 +4,7 @@ import { environment } from './../../../environments/environment';
 import { WebSocketActions } from './websocket.actions.enum';
 import { WebSocketMessage } from './websocket.message.model';
 import { WebSocketRequest } from './websocket.request.model';
-import { LoginClient } from '@authress/login';
+import { LoginClient, Settings } from '@authress/login';
 import { isNullOrUndefined } from 'src/app/app.component';
 
 @Injectable({ providedIn: 'root' })
@@ -13,10 +13,17 @@ export class WebSocketService<T = WebSocketRequest> {
   private connectedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public connected$: Observable<boolean> = this.connectedSubject.asObservable();
   private messages = new Subject<WebSocketMessage<T>>();
-  private loginClient: LoginClient = new LoginClient({authressLoginHostUrl: "https://authress.flyingdarts.net/", applicationId: "app_2YKyhM6M31XVtuCeuDsSJ2"});
+
+  private loginClient: LoginClient;
 
   constructor() {
     this.initialize();
+
+    var loginClientSettings: Settings = {
+      applicationId: "app_2YKyhM6M31XVtuCeuDsSJ2",
+      authressApiUrl: "https://authress.flyingdarts.net/",
+    }
+    this.loginClient = new LoginClient(loginClientSettings);
   }
 
   private async initialize() {

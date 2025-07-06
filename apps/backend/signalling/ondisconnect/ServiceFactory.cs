@@ -1,5 +1,6 @@
-using Amazon.DynamoDBv2;
-using Microsoft.Extensions.DependencyInjection;
+using Flyingdarts.Backend.Signalling.OnDisconnect.CQRS;
+
+namespace Flyingdarts.Backend.Signalling.OnDisconnect;
 
 public static class ServiceFactory
 {
