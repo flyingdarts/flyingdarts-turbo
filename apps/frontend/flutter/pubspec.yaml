@@ -60,7 +60,6 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   flutter_localizations:
     sdk: flutter
-  melos: ^3.2.0
   get_it: ^7.6.4
   injectable: ^2.3.0
   speech_to_text: 

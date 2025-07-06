@@ -1,5 +1,6 @@
 {
   "name": "flyingdarts",
+  "version": "0.0.1",
   "workspaces": [
     "packages/**/*",
     "apps/backend/**/*",

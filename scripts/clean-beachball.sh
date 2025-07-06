@@ -64,8 +64,8 @@ remove_changelog_files() {
 
     local changelog_count=0
 
-    # Find and remove all CHANGELOG.json and CHANGELOG.md files
-    find . \( -name "CHANGELOG.json" -o -name "CHANGELOG.md" \) -type f 2>/dev/null | while IFS= read -r file; do
+    # Find and remove all CHANGELOG.json and CHANGELOG.md files (excluding node_modules)
+    find . \( -name "CHANGELOG.json" -o -name "CHANGELOG.md" \) -type f -not -path "./node_modules/*" 2>/dev/null | while IFS= read -r file; do
         if [[ -f "$file" ]]; then
             rm "$file"
             changelog_count=$((changelog_count + 1))
@@ -86,8 +86,8 @@ reset_package_versions() {
 
     local package_count=0
 
-    # Find all package.json files
-    find . -name "package.json" -type f 2>/dev/null | while IFS= read -r file; do
+    # Find all package.json files (excluding node_modules)
+    find . -name "package.json" -type f -not -path "./node_modules/*" 2>/dev/null | while IFS= read -r file; do
         if [[ -f "$file" ]]; then
             # Use jq to update the version field if it exists
             if command -v jq &>/dev/null; then
