@@ -299,12 +299,7 @@ paths:
             type: string
             format: uuid
       requestBody:
-        description: "No request body required"
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
+        content: {}
       responses:
         "200":
           description: OK
@@ -605,12 +600,7 @@ paths:
           schema:
             type: string
       requestBody:
-        description: "No request body required"
-        content:
-          application/json:
-            schema:
-              type: object
-              properties: {}
+        content: {}
       responses:
         "200":
           description: OK
@@ -1590,7 +1580,7 @@ paths:
         - Active session
       summary: Kick participants from an active session
       description: Kicks one or more participants from an active session using user ID or custom participant ID.
-      operationId: KickParticipants
+      operationId: KickPartcipants
       parameters:
         - $ref: "#/components/parameters/meetingId"
       requestBody:
@@ -3105,7 +3095,7 @@ paths:
         > any issues.
 
         Starts a track recording in a meeting. Track recordings consist of "layers". Layers are used to map audio/video tracks in a meeting to output destinations. More information about track recordings is available in the [Track Recordings Guide Page](https://docs.dyte.io/guides/capabilities/recording/recording-overview).
-      operationId: start_track_recording_for_meeting
+      operationId: Start Track Recording for a Meeting
       requestBody:
         $ref: "#/components/requestBodies/StartTrackRecordingBody"
       responses:
@@ -3441,6 +3431,7 @@ components:
               picture:
                 type: string
                 description: "(Optional) A URL to a picture to be used for the participant. "
+                format: uri
                 example: "https://i.imgur.com/test.jpg"
                 nullable: true
               preset_name:
@@ -3465,7 +3456,7 @@ components:
                 type: string
                 nullable: true
                 description: (Optional) A URL to a picture to be used for the participant.
-
+                format: uri
               preset_name:
                 type: string
                 nullable: true
@@ -3499,6 +3490,7 @@ components:
               url:
                 type: string
                 description: Pass a custom url to record arbitary screen
+                format: uri
               dyte_bucket_config:
                 $ref: "#/components/schemas/DyteBucketConfig"
               interactive_config:
@@ -3602,8 +3594,7 @@ components:
   securitySchemes:
     Authorization:
       type: http
-      scheme: bearer
-      description: Bearer token authentication
+      scheme: basic
     Bearer:
       type: http
       description: Provide bearer token for a participant who has permissions for recording. Note that this is only useful for the `/recordings` routes.
@@ -3819,7 +3810,36 @@ components:
                 type: boolean
               data:
                 $ref: "#/components/schemas/Transcript"
-
+    GetOverallStats:
+      description: Returns complete analytics of an organization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              success:
+                type: boolean
+              data:
+                $ref: "#/components/schemas/OverallStats"
+          examples:
+            OverallStatsSuccess:
+              $ref: "#/components/examples/OverallStatsSuccessResponse"
+    GetDaywiseStats:
+      description: Returns daywise analytics of an organization
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              succes:
+                type: boolean
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DaywiseStats"
+          examples:
+            DaywiseStatsSuccess:
+              $ref: "#/components/examples/DaywiseStatsSuccessResponse"
     GetMeeting:
       description: Success Response
       content:
@@ -4937,7 +4957,7 @@ components:
               custom_participant_id: 3uggr
               display_name: Henry
               preset_name: webinar_participant
-              joined_at: "2023-02-01T10:50:36.846Z"
+              joined_at: '2023-02-01T10:50:36.846Z"'
               left_at: "2023-02-01T10:57:32.424Z"
               duration: 6.9263
               created_at: "2023-02-01T10:50:36.853Z"
@@ -4978,7 +4998,7 @@ components:
               custom_participant_id: 3uggr
               display_name: Henry
               preset_name: webinar_participant
-              joined_at: "2023-02-01T10:50:36.846Z"
+              joined_at: '2023-02-01T10:50:36.846Z"'
               left_at: "2023-02-01T10:57:32.424Z"
               duration: 6.9263
               created_at: "2023-02-01T10:50:36.853Z"
@@ -5005,7 +5025,27 @@ components:
         error:
           code: 404
           message: No user found with id 813432c7-3c5a-45e2-9acf-eef7061c7584
-
+    OverallStatsSuccessResponse:
+      summary: Overall Stats response
+      value:
+        success: true
+        data:
+          sessions_count: 26
+          sessions_minutes_consumed: 1323.23
+          recordings_minutes_consumed: 468.8932
+    DaywiseStatsSuccessResponse:
+      summary: Daywise stats response
+      value:
+        success: true
+        data:
+          - date: "2022-03-01"
+            sessions_count: 10
+            sessions_minutes_consumed: 123.22
+            recordings_minutes_consumed: 129.14
+          - date: "2022-03-02"
+            sessions_count: 16
+            sessions_minutes_consumed: 1278.87
+            recordings_minutes_consumed: 338.12
   schemas:
     LivestreamBase:
       type: object
@@ -5099,7 +5139,7 @@ components:
         url:
           type: string
           description: URL the webhook will send events to
-
+          format: uri
           example: "https://webhook.site/b23a5bbd-c7b0-4ced-a9e2-78ae7889897e"
         events:
           type: array
@@ -5159,7 +5199,7 @@ components:
         url:
           type: string
           description: URL this webhook will send events to
-
+          format: uri
           example: "https://webhook.site/b23a5bbd-c7b0-4ced-a9e2-78ae7889897e"
         events:
           type: array
@@ -5245,7 +5285,7 @@ components:
         url:
           type: string
           description: URL the webhook will send events to
-
+          format: uri
           example: "https://webhook.site/b23a5bbd-c7b0-4ced-a9e2-78ae7889897e"
         events:
           type: array
@@ -5317,7 +5357,7 @@ components:
           example: 778-330-2389
         website:
           type: string
-
+          format: uri
           example: "https://www.dyte.io"
         apikey:
           type: string
@@ -5361,7 +5401,7 @@ components:
           example: 778-330-2389
         website:
           type: string
-
+          format: uri
           example: "https://www.dyte.io"
         feature_flags:
           type: array
@@ -5406,7 +5446,7 @@ components:
           type: string
         website:
           type: string
-
+          format: uri
           example: "https://www.dyte.io"
         feature_flags:
           type: array
@@ -5421,7 +5461,28 @@ components:
             - eu-central-1
       x-stoplight:
         id: 9ta8usp3kfzru
-
+    CreateChatChannelInfo:
+      type: object
+      properties:
+        display_name:
+          type: string
+        custom_participant_ids:
+          type: array
+          items:
+            type: string
+        visibility:
+          type: string
+          enum:
+            - public
+            - private
+      x-examples:
+        Example 1:
+          display_name: Channel 1
+          custom_participant_ids:
+            - custom_participant_id_1
+          visibility: public
+      x-stoplight:
+        id: czbwjgqw3crv9
     RecordingConfig:
       type: object
       title: RecordingConfig
@@ -5480,7 +5541,7 @@ components:
             url:
               type: string
               description: URL of the watermark image
-
+              format: uri
             size:
               type: object
               description: Size of the watermark
@@ -5611,7 +5672,7 @@ components:
         rtmp_url:
           type: string
           description: RTMP URL to stream to
-
+          format: uri
           example: "rtmp://a.rtmp.youtube.com/live2"
       x-stoplight:
         id: osa9lqxfycydd
@@ -6877,7 +6938,37 @@ components:
         - transcript_download_url_expiry
       x-stoplight:
         id: o83nj5j36irgq
-
+    OverallStats:
+      type: object
+      properties:
+        sessions_count:
+          type: number
+          description: Number of sessions_count happened in the given time period
+        sessions_minutes_consumed:
+          type: number
+          description: Total meetings minutes consumed across all sessions in the given time period.
+        recordings_minutes_consumed:
+          type: number
+          description: Total recordings minutes consumed across all sessions in the given time period.
+      x-stoplight:
+        id: 4uf74heutyu96
+    DaywiseStats:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date in YYYY-MM-DD format
+        sessions_count:
+          type: number
+          description: Number of sessions_count happened in the given time period
+        sessions_minutes_consumed:
+          type: number
+          description: Total meetings minutes consumed across all sessions in the given time period.
+        recordings_minutes_consumed:
+          type: number
+          description: Total recordings minutes consumed across all sessions in the given time period.
+      x-stoplight:
+        id: dzu4f290axvy8
     GenericSuccessResponse:
       type: object
       title: GenericSuccessResponse
@@ -6965,8 +7056,6 @@ components:
           example: true
         data:
           type: array
-          items:
-            type: object
         paging:
           type: object
           properties:
@@ -7007,7 +7096,7 @@ components:
           type: string
           nullable: true
           description: URL to a picture of the participant.
-
+          format: uri
         custom_participant_id:
           type: string
           description: A unique participant ID generated by the client.
@@ -7043,7 +7132,7 @@ components:
           type: string
           nullable: true
           description: URL where the recording can be downloaded.
-
+          format: uri
           readOnly: true
         download_url_expiry:
           type: string
@@ -7055,6 +7144,7 @@ components:
           type: string
           nullable: true
           description: "If the audio_config is passed, the URL for downloading the audio recording is returned."
+          format: uri
           readOnly: true
         file_size:
           type: number
@@ -7215,4 +7305,6 @@ components:
         - summaryDownloadUrlExpiry
       x-stoplight:
         id: w3rn26ss3mm20
+security:
+  - Authorization: []
 x-internal: false

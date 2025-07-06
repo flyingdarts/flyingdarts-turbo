@@ -18,31 +18,62 @@ dotnet tool install -g Microsoft.OpenApi.Kiota
 ### Step 2: Generate the client
 
 ```bash
-# Using the provided script
-./scripts/generate-dyte-client-kiota.sh dyte-api-spec.yaml
+# Using the provided script with FIXED specification (recommended)
+./scripts/generate-charp-dyte-client.sh
 
-# Or manually
+# Or manually with custom parameters
+./scripts/generate-charp-dyte-client.sh specs/dyte-api-spec-fixed.yaml packages/Flyingdarts.Meetings.Service/Generated/Dyte Flyingdarts.Meetings.Service.Generated.Dyte DyteApiClient
+
+# Or manually with Kiota directly
 kiota generate \
-    --openapi dyte-api-spec.yaml \
+    --openapi specs/dyte-api-spec-fixed.yaml \
     --language csharp \
-    --output packages/Flyingdarts.Meetings.Service/Generated \
+    --output packages/Flyingdarts.Meetings.Service/Generated/Dyte \
     --class-name DyteApiClient \
-    --namespace-name Flyingdarts.Meetings.Service.Generated \
+    --namespace-name Flyingdarts.Meetings.Service.Generated.Dyte \
     --clean-output \
-    --serializer SystemTextJson \
-    --deserializer SystemTextJson \
+    --serializer Microsoft.Kiota.Serialization.Json.JsonSerializationWriterFactory \
+    --deserializer Microsoft.Kiota.Serialization.Json.JsonParseNodeFactory \
     --backing-store
+
 ```
 
-### Step 3: Add required NuGet packages
+### Step 3: Required NuGet packages
 
-Add the following packages to your project:
+The following packages are already installed and up to date in the project:
 
 ```xml
 <PackageReference Include="Microsoft.Kiota.Http.HttpClientLibrary" Version="1.1.8" />
-<PackageReference Include="Microsoft.Kiota.Serialization.SystemTextJson" Version="1.1.8" />
+<PackageReference Include="Microsoft.Kiota.Serialization.Json" Version="1.1.8" />
 <PackageReference Include="Microsoft.Kiota.Abstractions" Version="1.1.8" />
 ```
+
+✅ **Note**: These packages are already installed and on the latest version, so no additional installation is required.
+
+## API Specification Differences
+
+### Original vs Fixed Specification
+
+The project includes two API specification files:
+
+- **`specs/dyte-api-spec.yaml`** (Original): The complete Dyte API specification with 7,311 lines
+- **`specs/dyte-api-spec-fixed.yaml`** (Fixed): A focused subset with 327 lines that resolves schema conflicts
+
+### Key Differences
+
+1. **Scope**: The fixed spec focuses only on the essential meeting and participant endpoints needed for the application
+2. **Schema Conflicts**: The original spec had conflicting schema definitions that caused Kiota to generate empty response data classes
+3. **Response Structure**: The fixed spec properly defines the response structure with `success` and `data` properties
+4. **Type Safety**: The fixed spec ensures proper type definitions for Meeting and Participant objects
+
+### Why Use the Fixed Specification?
+
+The original Dyte API specification contains schema conflicts that cause Kiota to generate empty response data classes. The fixed specification:
+
+- Resolves naming conflicts in schema definitions
+- Provides proper type definitions for Meeting and Participant objects
+- Ensures the generated client has strongly-typed response objects
+- Focuses on the specific endpoints needed for the application
 
 ## Method 2: Using OpenAPI Generator
 
@@ -54,11 +85,11 @@ Download and install Java from https://adoptium.net/
 
 ```bash
 # Using the provided script
-./scripts/generate-dyte-client-openapi.ps1 dyte-api-spec.yaml
+./scripts/generate-charp-dyte-client-openapi.ps1 specs/dyte-api-spec-fixed.yaml
 
 # Or manually
 java -jar openapi-generator-cli.jar generate \
-    --input-spec dyte-api-spec.yaml \
+    --input-spec specs/dyte-api-spec-fixed.yaml \
     --generator-name csharp-netcore \
     --output packages/Flyingdarts.Meetings.Service/Generated \
     --additional-properties=packageName=Flyingdarts.Meetings.Service.Generated,targetFramework=net8.0
@@ -70,7 +101,7 @@ java -jar openapi-generator-cli.jar generate \
 2. Select "Add" → "Connected Service"
 3. Choose "OpenAPI" from the list
 4. Select "OpenAPI specification file"
-5. Browse to your OpenAPI spec file
+5. Browse to `specs/dyte-api-spec-fixed.yaml`
 6. Configure the namespace and other options
 7. Click "Finish"
 
@@ -80,11 +111,8 @@ java -jar openapi-generator-cli.jar generate \
 # Install the tool
 dotnet tool install --global Microsoft.OpenApi.Kiota
 
-
-# Generate the client
-Depending on your operating system or preference, either run
-`pwsh /scripts/generate-dyte-client-kiota.ps1` or
-`sh /scripts/generate-dyte-client-kiota.sh`
+# Generate the client using the provided script
+./scripts/generate-charp-dyte-client.sh
 ```
 
 ## Integration with Existing Code
@@ -93,8 +121,8 @@ After generating the client, you can integrate it with your existing `DyteMeetin
 
 ```csharp
 using Microsoft.Kiota.Http.HttpClientLibrary;
-using Microsoft.Kiota.Serialization.SystemTextJson;
-using Flyingdarts.Meetings.Service.Generated;
+using Microsoft.Kiota.Serialization.Json;
+using Flyingdarts.Meetings.Service.Generated.Dyte;
 
 public class DyteMeetingService : IMeetingService
 {
@@ -112,7 +140,7 @@ public class DyteMeetingService : IMeetingService
 
         // Create request adapter
         var requestAdapter = new HttpClientRequestAdapter(
-            new SystemTextJsonSerializationWriterFactory(),
+            new JsonSerializationWriterFactory(),
             httpClient: httpClient
         );
 
@@ -126,7 +154,7 @@ public class DyteMeetingService : IMeetingService
         {
             // Try to get existing meeting
             var meeting = await _dyteClient.Meetings[meetingId].GetAsync();
-            return meeting?.Id ?? meetingId;
+            return meeting?.Data?.Id ?? meetingId;
         }
         catch (ApiException ex) when (ex.ResponseStatusCode == 404)
         {
@@ -134,11 +162,11 @@ public class DyteMeetingService : IMeetingService
             var createRequest = new CreateMeetingRequest
             {
                 Title = $"Meeting {meetingId}",
-                Region = "eu-central-1"
+                PreferredRegion = "eu-central-1"
             };
 
             var newMeeting = await _dyteClient.Meetings.PostAsync(createRequest);
-            return newMeeting?.Id ?? meetingId;
+            return newMeeting?.Data?.Id ?? meetingId;
         }
     }
 
@@ -148,11 +176,11 @@ public class DyteMeetingService : IMeetingService
         {
             Name = $"Participant {Guid.NewGuid():N}",
             PresetName = _options.DefaultPresetName,
-            ClientSpecificId = Guid.NewGuid().ToString()
+            CustomParticipantId = Guid.NewGuid().ToString()
         };
 
         var participant = await _dyteClient.Meetings[meetingId].Participants.PostAsync(addParticipantRequest);
-        return participant?.Token ?? string.Empty;
+        return participant?.Data?.Token ?? string.Empty;
     }
 }
 ```
@@ -191,8 +219,8 @@ public static IServiceCollection AddDyteMeetingService(this IServiceCollection s
 
 When the Dyte API changes:
 
-1. Update your OpenAPI specification file
-2. Re-run the generation script
+1. Update your OpenAPI specification file (preferably the fixed version)
+2. Re-run the generation script: `./scripts/generate-charp-dyte-client.sh`
 3. Review and test the changes
 4. Update your integration code if needed
 
@@ -204,6 +232,7 @@ When the Dyte API changes:
 2. **Base URL**: Verify the API base URL is correct
 3. **CORS**: Check if CORS policies allow your requests
 4. **Rate Limiting**: Implement retry logic for rate-limited requests
+5. **Empty Response Classes**: Use the fixed specification to avoid schema conflicts
 
 ### Getting Dyte API Spec
 
@@ -212,3 +241,4 @@ If you don't have the OpenAPI spec, you can:
 1. Check Dyte's official documentation
 2. Use tools like Swagger Inspector to generate from live API
 3. Contact Dyte support for official OpenAPI specification
+4. Use the provided fixed specification as a starting point

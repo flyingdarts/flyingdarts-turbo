@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Generate Dyte API Client using Microsoft Kiota with FIXED specification
-# Usage: ./scripts/generate-dyte-client-fixed.sh
+# Usage: ./scripts/generate-charp-dyte-client.sh
 
 OPENAPI_SPEC_PATH=${1:-"specs/dyte-api-spec-fixed.yaml"}
 OUTPUT_PATH=${2:-"packages/Flyingdarts.Meetings.Service/Generated/Dyte"}
@@ -36,7 +36,7 @@ kiota generate \
     --clean-output \
     --serializer Microsoft.Kiota.Serialization.Json.JsonSerializationWriterFactory \
     --deserializer Microsoft.Kiota.Serialization.Json.JsonParseNodeFactory \
-    --log-level debug
+    --backing-store
 
 echo "Client generated successfully at: $OUTPUT_PATH"
 echo "This should now have proper Meeting and Participant objects in response data!"
