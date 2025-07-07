@@ -19,10 +19,10 @@
         <PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="3.7.300.5" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\..\..\packages\Flyingdarts.Connection.Services\Flyingdarts.Connection.Services.csproj" />
-      <ProjectReference Include="..\..\..\..\..\..\packages\Flyingdarts.Meetings.Service\Flyingdarts.Meetings.Service.csproj" />
-      <ProjectReference Include="..\..\..\..\..\..\packages\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services.csproj" />
-      <ProjectReference Include="..\..\..\..\..\..\packages\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
+      <ProjectReference Include="..\..\..\..\..\..\packages\dotnet\Flyingdarts.Connection.Services\Flyingdarts.Connection.Services.csproj" />
+      <ProjectReference Include="..\..\..\..\..\..\packages\dotnet\Flyingdarts.Meetings.Service\Flyingdarts.Meetings.Service.csproj" />
+      <ProjectReference Include="..\..\..\..\..\..\packages\dotnet\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services.csproj" />
+      <ProjectReference Include="..\..\..\..\..\..\packages\dotnet\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,9 +1,0 @@
-{
-  "name": "flyingdarts.metadata.services.tests",
-  "version": "0.0.1",
-  "private": false,
-  "scripts": {
-    "build:dev": "dotnet build -c Debug --no-dependencies",
-    "build:prod": "dotnet build -c Release --no-dependencies"
-  }
-}

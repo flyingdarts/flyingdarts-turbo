@@ -3,9 +3,6 @@
   "version": "0.0.1",
   "private": false,
   "scripts": {
-    "build:dev": "flutter build",
-    "build:web:dev": "flutter build web",
-    "build:prod": "flutter --version",
     "dockerize": "docker build -t flyingdarts-flutter-app:slim .",
     "serve": "flutter run -d Chrome --web-hostname=127.0.0.1 --web-port=4100 --profile -v"
   },

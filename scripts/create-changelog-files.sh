@@ -53,7 +53,8 @@ create_changelog_md() {
     local changelog_path="$project_dir/CHANGELOG.md"
 
     if [ -f "$changelog_path" ]; then
-        return 1 # File already exists, should be counted as skipped
+        log_debug "CHANGELOG.md already exists for $project_name, skipping..."
+        return 0
     fi
 
     log_debug "Creating CHANGELOG.md for $project_name..."
@@ -86,7 +87,7 @@ EOF
         return 0
     else
         log_error "Failed to create CHANGELOG.md for $project_name"
-        return 2 # Error occurred
+        return 1
     fi
 }
 
@@ -97,7 +98,8 @@ create_changelog_json() {
     local changelog_path="$project_dir/CHANGELOG.json"
 
     if [ -f "$changelog_path" ]; then
-        return 1 # File already exists, should be counted as skipped
+        log_debug "CHANGELOG.json already exists for $project_name, skipping..."
+        return 0
     fi
 
     log_debug "Creating CHANGELOG.json for $project_name..."
@@ -119,7 +121,7 @@ EOF
         return 0
     else
         log_error "Failed to create CHANGELOG.json for $project_name"
-        return 2 # Error occurred
+        return 1
     fi
 }
 
@@ -146,24 +148,18 @@ create_changelog_files() {
         local project_dir=$(dirname "$csproj_file")
         local project_name=$(basename "$csproj_file" .csproj)
 
+        log_debug "Processing project: $project_name in $project_dir"
+
         # Create CHANGELOG.md
-        create_changelog_md "$project_dir" "$project_name"
-        local md_result=$?
-        if [ $md_result -eq 0 ]; then
+        if create_changelog_md "$project_dir" "$project_name"; then
             created_count=$((created_count + 1))
-        elif [ $md_result -eq 1 ]; then
-            skipped_count=$((skipped_count + 1))
         else
             error_count=$((error_count + 1))
         fi
 
         # Create CHANGELOG.json
-        create_changelog_json "$project_dir" "$project_name"
-        local json_result=$?
-        if [ $json_result -eq 0 ]; then
+        if create_changelog_json "$project_dir" "$project_name"; then
             created_count=$((created_count + 1))
-        elif [ $json_result -eq 1 ]; then
-            skipped_count=$((skipped_count + 1))
         else
             error_count=$((error_count + 1))
         fi

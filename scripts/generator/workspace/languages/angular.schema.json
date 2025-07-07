@@ -1,0 +1,10 @@
+{
+  "$id": "angular.schema.json",
+  "title": "Angular Language Config",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" }
+  },
+  "required": ["version"],
+  "additionalProperties": false
+}

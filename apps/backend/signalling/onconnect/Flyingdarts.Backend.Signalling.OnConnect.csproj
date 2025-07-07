@@ -28,7 +28,7 @@
     <None Include=".github\workflows\build-and-publish-lambda.yml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\packages\Flyingdarts.Meetings.Service\Flyingdarts.Meetings.Service.csproj" />
-    <ProjectReference Include="..\..\..\..\packages\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
+    <ProjectReference Include="..\..\..\..\packages\dotnet\Flyingdarts.Meetings.Service\Flyingdarts.Meetings.Service.csproj" />
+    <ProjectReference Include="..\..\..\..\packages\dotnet\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
   </ItemGroup>
 </Project>

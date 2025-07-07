@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": false,
   "scripts": {
-    "build:dev": "dotnet build -c Debug --no-dependencies",
+    "build": "dotnet build -c Debug --no-dependencies",
     "build:prod": "dotnet build -c Release --no-dependencies",
     "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnDisconnect-Development  -frun dotnet8 -f net6.0 --region eu-west-1",
     "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnDisconnect-Production  -frun dotnet8 -f net6.0 --region eu-west-1"

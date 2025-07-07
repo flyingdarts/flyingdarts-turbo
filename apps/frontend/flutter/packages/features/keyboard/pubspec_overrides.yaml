@@ -1,9 +1,0 @@
-dependency_overrides:
-  ui:
-    path: ../../shared/ui
-  widgetbook:
-    path: ../../../dependencies/widgetbook/packages/widgetbook
-  widgetbook_annotation:
-    path: ../../../dependencies/widgetbook/packages/widgetbook_annotation
-  widgetbook_generator:
-    path: ../../../dependencies/widgetbook/packages/widgetbook_generator

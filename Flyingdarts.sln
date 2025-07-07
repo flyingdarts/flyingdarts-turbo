@@ -12,9 +12,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "packages", "packages", "{1B95FF49-0572-4BBD-A14D-DCB8B684AB71}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Persistence", "packages\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj", "{CB147682-D9D9-43F4-AC6E-1BDE83B04C10}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Persistence", "packages\dotnet\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj", "{CB147682-D9D9-43F4-AC6E-1BDE83B04C10}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Infrastructure.Constructs", "packages\Flyingdarts.Infrastructure.Constructs\Flyingdarts.Infrastructure.Constructs.csproj", "{273E4496-8A5D-412A-A0BD-5922EFF76654}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Infrastructure.Constructs", "packages\dotnet\Flyingdarts.Infrastructure.Constructs\Flyingdarts.Infrastructure.Constructs.csproj", "{273E4496-8A5D-412A-A0BD-5922EFF76654}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{865EFF7A-0DF4-45F1-9BC3-C0F4FC418BBE}"
 EndProject
@@ -54,9 +54,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Flyingdarts.Backend.Games.X
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Flyingdarts.Backend.Auth", "apps\backend\auth\Flyingdarts.Backend.Auth.csproj", "{A263A8F6-B7F8-4FD0-B5D2-D522FADB87E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Metadata.Services", "packages\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services.csproj", "{0EA75B94-AE47-452F-9149-0D9F151F4A54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Metadata.Services", "packages\dotnet\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services.csproj", "{0EA75B94-AE47-452F-9149-0D9F151F4A54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Metadata.Services.Tests", "packages\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services.Tests\Flyingdarts.Metadata.Services.Tests.csproj", "{F384B8F1-7D8E-4918-AD78-E23D067D8155}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Metadata.Services.Tests", "packages\dotnet\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services.Tests\Flyingdarts.Metadata.Services.Tests.csproj", "{F384B8F1-7D8E-4918-AD78-E23D067D8155}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Flyingdarts.Metadata.Services", "Flyingdarts.Metadata.Services", "{5327FCE7-0197-49DE-BB98-E457E76DACD3}"
 EndProject
@@ -66,13 +66,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Backend.Games.X
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Flyingdarts.Meetings.Service", "Flyingdarts.Meetings.Service", "{BA4D6849-661F-4997-AAFF-3E2EE634B919}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Meetings.Service", "packages\Flyingdarts.Meetings.Service\Flyingdarts.Meetings.Service.csproj", "{396F6830-1C0D-41EA-92AC-AC575BD2224D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Meetings.Service", "packages\dotnet\Flyingdarts.Meetings.Service\Flyingdarts.Meetings.Service.csproj", "{396F6830-1C0D-41EA-92AC-AC575BD2224D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Meetings.Service.Tests", "packages\Flyingdarts.Meetings.Service.Tests\Flyingdarts.Meetings.Service.Tests.csproj", "{558FC298-A2FB-45D7-ACCC-9118DB3D4AEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Meetings.Service.Tests", "packages\dotnet\Flyingdarts.Meetings.Service.Tests\Flyingdarts.Meetings.Service.Tests.csproj", "{558FC298-A2FB-45D7-ACCC-9118DB3D4AEC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Flyingdarts.Connection.Services", "Flyingdarts.Connection.Services", "{266F6C8F-C4AF-4894-9F99-9E416C4E27AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Connection.Services", "packages\Flyingdarts.Connection.Services\Flyingdarts.Connection.Services.csproj", "{DEB49F60-59FA-47B9-AC67-3B4EE82867B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.Connection.Services", "packages\dotnet\Flyingdarts.Connection.Services\Flyingdarts.Connection.Services.csproj", "{DEB49F60-59FA-47B9-AC67-3B4EE82867B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
