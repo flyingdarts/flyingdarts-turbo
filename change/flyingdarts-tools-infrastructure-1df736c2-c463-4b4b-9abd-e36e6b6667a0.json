@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Initial change log",
+  "packageName": "flyingdarts.tools.infrastructure",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}

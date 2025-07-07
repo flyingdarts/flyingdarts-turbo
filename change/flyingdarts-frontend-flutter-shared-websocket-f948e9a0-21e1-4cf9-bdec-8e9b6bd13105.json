@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Initial change log",
+  "packageName": "flyingdarts.frontend.flutter.shared.websocket",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}

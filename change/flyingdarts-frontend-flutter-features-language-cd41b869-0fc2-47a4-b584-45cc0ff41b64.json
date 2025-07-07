@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Initial change log",
+  "packageName": "flyingdarts.frontend.flutter.features.language",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}
