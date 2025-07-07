@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.frontend.flutter.shared.configuration",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A flutter package containing readable and writeable configurations",
   "private": false
 }

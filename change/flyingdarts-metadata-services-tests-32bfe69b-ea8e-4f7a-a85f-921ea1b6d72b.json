@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Initial change log",
-  "packageName": "flyingdarts.metadata.services.tests",
-  "email": "mike@methylium.com",
-  "dependentChangeType": "patch"
-}

@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Initial change log",
-  "packageName": "flyingdarts.backend.signalling.ondisconnect",
-  "email": "mike@methylium.com",
-  "dependentChangeType": "patch"
-}

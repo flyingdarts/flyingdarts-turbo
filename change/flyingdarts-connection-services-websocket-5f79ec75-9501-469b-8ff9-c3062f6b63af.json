@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Initial change log",
-  "packageName": "flyingdarts.connection.services.websocket",
-  "email": "mike@methylium.com",
-  "dependentChangeType": "patch"
-}

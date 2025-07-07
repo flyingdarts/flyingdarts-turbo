@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Initial change log",
-  "packageName": "flyingdarts.infrastructure.constructs",
-  "email": "mike@methylium.com",
-  "dependentChangeType": "patch"
-}

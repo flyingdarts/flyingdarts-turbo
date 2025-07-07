@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Initial change log",
-  "packageName": "flyingdarts.backend.games.x01.queue",
-  "email": "mike@methylium.com",
-  "dependentChangeType": "patch"
-}
