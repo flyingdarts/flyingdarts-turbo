@@ -1,0 +1,32 @@
+{
+  "$id": "packages.schema.json",
+  "title": "Packages Type",
+  "type": "object",
+  "properties": {
+    "backend": {
+      "type": "object",
+      "properties": {
+        "dotnet": { "$ref": "../languages/dotnet.schema.json" },
+        "rust": { "$ref": "../languages/rust.schema.json" }
+      },
+      "additionalProperties": false
+    },
+    "frontend": {
+      "type": "object",
+      "properties": {
+        "angular": { "$ref": "../languages/angular.schema.json" },
+        "flutter": { "$ref": "../languages/flutter.schema.json" }
+      },
+      "additionalProperties": false
+    },
+    "tools": {
+      "type": "object",
+      "properties": {
+        "dotnet": { "$ref": "../languages/dotnet.schema.json" },
+        "typescript": { "$ref": "../languages/typescript.schema.json" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

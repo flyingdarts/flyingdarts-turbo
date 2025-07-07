@@ -1,9 +1,9 @@
 {
   "name": "flyingdarts.backend.auth",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "build:dev": "dotnet build -c Debug --no-dependencies",
+    "build": "dotnet build -c Debug --no-dependencies",
     "build:prod": "dotnet build -c Release --no-dependencies",
     "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Auth-Development  -frun dotnet6 -f net6.0 --region eu-west-1",
     "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Auth-Production  -frun dotnet6 -f net6.0 --region eu-west-1"

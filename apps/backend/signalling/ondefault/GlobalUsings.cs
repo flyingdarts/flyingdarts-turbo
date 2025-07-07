@@ -1,7 +1,5 @@
 ﻿global using Amazon.ApiGatewayManagementApi;
 global using Amazon.ApiGatewayManagementApi.Model;
-global using Amazon.DynamoDBv2;
-global using Amazon.DynamoDBv2.Model;
 global using Amazon.Lambda.RuntimeSupport;
 global using Amazon.Lambda.Serialization.SystemTextJson;
 global using Flyingdarts.Backend.Signalling.OnDefault.CQRS;

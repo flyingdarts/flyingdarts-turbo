@@ -1,4 +1,6 @@
-﻿public class CreateUserProfileCommand : IRequest<APIGatewayProxyResponse>
+﻿namespace Flyingdarts.Backend.User.Profile.Api.Requests.Create;
+
+public class CreateUserProfileCommand : IRequest<APIGatewayProxyResponse>
 {
     public string AuthProviderUserId { get; set; }
     public string UserName { get; set; }
@@ -9,4 +11,4 @@
 }
 
 
-    // Command Query Reponsibility Segregation.
+// Command Query Reponsibility Segregation.

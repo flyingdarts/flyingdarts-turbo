@@ -1,6 +1,8 @@
-using Amazon.DynamoDBv2.DataModel;
-using Flyingdarts.Backend.Games.X01.Services.Connection;
-using Microsoft.Extensions.Configuration;
+
+using Flyingdarts.Connection.Services;
+using Flyingdarts.Metadata.Services.Services.X01;
+
+namespace Flyingdarts.Backend.Games.X01.Queue;
 
 /// <summary>
 /// Factory class for creating the service provider.
@@ -15,7 +17,7 @@ public static class ServiceFactory
     {
         // Build the configuration using AWS Systems Manager Parameter Store.
         var configuration = new ConfigurationBuilder()
-            .AddSystemsManager($"/{System.Environment.GetEnvironmentVariable("EnvironmentName")}/Application")
+            .AddSystemsManager($"/{Environment.GetEnvironmentVariable("EnvironmentName")}/Application")
             .Build();
 
         // Create a new service collection.
@@ -33,7 +35,7 @@ public static class ServiceFactory
         services.AddSingleton<IDynamoDbService, DynamoDbService>();
         // Register a caching service
         services.AddScoped<CachingService<X01State>>();
-        // Register a metadata service
+        // Register metadata services
         services.AddScoped<X01MetadataService>();
         // Register queue service
         services.AddScoped<QueueService<X01Queue>>();
@@ -45,17 +47,8 @@ public static class ServiceFactory
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(HandleX01QueueCommand).Assembly));
 
         // Api Gateway Client.
-        services.AddTransient<IAmazonApiGatewayManagementApi>(provider =>
-        {
-            var config = new AmazonApiGatewayManagementApiConfig
-            {
-                ServiceURL = System.Environment.GetEnvironmentVariable("WebSocketApiUrl")!
-            };
+        services.AddAWSService<IAmazonApiGatewayManagementApi>(configuration.GetAWSOptions("ApiGateway"));
 
-            return new AmazonApiGatewayManagementApiClient(config);
-        });
-
-        // Build and return the service provider.
         return services.BuildServiceProvider();
     }
 }

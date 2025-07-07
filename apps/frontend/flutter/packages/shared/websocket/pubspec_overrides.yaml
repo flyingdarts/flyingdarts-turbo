@@ -1,4 +1,0 @@
-# melos_managed_dependency_overrides: amplify
-dependency_overrides:
-  amplify:
-    path: ..\\amplify

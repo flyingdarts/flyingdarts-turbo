@@ -1,40 +1,47 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "build:dev": {
-      "outputs": [
-        "bin/Debug/net6.0/**",
-        "obj/Debug/net6.0/**"
-      ],
+    // Cache all build tasks
+    "^build": {
       "cache": true
     },
-    "build:prod": {
+    // Generic build step for all packages
+    "build": {
       "outputs": [
-        "bin/Release/net6.0/**",
-        "obj/Release/net6.0/**"
+        "bin/Debug/*/**",
+        "obj/Debug/*/**", // .NET outputs
+        "build/**", // Flutter outputs
+        "!package.json"
+      ]
+    },
+    // Production build step
+    "build:prod": {
+      "dependsOn": ["build"],
+      "outputs": [
+        "bin/Release/*/**",
+        "obj/Release/*/**", // .NET outputs
+        "build/**", // Flutter outputs
+        "!package.json"
       ],
       "cache": false
     },
+    // Development deploy (mainly for backend/dotnet)
     "deploy:dev": {
-      "dependsOn": [
-        "build:dev"
-      ],
+      "dependsOn": ["build"],
       "cache": false
     },
+    // Production deploy (mainly for backend/dotnet)
     "deploy:prod": {
-      "dependsOn": [
-        "build:prod"
-      ],
+      "dependsOn": ["build:prod"],
       "cache": false
     },
+    // Serve (mainly for frontend)
     "serve": {
-      "outputMode": "full",
       "persistent": true
     },
+    // Dockerize (mainly for frontend Flutter)
     "dockerize": {
-      "dependsOn": [
-        "build:prod"
-      ],
+      "dependsOn": ["build:prod"],
       "cache": false
     }
   }

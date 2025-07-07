@@ -1,3 +1,7 @@
+using Amazon.DynamoDBv2;
+
+namespace Flyingdarts.Backend.Signalling.OnDefault;
+
 public static class ServiceFactory
 {
     public static ServiceProvider GetServiceProvider()

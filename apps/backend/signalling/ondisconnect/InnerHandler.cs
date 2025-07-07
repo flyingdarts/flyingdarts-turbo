@@ -1,5 +1,7 @@
-using Amazon.DynamoDBv2;
-using System.Threading.Tasks;
+using Flyingdarts.Backend.Signalling.OnDisconnect.CQRS;
+using Flyingdarts.Backend.Signalling.OnDisconnect.Models;
+
+namespace Flyingdarts.Backend.Signalling.OnDisconnect;
 
 public class InnerHandler
 {

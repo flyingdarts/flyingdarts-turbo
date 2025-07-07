@@ -1,9 +1,0 @@
-{
-  "name": "flyingdarts.backend.games.services.metadata",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "build:dev": "dotnet build -c Debug --no-dependencies",
-    "build:prod": "dotnet build -c Release --no-dependencies"
-  }
-}

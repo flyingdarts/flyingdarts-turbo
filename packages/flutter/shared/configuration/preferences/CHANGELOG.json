@@ -1,0 +1,20 @@
+{
+  "name": "flyingdarts.frontend.flutter.shared.configuration-preferences",
+  "entries": [
+    {
+      "date": "Mon, 07 Jul 2025 15:59:36 GMT",
+      "version": "0.0.2",
+      "tag": "flyingdarts.frontend.flutter.shared.configuration-preferences_v0.0.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com.com",
+            "package": "flyingdarts.frontend.flutter.shared.configuration-preferences",
+            "commit": "04ef7c6b61613920f8184b0ede0e87e6bbf7ad49",
+            "comment": "Initial change log"
+          }
+        ]
+      }
+    }
+  ]
+}

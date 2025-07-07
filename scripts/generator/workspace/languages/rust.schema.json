@@ -1,0 +1,10 @@
+{
+  "$id": "rust.schema.json",
+  "title": "Rust Language Config",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" }
+  },
+  "required": ["version"],
+  "additionalProperties": false
+}

@@ -1,6 +1,10 @@
 
 
 // Get the service provider
+
+using Flyingdarts.Backend.User.Profile.VerifyEmail;
+using Flyingdarts.Backend.User.Profile.VerifyEmail.CQRS;
+
 var services = ServiceFactory.GetServiceProvider();
 
 // Create an instance of the InnerHandler using the service provider
@@ -21,8 +25,3 @@ var handler = async (SQSRecordSet records, ILambdaContext context) =>
 await LambdaBootstrapBuilder.Create(handler, serializer)
     .Build()
     .RunAsync();
-
-public class SQSRecordSet 
-{
-    public SQSEvent.SQSMessage[] Records { get; set; }
-}

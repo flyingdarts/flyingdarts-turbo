@@ -1,3 +1,5 @@
+namespace Flyingdarts.Backend.Signalling.OnDisconnect.Models;
+
 public static class APIGatewayProxyRequestExtensions
 {
     public static SocketMessage<T> To<T>(this APIGatewayProxyRequest request, ILambdaSerializer serializer) where T : class

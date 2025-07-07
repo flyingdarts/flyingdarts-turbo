@@ -1,0 +1,10 @@
+{
+  "$id": "flutter.schema.json",
+  "title": "Flutter Language Config",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" }
+  },
+  "required": ["version"],
+  "additionalProperties": false
+}

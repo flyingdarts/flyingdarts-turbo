@@ -1,35 +1,48 @@
 {
-	"name": "flyingdarts",
-	"workspaces": [
-		"packages/**",
-		"apps/backend/**",
-		"apps/frontend/**",
-		"apps/tools/**"
-	],
-	"dependencies": {
-		"aws-sdk": "^2.1528.0",
-		"turbo": "^1.11.2"
-	},
-	"packageManager": "npm@9.5.0",
-	"scripts": {
-		"generate-files": "turbo run generate --log-order=grouped --filter=./apps/frontend/flutter/**",
-		"build-apis-dev": "turbo run build:dev --log-order=stream --filter=./apps/backend/** --concurrency=1",
-		"build-apis-prod": "turbo run build:prod --log-order=stream --filter=./apps/backend/** --concurrency=1",
-		"deploy-apis-dev": "turbo run deploy:dev --log-order=stream --filter=./apps/backend/** --concurrency=1",
-		"deploy-apis-prod": "turbo run deploy:prod --log-order=stream --filter=./apps/backend/** --concurrency=1",
-		"deploy-auth-dev": "turbo run deploy:dev --filter=flyingdarts.backend.auth...",
-		"deploy-auth-prod": "turbo run deploy:prod --filter=flyingdarts.backend.auth...",
-		"serve-angular": "turbo run serve --log-order=stream --filter=./apps/frontend/angular",
-		"serve-flutter": "turbo run serve --log-order=stream --filter=./apps/frontend/flutter",
-		"dockerize": "turbo run dockerize --log-order=grouped --filter=flyingdarts.frontend.flutter..."
-	},
-	"repository": {
-		"url": "https://github.com/flyingdarts/flyingdarts-turbo",
-		"type": "git"
-	},
-	"devDependencies": {
-		"@types/aws-lambda": "^8.10.130",
-		"@types/node": "^20.10.6",
-		"typescript": "^5.3.3"
-	}
+  "name": "flyingdarts",
+  "version": "0.0.1",
+  "workspaces": [
+    "packages/**/*",
+    "apps/backend/**/*",
+    "apps/frontend/**/*",
+    "apps/tools/**/*"
+  ],
+  "peerDependencies": {
+    "aws-sdk": "^2.1528.0",
+    "beachball": "2.52.0",
+    "turbo": "^1.11.2"
+  },
+  "packageManager": "npm@9.5.0",
+  "scripts": {
+    "generate-files": "turbo run generate --log-order=grouped --filter=./apps/frontend/flutter/**",
+    "build-apis-dev": "turbo run build:dev --log-order=stream --filter=./apps/backend/** --concurrency=1",
+    "build-apis-prod": "turbo run build:prod --log-order=stream --filter=./apps/backend/** --concurrency=1",
+    "build-frontend-prod": "turbo run build:prod --log-order=stream --filter=./apps/frontend/** --concurrency=1",
+    "deploy-apis-dev": "turbo run deploy:dev --log-order=stream --filter=./apps/backend/** --concurrency=1",
+    "deploy-apis-prod": "turbo run deploy:prod --log-order=stream --filter=./apps/backend/** --concurrency=1",
+    "deploy-auth-dev": "turbo run deploy:dev --filter=flyingdarts.backend.auth...",
+    "deploy-auth-prod": "turbo run deploy:prod --filter=flyingdarts.backend.auth...",
+    "serve-angular": "turbo run serve --log-order=stream --filter=./apps/frontend/angular",
+    "serve-flutter": "turbo run serve --log-order=stream --filter=./apps/frontend/flutter",
+    "dockerize": "turbo run dockerize --log-order=grouped --filter=flyingdarts.frontend.flutter...",
+    "beachball:check": "./scripts/beachball-wrapper.sh check",
+    "beachball:change": "./scripts/beachball-wrapper.sh change",
+    "beachball:bump": "./scripts/beachball-wrapper.sh bump",
+    "beachball:publish": "./scripts/beachball-wrapper.sh publish",
+    "beachball:sync": "./scripts/beachball-wrapper.sh sync",
+    "release:patch": "./scripts/beachball-wrapper.sh bump --type patch",
+    "release:minor": "./scripts/beachball-wrapper.sh bump --type minor",
+    "release:major": "./scripts/beachball-wrapper.sh bump --type major",
+    "release:prerelease": "./scripts/beachball-wrapper.sh bump --type prerelease"
+  },
+  "repository": {
+    "url": "https://github.com/flyingdarts/flyingdarts-turbo",
+    "type": "git"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.6",
+    "beachball": "^2.54.0",
+    "typescript": "^5.3.3"
+  }
 }

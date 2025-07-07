@@ -1,3 +1,5 @@
+namespace Flyingdarts.Backend.Games.X01.Queue;
+
 /// <summary>
 /// Represents the inner handler for processing APIGatewayProxyRequest.
 /// </summary>

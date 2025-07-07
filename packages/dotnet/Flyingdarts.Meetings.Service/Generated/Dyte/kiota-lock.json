@@ -1,0 +1,29 @@
+{
+  "descriptionHash": "41BF846F164174D0B9DD34AC5BD96B993E4E6710FC37BFC474C1A81EC40DA2E7B25AF9E94C7B0A5678A93C73B4D5184F102852EDBCA9E4551873D733003465C1",
+  "descriptionLocation": "../../../../specs/dyte-api-spec-fixed.yaml",
+  "lockFileVersion": "1.0.0",
+  "kiotaVersion": "1.27.0",
+  "clientClassName": "DyteApiClient",
+  "typeAccessModifier": "Public",
+  "clientNamespaceName": "Flyingdarts.Meetings.Service.Generated.Dyte",
+  "language": "CSharp",
+  "usesBackingStore": false,
+  "excludeBackwardCompatible": false,
+  "includeAdditionalData": true,
+  "disableSSLValidation": false,
+  "serializers": [
+    "Microsoft.Kiota.Serialization.Json.JsonSerializationWriterFactory"
+  ],
+  "deserializers": [
+    "Microsoft.Kiota.Serialization.Json.JsonParseNodeFactory"
+  ],
+  "structuredMimeTypes": [
+    "application/json",
+    "text/plain;q=0.9",
+    "application/x-www-form-urlencoded;q=0.2",
+    "multipart/form-data;q=0.1"
+  ],
+  "includePatterns": [],
+  "excludePatterns": [],
+  "disabledValidationRules": []
+}

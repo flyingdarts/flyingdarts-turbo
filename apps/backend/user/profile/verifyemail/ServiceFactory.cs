@@ -1,3 +1,7 @@
+using Flyingdarts.Backend.User.Profile.VerifyEmail.CQRS;
+
+namespace Flyingdarts.Backend.User.Profile.VerifyEmail;
+
 /// <summary>
 /// Factory class for creating the service provider.
 /// </summary>

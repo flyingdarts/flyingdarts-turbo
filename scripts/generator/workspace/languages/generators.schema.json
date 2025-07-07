@@ -1,0 +1,10 @@
+{
+  "$id": "generators.schema.json",
+  "title": "Generators Script Config",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string" }
+  },
+  "required": ["version"],
+  "additionalProperties": false
+}

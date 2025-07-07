@@ -1,4 +1,6 @@
 ﻿
+namespace Flyingdarts.Backend.User.Profile.Api.Response;
+
 public class UserProfileDto
 {
     public string UserId { get; set; }
@@ -6,4 +8,3 @@ public class UserProfileDto
     public string Email { get; set; }
     public string Country { get; set; }
 }
-

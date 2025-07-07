@@ -1,4 +1,6 @@
-﻿public class CreateUserProfileCommandValidator : AbstractValidator<CreateUserProfileCommand>
+﻿namespace Flyingdarts.Backend.User.Profile.Api.Requests.Create;
+
+public class CreateUserProfileCommandValidator : AbstractValidator<CreateUserProfileCommand>
 {
     public CreateUserProfileCommandValidator()
     {

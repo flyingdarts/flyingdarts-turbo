@@ -1,4 +1,6 @@
-﻿public class SocketMessage<TMessage>
+﻿namespace Flyingdarts.Backend.Signalling.OnConnect.Models;
+
+public class SocketMessage<TMessage>
 {
     [JsonPropertyName("action")]
     public string Action { get; set; } = null;
@@ -12,6 +14,9 @@
     [JsonIgnore]
     public string ConnectionId { get; set; } = null;
 
+    [JsonIgnore]
+    public string AuthProviderUserId { get; set; } = null;
+    
     // ReSharper disable once PublicConstructorInAbstractClass
     public SocketMessage()
     {

@@ -1,0 +1,187 @@
+# State Machine Definition for Beachball Setup Workflow
+# This YAML can be used to generate code for state machines
+# Schema: workflow-schema.json
+
+workflow:
+  name: "BeachballSetupWorkflow"
+  description: "Workflow for setting up and configuring Beachball in a project"
+  version: "1.0.0"
+
+  # Domain Events that can be triggered
+  events:
+    - name: "start"
+      description: "Start the workflow process"
+    - name: "continue"
+      description: "Continue to the next step"
+    - name: "RequirementsVerified"
+      description: "Beachball requirements have been verified"
+    - name: "PackageInstalled"
+      description: "Beachball package has been installed"
+    - name: "ChangelogVerified"
+      description: "Changelog files have been verified"
+    - name: "SetupCompleted"
+      description: "Setup process has been completed"
+    - name: "UserPrompted"
+      description: "User has been prompted for input"
+    - name: "ErrorOccurred"
+      description: "An error occurred during the process"
+
+  # States of the workflow
+  states:
+    - id: "initial"
+      name: "Initial"
+      description: "Starting state of the workflow"
+      isInitial: true
+      transitions:
+        - event: "start"
+          target: "verifying-requirements"
+          description: "Begin the setup process"
+
+    - id: "verifying-requirements"
+      name: "VerifyingRequirements"
+      description: "Checking if Beachball is installed and requirements are met"
+      actions:
+        - type: "log"
+          level: "info"
+          message: "🚀 Setting up Beachball in $pwd"
+        - type: "log"
+          level: "info"
+          message: "🔄 Checking beachball requirements"
+        - type: "verify-beachball-installation"
+      transitions:
+        - event: "RequirementsVerified"
+          target: "requirements-met"
+          condition: "beachball_installed"
+        - event: "RequirementsVerified"
+          target: "installing-package"
+          condition: "beachball_not_found"
+        - event: "ErrorOccurred"
+          target: "error"
+          description: "Failed to verify requirements"
+
+    - id: "requirements-met"
+      name: "RequirementsMet"
+      description: "Beachball requirements are satisfied"
+      actions:
+        - type: "log"
+          level: "success"
+          message: "✅ Package requirements verified"
+      transitions:
+        - event: "continue"
+          target: "checking-changelog"
+          description: "Proceed to check changelog files"
+
+    - id: "installing-package"
+      name: "InstallingPackage"
+      description: "Installing or updating Beachball package"
+      actions:
+        - type: "log"
+          level: "info"
+          message: "💡 Upgrading beachball package in (project/global)"
+        - type: "install-beachball-package"
+      transitions:
+        - event: "PackageInstalled"
+          target: "checking-changelog"
+          description: "Package installed successfully"
+        - event: "UserPrompted"
+          target: "user-prompt"
+          description: "User needs to make a decision"
+        - event: "ErrorOccurred"
+          target: "error"
+          description: "Failed to install package"
+
+    - id: "user-prompt"
+      name: "UserPrompt"
+      description: "Waiting for user input"
+      actions:
+        - type: "log"
+          level: "warning"
+          message: "⚠️ New version of beachball is available. Do you want to upgrade to the latest version? (y/N):"
+        - type: "prompt-user"
+          question: "upgrade_beachball"
+      transitions:
+        - event: "UserPrompted"
+          target: "installing-package"
+          condition: "user_agreed"
+        - event: "UserPrompted"
+          target: "checking-changelog"
+          condition: "user_declined"
+
+    - id: "checking-changelog"
+      name: "CheckingChangelog"
+      description: "Verifying changelog files in workspace"
+      actions:
+        - type: "log"
+          level: "info"
+          message: "🔄 Checking package installations"
+        - type: "verify-changelog-files"
+      transitions:
+        - event: "ChangelogVerified"
+          target: "setup-complete"
+          description: "Changelog files are valid"
+        - event: "ErrorOccurred"
+          target: "error"
+          description: "Failed to verify changelog files"
+
+    - id: "setup-complete"
+      name: "SetupComplete"
+      description: "Beachball setup has been completed successfully"
+      isFinal: true
+      actions:
+        - type: "log"
+          level: "success"
+          message: "✅ Setup completed successfully! 🎉"
+        - type: "log"
+          level: "success"
+          message: "✅ Verifying requirements are met"
+
+    - id: "error"
+      name: "Error"
+      description: "An error occurred during the setup process"
+      isFinal: true
+      actions:
+        - type: "log"
+          level: "error"
+          message: "❌ Setup failed. Please check the error messages above."
+
+  # Configuration for code generation
+  codeGeneration:
+    language: "csharp"
+    namespace: "Flyingdarts.Workflows.Beachball"
+    baseClass: "StateMachineBase"
+    generateInterfaces: true
+    generateTests: true
+
+    # Custom actions that need implementation
+    customActions:
+      - name: "verify-beachball-installation"
+        description: "Check if Beachball is installed globally or locally"
+        returnType: "bool"
+
+      - name: "install-beachball-package"
+        description: "Install or update Beachball package"
+        returnType: "bool"
+
+      - name: "verify-changelog-files"
+        description: "Verify that changelog files exist and are valid"
+        returnType: "bool"
+
+      - name: "prompt-user"
+        description: "Prompt user for input and wait for response"
+        parameters:
+          - name: "question"
+            type: "string"
+        returnType: "string"
+
+  # Validation rules
+  validation:
+    - rule: "all-states-must-have-transitions"
+      description: "Every state must have at least one transition (except final states)"
+    - rule: "initial-state-required"
+      description: "Exactly one state must be marked as initial"
+    - rule: "final-states-required"
+      description: "At least one state must be marked as final"
+    - rule: "unique-state-ids"
+      description: "All state IDs must be unique"
+    - rule: "valid-transition-targets"
+      description: "All transition targets must reference existing states"

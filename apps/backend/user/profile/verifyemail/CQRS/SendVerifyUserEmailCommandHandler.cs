@@ -1,4 +1,6 @@
-﻿public class SendVerifyUserEmailCommandHandler : IRequestHandler<SendVerifyUserEmailCommand>
+﻿namespace Flyingdarts.Backend.User.Profile.VerifyEmail.CQRS;
+
+public class SendVerifyUserEmailCommandHandler : IRequestHandler<SendVerifyUserEmailCommand>
 {
     private readonly IAmazonSimpleEmailService _emailService;
     public SendVerifyUserEmailCommandHandler(IAmazonSimpleEmailService emailService)

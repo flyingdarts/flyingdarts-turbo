@@ -1,4 +1,6 @@
-﻿public class UpdateUserProfileCommandValidator : AbstractValidator<UpdateUserProfileCommand>
+﻿namespace Flyingdarts.Backend.User.Profile.Api.Requests.Update;
+
+public class UpdateUserProfileCommandValidator : AbstractValidator<UpdateUserProfileCommand>
 {
     public UpdateUserProfileCommandValidator()
     {

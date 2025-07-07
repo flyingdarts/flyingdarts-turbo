@@ -1,0 +1,48 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- AWS Lambda Packages -->
+    <PackageVersion Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.1" />
+    <PackageVersion Include="Amazon.Lambda.RuntimeSupport" Version="1.13.1" />
+    <PackageVersion Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
+    <PackageVersion Include="Amazon.Lambda.Core" Version="2.6.0" />
+    <PackageVersion Include="Amazon.Lambda.DynamoDBEvents" Version="3.1.1" />
+    <PackageVersion Include="Amazon.Lambda.SQSEvents" Version="2.3.0" />
+    <!-- AWS SDK Packages -->
+    <PackageVersion Include="AWSSDK.Core" Version="4.0.0.14" />
+    <PackageVersion Include="AWSSDK.DynamoDBv2" Version="4.0.2.1" />
+    <PackageVersion Include="AWSSDK.SQS" Version="4.0.0.13" />
+    <PackageVersion Include="AWSSDK.SimpleEmail" Version="4.0.0.12" />
+    <PackageVersion Include="AWSSDK.SimpleSystemsManagement" Version="4.0.2.1" />
+    <PackageVersion Include="AWSSDK.ApiGatewayManagementApi" Version="4.0.0.12" />
+    <!-- AWS Extensions -->
+    <PackageVersion Include="Amazon.Extensions.Configuration.SystemsManager" Version="7.0.0" />
+    <!-- AWS CDK -->
+    <PackageVersion Include="Amazon.CDK.Lib" Version="2.204.0" />
+    <PackageVersion Include="Constructs" Version="10.4.2" />
+    <!-- Microsoft Extensions -->
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.6" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="9.0.6" />
+    <!-- Microsoft Kiota (OpenAPI Client Generation) -->
+    <PackageVersion Include="Microsoft.Kiota.Http.HttpClientLibrary" Version="1.19.0" />
+    <PackageVersion Include="Microsoft.Kiota.Serialization.Json" Version="1.19.0" />
+    <PackageVersion Include="Microsoft.Kiota.Abstractions" Version="1.19.0" />
+    <!-- Validation & Mediation -->
+    <PackageVersion Include="MediatR" Version="13.0.0" />
+    <!-- Auth -->
+    <PackageVersion Include="Authress.SDK" Version="2.0.80" />
+    <PackageVersion Include="Microsoft.IdentityModel.Tokens" Version="8.12.1" />
+    <!-- Testing -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+    <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.1" />
+    <!-- System -->
+    <PackageVersion Include="System.Text.Json" Version="9.0.6" />
+  </ItemGroup>
+</Project>
