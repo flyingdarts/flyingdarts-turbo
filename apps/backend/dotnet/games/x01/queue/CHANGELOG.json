@@ -2,6 +2,21 @@
   "name": "flyingdarts.backend.games.x01.queue",
   "entries": [
     {
+      "date": "Tue, 08 Jul 2025 06:33:52 GMT",
+      "version": "0.0.4",
+      "tag": "flyingdarts.backend.games.x01.queue_v0.0.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts.backend.games.x01.queue",
+            "commit": "7575bcb70c141ad6b44824cd434d9f298e4ace36",
+            "comment": "Make ci"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 08 Jul 2025 05:11:38 GMT",
       "version": "0.0.3",
       "tag": "flyingdarts.backend.games.x01.queue_v0.0.3",

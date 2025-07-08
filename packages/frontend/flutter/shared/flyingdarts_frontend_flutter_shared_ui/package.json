@@ -1,10 +1,9 @@
 {
   "name": "flyingdarts_frontend_flutter_shared_ui",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A new Flutter package project.",
   "private": false,
   "scripts": {
-    "build": "flutter --version",
-    "build:prod": "flutter --version"
+    "build": "flutter build"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.meetings.service",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": false,
   "scripts": {
     "build": "dotnet build -c Debug --no-dependencies",

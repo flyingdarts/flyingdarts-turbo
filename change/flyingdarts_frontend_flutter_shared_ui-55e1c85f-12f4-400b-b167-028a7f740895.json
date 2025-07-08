@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Make ci",
-  "packageName": "flyingdarts_frontend_flutter_shared_ui",
-  "email": "mike@methylium.com",
-  "dependentChangeType": "patch"
-}

@@ -1,6 +1,9 @@
 {
   "name": "flyingdarts.frontend.flutter.features.keyboard",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Keyboard feature package",
-  "private": false
+  "private": false,
+  "scripts": {
+    "build": "flutter build"
+  }
 }

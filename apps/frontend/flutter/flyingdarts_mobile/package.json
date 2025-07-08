@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.frontend.flutter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": false,
   "scripts": {
     "dockerize": "docker build -t flyingdarts-flutter-app:slim .",

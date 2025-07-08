@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.frontend.flutter.features.navigation",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A package containing the navigation feature.",
   "private": false,
   "dependencies": {
@@ -8,5 +8,8 @@
     "flyingdarts.frontend.flutter.features.keyboard": "*",
     "flyingdarts.frontend.flutter.features.language": "*",
     "flyingdarts.frontend.flutter.features.speech": "*"
+  },
+  "scripts": {
+    "build": "flutter build"
   }
 }

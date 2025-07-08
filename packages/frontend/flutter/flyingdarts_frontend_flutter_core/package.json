@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts_frontend_flutter_core",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A flutter package used to configure dependencies and modules",
   "private": false,
   "dependencies": {
@@ -8,5 +8,8 @@
     "flyingdarts_frontend_flutter_shared_configuration": "*",
     "flyingdarts_frontend_flutter_shared_configuration_preferences": "*",
     "flyingdarts_frontend_flutter_shared_configuration_secrets": "*"
+  },
+  "scripts": {
+    "build": "flutter build"
   }
 }

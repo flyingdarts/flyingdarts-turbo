@@ -2,8 +2,6 @@
 /** @type {import('beachball').BeachballConfig} */
 
 const config = {
-  branch: "main",
-
   // Version bump strategy
   bumpDeps: true,
   generateChangelog: true,

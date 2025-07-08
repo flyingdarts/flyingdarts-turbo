@@ -1,6 +1,9 @@
 {
   "name": "flyingdarts_frontend_flutter_shared_amplify",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Amplify package",
-  "private": false
+  "private": false,
+  "scripts": {
+    "build": "flutter build"
+  }
 }
