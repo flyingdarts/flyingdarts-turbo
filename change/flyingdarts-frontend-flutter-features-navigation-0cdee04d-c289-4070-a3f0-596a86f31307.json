@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Make ci",
+  "packageName": "flyingdarts.frontend.flutter.features.navigation",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}

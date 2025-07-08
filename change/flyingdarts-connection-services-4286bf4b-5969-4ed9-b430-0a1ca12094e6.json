@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Make ci",
+  "packageName": "flyingdarts.connection.services",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}

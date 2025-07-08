@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Make ci",
+  "packageName": "flyingdarts.backend.user.profile.verifyemail",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}

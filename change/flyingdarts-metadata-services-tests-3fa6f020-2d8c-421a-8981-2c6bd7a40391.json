@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Make ci",
+  "packageName": "flyingdarts.metadata.services.tests",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}
