@@ -1,0 +1,13 @@
+{
+  "name": "flyingdarts_frontend_flutter_shared_websocket",
+  "version": "0.0.3",
+  "description": "A new Flutter package project.",
+  "private": false,
+  "dependencies": {
+    "flyingdarts_frontend_flutter_shared_amplify": "*"
+  },
+  "scripts": {
+    "build": "flutter --version",
+    "build:prod": "flutter --version"
+  }
+}

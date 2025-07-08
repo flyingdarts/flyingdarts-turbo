@@ -1,0 +1,26 @@
+name: flyingdarts_frontend_flutter_api_sdk
+description: A new Flutter package project.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ">=3.1.5 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  injectable: ^2.3.0
+  json_annotation: ^4.8.1
+  equatable: ^2.0.5
+  dio: ^4.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  json_serializable: ^6.7.1
+  mockito: ^5.4.3
+  build_runner: ^2.4.6
+
+flutter:

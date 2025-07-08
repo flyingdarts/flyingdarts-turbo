@@ -2,6 +2,8 @@
 /** @type {import('beachball').BeachballConfig} */
 
 const config = {
+  branch: "main",
+
   // Version bump strategy
   bumpDeps: true,
   generateChangelog: true,
@@ -13,9 +15,6 @@ const config = {
   // Git configuration
   gitTags: true,
   push: false,
-
-  // Message configuration
-  message: "chore: bump version to %s [skip ci]",
 
   // Tag configuration
   tag: "latest",

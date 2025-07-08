@@ -1,0 +1,18 @@
+{
+  "$id": "apps.flutter.schema.json",
+  "title": "Flutter Apps Type",
+  "type": "object",
+  "properties": {
+    "flutter": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "The version of flutter to use."
+        }
+      },
+      "required": ["version"],
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "flyingdarts_frontend_flutter_shared_internationalization",
+  "version": "0.0.3",
+  "description": "Internationalization package",
+  "private": false,
+  "scripts": {
+    "build": "flutter --version",
+    "build:prod": "flutter --version"
+  }
+}

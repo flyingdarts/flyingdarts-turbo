@@ -1,0 +1,12 @@
+{
+  "name": "flyingdarts.connection.services",
+  "version": "0.0.3",
+  "private": false,
+  "scripts": {
+    "build": "dotnet build -c Debug --no-dependencies",
+    "build:prod": "dotnet build -c Release --no-dependencies"
+  },
+  "dependencies": {
+    "flyingdarts.persistance": "*"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "flyingdarts.backend.user.profile.verifyemail",
+  "entries": [
+    {
+      "date": "Tue, 08 Jul 2025 05:11:38 GMT",
+      "version": "0.0.3",
+      "tag": "flyingdarts.backend.user.profile.verifyemail_v0.0.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts.backend.user.profile.verifyemail",
+            "commit": "b143e1ddff1763e2f652207fffd3dfa8bd5dc79c",
+            "comment": "Make & restore solution"
+          }
+        ]
+      }
+    }
+  ]
+}

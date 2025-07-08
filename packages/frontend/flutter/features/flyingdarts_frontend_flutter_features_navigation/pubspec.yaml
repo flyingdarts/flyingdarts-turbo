@@ -1,0 +1,38 @@
+name: flyingdarts_frontend_flutter_features_navigation
+description: "A package containing the navigation feature."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ">=3.1.3 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  amplify_flutter: ^1.6.1
+  get_it:
+  flyingdarts_frontend_flutter_features_dartboard:
+    path: ./../flyingdarts_frontend_flutter_features_dartboard
+
+  flyingdarts_frontend_flutter_features_keyboard:
+    path: ./../flyingdarts_frontend_flutter_features_keyboard
+
+  flyingdarts_frontend_flutter_features_language:
+    path: ./../flyingdarts_frontend_flutter_features_language
+
+  flyingdarts_frontend_flutter_features_speech:
+    path: ./../flyingdarts_frontend_flutter_features_speech
+
+  widgetbook: ^3.14.3
+  widgetbook_annotation: ^3.5.0
+  flutter_bloc: ^8.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+  build_runner: ^2.4.6
+  widgetbook_generator: ^3.13.0
+flutter:

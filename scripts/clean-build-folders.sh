@@ -23,7 +23,13 @@ remove_file "package-lock.json"
 remove_file "pubspec.lock"
 
 # Directories to search within
-search_dirs="apps packages"
+search_dirs="
+	apps/backend/dotnet 
+	apps/frontend/flutter 
+	apps/tools/dotnet
+	packages/backend/dotnet 
+	packages/frontend/flutter
+	packages/tools/dotnet"
 
 # Patterns to find and remove
 dirs_patterns="node_modules dist .turbo .angular bin obj"

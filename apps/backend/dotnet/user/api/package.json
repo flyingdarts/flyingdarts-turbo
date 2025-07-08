@@ -1,0 +1,11 @@
+{
+  "name": "flyingdarts.backend.user.profile.api",
+  "version": "0.0.3",
+  "private": false,
+  "scripts": {
+    "build:dev": "dotnet build -c Debug --no-dependencies",
+    "build:prod": "dotnet build -c Release --no-dependencies",
+    "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-User-Profile-Api-Development  -frun dotnet8 -f net8.0 --region eu-west-1",
+    "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-User-Profile-Api-Production  -frun dotnet8 -f net8.0 --region eu-west-1"
+  }
+}
