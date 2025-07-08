@@ -1,0 +1,9 @@
+{
+  "name": "flyingdarts.frontend.flutter.features.profile",
+  "version": "0.0.4",
+  "description": "Profile feature package",
+  "private": false,
+  "scripts": {
+    "build": "flutter build"
+  }
+}

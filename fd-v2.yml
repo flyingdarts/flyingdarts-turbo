@@ -2,48 +2,20 @@ apps:
   backend:
     dotnet:
       version: "8.0"
-    rust:
-      version: "1.70"
   frontend:
-    angular:
-      version: "17"
     flutter:
       version: "3.19"
   tools:
     dotnet:
-      version: "8.0"
-    python:
-      version: "3.11"
-    typescript:
-      version: "5.4"
+      version: "7.0"
 
 packages:
   backend:
     dotnet:
       version: "8.0"
-    rust:
-      version: "1.70"
   frontend:
-    angular:
-      version: "17"
     flutter:
       version: "3.19"
   tools:
     dotnet:
       version: "8.0"
-    typescript:
-      version: "5.4"
-
-scripts:
-  generators:
-    version: "1.0"
-  dotnet:
-    version: "8.0"
-  typescript:
-    version: "5.4"
-  angular:
-    version: "17"
-  dart:
-    version: "3.3"
-  flutter:
-    version: "3.19"

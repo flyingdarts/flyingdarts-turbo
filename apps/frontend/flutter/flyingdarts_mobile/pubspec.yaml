@@ -1,0 +1,101 @@
+name: flyingdarts_app
+description: A flutter app to send score to Flyingdarts.net
+publish_to: none
+
+version: 1.3.9+1
+
+environment:
+  sdk: ">=2.18.2 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flyingdarts_frontend_flutter_core:
+    path: ../../../../packages/frontend/flutter/flyingdarts_frontend_flutter_core
+
+  flyingdarts_frontend_flutter_features_appbar:
+    path: ../../../../packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_appbar
+  flyingdarts_frontend_flutter_features_dartboard:
+    path: ../../../../packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_dartboard
+  flyingdarts_frontend_flutter_features_keyboard:
+    path: ../../../../packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_keyboard
+  flyingdarts_frontend_flutter_features_language:
+    path: ../../../../packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_language
+  flyingdarts_frontend_flutter_features_navigation:
+    path: ../../../../packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_navigation
+  flyingdarts_frontend_flutter_features_profile:
+    path: ../../../../packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_profile
+  flyingdarts_frontend_flutter_features_speech:
+    path: ../../../../packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_speech
+  flyingdarts_frontend_flutter_features_splash:
+    path: ../../../../packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_splash
+  flyingdarts_frontend_flutter_shared_configuration:
+    path: ../../../../packages/frontend/flutter/shared/configuration/flyingdarts_frontend_flutter_shared_configuration
+  flyingdarts_frontend_flutter_shared_configuration_secrets:
+    path: ../../../../packages/frontend/flutter/shared/configuration/flyingdarts_frontend_flutter_shared_configuration_secrets
+  flyingdarts_frontend_flutter_shared_internationalization:
+    path: ../../../../packages/frontend/flutter/shared/flyingdarts_frontend_flutter_shared_internationalization
+  flyingdarts_frontend_flutter_shared_websocket:
+    path: ../../../../packages/frontend/flutter/shared/flyingdarts_frontend_flutter_shared_websocket
+  flyingdarts_frontend_flutter_shared_ui:
+    path: ../../../../packages/frontend/flutter/shared/flyingdarts_frontend_flutter_shared_ui
+
+  flutter_bloc: ^8.1.3
+  bloc: ^8.1.2
+  provider: ^6.1.1
+  widgetbook_annotation: ^3.5.0
+  widgetbook: ^3.14.3
+  amplify_auth_cognito: ^1.6.1
+  amplify_authenticator: ^1.5.2
+  amplify_flutter: ^1.6.0
+  go_router: ^12.1.3
+  loading_animation_widget: ^1.2.0+4
+  flutter_svg: ^2.0.7
+  curved_navigation_bar: ^1.0.3
+  flutter_localizations:
+    sdk: flutter
+  get_it: ^7.6.4
+  injectable: ^2.3.0
+  speech_to_text:
+    git:
+      url: https://github.com/flyingdarts/speech_to_text.git
+      path: speech_to_text
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  rxdart: ^0.27.7
+  bloc_test: ^9.1.5
+  alchemist: ^0.7.0
+  glob: ^2.1.2
+  flutter_inappwebview: ^5.8.0
+  intl: any
+  equatable: ^2.0.5
+  injectable_generator: ^2.3.0
+  flutter_lints: ^3.0.1
+  mockito: ^5.4.3
+  build_runner: ^2.4.6
+  test: ^1.24.3
+  widgetbook_generator: ^3.13.0
+  gherkin: ^2.0.8
+  flutter_gherkin: ^2.0.0
+
+  dependency_validator:
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/icons/dartboard_icon.svg
+    - assets/icons/dartboard_icon_outlined.svg
+    - assets/icons/fd_icon.svg
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700

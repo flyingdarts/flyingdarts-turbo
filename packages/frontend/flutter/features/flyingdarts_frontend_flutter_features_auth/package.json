@@ -1,0 +1,9 @@
+{
+  "name": "flyingdarts_frontend_flutter_features_auth",
+  "version": "0.0.4",
+  "description": "Auth feature package",
+  "private": false,
+  "scripts": {
+    "build": "flutter build"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "flyingdarts_frontend_flutter_shared_configuration_preferences",
+  "version": "0.0.4",
+  "description": "Configuration preferences package",
+  "private": false,
+  "dependencies": {
+    "flyingdarts_frontend_flutter_shared_configuration": "*"
+  },
+  "scripts": {
+    "build": "flutter build"
+  }
+}

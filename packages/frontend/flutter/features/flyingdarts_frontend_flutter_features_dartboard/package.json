@@ -1,0 +1,13 @@
+{
+  "name": "flyingdarts.frontend.flutter.features.dartboard",
+  "version": "0.0.4",
+  "description": "A package containing the dartboard feature",
+  "private": false,
+  "dependencies": {
+    "flyingdarts_frontend_flutter_shared_ui": "*",
+    "flyingdarts_frontend_flutter_shared_internationalization": "*"
+  },
+  "scripts": {
+    "build": "flutter build"
+  }
+}

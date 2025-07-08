@@ -1,0 +1,9 @@
+{
+  "name": "flyingdarts_frontend_flutter_api_sdk",
+  "version": "0.0.4",
+  "description": "API SDK package",
+  "private": false,
+  "scripts": {
+    "build": "flutter build"
+  }
+}

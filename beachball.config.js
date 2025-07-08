@@ -14,9 +14,6 @@ const config = {
   gitTags: true,
   push: false,
 
-  // Message configuration
-  message: "chore: bump version to %s [skip ci]",
-
   // Tag configuration
   tag: "latest",
 };

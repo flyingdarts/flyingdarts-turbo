@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>Flyingdarts.CDK.Constructs</Title>
+		<VersionPrefix>1.0.2</VersionPrefix>
+		<Version>$(VersionPrefix)</Version>
+		<PackageId>Flyingdarts.CDK.Constructs</PackageId>
+		<Authors>Flyingdarts</Authors>
+		<Description>A package with Constructs for the Flyingdarts infrastructure in AWS Cloud</Description>
+		<PackageProjectUrl>https://github.com/flyingdarts/Flyingdarts.Infrastructure.Constructs</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/flyingdarts/Flyingdarts.Infrastructure.Constructs.git</RepositoryUrl>
+		<LicenseFile>LICENSE.md</LicenseFile>
+		<PackageTags>Flyingdarts Backend Constructs</PackageTags>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReleaseNotes>Update package references</PackageReleaseNotes>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RootNamespace>Flyingdarts.CDK.Constructs</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="icon.png">
+	    <PackagePath>\</PackagePath>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Include="LICENSE.md">
+	    <PackagePath>\</PackagePath>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	  <Content Include="README.md">
+	    <PackagePath>\</PackagePath>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    <Pack>True</Pack>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Amazon.CDK.AWS.APIGatewayv2.Alpha" Version="2.103.1-alpha.0" />
+		<PackageReference Include="Amazon.CDK.AWS.APIGatewayv2.Integrations.Alpha" Version="2.103.1-alpha.0" />
+		<PackageReference Include="Amazon.CDK.AWS.APIGatewayv2.Authorizers.Alpha" Version="2.103.1-alpha.0" />
+		<PackageReference Include="Constructs" Version="10.3.0" />
+	  <PackageReference Include="Amazon.CDK.Lib" Version="2.110.0" />
+	</ItemGroup>
+	
+</Project>

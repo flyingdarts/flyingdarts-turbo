@@ -4,10 +4,61 @@
   "title": "FlyingDarts Monorepo Workspace Schema",
   "type": "object",
   "properties": {
-    "apps": { "$ref": "types/apps.schema.json" },
-    "packages": { "$ref": "types/packages.schema.json" },
-    "scripts": { "$ref": "types/scripts.schema.json" }
+    "apps": {
+      "type": "object",
+      "properties": {
+        "backend": {
+          "type": "object",
+          "properties": {
+            "dotnet": { "$ref": "types/apps.dotnet.schema.json" }
+          },
+          "additionalProperties": false
+        },
+        "frontend": {
+          "type": "object",
+          "properties": {
+            "flutter": { "$ref": "types/apps.flutter.schema.json" }
+          },
+          "additionalProperties": false
+        },
+        "tools": {
+          "type": "object",
+          "properties": {
+            "dotnet": { "$ref": "types/apps.dotnet.schema.json" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "packages": {
+      "type": "object",
+      "properties": {
+        "backend": {
+          "type": "object",
+          "properties": {
+            "dotnet": { "$ref": "types/packages.dotnet.schema.json" }
+          },
+          "additionalProperties": false
+        },
+        "frontend": {
+          "type": "object",
+          "properties": {
+            "flutter": { "$ref": "types/packages.flutter.schema.json" }
+          },
+          "additionalProperties": false
+        },
+        "tools": {
+          "type": "object",
+          "properties": {
+            "dotnet": { "$ref": "types/packages.dotnet.schema.json" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
   },
-  "required": ["apps", "packages", "scripts"],
+  "required": ["apps", "packages"],
   "additionalProperties": false
 }

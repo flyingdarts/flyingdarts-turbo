@@ -1,0 +1,10 @@
+{
+  "name": "flyingdarts.frontend.flutter",
+  "version": "0.0.4",
+  "private": false,
+  "scripts": {
+    "dockerize": "docker build -t flyingdarts-flutter-app:slim .",
+    "serve": "flutter run -d Chrome --web-hostname=127.0.0.1 --web-port=4100 --profile -v"
+  },
+  "dependencies": {}
+}

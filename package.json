@@ -2,15 +2,19 @@
   "name": "flyingdarts",
   "version": "0.0.1",
   "workspaces": [
-    "packages/**/*",
-    "apps/backend/**/*",
-    "apps/frontend/**/*",
-    "apps/tools/**/*"
+    "apps/backend/dotnet/**/*",
+    "apps/frontend/flutter/**/*",
+    "apps/tools/dotnet/**/*",
+    "packages/backend/dotnet/**/*",
+    "packages/frontend/flutter/**/*",
+    "packages/tools/dotnet/**/*"
   ],
   "peerDependencies": {
     "aws-sdk": "^2.1528.0",
     "beachball": "2.52.0",
-    "turbo": "^1.11.2"
+    "turbo": "^2.5.4",
+    "js-yaml": "^4.1.0",
+    "ajv": "^8.17.1"
   },
   "packageManager": "npm@9.5.0",
   "scripts": {
