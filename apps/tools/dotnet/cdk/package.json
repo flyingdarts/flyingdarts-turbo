@@ -3,8 +3,8 @@
   "version": "0.0.4",
   "private": false,
   "scripts": {
-    "build": "dotnet build -c Debug --no-dependencies",
-    "build:prod": "dotnet build -c Release --no-dependencies"
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build -c Release"
   },
   "dependencies": {
     "flyingdarts.connection.services": "*",

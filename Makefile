@@ -22,3 +22,6 @@ ci:
 
 fix-flutter:
 	sh ./scripts/flutter/fix-flutter-package-names-and-folders.sh
+
+test:
+	dotnet test

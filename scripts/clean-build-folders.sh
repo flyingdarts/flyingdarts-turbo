@@ -4,7 +4,7 @@ remove_dir() {
 	dir_name="$1"
 	if [ -d "$dir_name" ]; then
 		rm -rf "$dir_name"
-		echo "$dir_name has been removed."
+		echo "🗑️  $dir_name has been removed."
 	fi
 }
 
@@ -12,9 +12,11 @@ remove_file() {
 	file_name="$1"
 	if [ -f "$file_name" ]; then
 		rm -rf "$file_name"
-		echo "$file_name has been removed."
+		echo "🗑️  $file_name has been removed."
 	fi
 }
+
+echo "🧹 Starting cleanup process..."
 
 # Remove top-level items
 remove_dir "node_modules"
@@ -36,49 +38,27 @@ dirs_patterns="node_modules dist .turbo .angular bin obj"
 
 # Loop through search dirs & patterns
 # Remove each find of patterns
+echo "🔍 Searching for build directories to clean..."
 for dir in $search_dirs; do
 	for pattern in $dirs_patterns; do
-		find "$dir" -type d -name "$pattern" -exec rm -rf {} + -exec echo "{} has been removed." \;
+		find "$dir" -type d -name "$pattern" -exec rm -rf {} + 2>/dev/null
 	done
 done
 
-# Find and remove all pubspec.lock files recursively, with user confirmation
-found_files=""
+# Find and remove all pubspec.lock files recursively (no prompt)
+echo "📦 Removing pubspec.lock files..."
 for dir in $search_dirs; do
 	if [ -d "$dir" ]; then
-		files=$(find "$dir" -type f -name "pubspec.lock")
-		if [ -n "$files" ]; then
-			found_files="$found_files\n$files"
-		fi
+		find "$dir" -type f -name "pubspec.lock" -exec rm -f {} + 2>/dev/null
 	fi
 done
 
-if [ -n "$found_files" ]; then
-	echo "🧹 Found the following pubspec.lock files to remove:"
-	echo "$found_files" | sed '/^$/d'
-	echo "Are you sure you want to delete ALL these pubspec.lock files? (y/N) 🚨 "
-	read confirm
-	case "$confirm" in
-	y | Y)
-		echo "$found_files" | sed '/^$/d' | while IFS= read file; do
-			rm -f "$file"
-			echo "$file has been removed."
-		done
-		;;
-	*)
-		echo "Aborted removal of pubspec.lock files."
-		;;
-	esac
-else
-	echo "No pubspec.lock files found to remove."
-fi
-
 # Clear npm cache
-echo "Clearing npm cache..."
-npm cache clean --force
+echo "🧹 Clearing npm cache..."
+npm cache clean --force >/dev/null 2>&1
 
 # Clear NuGet cache
-echo "Clearing NuGet cache..."
-dotnet nuget locals all --clear
+echo "🧹 Clearing NuGet cache..."
+dotnet nuget locals all --clear >/dev/null 2>&1
 
-echo "All cleaned up!"
+echo "✨ All cleaned up!"

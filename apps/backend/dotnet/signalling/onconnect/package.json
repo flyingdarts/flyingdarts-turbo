@@ -3,8 +3,8 @@
   "version": "0.0.4",
   "private": false,
   "scripts": {
-    "build": "dotnet build -c Debug --no-dependencies",
-    "build:prod": "dotnet build -c Release --no-dependencies",
+    "build": "dotnet build -c Debug ",
+    "build:prod": "dotnet build -c Release ",
     "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnConnect-Development  -frun dotnet8 -f net8.0 --region eu-west-1",
     "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Signalling-OnConnect-Production  -frun dotnet8 -f net8.0 --region eu-west-1"
   },
