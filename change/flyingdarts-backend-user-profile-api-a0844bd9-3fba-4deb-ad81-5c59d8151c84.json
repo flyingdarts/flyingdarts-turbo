@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Re-organize abit",
+  "packageName": "flyingdarts.backend.user.profile.api",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}

@@ -1,0 +1,7 @@
+{
+  "type": "patch",
+  "comment": "Re-organize abit",
+  "packageName": "flyingdarts.frontend.flutter",
+  "email": "mike@methylium.com",
+  "dependentChangeType": "patch"
+}
