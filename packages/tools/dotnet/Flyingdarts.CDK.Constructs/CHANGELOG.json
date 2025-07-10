@@ -2,6 +2,21 @@
   "name": "flyingdarts.cdk.constructs",
   "entries": [
     {
+      "date": "Thu, 10 Jul 2025 15:37:51 GMT",
+      "version": "0.0.5",
+      "tag": "flyingdarts.cdk.constructs_v0.0.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts.cdk.constructs",
+            "commit": "ae8ac3a743c4e6173f038fb977497ab00dcef336",
+            "comment": "Re-organize abit"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 08 Jul 2025 06:33:52 GMT",
       "version": "0.0.4",
       "tag": "flyingdarts.cdk.constructs_v0.0.4",

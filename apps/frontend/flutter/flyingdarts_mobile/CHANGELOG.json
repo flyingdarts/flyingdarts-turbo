@@ -2,6 +2,21 @@
   "name": "flyingdarts.frontend.flutter",
   "entries": [
     {
+      "date": "Thu, 10 Jul 2025 15:37:51 GMT",
+      "version": "0.0.5",
+      "tag": "flyingdarts.frontend.flutter_v0.0.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts.frontend.flutter",
+            "commit": "ae8ac3a743c4e6173f038fb977497ab00dcef336",
+            "comment": "Re-organize abit"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 08 Jul 2025 06:33:52 GMT",
       "version": "0.0.4",
       "tag": "flyingdarts.frontend.flutter_v0.0.4",

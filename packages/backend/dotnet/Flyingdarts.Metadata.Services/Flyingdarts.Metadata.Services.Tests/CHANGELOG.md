@@ -1,8 +1,16 @@
 # Change Log - flyingdarts.metadata.services.tests
 
-<!-- This log was last generated on Tue, 08 Jul 2025 06:33:52 GMT and should not be manually modified. -->
+<!-- This log was last generated on Thu, 10 Jul 2025 15:37:51 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 0.0.5
+
+Thu, 10 Jul 2025 15:37:51 GMT
+
+### Patches
+
+- Re-organize abit (mike.pattyn1@gmail.com)
 
 ## 0.0.4
 

@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Re-organize abit",
-  "packageName": "flyingdarts.backend.signalling.onconnect",
-  "email": "mike@methylium.com",
-  "dependentChangeType": "patch"
-}
