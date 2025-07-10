@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts_frontend_flutter_core",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A flutter package used to configure dependencies and modules",
   "private": false,
   "dependencies": {

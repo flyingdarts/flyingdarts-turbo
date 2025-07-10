@@ -1,7 +1,0 @@
-{
-  "type": "patch",
-  "comment": "Add flutter workspace at root",
-  "packageName": "flyingdarts_frontend_flutter_shared_configuration_preferences",
-  "email": "mike@methylium.com",
-  "dependentChangeType": "patch"
-}

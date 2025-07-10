@@ -2,6 +2,21 @@
   "name": "flyingdarts_frontend_flutter_shared_configuration",
   "entries": [
     {
+      "date": "Thu, 10 Jul 2025 18:42:19 GMT",
+      "version": "0.0.5",
+      "tag": "flyingdarts_frontend_flutter_shared_configuration_v0.0.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts_frontend_flutter_shared_configuration",
+            "commit": "64a9b796bbce7d2dc426dae7dd12b927260f61cb",
+            "comment": "Add flutter workspace at root"
+          }
+        ]
+      }
+    },
+    {
       "date": "Tue, 08 Jul 2025 06:33:52 GMT",
       "version": "0.0.4",
       "tag": "flyingdarts_frontend_flutter_shared_configuration_v0.0.4",

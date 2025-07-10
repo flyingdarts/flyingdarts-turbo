@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.frontend.flutter.features.navigation",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A package containing the navigation feature.",
   "private": false,
   "dependencies": {

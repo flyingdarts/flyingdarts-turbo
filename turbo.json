@@ -1,6 +1,13 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "restore": {
+      "outputs": [
+        "**/obj/**",
+        "**/bin/**",
+        "**/node_modules/**"
+      ]
+    },
     // Cache all build tasks
     "^build": {
       "cache": true
@@ -23,25 +30,6 @@
         "build/**", // Flutter outputs
         "!package.json"
       ],
-      "cache": false
-    },
-    // Development deploy (mainly for backend/dotnet)
-    "deploy:dev": {
-      "dependsOn": ["build"],
-      "cache": false
-    },
-    // Production deploy (mainly for backend/dotnet)
-    "deploy:prod": {
-      "dependsOn": ["build:prod"],
-      "cache": false
-    },
-    // Serve (mainly for frontend)
-    "serve": {
-      "persistent": true
-    },
-    // Dockerize (mainly for frontend Flutter)
-    "dockerize": {
-      "dependsOn": ["build:prod"],
       "cache": false
     }
   }

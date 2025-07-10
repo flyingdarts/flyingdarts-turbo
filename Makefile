@@ -1,4 +1,5 @@
-.PHONY: format format-only lint lint-fix
+.PHONY: format format-only lint lint-fix setup-turbo setup-beachball
 
-validate-workspace:
-	node scripts/generator/workspace/validate.js fd-v2.yml scripts/generator/workspace/fd-v2.schema.json
+restore:
+	dotnet restore && \
+	npm install 

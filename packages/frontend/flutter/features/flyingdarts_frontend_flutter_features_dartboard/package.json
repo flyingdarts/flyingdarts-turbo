@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts.frontend.flutter.features.dartboard",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A package containing the dartboard feature",
   "private": false,
   "dependencies": {

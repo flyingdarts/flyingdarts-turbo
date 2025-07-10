@@ -2,6 +2,21 @@
   "name": "flyingdarts.frontend.flutter",
   "entries": [
     {
+      "date": "Thu, 10 Jul 2025 18:42:19 GMT",
+      "version": "0.0.6",
+      "tag": "flyingdarts.frontend.flutter_v0.0.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts.frontend.flutter",
+            "commit": "not available",
+            "comment": "Add flutter workspace at root"
+          }
+        ]
+      }
+    },
+    {
       "date": "Thu, 10 Jul 2025 15:37:51 GMT",
       "version": "0.0.5",
       "tag": "flyingdarts.frontend.flutter_v0.0.5",

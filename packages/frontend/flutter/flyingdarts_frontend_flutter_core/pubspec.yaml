@@ -4,8 +4,9 @@ version: 0.0.1
 publish_to: none
 
 environment:
-  sdk: ">=3.1.3 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
   flutter: ">=1.17.0"
+resolution: workspace
 
 dependencies:
   flutter:
@@ -19,17 +20,13 @@ dependencies:
   injectable: ^2.3.0
 
   flyingdarts_frontend_flutter_shared_websocket:
-    path: ./../shared/flyingdarts_frontend_flutter_shared_websocket
   flyingdarts_frontend_flutter_shared_configuration:
-    path: ./../shared/configuration/flyingdarts_frontend_flutter_shared_configuration
   flyingdarts_frontend_flutter_shared_configuration_preferences:
-    path: ./../shared/configuration/flyingdarts_frontend_flutter_shared_configuration_preferences
   flyingdarts_frontend_flutter_shared_configuration_secrets:
-    path: ./../shared/configuration/flyingdarts_frontend_flutter_shared_configuration_secrets
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
   injectable_generator: ^2.3.0
   build_runner: ^2.4.6

@@ -1,5 +1,0 @@
-dotnet
-typescript
-angular
-flutter
-rust

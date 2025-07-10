@@ -4,45 +4,32 @@ version: 0.0.1
 publish_to: none
 
 environment:
-  sdk: ">=3.1.3 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
   flutter: ">=1.17.0"
+resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
   flyingdarts_frontend_flutter_shared_configuration:
-    path: ./../../shared/configuration/flyingdarts_frontend_flutter_shared_configuration
   flyingdarts_frontend_flutter_shared_configuration_secrets:
-    path: ./../../shared/configuration/flyingdarts_frontend_flutter_shared_configuration_secrets
   flutter_bloc: ^8.1.3
   dio: ^4.0.6
-
   get_it: ^7.6.4
-
-flyingdarts_frontend_flutter_api_sdk:
-  path: ../../api/sdk/flyingdarts_frontend_flutter_api_sdk
-
-flyingdarts_frontend_flutter_shared_amplify:
-  path: ../../shared/flyingdarts_frontend_flutter_shared_amplify
-
-flyingdarts_frontend_flutter_shared_ui:
-  path: ../../shared/flyingdarts_frontend_flutter_shared_ui
-
-flyingdarts_frontend_flutter_shared_internationalization:
-  path: ../../shared/flyingdarts_frontend_flutter_shared_internationalization
-
-flyingdarts_frontend_flutter_shared_websocket:
-  path: ../../shared/flyingdarts_frontend_flutter_shared_websocket
-
-widgetbook: ^3.14.3
-widgetbook_annotation: ^3.5.0
-json_annotation: ^4.8.0
-injectable: ^2.3.0
+  flyingdarts_frontend_flutter_api_sdk:
+  flyingdarts_frontend_flutter_shared_amplify:
+  flyingdarts_frontend_flutter_shared_ui:
+  flyingdarts_frontend_flutter_shared_internationalization:
+  flyingdarts_frontend_flutter_shared_websocket:
+  widgetbook: ^3.14.3
+  widgetbook_annotation: ^3.5.0
+  json_annotation: ^4.8.0
+  injectable: ^2.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
   build_runner: ^2.4.6
   widgetbook_generator: ^3.13.0

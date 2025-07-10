@@ -1,8 +1,16 @@
 # Change Log - flyingdarts.frontend.flutter.features.appbar
 
-<!-- This log was last generated on Tue, 08 Jul 2025 06:33:52 GMT and should not be manually modified. -->
+<!-- This log was last generated on Thu, 10 Jul 2025 18:42:19 GMT and should not be manually modified. -->
 
 <!-- Start content -->
+
+## 0.0.5
+
+Thu, 10 Jul 2025 18:42:19 GMT
+
+### Patches
+
+- Add flutter workspace at root (mike.pattyn1@gmail.com)
 
 ## 0.0.4
 

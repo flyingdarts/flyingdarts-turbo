@@ -1,0 +1,33 @@
+name: flyingdarts_workspace
+description: Workspace configuration for Flyingdarts monorepo
+version: 1.0.0
+publish_to: none
+
+# This is a workspace configuration file
+# It doesn't contain any dependencies itself, but defines the workspace structure
+
+# Define the workspace packages
+workspace:
+  - apps/frontend/flutter/flyingdarts_mobile
+  - packages/frontend/flutter/flyingdarts_frontend_flutter_core
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_appbar
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_auth
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_dartboard
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_keyboard
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_language
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_navigation
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_profile
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_speech
+  - packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_splash
+  - packages/frontend/flutter/shared/flyingdarts_frontend_flutter_shared_amplify
+  - packages/frontend/flutter/shared/flyingdarts_frontend_flutter_shared_internationalization
+  - packages/frontend/flutter/shared/flyingdarts_frontend_flutter_shared_ui
+  - packages/frontend/flutter/shared/flyingdarts_frontend_flutter_shared_websocket
+  - packages/frontend/flutter/shared/configuration/flyingdarts_frontend_flutter_shared_configuration
+  - packages/frontend/flutter/shared/configuration/flyingdarts_frontend_flutter_shared_configuration_preferences
+  - packages/frontend/flutter/shared/configuration/flyingdarts_frontend_flutter_shared_configuration_secrets
+  - packages/frontend/flutter/api/sdk/flyingdarts_frontend_flutter_api_sdk
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=1.17.0" 
