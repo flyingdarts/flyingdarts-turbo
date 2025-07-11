@@ -1,0 +1,29 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container-fluid {
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.fd-bg {
+  background-size: cover; /* Adjust as needed */
+  background-position: center;
+}
+
+.fd-bg-light {
+  background-image: url("./../assets/light-mode-background-arrow.svg");
+  background-color: #dddee8;
+}
+
+.fd-bg-dark {
+  background-image: url("./../assets/dark-mode-background-arrow.svg");
+  background-color: #252d49;
+}

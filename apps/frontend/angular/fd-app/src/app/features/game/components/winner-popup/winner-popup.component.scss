@@ -1,0 +1,34 @@
+#winnerPopupOverlay {
+  height: -webkit-fill-available;
+}
+.winner-popup {
+  background-color: #4b55e4;
+  color: white;
+  border-radius: 20px;
+  padding: 40px 40px;
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  width: fit-content;
+  margin: auto;
+}
+
+.emoji {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.winner-name {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.winner-text {
+  font-size: 1.5rem;
+}
+
+.btn {
+  background: #ff5e78;
+  border: none;
+}

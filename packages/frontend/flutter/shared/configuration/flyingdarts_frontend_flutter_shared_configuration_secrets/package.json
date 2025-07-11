@@ -7,6 +7,6 @@
     "flyingdarts_frontend_flutter_shared_configuration": "*"
   },
   "scripts": {
-    "build": "flutter build"
+    "build": " dart run build_runner build && flutter build"
   }
 }

@@ -1,0 +1,31 @@
+table {
+  background-color: transparent;
+  --bs-table-bg: transparent;
+  border: transparent;
+  thead {
+    tr {
+      th {
+        font-weight: 900;
+        font-size: 1.25rem;
+        color: #f9617d;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        font-weight: 900;
+        font-size: 1.25rem;
+        color: #7b81d8;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+  }
+}
+
+.history {
+  font-size: 1rem;
+}

@@ -4,6 +4,7 @@
   "workspaces": [
     "apps/backend/dotnet/**/*",
     "apps/frontend/flutter/**/*",
+    "apps/frontend/angular/**/*",
     "apps/tools/dotnet/**/*",
     "packages/backend/dotnet/**/*",
     "packages/frontend/flutter/**/*",

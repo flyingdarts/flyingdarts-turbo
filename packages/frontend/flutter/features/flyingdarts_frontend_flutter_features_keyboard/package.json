@@ -4,6 +4,6 @@
   "description": "Keyboard feature package",
   "private": false,
   "scripts": {
-    "build": "flutter build"
+    "build": " dart run build_runner build && flutter build"
   }
 }

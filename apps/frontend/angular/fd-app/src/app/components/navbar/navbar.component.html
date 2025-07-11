@@ -1,0 +1,59 @@
+<nav id="fdNavBar"
+     class="navbar navbar-expand-lg navbar-light bg-transparent mx-2">
+  <a class="navbar-brand navbar-title"
+     href="#">Flyingdarts</a>
+  @if(isLoggedIn$ | async) {
+
+  <button class="navbar-toggler ms-auto"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div id="navbarContent"
+       class="collapse navbar-collapse justify-content-end">
+    <!-- Large devices and up -->
+    <div class="d-none d-lg-block">
+      <div class="dropdown d-flex align-items-center">
+        <app-theme-toggler></app-theme-toggler>
+        <a class="navbar-brand navbar-username dropdown-toggle"
+           href="#"
+           id="userDropdown"
+           role="button"
+           data-bs-toggle="dropdown"
+           aria-expanded="false">
+          {{ userName$ | async }}
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="userDropdown">
+          <li><a class="dropdown-item disabled">Stats <small>(soon)</small></a></li>
+          <li><a class="dropdown-item disabled">History <small>(soon)</small></a></li>
+          <li><a class="dropdown-item disabled">Profile <small>(soon)</small></a></li>
+          <li><a class="dropdown-item"
+               (click)="logout()">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Small to large devices -->
+    <div class="d-block d-lg-none">
+      <div class="dropdown d-flex flex-column align-items-start">
+        <a class="navbar-brand navbar-username dropdown-toggle"
+           href="#"
+           id="userDropdownSmall"
+           role="button"
+           data-bs-toggle="dropdown"
+           aria-expanded="false">
+          {{ userName$ | async }}
+        </a>
+        <a class="dropdown-item"
+           (click)="logout()">Logout</a>
+      </div>
+    </div>
+  </div>
+  }
+</nav>

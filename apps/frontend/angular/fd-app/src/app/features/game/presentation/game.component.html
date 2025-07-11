@@ -1,0 +1,50 @@
+<app-winner-popup [winnerName]="winnerName"
+                  [winnerText]="winnerText"
+                  (handleCloseEvent)="closePopup()"></app-winner-popup>
+
+
+<div class="row h-100 w-100 g-0">
+  @if(!isMobileDevice()) {
+  <div class="col-5 col-lg-4 g-0 ps-2">
+    <div class="d-flex h-100 flex-column justify-content-between">
+      <app-game-stats></app-game-stats>
+      <div class="mb-2">
+        <app-game-input [shouldDisableControls]="shouldDisableControls"
+                        [canCheckOut]="canCheckOut"
+                        (checkHandler)="check()"
+                        (okHandler)="ok()"
+                        (noScoreHandler)="noScore()"
+                        (clearScoreHandler)="clear()"
+                        (inputScoreHandler)="inputScore($event)"
+                        (quickScoreHandler)="quickScore($event)">
+        </app-game-input>
+      </div>
+    </div>
+  </div>
+  }
+  <div
+       [ngClass]="isMobileDevice() ? 'position-absolute d-flex flex-column justify-content-between mobile-container p-2' : 'col-7 col-lg-8 g-0 pe-2'">
+    @if (isMobileDevice()) {
+    <app-game-stats></app-game-stats>
+    }
+    <app-meeting [ngClass]="isMobileDevice() ? 'display: none' : 'display: block'"
+                 [meetingId]="meetingId"></app-meeting>
+    @if (isMobileDevice()) {
+    <app-game-input [shouldDisableControls]="shouldDisableControls"
+                    [canCheckOut]="canCheckOut"
+                    (checkHandler)="check()"
+                    (okHandler)="ok()"
+                    (noScoreHandler)="noScore()"
+                    (clearScoreHandler)="clear()"
+                    (inputScoreHandler)="inputScore($event)"
+                    (quickScoreHandler)="quickScore($event)">
+    </app-game-input>
+    }
+  </div>
+</div>
+
+<!--  The layout is perfect on desktop and large tablets,
+      but on mobile and small tablets, the col-4 and col-8 should be col-12's AND
+      based on the showGameInput boolean, it should show / hide either one of the columns.
+      Please ensure when the game states and input are hidden, they remain in the dom but dont take up any space
+-->

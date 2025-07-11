@@ -10,6 +10,6 @@
     "flyingdarts.frontend.flutter.features.speech": "*"
   },
   "scripts": {
-    "build": "flutter build"
+    "build": " dart run build_runner build && flutter build"
   }
 }

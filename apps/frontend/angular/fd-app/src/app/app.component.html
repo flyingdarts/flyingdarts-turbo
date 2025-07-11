@@ -1,0 +1,16 @@
+@if(appStateLoading$ | async) {
+<div class="container-fluid fd-bg d-flex vw-100 vh-100 justify-content-center align-items-center p-5"
+     [ngClass]="'fd-bg-'+ (themeMode$ |async)">
+  <ng-lottie [options]="lottieOptions"></ng-lottie>
+</div>
+} @else {
+<div class="container-fluid fd-bg vw-100 vh-100 d-flex flex-column"
+     [ngClass]="'fd-bg-'+ (themeMode$ |async)">
+  <app-navbar></app-navbar>
+  <div class="d-flex align-items-center justify-content-center h-100">
+    <div class="w-100 h-100">
+      <router-outlet />
+    </div>
+  </div>
+</div>
+}

@@ -1,0 +1,4 @@
+<button (click)="toggleTheme()"
+        class="btn btn-icon">
+  <i [ngClass]="(themeMode$ | async) == 'light' ? 'bi bi-moon-fill' : 'bi bi-sun-fill'"></i>
+</button>

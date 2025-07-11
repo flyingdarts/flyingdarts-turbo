@@ -2,32 +2,30 @@
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "restore": {
-      "outputs": [
-        "**/obj/**",
-        "**/bin/**",
-        "**/node_modules/**"
-      ]
+      "outputs": ["**/obj/**", "**/bin/**", "**/node_modules/**"]
     },
-    // Cache all build tasks
     "^build": {
       "cache": true
     },
-    // Generic build step for all packages
     "build": {
       "outputs": [
         "bin/Debug/*/**",
-        "obj/Debug/*/**", // .NET outputs
-        "build/**", // Flutter outputs
+        "obj/Debug/*/**",
+        "build/**",
+        "dist/**",
         "!package.json"
       ]
     },
-    // Production build step
+    "build:flutter": {
+      "outputs": ["build/**", "!package.json"]
+    },
     "build:prod": {
       "dependsOn": ["build"],
       "outputs": [
         "bin/Release/*/**",
-        "obj/Release/*/**", // .NET outputs
-        "build/**", // Flutter outputs
+        "obj/Release/*/**",
+        "build/**",
+        "dist/**",
         "!package.json"
       ],
       "cache": false
