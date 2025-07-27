@@ -1,0 +1,15 @@
+meta {
+  name: Delete the application
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/v1/applications/:applicationId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

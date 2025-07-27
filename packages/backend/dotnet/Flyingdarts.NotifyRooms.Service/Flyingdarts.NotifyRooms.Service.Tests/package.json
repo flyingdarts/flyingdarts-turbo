@@ -1,0 +1,14 @@
+{
+  "name": "flyingdarts.notifyrooms.service.tests",
+  "version": "0.0.2",
+  "private": false,
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build -c Release",
+    "test": "dotnet test"
+  },
+  "dependencies": {
+    "flyingdarts.notifyrooms.service": "*"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "profile": "default",
+  "region": "us-east-1",
+  "configuration": "Release",
+  "function-runtime": "dotnet8",
+  "function-memory-size": 256,
+  "function-timeout": 30,
+  "function-handler": "Flyingdarts.Backend.Signalling.Api::Flyingdarts.Backend.Signalling.Api.Function::FunctionHandler"
+}

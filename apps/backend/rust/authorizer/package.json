@@ -1,0 +1,16 @@
+{
+  "name": "flyingdarts-authorizer",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "cargo build --release",
+    "test": "cargo test",
+    "clippy": "cargo clippy"
+  },
+  "dependencies": {
+    "flyingdarts-auth": "*"
+  },
+  "devDependencies": {},
+  "engines": {
+    "turbo": ">=1.10.0"
+  }
+}

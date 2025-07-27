@@ -1,0 +1,37 @@
+meta {
+  name: Respond to Friend Request
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/friends/request/{{requestId}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "accept": true
+  }
+}
+
+vars {
+  requestId: request-id-here
+}
+
+docs {
+  Accept or deny a friend request.
+  
+  Path parameters:
+  - requestId: The ID of the friend request to respond to
+  
+  Request body:
+  - accept: Boolean indicating whether to accept (true) or deny (false) the request
+  
+  The userId is automatically set from the authenticated user's token.
+} 

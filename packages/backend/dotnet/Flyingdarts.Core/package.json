@@ -1,0 +1,11 @@
+{
+  "name": "flyingdarts.core",
+  "version": "0.0.1",
+  "private": false,
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build -c Release "
+  },
+  "dependencies": {}
+}

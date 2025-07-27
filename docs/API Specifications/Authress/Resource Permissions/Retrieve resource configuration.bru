@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve resource configuration
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/resources/:resourceUri
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

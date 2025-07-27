@@ -1,0 +1,15 @@
+meta {
+  name: Delete access request
+  type: http
+  seq: 10
+}
+
+delete {
+  url: {{baseUrl}}/v1/requests/:requestId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

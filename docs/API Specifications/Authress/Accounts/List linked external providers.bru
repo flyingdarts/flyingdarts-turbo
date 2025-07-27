@@ -1,0 +1,15 @@
+meta {
+  name: List linked external providers
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/identities
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "clean": {
+      "cache": false,
+      "dependsOn": []
+    },
+    "clean:generated": {
+      "cache": false,
+      "dependsOn": []
+    },
+    "generate": {
+      "cache": false,
+      "dependsOn": ["^generate"]
+    },
+    "start": {
+      "cache": true,
+      "outputs": ["dist/**"]
+    },
+    "build:config": {
+      "cache": true,
+      "outputs": ["dist/**"]
+    },
+    "^build": {
+      "cache": true
+    },
+    "build": {
+      "dependsOn": ["^build", "build:config"],
+      "outputs": [
+        "bin/Debug/*/**",
+        "obj/Debug/*/**",
+        "build/**",
+        "dist/**",
+        "!package.json",
+        "**/*.g.dart",
+        "**/*.mocks.dart",
+        "**/*.module.dart",
+        "**/*.config.dart",
+        "target/**",
+        "!Cargo.lock",
+        "!Cargo.toml"
+      ]
+    },
+    "build:prod": {
+      "dependsOn": ["^build:prod"],
+      "outputs": [
+        "bin/Release/*/**",
+        "obj/Release/*/**",
+        "build/**",
+        "dist/**",
+        "!package.json",
+        "**/*.g.dart",
+        "**/*.mocks.dart",
+        "**/*.module.dart",
+        "**/*.config.dart",
+        "target/**",
+        "!Cargo.lock",
+        "!Cargo.toml"
+      ]
+    },
+    "test": {
+      "cache": true
+    },
+    "deploy-dev": {
+      "cache": true,
+      "dependsOn": ["^deploy-dev"]
+    },
+    "deploy-stage": {
+      "cache": true,
+      "dependsOn": ["^deploy-stage"]
+    },
+    "deploy-prod": {
+      "cache": true,
+      "dependsOn": ["^deploy-prod"]
+    }
+  }
+}

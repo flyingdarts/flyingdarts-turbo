@@ -1,0 +1,14 @@
+{
+  "name": "authress_login_example",
+  "version": "0.0.3",
+  "description": "A package for Authress login",
+  "private": false,
+  "scripts": {
+    "restore": "dart pub get",
+    "clean": "flutter clean && dart run build_runner clean",
+    "clean:generated": "dart run build_runner clean"
+  },
+  "dependencies": {
+    "authress_login": "*"
+  }
+}

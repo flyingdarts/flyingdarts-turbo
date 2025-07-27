@@ -1,0 +1,10 @@
+{
+  "name": "internationalization",
+  "version": "0.0.7",
+  "description": "Internationalization package",
+  "private": false,
+  "scripts": {
+    "clean": "flutter clean && dart run build_runner clean",
+    "clean:generated": "dart run build_runner clean"
+  }
+}

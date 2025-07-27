@@ -1,0 +1,12 @@
+{
+  "name": "flyingdarts-backend-signalling-api",
+  "version": "1.0.0",
+  "description": "Flyingdarts Backend Signalling API - Consolidated WebSocket API",
+  "changes": [
+    {
+      "type": "major",
+      "description": "Initial release - Consolidated WebSocket API combining onconnect, ondefault, and ondisconnect lambdas"
+    }
+  ],
+  "date": "2025-01-02"
+}

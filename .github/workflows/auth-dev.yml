@@ -1,0 +1,31 @@
+name: Auth Lambda (Development)
+
+on:
+  workflow_call:
+  push:
+    paths:
+      - "apps/backend/dotnet/auth/**"
+      - "packages/backend/dotnet/**"
+
+  pull_request:
+    paths:
+      - "apps/backend/dotnet/auth/**"
+      - "packages/backend/dotnet/**"
+
+jobs:
+  build-auth-dev:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.backend.auth"
+      project-directory: "apps/backend/dotnet/auth"
+      lambda-function-name: "Flyingdarts-Backend-Auth-Development"
+      dotnet-version: "8.0.x"
+
+  deploy-auth-dev:
+    needs: build-auth-dev
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Backend-Auth-Development"
+      artifact-name: "Flyingdarts-Backend-Auth-Development-package"
+      environment: "development"
+    secrets: inherit

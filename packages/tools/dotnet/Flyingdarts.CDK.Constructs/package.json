@@ -1,0 +1,11 @@
+{
+  "name": "flyingdarts.cdk.constructs",
+  "version": "0.0.8",
+  "private": false,
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build --configuration Release"
+  },
+  "dependencies": {}
+}

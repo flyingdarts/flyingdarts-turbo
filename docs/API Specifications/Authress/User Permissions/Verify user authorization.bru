@@ -1,0 +1,21 @@
+meta {
+  name: Verify user authorization
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/users/:userId/resources/:resourceUri/permissions/:permission
+  body: none
+  auth: bearer
+}
+
+params:path {
+  userId: 
+  resourceUri: 
+  permission: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Update access record
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/v1/records/:recordId
+  body: none
+  auth: bearer
+}
+
+headers {
+  ~If-Unmodified-Since: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -1,0 +1,6 @@
+{
+  "version": "1",
+  "name": "Friends API",
+  "type": "collection",
+  "ignore": ["node_modules", ".git"]
+}

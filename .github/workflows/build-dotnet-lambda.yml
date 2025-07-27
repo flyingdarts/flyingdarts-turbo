@@ -1,0 +1,84 @@
+name: Build .NET Lambda
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project within Turbo context. (package.json name)"
+        required: true
+        type: string
+      project-directory:
+        description: "Directory of the .NET project to build"
+        required: true
+        type: string
+      lambda-function-name:
+        description: "Name of the Lambda function to deploy"
+        required: true
+        type: string
+      dotnet-version:
+        description: "Version of .NET to use"
+        required: false
+        type: string
+        default: "8.0.x"
+      node-version:
+        description: "Version of Node.js to use"
+        required: false
+        type: string
+        default: "22"
+
+jobs:
+  prune:
+    uses: ./.github/workflows/setup-build-turbo-prune.yml
+    with:
+      project-name: ${{ inputs.project-name }}
+      node-version: ${{ inputs.node-version }}
+
+  build:
+    needs: prune
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download pruned files
+        uses: actions/download-artifact@v4
+        with:
+          name: pruned-${{ inputs.project-name }}
+          path: ./pruned
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ inputs.dotnet-version }}
+
+      - name: Cache .NET dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('./pruned/full/${{ inputs.project-directory }}/**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache Lambda tools
+        uses: actions/cache@v4
+        with:
+          path: ~/.dotnet/tools
+          key: ${{ runner.os }}-lambda-tools-${{ hashFiles('./pruned/full/${{ inputs.project-directory }}/**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-lambda-tools-
+
+      - name: Install Amazon.Lambda.Tools
+        run: dotnet tool install -g Amazon.Lambda.Tools
+
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ./pruned/full/${{ inputs.project-directory}}
+
+      - name: Package Lambda function
+        run: |
+          dotnet lambda package --output-package lambda.zip
+        working-directory: ./pruned/full/${{ inputs.project-directory}}
+
+      - name: Upload Lambda package as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.lambda-function-name }}-package
+          path: ./pruned/full/${{ inputs.project-directory }}/lambda.zip
+          retention-days: 1

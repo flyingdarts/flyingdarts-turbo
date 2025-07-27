@@ -1,0 +1,44 @@
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">
+          Best Of {{ (gameState$ | async)?.game?.sets }}/{{
+            (gameState$ | async)?.game?.legs
+          }}
+        </th>
+        <th scope="col">Sets</th>
+        <th scope="col">Legs</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ (gameState$ | async)?.player?.name }}</td>
+        <td>{{ (gameState$ | async)?.player?.sets }}</td>
+        <td>{{ (gameState$ | async)?.player?.legs }}</td>
+        <td>{{ (gameState$ | async)?.player?.score }}</td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <div class="history d-flex flex-wrap">
+            {{ getHistory((gameState$ | async)?.player?.scores) }}
+          </div>
+        </td>
+      </tr>
+      <tr [hidden]="(gameState$ | async)?.opponent?.name == ''">
+        <td>{{ (gameState$ | async)?.opponent?.name }}</td>
+        <td>{{ (gameState$ | async)?.opponent?.sets }}</td>
+        <td>{{ (gameState$ | async)?.opponent?.legs }}</td>
+        <td>{{ (gameState$ | async)?.opponent?.score }}</td>
+      </tr>
+      <tr>
+        <td colspan="4">
+          <div class="history d-flex flex-wrap">
+            {{ getHistory((gameState$ | async)?.opponent?.scores) }}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,13 @@
+{
+  "name": "flyingdarts.dynamodb.service.tests",
+  "version": "0.0.3",
+  "private": false,
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build --configuration Release"
+  },
+  "dependencies": {
+    "flyingdarts.dynamodb.service": "*"
+  }
+}

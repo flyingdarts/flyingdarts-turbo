@@ -1,0 +1,110 @@
+{
+  "name": "app.config.prefs",
+  "entries": [
+    {
+      "date": "Sun, 27 Jul 2025 13:14:13 GMT",
+      "version": "0.0.8",
+      "tag": "app.config.prefs_v0.0.8",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "app.config.prefs",
+            "commit": "7cc2c1be5db3263c1510ab06a079413dc075f6e2",
+            "comment": "Various updates"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Sat, 26 Jul 2025 20:04:36 GMT",
+      "version": "0.0.7",
+      "tag": "app.config.prefs_v0.0.7",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "app.config.prefs",
+            "commit": "18a03921a8388d4f6e76caa3545046b1773ac55a",
+            "comment": "Implemented friends feature"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 14 Jul 2025 20:48:56 GMT",
+      "version": "0.0.6",
+      "tag": "configuration_preferences_v0.0.6",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "configuration_preferences",
+            "commit": "12f2e42607973caf592fc820da35cb3cf46cdc98",
+            "comment": "Working flutter pipeline / run app on sim"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Thu, 10 Jul 2025 18:42:19 GMT",
+      "version": "0.0.5",
+      "tag": "flyingdarts_frontend_flutter_shared_configuration_preferences_v0.0.5",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts_frontend_flutter_shared_configuration_preferences",
+            "commit": "64a9b796bbce7d2dc426dae7dd12b927260f61cb",
+            "comment": "Add flutter workspace at root"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 08 Jul 2025 06:33:52 GMT",
+      "version": "0.0.4",
+      "tag": "flyingdarts_frontend_flutter_shared_configuration_preferences_v0.0.4",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts_frontend_flutter_shared_configuration_preferences",
+            "commit": "7575bcb70c141ad6b44824cd434d9f298e4ace36",
+            "comment": "Make ci"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Tue, 08 Jul 2025 05:11:38 GMT",
+      "version": "0.0.3",
+      "tag": "flyingdarts_frontend_flutter_shared_configuration_preferences_v0.0.3",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "flyingdarts_frontend_flutter_shared_configuration_preferences",
+            "commit": "b143e1ddff1763e2f652207fffd3dfa8bd5dc79c",
+            "comment": "Make & restore solution"
+          }
+        ]
+      }
+    },
+    {
+      "date": "Mon, 07 Jul 2025 15:59:36 GMT",
+      "version": "0.0.2",
+      "tag": "flyingdarts_frontend_flutter_shared_configuration_preferences_v0.0.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com.com",
+            "package": "flyingdarts_frontend_flutter_shared_configuration_preferences",
+            "commit": "04ef7c6b61613920f8184b0ede0e87e6bbf7ad49",
+            "comment": "Initial change log"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+meta {
+  name: List all resource configurations
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/resources
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

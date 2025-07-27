@@ -1,0 +1,27 @@
+<div class="card shadow-sm" style="transition: transform 0.2s; cursor: pointer">
+  <div class="card-body">
+    <h5 class="card-title">Login Form</h5>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-check mb-3">
+        <input
+          type="checkbox"
+          id="acceptTerms"
+          class="form-check-input"
+          formControlName="acceptTerms"
+        />
+        <label for="acceptTerms" class="form-check-label">
+          I accept and surrender
+        </label>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loginForm.invalid"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+</div>

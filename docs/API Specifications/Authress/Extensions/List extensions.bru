@@ -1,0 +1,20 @@
+meta {
+  name: List extensions
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/extensions
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~limit: 
+  ~cursor: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

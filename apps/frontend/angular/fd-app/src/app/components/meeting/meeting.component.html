@@ -1,0 +1,79 @@
+<dyte-ui-provider
+  id="dyte-provider"
+  class="position-relative h-100 w-100 pb-2 ps-0 ps-lg-2"
+>
+  <div
+    class="d-flex justify-content-center align-items-center video-container w-100 overflow-hidden"
+    [class.video-hidden]="!isVisible"
+  >
+    <!-- Main video element - shows local video when it's player's turn, opponent video otherwise -->
+    <video
+      #localVideo
+      id="localVideo"
+      class="opponent-video rounded"
+      autoplay
+      [class.main-video]="isPlayerTurn"
+      [class.corner-video]="!isPlayerTurn"
+    ></video>
+    <video
+      #opponentVideo
+      id="opponentVideo"
+      class="opponent-video rounded"
+      autoplay
+      [class.main-video]="!isPlayerTurn"
+      [class.corner-video]="isPlayerTurn"
+    ></video>
+  </div>
+
+  <!-- Top Right Element -->
+  <div class="position-absolute top-0 end-0 d-flex justify-content-end z-1">
+    <dyte-settings-toggle
+      [hidden]="showSettings"
+      (click)="openSettings()"
+      class="dyte"
+    ></dyte-settings-toggle>
+    <div class="row" [hidden]="!showSettings">
+      <div class="col g-0 me-3">
+        <button
+          [hidden]="!showSettings"
+          class="btn btn-sm"
+          (click)="closeSettings()"
+        >
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col g-0">
+      <dyte-settings [hidden]="!showSettings"></dyte-settings>
+    </div>
+  </div>
+
+  <!-- Bottom Left Element -->
+  <div class="position-absolute bottom-0 start-0 ps-sm-0 ps-lg-2 pb-2 z-1">
+    <dyte-mic-toggle class="dyte"></dyte-mic-toggle>
+  </div>
+
+  <!-- Bottom Right Element -->
+  <div class="position-absolute bottom-0 end-0">
+    <div class="d-flex justify-content-end mb-2">
+      <!-- Small video element - shows opponent video when it's player's turn, local video otherwise -->
+      <video
+        #opponentVideoSmall
+        id="opponentVideoSmall"
+        class="w-25 rounded corner-video"
+        autoplay
+        [class.main-video]="isPlayerTurn"
+        [class.corner-video]="!isPlayerTurn"
+      ></video>
+      <video
+        #localVideoSmall
+        id="localVideoSmall"
+        class="w-25 rounded corner-video"
+        autoplay
+        [class.main-video]="!isPlayerTurn"
+        [class.corner-video]="isPlayerTurn"
+      ></video>
+    </div>
+  </div>
+  <audio #opponentAudio id="opponentAudio" class="rounded" hidden></audio>
+</dyte-ui-provider>

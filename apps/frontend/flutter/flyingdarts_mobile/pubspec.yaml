@@ -1,0 +1,85 @@
+name: flyingdarts_mobile
+description: A flutter app to send score to Flyingdarts.net
+publish_to: none
+
+version: 1.3.9+1
+
+environment:
+  sdk: ^3.8.1
+  flutter: ^3.26.0
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Workspace packages - these are now managed by the workspace configuration
+  api_sdk:
+  app_config_core:
+  app_config_prefs:
+  app_config_secrets:
+  core:
+  internationalization:
+  keyboard:
+  language:
+  profile:
+  speech:
+  splash:
+  ui:
+  websocket:
+
+  authress_login:
+
+  # External dependencies
+  bloc: ^9.0.0
+  curved_navigation_bar: ^1.0.6
+  flutter_bloc: ^9.1.1
+  flutter_localizations:
+    sdk: flutter
+  flutter_svg: ^2.2.0
+  get_it: ^8.0.3
+  go_router: ^16.0.0
+  injectable: ^2.5.0
+  loading_animation_widget: ^1.3.0
+  lottie: ^3.1.2
+  provider: ^6.1.5
+  speech_to_text: ^7.2.0
+  widgetbook: ^3.14.3
+  widgetbook_annotation: ^3.5.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  alchemist: ^0.12.1
+  bloc_test: ^10.0.0
+  build_runner: ^2.5.4
+  equatable: ^2.0.7
+  flutter_gherkin: 2.0.0
+  flutter_inappwebview: ^6.1.5
+  flutter_lints: ^6.0.0
+  gherkin: ^2.0.8
+  glob: ^2.1.3
+  injectable_generator: ^2.7.0
+  intl: ^0.20.2
+  mockito: ^5.4.6
+  rxdart: ^0.28.0
+  test: ^1.25.15
+  widgetbook_generator: ^3.13.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/animations/
+    - assets/icons/fd_icon.svg
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
+

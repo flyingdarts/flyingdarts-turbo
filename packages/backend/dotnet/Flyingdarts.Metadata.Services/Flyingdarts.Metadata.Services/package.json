@@ -1,0 +1,14 @@
+{
+  "name": "flyingdarts.metadata.services",
+  "version": "0.0.9",
+  "private": false,
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build -c Release "
+  },
+  "dependencies": {
+    "flyingdarts.persistence": "*",
+    "flyingdarts.dynamodb.service": "*"
+  }
+}

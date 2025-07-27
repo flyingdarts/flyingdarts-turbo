@@ -1,0 +1,29 @@
+name: Main Angular Workflow (Development)
+
+on:
+  workflow_call:
+  push:
+    paths:
+      - "apps/frontend/angular/**"
+
+  pull_request:
+    paths:
+      - "apps/frontend/angular/**"
+
+jobs:
+  build-angular-dev:
+    uses: ./.github/workflows/build-angular-app.yml
+    with:
+      project-name: "fd-app"
+      project-directory: "apps/frontend/angular/fd-app"
+      configuration: "development"
+      environment: "staging"
+      node-version: "22"
+
+  deploy-angular-dev:
+    needs: build-angular-dev
+    uses: ./.github/workflows/deploy-angular-app.yml
+    with:
+      project-name: "fd-app"
+      environment: "staging"
+    secrets: inherit

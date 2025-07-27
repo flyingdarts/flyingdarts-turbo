@@ -1,0 +1,51 @@
+name: Deploy Lambda Function
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project to deploy"
+        required: true
+        type: string
+      environment:
+        description: "Environment to deploy to (for manual approval)"
+        required: false
+        type: string
+        default: "staging"
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        description: "AWS Access Key ID"
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        description: "AWS Secret Access Key"
+        required: true
+      AWS_REGION:
+        description: "AWS Region"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download Lambda package from specific workflow run
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.project-name }}-${{ inputs.environment }}
+          path: ./dist
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: aws s3 sync ./dist/${{ inputs.project-name }} s3://flyingdarts-v2-bucket-${{ inputs.environment }} --delete
+
+      - name: Purge CloudFront cache
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_DEVELOPMENT }} --paths "/*"

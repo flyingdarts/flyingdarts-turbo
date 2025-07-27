@@ -1,0 +1,22 @@
+[workspace]
+members = [
+    "packages/backend/rust/auth",
+    "apps/backend/rust/authorizer",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["preserve_order"] }
+authress = { version = "0.1.66" }
+base64 = "0.21"
+tokio = { version = "1.0", features = ["full"] }
+anyhow = "1.0"
+lambda_runtime = "0.8"
+tracing = { version = "0.1", features = ["log"] }
+tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
+aws_lambda_events = "0.11"
+http = "0.2" 

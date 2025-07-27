@@ -1,0 +1,96 @@
+name: Build Flutter App
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project within Turbo context. (package.json name)"
+        required: true
+        type: string
+      project-directory:
+        description: "Directory of the Flutter project to build"
+        required: true
+        type: string
+      flutter-version:
+        description: "Version of Flutter to use"
+        required: true
+        type: string
+      flavor:
+        description: "Flavor of the app to build"
+        required: true
+        type: string
+      platform:
+        description: "Platform of the app to build"
+        required: true
+        type: string
+      channel:
+        description: "Channel of the app to build"
+        required: true
+        type: string
+        default: "stable"
+      node-version:
+        description: "Version of Node.js to use"
+        required: false
+        type: string
+        default: "22"
+jobs:
+  prune:
+    uses: ./.github/workflows/setup-build-turbo-prune.yml
+    with:
+      project-name: ${{ inputs.project-name }}
+      node-version: ${{ inputs.node-version }}
+
+  build:
+    needs: prune
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download pruned files
+        uses: actions/download-artifact@v4
+        with:
+          name: pruned-${{ inputs.project-name }}
+          path: ./pruned
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ inputs.flutter-version }}
+          channel: ${{ inputs.channel }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+
+      # Install Turbo
+      - name: Install Turbo
+        run: npm install -g turbo
+
+      # Turbo prune does not copy the pubspec.yaml or pubspec.lock file to the dist directory, so we need to copy it manually
+      - name: Copy pubspec.yaml to dist/full
+        run: cp pubspec.yaml ./pruned/full
+
+      - name: Copy pubspec.lock to dist/full
+        run: cp pubspec.lock ./pruned/full
+
+      # Restore dependencies
+      - name: Restore flutter dependencies
+        run: flutter pub get
+        working-directory: ./pruned/full
+
+      - name: Restore npm dependencies
+        run: npm install
+        working-directory: ./pruned/full
+
+      # Generate files
+      - name: Generate files
+        run: turbo run generate
+        working-directory: ./pruned/full
+
+      # Build the application
+      - name: Build
+        run: turbo run build
+        working-directory: ./pruned/full/${{ inputs.project-directory }}

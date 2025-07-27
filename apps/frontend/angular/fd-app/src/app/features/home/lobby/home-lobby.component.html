@@ -1,0 +1,14 @@
+<div class="d-flex justify-content-between">
+  <i class="bi bi-gear-fill cursor-pointer" (click)="goToSettings()"></i>
+</div>
+
+<h2 class="fw-bold mt-5">with a<br />friend</h2>
+<h3 class="mt-1 fw-bold">501</h3>
+<p class="mb-5">{{ "best of " + (x01SetsAndLegsText$ | async) }}</p>
+<button
+  class="btn"
+  style="background: #ff5e78; color: white; border: none"
+  (click)="createGame()"
+>
+  create room
+</button>

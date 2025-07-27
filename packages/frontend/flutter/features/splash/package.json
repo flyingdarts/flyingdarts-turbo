@@ -1,0 +1,13 @@
+{
+  "name": "splash",
+  "version": "0.0.7",
+  "description": "Splash feature package",
+  "private": false,
+  "scripts": {
+    "clean": "flutter clean && dart run build_runner clean",
+    "clean:generated": "dart run build_runner clean"
+  },
+  "dependencies": {
+    "ui": "*"
+  }
+}

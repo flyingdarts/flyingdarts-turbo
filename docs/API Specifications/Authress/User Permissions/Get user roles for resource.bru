@@ -1,0 +1,20 @@
+meta {
+  name: Get user roles for resource
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/users/:userId/resources/:resourceUri/roles
+  body: none
+  auth: bearer
+}
+
+params:path {
+  userId: 
+  resourceUri: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

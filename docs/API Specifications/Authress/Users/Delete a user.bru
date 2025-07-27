@@ -1,0 +1,15 @@
+meta {
+  name: Delete a user
+  type: http
+  seq: 3
+}
+
+delete {
+  url: {{baseUrl}}/v1/users/:userId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

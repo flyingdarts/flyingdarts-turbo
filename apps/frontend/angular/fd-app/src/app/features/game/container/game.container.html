@@ -1,0 +1,15 @@
+<app-game-ui
+  [isPlayerTurn]="isPlayerTurn$ | async"
+  [winnerName]="(winner$ | async)?.winner"
+  [winnerText]="(winner$ | async)?.text"
+  [shouldDisableControls]="!(shouldEnableControls$ | async)"
+  [canCheckOut]="canCheckOut$ | async"
+  [showGameInput]="shouldEnableControls$ | async"
+  (handleInputScore)="inputScore($event)"
+  (handleClear)="clearScore()"
+  (handleNoScore)="noScore($event)"
+  (handleQuickScore)="quickScore($event.score, $event.updatedScore)"
+  (handleOk)="ok($event.score, $event.updatedScore)"
+  (handleCheck)="check($event)"
+  (handleClosePopup)="closeWinnerPopup()"
+></app-game-ui>

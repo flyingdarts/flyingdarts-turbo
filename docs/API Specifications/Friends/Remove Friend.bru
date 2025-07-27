@@ -1,0 +1,28 @@
+meta {
+  name: Remove Friend
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/friends/{{friendId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+vars {
+  friendId: friend-user-id-here
+}
+
+docs {
+  Remove a friend from the user's friends list.
+  
+  Path parameters:
+  - friendId: The user ID of the friend to remove
+  
+  The userId is automatically set from the authenticated user's token.
+} 

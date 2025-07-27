@@ -1,0 +1,35 @@
+name: core
+description: "A flutter package used to configure dependencies and modules"
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ^3.26.0
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  dio: ^5.8.0+1
+  dio_smart_retry: ^7.0.1
+  flutter_secure_storage: ^10.0.0-beta.4
+  shared_preferences: ^2.5.3
+  get_it: ^8.0.3
+  injectable: ^2.5.0
+
+  websocket:
+  app_config_core:
+  app_config_prefs:
+  app_config_secrets:
+  
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  injectable_generator: ^2.7.0
+  build_runner: ^2.5.4
+
+flutter:

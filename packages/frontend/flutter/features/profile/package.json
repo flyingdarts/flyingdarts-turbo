@@ -1,0 +1,20 @@
+{
+  "name": "profile",
+  "version": "0.0.8",
+  "description": "Profile feature package",
+  "private": false,
+  "scripts": {
+    "clean": "flutter clean && dart run build_runner clean",
+    "clean:generated": "dart run build_runner clean",
+    "generate": "dart run build_runner build --delete-conflicting-outputs"
+  },
+  "dependencies": {
+    "api_sdk": "*",
+    "authress_login": "*",
+    "ui": "*",
+    "internationalization": "*",
+    "websocket": "*",
+    "app.config.core": "*",
+    "app.config.secrets": "*"
+  }
+}

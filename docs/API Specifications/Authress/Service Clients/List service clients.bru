@@ -1,0 +1,20 @@
+meta {
+  name: List service clients
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/clients
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~limit: 
+  ~cursor: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

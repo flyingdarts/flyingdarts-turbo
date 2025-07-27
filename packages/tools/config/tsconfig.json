@@ -1,0 +1,21 @@
+{
+  "extends": "./src/typescript/tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "preserve",
+    "rootDir": ".",
+    "outDir": "./dist"
+  },
+  "include": [
+    "index.ts",
+    "index.d.ts",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.tss",
+    "**/*.js"
+  ]
+} 

@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* Custom utility class for transitions */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Custom utility class for max-width */
+.max-w-1200 {
+  max-width: 1200px;
+}
+
+/* Custom utility class for cursor pointer */
+.cursor-pointer {
+  cursor: pointer;
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Update resource configuration
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/v1/resources/:resourceUri
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

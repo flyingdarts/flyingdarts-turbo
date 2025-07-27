@@ -1,0 +1,31 @@
+{
+  "name": "@flyingdarts/config",
+  "version": "0.0.2",
+  "description": "Shared configuration files for the Flyingdarts workspace",
+  "main": "index.js",
+  "module": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "build:config": "tsc",
+    "build:watch": "tsc --watch"
+  },
+  "keywords": [
+    "config",
+    "configuration",
+    "jest",
+    "typescript",
+    "eslint",
+    "prettier",
+    "turbo"
+  ],
+  "dependencies": {
+    "jest": "^29.7.0"
+  },
+  "author": "Flyingdarts Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/flyingdarts/flyingdarts-turbo",
+    "directory": "packages/tools/config"
+  }
+}

@@ -1,0 +1,30 @@
+name: websocket
+description: "A new Flutter package project."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ^3.26.0
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  authress_login:
+  rxdart: ^0.28.0
+  web_socket_channel: ^3.0.3
+  injectable: ^2.5.0
+  json_annotation: ^4.9.0
+  get_it: ^8.0.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  json_serializable: ^6.9.5
+  mockito: ^5.4.6
+  injectable_generator: ^2.7.0
+  build_runner: ^2.5.4
+
+flutter:

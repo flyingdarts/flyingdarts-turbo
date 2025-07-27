@@ -1,0 +1,22 @@
+meta {
+  name: List access records
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/records
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~limit: 
+  ~cursor: 
+  ~filter: 
+  ~status: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

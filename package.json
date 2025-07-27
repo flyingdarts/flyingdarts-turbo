@@ -1,0 +1,45 @@
+{
+  "name": "flyingdarts",
+  "version": "0.0.1",
+  "workspaces": [
+    "apps/backend/dotnet/**/*",
+    "apps/backend/rust/**/*",
+    "apps/frontend/flutter/*",
+    "apps/frontend/angular/*",
+    "apps/tools/dotnet/**/*",
+    "packages/backend/dotnet/**/*",
+    "packages/backend/rust/**/*",
+    "packages/frontend/flutter/**/*",
+    "packages/tools/dotnet/**/*",
+    "packages/tools/config"
+  ],
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "aws-sdk": "^2.1528.0",
+    "beachball": "^2.54.0",
+    "js-yaml": "^4.1.0",
+    "turbo": "^2.5.4",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "npm@9.5.0",
+  "scripts": {
+    "clean:flutter:generated": "turbo run clean:generated --filter=./packages/frontend/flutter/**/*",
+    "generate:flutter": "turbo run generate --filter=./packages/frontend/flutter/**/* --filter=./apps/frontend/flutter/flyingdarts_mobile",
+    "test:flutter": "turbo run test --filter=./packages/frontend/flutter/**/* --filter=./apps/frontend/flutter/flyingdarts_mobile",
+    "build:flutter:mobile": "turbo run build --filter=./apps/frontend/flutter/flyingdarts_mobile",
+    "build:angular:fd-app": "turbo run build --filter=./apps/frontend/angular/fd-app",
+    "start:angular:fd-app": "turbo run start --filter=./apps/frontend/angular/fd-app",
+    "deploy:cdk:dev": "turbo run deploy-dev --filter=./apps/tools/dotnet/cdk",
+    "deploy:cdk:stage": "turbo run deploy-stage --filter=./apps/tools/dotnet/cdk",
+    "deploy:cdk:prod": "turbo run deploy-prod --filter=./apps/tools/dotnet/cdk"
+  },
+  "repository": {
+    "url": "https://github.com/flyingdarts/flyingdarts-turbo",
+    "type": "git"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "@types/node": "^20.10.6",
+    "ts-node": "^10.9.2"
+  }
+}

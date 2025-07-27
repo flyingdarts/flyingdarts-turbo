@@ -1,0 +1,18 @@
+{
+  "name": "flyingdarts.backend.signalling.api",
+  "version": "1.0.0",
+  "description": "Flyingdarts Backend Signalling API",
+  "private": true,
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build -c Release",
+    "test": "dotnet test"
+  },
+  "dependencies": {
+    "flyingdarts.dynamodb.service": "*",
+    "flyingdarts.lambda.core": "*",
+    "flyingdarts.meetings.service": "*",
+    "flyingdarts.persistence": "*"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: List access requests
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/v1/requests
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~limit: 
+  ~cursor: 
+  ~status: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

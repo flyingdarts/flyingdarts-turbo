@@ -1,0 +1,11 @@
+{
+  "name": "flyingdarts.meetings.service.tests",
+  "version": "0.0.8",
+  "private": false,
+  "scripts": {
+    "test": "dotnet test"
+  },
+  "dependencies": {
+    "flyingdarts.meetings.service": "*"
+  }
+}

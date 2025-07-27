@@ -1,0 +1,21 @@
+meta {
+  name: Link tenant user
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{baseUrl}}/v1/tenants/:tenantId/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "userId": ""
+  }
+}

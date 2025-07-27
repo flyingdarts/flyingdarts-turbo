@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve tenant
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/tenants/:tenantId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

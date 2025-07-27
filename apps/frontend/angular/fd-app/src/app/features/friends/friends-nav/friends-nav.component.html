@@ -1,0 +1,39 @@
+<div class="friends-nav mb-4">
+  <ul class="nav nav-tabs border-0">
+    <li class="nav-item">
+      <a
+        class="nav-link text-white border-0 py-3 px-4 fw-bold"
+        routerLink="/friends"
+        routerLinkActive="active text-white border-bottom border-white border-3"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <i class="bi bi-people me-2"></i> My Friends
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link text-white border-0 py-3 px-4 fw-bold"
+        routerLink="/friends/requests"
+        routerLinkActive="active text-white border-bottom border-white border-3"
+      >
+        <i class="bi bi-inbox me-2"></i> Requests
+        <span
+          class="badge bg-white text-white ms-2"
+          style="font-size: 0.75rem"
+          *ngIf="pendingRequestsCount > 0"
+        >
+          {{ pendingRequestsCount }}
+        </span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link text-white border-0 py-3 px-4 fw-bold"
+        routerLink="/friends/add"
+        routerLinkActive="active text-white border-bottom border-white border-3"
+      >
+        <i class="bi bi-person-plus me-2"></i> Add Friend
+      </a>
+    </li>
+  </ul>
+</div>

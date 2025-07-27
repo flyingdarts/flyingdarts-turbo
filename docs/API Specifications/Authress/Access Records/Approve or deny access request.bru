@@ -1,0 +1,21 @@
+meta {
+  name: Approve or deny access request
+  type: http
+  seq: 9
+}
+
+patch {
+  url: {{baseUrl}}/v1/requests/:requestId
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "status": ""
+  }
+}

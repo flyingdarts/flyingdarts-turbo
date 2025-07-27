@@ -1,0 +1,17 @@
+{
+  "name": "flyingdarts.backend.signalling.api.tests",
+  "version": "0.0.2",
+  "private": true,
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build -c Release",
+    "test": "dotnet test"
+  },
+  "dependencies": {
+    "flyingdarts.meetings.service": "*",
+    "flyingdarts.core": "*",
+    "flyingdarts.lambda.core": "*",
+    "flyingdarts.backend.signalling.api": "*"
+  }
+}

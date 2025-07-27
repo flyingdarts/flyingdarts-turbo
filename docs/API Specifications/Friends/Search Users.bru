@@ -1,0 +1,36 @@
+meta {
+  name: Search Users
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/friends/search
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "SearchTerm": "638890993640285456"
+  }
+}
+
+docs {
+  Search for users by username or email.
+  
+  Request body:
+  - searchTerm: The username or email to search for
+  
+  Returns an array of UserSearchDto objects containing:
+  - UserId: The user's ID
+  - UserName: The user's username
+  - Email: The user's email
+  - Country: The user's country
+  - IsAlreadyFriend: Whether this user is already a friend
+  - HasPendingRequest: Whether there's a pending friend request
+}

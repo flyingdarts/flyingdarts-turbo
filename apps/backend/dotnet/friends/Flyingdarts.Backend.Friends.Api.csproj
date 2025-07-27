@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <AWSProjectType>Lambda</AWSProjectType>
+    <!-- This property makes the build directory similar to a publish directory and helps the AWS .NET Lambda Mock Test Tool find project dependencies. -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!-- Generate ready to run images during publishing to improve cold start time. -->
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <!-- Enable .NET 8 optimizations for Lambda -->
+    <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+    <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+    <EventSourceSupport>false</EventSourceSupport>
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+    <UseSystemTextJson>true</UseSystemTextJson>
+    <RootNamespace>Flyingdarts.Backend.Friends.Api</RootNamespace>  
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.1" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="2.7.0" />
+    <PackageReference Include="Amazon.Lambda.RuntimeSupport" Version="1.13.1" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
+    <PackageReference Include="Amazon.Extensions.Configuration.SystemsManager" Version="7.0.0" />
+    <PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="4.0.0.14" />
+    <PackageReference Include="AWSSDK.Core" Version="4.0.0.16" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="4.0.3" />
+    <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="4.0.2.4" />
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0-preview.6.25358.103" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.6.25358.103" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0-preview.6.25358.103" />
+
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\packages\backend\dotnet\Flyingdarts.Core\Flyingdarts.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\packages\backend\dotnet\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
+    <ProjectReference Include="..\..\..\..\packages\backend\dotnet\Flyingdarts.DynamoDb.Service\Flyingdarts.DynamoDb.Service\Flyingdarts.DynamoDb.Service.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<RootNamespace>Flyingdarts.CDK</RootNamespace>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Amazon.CDK.Lib" Version="2.206.0" />
+		<PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="4.0.2.4" />
+		<PackageReference Include="Constructs" Version="10.4.2" />
+		<PackageReference Include="Amazon.CDK.AWS.Apigatewayv2.Alpha" Version="2.103.1-alpha.0" />
+		<PackageReference Include="Amazon.CDK.AWS.Apigatewayv2.Integrations.Alpha" Version="2.103.1-alpha.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0-preview.6.25358.103" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.6.25358.103" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0-preview.6.25358.103" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="lambda.zip">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\..\packages\tools\dotnet\Flyingdarts.CDK.Constructs\Flyingdarts.CDK.Constructs.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageVersion Update="Amazon.CDK.Lib" Version="2.206.0" />
+	</ItemGroup>
+</Project>

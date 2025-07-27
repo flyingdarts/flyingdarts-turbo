@@ -1,0 +1,24 @@
+name: Main Flutter Workflow (Development)
+
+on:
+  workflow_call:
+  push:
+    paths:
+      - "apps/frontend/flutter/**"
+      - "packages/frontend/flutter/**"
+
+  pull_request:
+    paths:
+      - "apps/frontend/flutter/**"
+      - "packages/frontend/flutter/**"
+
+jobs:
+  build-flutter-dev:
+    uses: ./.github/workflows/build-flutter.yml
+    with:
+      project-name: "flyingdarts_mobile"
+      project-directory: "apps/frontend/flutter/flyingdarts_mobile"
+      flutter-version: "3.32.6"
+      channel: "stable"
+      platform: "web"
+      flavor: "dev"

@@ -1,0 +1,26 @@
+name: Build Rust Applications
+
+on:
+  workflow_call:
+  push:
+    paths:
+      - "apps/backend/rust/**"
+      - "packages/backend/rust/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+  pull_request:
+    paths:
+      - "apps/backend/rust/**"
+      - "packages/backend/rust/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  rust:
+    uses: ./.github/workflows/build-rust.yml
+    with:
+      project-name: "flyingdarts-authorizer"
+      project-directory: "apps/backend/rust/authorizer"

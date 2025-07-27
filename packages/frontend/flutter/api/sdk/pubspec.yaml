@@ -1,0 +1,27 @@
+name: api_sdk
+description: A new Flutter package project.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ^3.26.0
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  injectable: ^2.5.0
+  json_annotation: ^4.9.0
+  equatable: ^2.0.7
+  dio: ^5.8.0+1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  json_serializable: ^6.9.5
+  mockito: ^5.4.6
+  build_runner: ^2.5.4
+
+flutter:

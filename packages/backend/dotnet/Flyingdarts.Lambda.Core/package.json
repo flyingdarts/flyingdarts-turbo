@@ -1,0 +1,15 @@
+{
+  "name": "flyingdarts.lambda.core",
+  "version": "1.0.0",
+  "description": "Core infrastructure and utilities for Flyingdarts Lambda functions",
+  "private": true,
+  "scripts": {
+    "clean": "dotnet clean",
+    "build": "dotnet build",
+    "test": "dotnet test",
+    "pack": "dotnet pack"
+  },
+  "dependencies": {
+    "flyingdarts.core": "*"
+  }
+}

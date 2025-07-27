@@ -1,0 +1,23 @@
+meta {
+  name: OAuth Token
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/api/authentication/oauth/tokens
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "client_id": "",
+    "client_secret": "",
+    "code_verifier": "",
+    "grant_type": "",
+    "username": "",
+    "password": "",
+    "loginType": ""
+  }
+}

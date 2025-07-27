@@ -1,0 +1,44 @@
+meta {
+  name: Create service client
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/clients
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "clientId": "",
+    "createdTime": "",
+    "name": "",
+    "options": {
+      "grantUserPermissionsAccess": "",
+      "grantTokenGeneration": ""
+    },
+    "rateLimits": [
+      {
+        "duration": "",
+        "quota": ""
+      }
+    ],
+    "verificationKeys": [
+      {
+        "keyId": "",
+        "clientId": "",
+        "publicKey": "",
+        "generationDate": "",
+        "clientSecret": "",
+        "accessKey": ""
+      }
+    ],
+    "tags": ""
+  }
+}

@@ -1,0 +1,29 @@
+// Mobile container for full height
+.mobile-container {
+  height: -webkit-fill-available !important;
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  // Mobile specific styles
+  .flex-grow-1 {
+    min-height: 0; // Allow flex items to shrink
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  // Tablet specific styles
+  .flex-grow-1 {
+    min-height: 0; // Allow flex items to shrink
+  }
+}
+
+// Ensure proper height handling on all devices
+.h-100 {
+  height: 100% !important;
+}
+
+// Smooth transitions for layout changes
+.flex-grow-1 {
+  transition: all 0.3s ease;
+}

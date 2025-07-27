@@ -1,0 +1,55 @@
+.button {
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  line-height: 70px;
+  cursor: pointer;
+  background-color: #fc3c60;
+  border-radius: 7px;
+  color: #e5e5e5;
+  width: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #e63950; /* Slightly darker shade for hover */
+  color: #ffffff; /* Brighter text color for contrast */
+}
+
+.clear-button,
+.check-button {
+  background-color: #3c46a7;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.clear-button:hover,
+.check-button:hover {
+  background-color: #2f387d; /* Darker blue for hover */
+  color: #ffffff; /* Brighter text color for contrast */
+}
+
+.no-score-button,
+.ok-button {
+  background-color: #3c46a7;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.no-score-button:hover,
+.ok-button:hover {
+  background-color: #2f387d; /* Darker blue for hover */
+  color: #ffffff; /* Brighter text color for contrast */
+}
+
+.fd-input {
+  font-size: 3rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.fd-input-light {
+  color: #2f387d;
+}
+
+.fd-input-dark {
+  color: #3c46a7;
+}

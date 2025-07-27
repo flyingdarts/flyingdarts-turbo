@@ -1,0 +1,11 @@
+{
+  "name": "ui",
+  "version": "0.0.7",
+  "description": "A new Flutter package project.",
+  "private": false,
+  "scripts": {
+    "generate": "dart run build_runner build --delete-conflicting-outputs",
+    "clean": "flutter clean && dart run build_runner clean",
+    "clean:generated": "dart run build_runner clean"
+  }
+}

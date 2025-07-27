@@ -1,0 +1,14 @@
+{
+  "name": "flyingdarts.cdk.infrastructure",
+  "version": "0.0.9",
+  "private": false,
+  "scripts": {
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build -c Release"
+  },
+  "dependencies": {
+    "flyingdarts.connection.services": "*",
+    "flyingdarts.metadata.services": "*",
+    "flyingdarts.persistence": "*"
+  }
+}

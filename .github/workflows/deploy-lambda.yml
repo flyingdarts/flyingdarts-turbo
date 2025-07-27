@@ -1,0 +1,56 @@
+name: Deploy Lambda Function
+
+on:
+  workflow_call:
+    inputs:
+      lambda-function-name:
+        description: "Name of the Lambda function to deploy"
+        required: true
+        type: string
+      artifact-name:
+        description: "Name of the artifact containing the Lambda package"
+        required: true
+        type: string
+      environment:
+        description: "Environment to deploy to (for manual approval)"
+        required: true
+        type: string
+        default: "development"
+    secrets:
+      AWS_REGION:
+        description: "AWS Region"
+        required: true
+      AWS_DEPLOYMENT_ROLE_ARN:
+        description: "AWS Role ARN to assume for deployment"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download Lambda package from specific workflow run
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact-name }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
+          role-session-name: github-actions-${{ github.run_id }}
+          audience: sts.amazonaws.com
+        env:
+          ACTIONS_STEP_DEBUG: true
+
+      - name: Deploy Lambda function
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ inputs.lambda-function-name }} \
+            --zip-file fileb://lambda.zip \
+            --region ${{ secrets.AWS_REGION }}

@@ -1,0 +1,59 @@
+name: Main .NET Workflow (Development)
+
+on:
+  workflow_call:
+
+jobs:
+  build-signalling-api-dev:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.backend.signalling.api"
+      project-directory: "apps/backend/dotnet/signalling/api"
+      lambda-function-name: "Flyingdarts-Backend-Signalling-Api-Development"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-signalling-api-dev:
+    needs: build-signalling-api-dev
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Backend-Signalling-Api-Development"
+      artifact-name: "Flyingdarts-Backend-Signalling-Api-Development-package"
+      environment: "development"
+    secrets: inherit
+
+  build-x01-api-dev:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.backend.games.x01.api"
+      project-directory: "apps/backend/dotnet/api"
+      lambda-function-name: "Flyingdarts-Backend-Games-X01-Api-Development"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-x01-api-dev:
+    needs: build-x01-api-dev
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Backend-Games-X01-Api-Development"
+      artifact-name: "Flyingdarts-Backend-Games-X01-Api-Development-package"
+      environment: "development"
+    secrets: inherit
+
+  build-friends-api-dev:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.backend.friends.api"
+      project-directory: "apps/backend/dotnet/friends"
+      lambda-function-name: "Flyingdarts-Backend-Friends-Api-Development"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-friends-api-dev:
+    needs: build-friends-api-dev
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Backend-Friends-Api-Development"
+      artifact-name: "Flyingdarts-Backend-Friends-Api-Development-package"
+      environment: "development"
+    secrets: inherit

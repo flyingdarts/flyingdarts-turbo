@@ -1,0 +1,40 @@
+name: profile
+description: "A package containg the profile feature."
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: ^3.8.1
+  flutter: ^3.26.0
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  api_sdk:
+  authress_login:
+  ui:
+  internationalization:
+  websocket:
+  app_config_core:
+  app_config_secrets:
+
+  flutter_bloc: ^9.1.1
+  dio: ^5.8.0+1
+  get_it: ^8.0.3
+  widgetbook: ^3.14.3
+  widgetbook_annotation: ^3.5.0
+  json_annotation: ^4.9.0
+  injectable: ^2.5.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+  build_runner: ^2.5.4
+  widgetbook_generator: ^3.13.0
+  json_serializable: ^6.9.5
+  injectable_generator: ^2.7.0
+
+flutter:

@@ -1,0 +1,67 @@
+name: Setup Build Turbo Prune
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project within Turbo context. (package.json name)"
+        required: true
+        type: string
+      node-version:
+        description: "Version of Node.js to use"
+        required: false
+        type: string
+        default: "22"
+    outputs:
+      dist-path:
+        description: "Path to the pruned dist directory"
+        value: ${{ jobs.setup.outputs.dist-path }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    outputs:
+      dist-path: ${{ steps.setup-turbo.outputs.dist-path }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Fetch all history for turbo prune
+
+      # Cache turbo
+      - name: Cache turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+
+      # Install Turbo
+      - name: Install Turbo
+        run: npm install -g turbo
+
+      # Prune our application (optimized for docker)
+      - name: Turbo prune
+        id: setup-turbo
+        run: |
+          turbo prune ${{ inputs.project-name }} --out-dir ./dist --docker
+
+      # Upload pruned files as artifacts
+      - name: Upload pruned files
+        uses: actions/upload-artifact@v4
+        with:
+          name: pruned-${{ inputs.project-name }}
+          path: ./dist
+          retention-days: 1

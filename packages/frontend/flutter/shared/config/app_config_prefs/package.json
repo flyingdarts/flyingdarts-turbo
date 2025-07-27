@@ -1,0 +1,13 @@
+{
+  "name": "app.config.prefs",
+  "version": "0.0.8",
+  "description": "Configuration preferences package",
+  "private": false,
+  "dependencies": {
+    "app.config.core": "*"
+  },
+  "scripts": {
+    "clean": "flutter clean && dart run build_runner clean",
+    "clean:generated": "dart run build_runner clean"
+  }
+}

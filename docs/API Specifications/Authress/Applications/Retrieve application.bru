@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve application
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/applications/:applicationId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

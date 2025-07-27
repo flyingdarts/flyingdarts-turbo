@@ -1,0 +1,15 @@
+meta {
+  name: Update service client
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/v1/clients/:clientId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

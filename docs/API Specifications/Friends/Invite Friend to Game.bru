@@ -1,0 +1,36 @@
+meta {
+  name: Invite Friend to Game
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/friends/invite
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "friendIds": ["friend-id-1", "friend-id-2"],
+    "gameType": "x01",
+    "gameId": "optional-existing-game-id",
+    "message": "Optional invitation message"
+  }
+}
+
+docs {
+  Invite one or more friends to join a game.
+  
+  Request body:
+  - friendIds: Array of user IDs to invite to the game
+  - gameType: The type of game (e.g., "x01")
+  - gameId: Optional ID of an existing game to invite friends to
+  - message: Optional message to include with the invitation
+  
+  The inviterId is automatically set from the authenticated user's token.
+} 

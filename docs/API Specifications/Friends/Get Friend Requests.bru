@@ -1,0 +1,28 @@
+meta {
+  name: Get Friend Requests
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/friends/requests
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  Get all pending friend requests for the authenticated user.
+  
+  Returns an array of FriendRequestDto objects containing:
+  - RequestId: The unique ID of the friend request
+  - RequesterId: The ID of the user who sent the request
+  - RequesterUserName: The username of the requester
+  - TargetUserId: The ID of the user receiving the request
+  - Message: Optional message included with the request
+  - CreatedAt: When the request was created
+  - Status: The current status of the request
+} 

@@ -1,0 +1,15 @@
+meta {
+  name: Create access request
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/v1/requests
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

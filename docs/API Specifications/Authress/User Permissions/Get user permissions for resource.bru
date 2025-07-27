@@ -1,0 +1,20 @@
+meta {
+  name: Get user permissions for resource
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/users/:userId/resources/:resourceUri/permissions
+  body: none
+  auth: bearer
+}
+
+params:path {
+  userId: 
+  resourceUri: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

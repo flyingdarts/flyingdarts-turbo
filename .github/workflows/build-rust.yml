@@ -1,0 +1,88 @@
+name: Build Flutter App
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project within Turbo context. (package.json name)"
+        required: true
+        type: string
+      project-directory:
+        description: "Directory of the Flutter project to build"
+        required: true
+        type: string
+      node-version:
+        description: "Version of Node.js to use"
+        required: false
+        type: string
+        default: "22"
+jobs:
+  prune:
+    uses: ./.github/workflows/setup-build-turbo-prune.yml
+    with:
+      project-name: ${{ inputs.project-name }}
+      node-version: ${{ inputs.node-version }}
+
+  build:
+    needs: prune
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download pruned files
+        uses: actions/download-artifact@v4
+        with:
+          name: pruned-${{ inputs.project-name }}
+          path: ./pruned
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      # Turbo prune does not copy the pubspec.yaml or pubspec.lock file to the dist directory, so we need to copy it manually
+      - name: Copy Cargo.toml to pruned/full
+        run: cp Cargo.toml ./pruned/full
+
+      - name: Copy Cargo.lock to pruned/full
+        run: cp Cargo.lock ./pruned/full
+
+      # Restore dependencies
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Restore npm dependencies
+        run: npm install
+        working-directory: ./pruned/full
+
+      - name: Run clippy
+        run: cargo clippy --workspace -- -D warnings
+        working-directory: ./pruned/full/${{ inputs.project-directory }}
+
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
+        working-directory: ./pruned/full/${{ inputs.project-directory }}
+
+      - name: Build release binaries
+        run: cargo build --workspace --release
+        working-directory: ./pruned/full/${{ inputs.project-directory }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-binaries
+          path: |
+            target/release/
+          retention-days: 7
+          working-directory: ./pruned/full/${{ inputs.project-directory }}

@@ -1,0 +1,20 @@
+{
+  "name": "authress_login",
+  "entries": [
+    {
+      "date": "Sat, 26 Jul 2025 20:04:36 GMT",
+      "version": "0.0.2",
+      "tag": "authress_login_v0.0.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "authress_login",
+            "commit": "18a03921a8388d4f6e76caa3545046b1773ac55a",
+            "comment": "Implemented friends feature"
+          }
+        ]
+      }
+    }
+  ]
+}

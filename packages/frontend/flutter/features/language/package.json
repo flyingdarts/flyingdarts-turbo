@@ -1,0 +1,16 @@
+{
+  "name": "language",
+  "version": "0.0.8",
+  "description": "Language feature package",
+  "private": false,
+  "scripts": {
+    "generate": "dart run build_runner build --delete-conflicting-outputs",
+    "clean": "flutter clean && dart run build_runner clean",
+    "clean:generated": "dart run build_runner clean"
+  },
+  "dependencies": {
+    "ui": "*",
+    "app.config.core": "*",
+    "app.config.prefs": "*"
+  }
+}

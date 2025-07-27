@@ -1,0 +1,21 @@
+meta {
+  name: List SSO connections
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/connections
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~limit: 
+  ~cursor: 
+  ~filter: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

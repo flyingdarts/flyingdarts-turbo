@@ -1,0 +1,15 @@
+meta {
+  name: Create group
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/groups
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

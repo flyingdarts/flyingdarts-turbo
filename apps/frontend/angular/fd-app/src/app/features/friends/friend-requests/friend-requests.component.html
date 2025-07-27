@@ -1,0 +1,176 @@
+<div class="w-100">
+  <ng-container *ngIf="hasAnyRequests$ | async; else noRequests">
+    <!-- Incoming Friend Requests Section -->
+    <div
+      class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-white"
+    >
+      <h2 class="m-0 text-white fw-bold">Friend Requests</h2>
+      <span
+        class="badge bg-white text-primary rounded-pill"
+        *ngIf="hasIncomingRequests$ | async"
+      >
+        {{ (incomingRequests$ | async)?.length }} pending
+      </span>
+    </div>
+
+    <div>
+      <div
+        class="d-flex align-items-center justify-content-center"
+        style="min-height: 40vh"
+        *ngIf="(hasAnyRequests$ | async) && !(hasIncomingRequests$ | async)"
+      >
+        <div class="text-center">
+          <i class="bi bi-inbox display-1 text-white mb-4"></i>
+          <h4 class="text-white mb-2 fw-bold">No incoming friend requests</h4>
+          <p class="text-white">
+            You don't have any pending friend requests at the moment.
+          </p>
+        </div>
+      </div>
+      <div
+        class="d-flex flex-column gap-3"
+        *ngIf="hasIncomingRequests$ | async"
+      >
+        <div
+          class="d-flex align-items-center p-4 bg-white bg-opacity-10 rounded border border-white border-opacity-25 transition-all"
+          *ngFor="
+            let request of incomingRequests$ | async;
+            trackBy: trackByRequestId
+          "
+        >
+          <div class="me-3">
+            <i
+              class="bi bi-person-circle text-white"
+              style="font-size: 3rem"
+            ></i>
+          </div>
+          <div class="flex-grow-1">
+            <h4 class="m-0 mb-1 text-white fw-bold">
+              {{ request.RequesterUserName }}
+            </h4>
+            <p class="m-0 mb-1 text-white small">
+              Sent {{ request.CreatedAt | date : "shortDate" }}
+            </p>
+            <p class="m-0 text-white fst-italic small" *ngIf="request.Message">
+              "{{ request.Message }}"
+            </p>
+          </div>
+          <div class="d-flex gap-2">
+            <button
+              class="btn btn-sm"
+              style="background: #ff5e78; color: white; border: none"
+              (click)="acceptRequest(request)"
+              [disabled]="processingRequest === request.RequestId"
+            >
+              <span
+                class="spinner-border spinner-border-sm me-1"
+                *ngIf="processingRequest === request.RequestId"
+              ></span>
+              <i
+                class="bi bi-check-lg"
+                *ngIf="processingRequest !== request.RequestId"
+              ></i>
+              {{
+                processingRequest === request.RequestId
+                  ? "Accepting..."
+                  : "Accept"
+              }}
+            </button>
+            <button
+              class="btn btn-sm btn-outline-light"
+              (click)="declineRequest(request)"
+              [disabled]="processingRequest === request.RequestId"
+            >
+              <span
+                class="spinner-border spinner-border-sm me-1"
+                *ngIf="processingRequest === request.RequestId"
+              ></span>
+              <i
+                class="bi bi-x-lg"
+                *ngIf="processingRequest !== request.RequestId"
+              ></i>
+              {{
+                processingRequest === request.RequestId
+                  ? "Declining..."
+                  : "Decline"
+              }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outgoing (Sent) Friend Requests Section -->
+    <div class="w-100 mt-5">
+      <div
+        class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-white"
+      >
+        <h2 class="m-0 text-white fw-bold">Sent Requests</h2>
+        <span
+          class="badge bg-white text-primary rounded-pill"
+          *ngIf="hasOutgoingRequests$ | async"
+        >
+          {{ (outgoingRequests$ | async)?.length }} sent
+        </span>
+      </div>
+
+      <div>
+        <div
+          class="text-center py-5"
+          *ngIf="!(hasOutgoingRequests$ | async)"
+        ></div>
+        <div
+          class="d-flex flex-column gap-3"
+          *ngIf="hasOutgoingRequests$ | async"
+        >
+          <div
+            class="d-flex align-items-center p-4 bg-white bg-opacity-10 rounded border border-white border-opacity-25 transition-all"
+            *ngFor="
+              let request of outgoingRequests$ | async;
+              trackBy: trackByRequestId
+            "
+          >
+            <div class="me-3">
+              <i
+                class="bi bi-person-circle text-white"
+                style="font-size: 3rem"
+              ></i>
+            </div>
+            <div class="flex-grow-1">
+              <h4 class="m-0 mb-1 text-white fw-bold">
+                {{ request.TargetUserId }}
+                <!-- TODO: Show recipient username -->
+              </h4>
+              <p class="m-0 mb-1 text-white small">
+                Sent {{ request.CreatedAt | date : "shortDate" }}
+              </p>
+              <p
+                class="m-0 text-white fst-italic small"
+                *ngIf="request.Message"
+              >
+                "{{ request.Message }}"
+              </p>
+            </div>
+            <div class="d-flex gap-2">
+              <span class="badge bg-white text-primary">Pending</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noRequests>
+    <div
+      class="d-flex align-items-center justify-content-center"
+      style="min-height: 60vh"
+    >
+      <div class="text-center">
+        <i class="bi bi-inbox display-1 text-white mb-4"></i>
+        <h3 class="text-white mb-2 fw-bold">No friend requests</h3>
+        <p class="text-white">
+          You don't have any pending friend requests at the moment.
+        </p>
+      </div>
+    </div>
+  </ng-template>
+</div>

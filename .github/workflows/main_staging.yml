@@ -1,0 +1,62 @@
+name: Main Staging Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # Test jobs - run before builds
+  test-dotnet:
+    uses: ./.github/workflows/test-dotnet.yml
+    with:
+      solution-file: "flyingdarts-turbo.sln"
+      project-name: "flyingdarts"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  test-flutter:
+    uses: ./.github/workflows/test-flutter.yml
+    with:
+      project-name: "flyingdarts_mobile"
+      project-directory: "apps/frontend/flutter/flyingdarts_mobile"
+      flutter-version: "3.32.6"
+      node-version: "22"
+
+  test-rust:
+    uses: ./.github/workflows/test-rust.yml
+    with:
+      project-name: "flyingdarts-authorizer"
+      project-directory: "apps/backend/rust/authorizer"
+      node-version: "22"
+
+  test-angular:
+    uses: ./.github/workflows/test-angular.yml
+    with:
+      project-name: "fd-app"
+      project-directory: "apps/frontend/angular/fd-app"
+      configuration: "development"
+      node-version: "22"
+
+  # Build jobs - run after tests pass
+  build-deploy-dotnet-dev:
+    name: Build .NET
+    needs: [test-dotnet]
+    uses: ./.github/workflows/main_dotnet_dev.yml
+    secrets: inherit
+
+  build-flutter-dev:
+    name: Build Flutter
+    needs: [test-flutter]
+    uses: ./.github/workflows/main_flutter_dev.yml
+    secrets: inherit
+
+  build-rust-dev:
+    name: Build Rust
+    needs: [test-rust]
+    uses: ./.github/workflows/main_rust_dev.yml
+    secrets: inherit
+
+  build-angular:
+    name: Build Angular
+    needs: [test-angular] # Angular might depend on .NET backend
+    uses: ./.github/workflows/main_angular_dev.yml
+    secrets: inherit

@@ -1,0 +1,31 @@
+meta {
+  name: Put Friend Request
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/friends/request
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "TargetUserId": "638890993640285456"
+  }
+}
+
+docs {
+  Send a friend request to another user.
+  
+  Request body:
+  - targetUserId: The ID of the user to send the friend request to
+  - message: Optional message to include with the friend request
+  
+  The requesterId is automatically set from the authenticated user's token.
+}

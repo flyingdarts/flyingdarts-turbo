@@ -1,0 +1,14 @@
+global using Amazon.CDK;
+global using Amazon.CDK.AWS.DynamoDB;
+global using Amazon.CDK.AWS.IAM;
+global using Amazon.CDK.AWS.Lambda;
+global using Amazon.CDK.AWS.SSM;
+global using Attribute = Amazon.CDK.AWS.DynamoDB.Attribute;
+global using Amazon.CDK.AWS.APIGateway;
+global using Construct = Constructs.Construct;
+global using Stage = Amazon.CDK.AWS.APIGateway.Stage;
+global using StageProps = Amazon.CDK.AWS.APIGateway.StageProps;
+global using AmazonAspect = Amazon.CDK.Aspects;
+global using Amazon.CDK.AWS.Apigatewayv2.Authorizers.Alpha;
+global using Amazon.CDK.AWS.Apigatewayv2.Alpha;
+global using Amazon.CDK.AWS.Apigatewayv2.Integrations.Alpha;

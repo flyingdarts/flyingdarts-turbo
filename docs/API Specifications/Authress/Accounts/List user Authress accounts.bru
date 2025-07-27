@@ -1,0 +1,19 @@
+meta {
+  name: List user Authress accounts
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~earliestCacheTime: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

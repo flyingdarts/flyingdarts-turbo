@@ -1,0 +1,23 @@
+<form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="userName">User Name:</label>
+    <input id="userName" formControlName="userName" />
+
+    <!-- Check if the userName control is invalid and touched -->
+    <div *ngIf="signUpForm.get('userName')?.invalid && signUpForm.get('userName')?.touched">
+
+      <!-- Check if the required error exists -->
+      <small *ngIf="signUpForm.get('userName')?.errors?.['required']">
+        User Name is required.
+      </small>
+
+      <!-- Check if the minlength error exists -->
+      <small *ngIf="signUpForm.get('userName')?.errors?.['minlength']">
+        User Name must be at least 3 characters long.
+      </small>
+
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="signUpForm.invalid">Submit</button>
+</form>

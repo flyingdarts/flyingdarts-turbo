@@ -1,0 +1,79 @@
+name: Test Angular App
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project within Turbo context. (package.json name)"
+        required: true
+        type: string
+      project-directory:
+        description: "Directory of the Angular project to build"
+        required: true
+        type: string
+      configuration:
+        description: "Configuration to build the app with"
+        required: true
+        type: string
+      node-version:
+        description: "Version of Node.js to use"
+        required: false
+        type: string
+        default: "22"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Fetch all history for turbo prune
+      # Setup
+      - name: Cache turbo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+
+      - name: Install Turbo
+        run: npm install -g turbo
+
+      # Prune our application (optimized for docker)
+      - name: Turbo prune
+        run: turbo prune ${{ inputs.project-name }} --out-dir ./dist --docker
+
+      # Turbo prune does not copy the angular.json file to the dist directory, so we need to copy it manually
+      - name: Check for angular.json file recursively in the dist directory
+        run: |
+          if ! find ./dist/full -name "angular.json" -type f | grep -q .; then
+            echo "No angular.json file found recursively in ./dist directory, copying from repo root"
+            if [ -f angular.json ]; then
+              cp angular.json ./dist/full/
+              echo "angular.json copied to ./dist/full/"
+            else
+              echo "angular.json not found in repo root either"
+              exit 1
+            fi
+          fi
+
+      # Restore dependencies
+      - name: Restore dependencies
+        run: npm install
+        working-directory: ./dist/full
+
+      # Build the application
+      - name: Build
+        run: turbo run test
+        working-directory: ./dist/full/${{ inputs.project-directory }}

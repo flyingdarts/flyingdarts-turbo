@@ -1,0 +1,21 @@
+{
+  "name": "flyingdarts.backend.games.x01.api",
+  "version": "0.0.7",
+  "private": true,
+  "scripts": {
+    "restore": "dotnet restore",
+    "build": "dotnet build -c Debug",
+    "build:prod": "dotnet build -c Release ",
+    "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Api-Development  -frun dotnet8 -f net8.0 --region eu-west-1",
+    "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Api-Production  -frun dotnet8 -f net8.0 --region eu-west-1"
+  },
+  "dependencies": {
+    "flyingdarts.connection.services": "*",
+    "flyingdarts.meetings.service": "*",
+    "flyingdarts.metadata.services": "*",
+    "flyingdarts.notifyrooms.service": "*",
+    "flyingdarts.persistence": "*",
+    "flyingdarts.core": "*",
+    "flyingdarts.lambda.core": "*"
+  }
+}

@@ -1,0 +1,68 @@
+name: Build Angular App
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project within Turbo context. (package.json name)"
+        required: true
+        type: string
+      project-directory:
+        description: "Directory of the Angular project to build"
+        required: true
+        type: string
+      configuration:
+        description: "Configuration to build the app with"
+        required: true
+        type: string
+      environment:
+        description: "Environment to build the app for"
+        required: true
+        type: string
+        default: "staging"
+      node-version:
+        description: "Version of Node.js to use"
+        required: false
+        type: string
+        default: "22"
+jobs:
+  prune:
+    uses: ./.github/workflows/setup-build-turbo-prune.yml
+    with:
+      project-name: ${{ inputs.project-name }}
+      node-version: ${{ inputs.node-version }}
+
+  build:
+    needs: prune
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download pruned files
+        uses: actions/download-artifact@v4
+        with:
+          name: pruned-${{ inputs.project-name }}
+          path: ./pruned
+
+      # Turbo prune does not copy the angular.json file to the dist directory, so we need to copy it manually
+      - name: Check for angular.json file recursively in the dist directory
+        run: cp angular.json ./pruned/full
+
+      # Restore dependencies
+      - name: Restore dependencies
+        run: npm install
+        working-directory: ./pruned/full
+
+      # Build the application
+      - name: Build
+        run: npm run build
+        working-directory: ./pruned/full/${{ inputs.project-directory }}
+
+      # Upload artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.project-name }}-${{ inputs.environment }}
+          path: ./pruned/full/${{ inputs.project-directory }}/dist
+          retention-days: 1

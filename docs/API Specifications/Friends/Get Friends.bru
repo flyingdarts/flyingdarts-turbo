@@ -1,0 +1,28 @@
+meta {
+  name: Get Friends
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/friends
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  Get the list of friends for the authenticated user.
+  
+  Returns an array of FriendDto objects containing:
+  - UserId: The friend's user ID
+  - UserName: The friend's username
+  - Email: The friend's email
+  - Country: The friend's country
+  - FriendsSince: When they became friends
+  - IsOnline: Whether the friend is currently online
+  - ConnectionId: WebSocket connection ID if online
+} 

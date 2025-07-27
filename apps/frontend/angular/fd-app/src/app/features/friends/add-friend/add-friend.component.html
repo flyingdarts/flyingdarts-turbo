@@ -1,0 +1,123 @@
+<div class="w-100">
+  <div
+    class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-white"
+  >
+    <button class="btn btn-outline-light" (click)="goBack()">
+      <i class="bi bi-arrow-left"></i> Back
+    </button>
+    <h2 class="m-0 text-white fw-bold">Add Friend</h2>
+  </div>
+
+  <div class="mb-4">
+    <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div class="input-group" style="max-width: 500px">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search for users by username or email address..."
+          formControlName="searchQuery"
+        />
+        <button
+          class="btn"
+          style="background: #ff5e78; color: white; border: none"
+          type="submit"
+          [disabled]="searchForm.invalid"
+        >
+          <i class="bi bi-search"></i> Search
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="searchResults.length > 0">
+    <h3 class="mb-3 text-white fw-bold">Search Results</h3>
+    <div class="row g-4">
+      <div *ngFor="let user of searchResults" class="col-12 col-md-6 col-lg-6">
+        <div
+          class="d-flex align-items-center p-4 bg-white bg-opacity-10 rounded border border-white border-opacity-25 transition-all"
+        >
+          <div class="me-3">
+            @if (user.Picture) {
+            <img
+              src="{{ user.Picture }}"
+              alt="User Avatar"
+              class="rounded-circle"
+              style="width: 3rem; height: 3rem"
+            />
+            } @else {
+            <i
+              class="bi bi-person-circle text-white"
+              style="font-size: 3rem"
+            ></i>
+            }
+          </div>
+          <div class="flex-grow-1">
+            <h4 class="m-0 mb-1 text-white fw-bold">{{ user.UserName }}</h4>
+            <p class="m-0 text-white" style="font-size: 0.8rem">
+              {{ user.Country }}
+            </p>
+          </div>
+          <div class="d-flex flex-column align-items-center gap-2">
+            <div *ngIf="user.IsAlreadyFriend">
+              <span class="badge bg-white text-primary">Already Friends</span>
+            </div>
+            <div *ngIf="user.HasPendingRequest">
+              <span class="badge bg-white text-primary">Request Pending</span>
+            </div>
+            <div *ngIf="!user.IsAlreadyFriend && !user.HasPendingRequest">
+              <button
+                class="btn btn-sm"
+                style="background: #ff5e78; color: white; border: none"
+                (click)="sendFriendRequest(user)"
+                [disabled]="sendingRequest === user.UserId"
+              >
+                <span
+                  *ngIf="sendingRequest === user.UserId"
+                  class="spinner-border spinner-border-sm me-1"
+                ></span>
+                <i
+                  *ngIf="sendingRequest !== user.UserId"
+                  class="bi bi-person-plus"
+                ></i>
+                {{
+                  sendingRequest === user.UserId ? "Sending..." : "Add Friend"
+                }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="text-center py-5"
+    *ngIf="hasSearched && searchResults.length === 0"
+  >
+    <div>
+      <i class="bi bi-search display-1 text-white mb-4"></i>
+      <h3 class="text-white mb-2 fw-bold">No users found</h3>
+      <p class="text-white">Try searching with a different identifier.</p>
+    </div>
+  </div>
+
+  <div
+    class="bg-white bg-opacity-10 rounded p-4 mt-4 border border-white border-opacity-25"
+    *ngIf="!hasSearched"
+  >
+    <div>
+      <h3 class="text-white mb-3 fw-bold">Search Tips</h3>
+      <ul class="m-0 ps-4">
+        <li class="text-white mb-2">
+          Search by username or email address (case-insensitive)
+        </li>
+        <li class="text-white mb-2">
+          Make sure the user has an account on Flyingdarts
+        </li>
+        <li class="text-white mb-2">
+          You can only add users who are not already your friends
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

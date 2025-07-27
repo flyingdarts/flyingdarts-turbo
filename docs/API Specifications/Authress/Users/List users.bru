@@ -1,0 +1,22 @@
+meta {
+  name: List users
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/users
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~limit: 
+  ~cursor: 
+  ~filter: 
+  ~tenantId: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

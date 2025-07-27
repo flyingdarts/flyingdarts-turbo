@@ -1,0 +1,31 @@
+.card-custom {
+  background: #5a54e3;
+  color: white;
+  border-radius: 1.5rem;
+  width: 90vw;
+  max-width: 1200px;
+  height: 80vh;
+  max-height: 800px;
+  overflow-y: auto;
+}
+
+#friendsContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .card-custom {
+    width: 95vw;
+    height: 85vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-custom {
+    width: 98vw;
+    height: 90vh;
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Update extension
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/v1/extensions/:extensionId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

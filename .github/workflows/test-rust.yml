@@ -1,0 +1,102 @@
+name: Test Rust Solution
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project within Turbo context. (package.json name)"
+        required: true
+        type: string
+      project-directory:
+        description: "Directory of the Flutter project to build"
+        required: true
+        type: string
+      node-version:
+        description: "Version of Node.js to use"
+        required: false
+        type: string
+        default: "22"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Fetch all history for turbo prune
+
+      # Setup
+      - name: Cache turbo
+        uses: actions/cache@v4
+        with:
+          path: ./dist/full/.turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+
+      - name: Install Turbo
+        run: npm install -g turbo
+
+      # Prune our application (optimized for docker)
+      - name: Turbo prune
+        run: turbo prune ${{ inputs.project-name }} --out-dir ./dist --docker
+
+      # Turbo prune does not copy the pubspec.yaml or pubspec.lock file to the dist directory, so we need to copy it manually
+      - name: Copy Cargo.toml to dist/full
+        run: cp Cargo.toml ./dist/full/
+
+      - name: Copy Cargo.lock to dist/full
+        run: cp Cargo.lock ./dist/full/
+
+      # Restore dependencies
+      - name: Cache Rust dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Restore npm dependencies
+        run: npm install
+        working-directory: ./dist/full
+
+      - name: Build
+        run: npm run build
+        working-directory: ./dist/full/${{ inputs.project-directory }}
+
+      - name: Build workspace
+        run: turbo run build
+        working-directory: ./dist/full/${{ inputs.project-directory }}
+
+      - name: Run clippy
+        run: cargo clippy --workspace -- -D warnings
+        working-directory: ./dist/full/${{ inputs.project-directory }}
+
+      - name: Run rustfmt
+        run: cargo fmt --all -- --check
+        working-directory: ./dist/full/${{ inputs.project-directory }}
+
+      - name: Run tests
+        run: turbo run test
+        working-directory: ./dist/full/${{ inputs.project-directory }}

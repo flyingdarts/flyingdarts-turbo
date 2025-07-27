@@ -1,0 +1,15 @@
+meta {
+  name: Generate service client access key
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/v1/clients/:clientId/access-keys
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

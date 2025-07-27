@@ -1,0 +1,15 @@
+meta {
+  name: Create tenant
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v1/tenants
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

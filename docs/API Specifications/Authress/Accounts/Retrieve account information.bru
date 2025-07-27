@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve account information
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v1/accounts/:accountId
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

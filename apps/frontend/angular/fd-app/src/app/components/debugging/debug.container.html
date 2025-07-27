@@ -1,0 +1,269 @@
+<!-- Floating Action Button -->
+<div class="debug-fab" (click)="toggleDebug()">
+  <i class="bi bi-bug-fill"></i>
+</div>
+
+<!-- Debug Overlay -->
+<div class="debug-overlay" *ngIf="showDebug" (click)="toggleDebug()">
+  <div class="debug-content" (click)="$event.stopPropagation()">
+    <div class="debug-header">
+      <div>
+        <h5 class="mb-0">Debug Information</h5>
+        <small>GameId - {{ gameId }} | User id - {{ userId$ | async }}</small>
+      </div>
+      <button class="btn-close" (click)="toggleDebug()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="debug-body">
+      <div class="mb-3">
+        <div class="row">
+          <div class="col-6">
+            <h6>Game State</h6>
+            <p class="mb-1">Next player: {{ nextPlayer$ | async }}</p>
+          </div>
+          <div class="col-6">
+            <h6>Should enable / show my controls</h6>
+            <p class="mb-1">Enable controls: {{ enableControls$ | async }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="row mb-3">
+          <div class="col-6">
+            <button
+              [disabled]="!(enableControls$ | async)"
+              class="btn btn-primary"
+              (click)="logRandomNumber()"
+            >
+              Log Random Number (30-170)
+            </button>
+          </div>
+          <div class="col-6">
+            Remaining score
+            <td>{{ remainingScore$ | async }}</td>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-12">
+            <h6>Raw WebSocket Messages (Last 5)</h6>
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        <th>Action</th>
+                        <th>Has Message</th>
+                        <th>Has Metadata</th>
+                        <th>Raw Message</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let msg of recentMessages">
+                        <td>{{ msg.timestamp | date : "HH:mm:ss" }}</td>
+                        <td>{{ msg.action }}</td>
+                        <td>{{ msg.hasMessage ? "Yes" : "No" }}</td>
+                        <td>{{ msg.hasMetadata ? "Yes" : "No" }}</td>
+                        <td>
+                          <button
+                            class="btn btn-sm btn-outline-secondary"
+                            (click)="showRawMessage(msg.rawMessage)"
+                          >
+                            View Raw
+                          </button>
+                        </td>
+                      </tr>
+                      <tr *ngIf="recentMessages.length === 0">
+                        <td colspan="5" class="text-center text-muted">
+                          No messages captured yet
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h6>Event Tables</h6>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card">
+              <div
+                class="card-header d-flex justify-content-between align-items-center"
+              >
+                <h6 class="mb-0">
+                  JoinGameCommand Events ({{ joinGameEvents.length }})
+                </h6>
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="clearJoinEvents()"
+                >
+                  Clear
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        <th>GameId</th>
+                        <th>PlayerId</th>
+                        <th>PlayerName</th>
+                        <th>FirstToThrow</th>
+                        <th>DoubleIn</th>
+                        <th>DoubleOut</th>
+                        <th>Legs</th>
+                        <th>Sets</th>
+                        <th>StartingScore</th>
+                        <th>NextPlayer</th>
+                        <th>Metadata</th>
+                        <th>History</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let event of joinGameEvents">
+                        <td>{{ event.timestamp | date : "HH:mm:ss" }}</td>
+                        <td>{{ event.data.GameId }}</td>
+                        <td>{{ event.data.PlayerId }}</td>
+                        <td>{{ event.data.PlayerName }}</td>
+                        <td>{{ event.data.FirstToThrow || "N/A" }}</td>
+                        <td>{{ event.data.Game?.X01?.DoubleIn }}</td>
+                        <td>{{ event.data.Game?.X01?.DoubleOut }}</td>
+                        <td>{{ event.data.Game?.X01?.Legs }}</td>
+                        <td>{{ event.data.Game?.X01?.Sets }}</td>
+                        <td>{{ event.data.Game?.X01?.StartingScore }}</td>
+                        <td>{{ event.metadata?.NextPlayer || "N/A" }}</td>
+                        <td>
+                          <button
+                            class="btn btn-sm btn-outline-info"
+                            (click)="showMetadata(event.metadata)"
+                            [disabled]="!event.metadata"
+                          >
+                            View Metadata {{ event.metadata ? "(Available)" :
+                            "(None)" }}
+                          </button>
+                        </td>
+                        <td>{{ event.data.History?.length || 0 }} items</td>
+                      </tr>
+                      <tr *ngIf="joinGameEvents.length === 0">
+                        <td colspan="13" class="text-center text-muted">
+                          No join events captured yet
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card">
+              <div
+                class="card-header d-flex justify-content-between align-items-center"
+              >
+                <h6 class="mb-0">
+                  CreateX01ScoreCommand Events ({{ scoreEvents.length }})
+                </h6>
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="clearScoreEvents()"
+                >
+                  Clear
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Time</th>
+                        <th>GameId</th>
+                        <th>PlayerId</th>
+                        <th>Score</th>
+                        <th>Input</th>
+                        <th>NextToThrow</th>
+                        <th>NextPlayer</th>
+                        <th>Metadata</th>
+                        <th>History</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let event of scoreEvents">
+                        <td>{{ event.timestamp | date : "HH:mm:ss" }}</td>
+                        <td>{{ event.data.GameId }}</td>
+                        <td>{{ event.data.PlayerId }}</td>
+                        <td>{{ event.data.Score }}</td>
+                        <td>{{ event.data.Input }}</td>
+                        <td>{{ event.data.NextToThrow || "N/A" }}</td>
+                        <td>{{ event.metadata?.NextPlayer || "N/A" }}</td>
+                        <td>
+                          <button
+                            class="btn btn-sm btn-outline-info"
+                            (click)="showMetadata(event.metadata)"
+                            [disabled]="!event.metadata"
+                          >
+                            View Metadata {{ event.metadata ? "(Available)" :
+                            "(None)" }}
+                          </button>
+                        </td>
+                        <td>{{ event.data.History?.join(", ") || "Empty" }}</td>
+                      </tr>
+                      <tr *ngIf="scoreEvents.length === 0">
+                        <td colspan="9" class="text-center text-muted">
+                          No score events captured yet
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Metadata Modal -->
+<div
+  class="metadata-modal"
+  *ngIf="showMetadataModal"
+  (click)="closeMetadataModal()"
+>
+  <div class="metadata-content" (click)="$event.stopPropagation()">
+    <div class="metadata-header">
+      <h5 class="mb-0">Metadata Details</h5>
+      <button class="btn-close" (click)="closeMetadataModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="metadata-body">
+      <pre>{{ getFormattedJson(selectedMetadata) }}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- Raw Message Modal -->
+<div
+  class="metadata-modal"
+  *ngIf="showRawMessageModal"
+  (click)="closeRawMessageModal()"
+>
+  <div class="metadata-content" (click)="$event.stopPropagation()">
+    <div class="metadata-header">
+      <h5 class="mb-0">Raw WebSocket Message</h5>
+      <button class="btn-close" (click)="closeRawMessageModal()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="metadata-body">
+      <pre>{{ getFormattedJson(selectedRawMessage) }}</pre>
+    </div>
+  </div>
+</div>

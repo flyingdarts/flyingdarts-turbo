@@ -1,0 +1,326 @@
+# Fixed Dyte API Specification
+# This fixes the schema conflicts that cause empty response data classes
+
+openapi: 3.0.0
+info:
+  version: v2
+  title: Dyte REST APIs
+servers:
+  - url: "https://api.dyte.io/v2"
+
+paths:
+  /meetings:
+    get:
+      tags:
+        - Meetings
+      summary: Fetch all meetings for an organization
+      parameters:
+        - name: page_no
+          in: query
+          description: The page number from which you want your page search results to be displayed.
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Number of results per page
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - name: search
+          in: query
+          description: The search query string. You can search using the meeting ID or title.
+          required: false
+          schema:
+            type: string
+        - name: start_time
+          in: query
+          description: The start time range for which you want to retrieve the meetings. The time must be specified in ISO format.
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          description: The end time range for which you want to retrieve the meetings. The time must be specified in ISO format.
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: status
+          in: query
+          description: Filter meetings by status
+          required: false
+          schema:
+            type: string
+            enum:
+              - ACTIVE
+              - INACTIVE
+        - name: sort_by
+          in: query
+          description: Sort results by field
+          required: false
+          schema:
+            type: string
+            enum:
+              - minutesConsumed
+              - createdAt
+        - name: sort_order
+          in: query
+          description: Sort order for results
+          required: false
+          schema:
+            type: string
+            enum:
+              - ASC
+              - DESC
+      responses:
+        "200":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Meeting"
+                  paging:
+                    $ref: "#/components/schemas/PagingInfo"
+    post:
+      tags:
+        - Meetings
+      summary: Create a meeting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateMeetingRequest"
+      responses:
+        "201":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/Meeting"
+
+  "/meetings/{meeting_id}":
+    get:
+      tags:
+        - Meetings
+      summary: Fetch a meeting for an organization
+      parameters:
+        - name: meeting_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    $ref: "#/components/schemas/Meeting"
+
+  "/meetings/{meeting_id}/participants":
+    post:
+      tags:
+        - Meetings
+      summary: Add a participant
+      parameters:
+        - name: meeting_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddParticipantRequest"
+      responses:
+        "201":
+          description: Success response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  data:
+                    allOf:
+                      - $ref: "#/components/schemas/Participant"
+                      - type: object
+                        properties:
+                          token:
+                            type: string
+                            description: The participant's auth token
+
+components:
+  schemas:
+    Meeting:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the meeting.
+        title:
+          type: string
+          description: Title of the meeting.
+        preferred_region:
+          type: string
+          enum:
+            - ap-south-1
+            - ap-southeast-1
+            - us-east-1
+            - eu-central-1
+          description: The region in which this meeting should be created.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp the object was created at.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp the object was updated at.
+        record_on_start:
+          type: boolean
+          description: Specifies if the meeting should start getting recorded.
+        live_stream_on_start:
+          type: boolean
+          description: Specifies if the meeting should start getting livestreamed.
+        persist_chat:
+          type: boolean
+          description: Specifies if Chat within a meeting should persist for a week.
+        summarize_on_end:
+          type: boolean
+          description: Automatically generate summary of meetings using transcripts.
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+          description: Whether the meeting is ACTIVE or INACTIVE.
+      required:
+        - id
+        - created_at
+        - updated_at
+
+    Participant:
+      type: object
+      description: Represents a participant.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the participant.
+        name:
+          type: string
+          nullable: true
+          description: Name of the participant.
+        picture:
+          type: string
+          nullable: true
+          description: URL to a picture of the participant.
+        custom_participant_id:
+          type: string
+          description: A unique participant ID generated by the client.
+        preset_name:
+          type: string
+          description: Preset applied to the participant.
+        created_at:
+          type: string
+          format: date-time
+          description: When this object was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: When this object was updated.
+      required:
+        - id
+        - custom_participant_id
+        - preset_name
+        - created_at
+        - updated_at
+
+    CreateMeetingRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the meeting.
+        preferred_region:
+          type: string
+          enum:
+            - ap-south-1
+            - ap-southeast-1
+            - us-east-1
+            - eu-central-1
+          description: The region in which this meeting should be created.
+        record_on_start:
+          type: boolean
+          description: Specifies if the meeting should start getting recorded.
+        live_stream_on_start:
+          type: boolean
+          description: Specifies if the meeting should start getting livestreamed.
+        persist_chat:
+          type: boolean
+          description: Specifies if Chat within a meeting should persist for a week.
+        summarize_on_end:
+          type: boolean
+          description: Automatically generate summary of meetings using transcripts.
+
+    AddParticipantRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the participant.
+        picture:
+          type: string
+          nullable: true
+          description: URL to a picture of the participant.
+        custom_participant_id:
+          type: string
+          description: A unique participant ID generated by the client.
+        preset_name:
+          type: string
+          description: Name of the preset to apply to this participant.
+
+    PagingInfo:
+      type: object
+      properties:
+        total_count:
+          type: number
+          minimum: 0
+          example: 30
+        start_offset:
+          type: number
+          example: 1
+        end_offset:
+          type: number
+          example: 30
+      required:
+        - total_count
+        - start_offset
+        - end_offset

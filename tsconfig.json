@@ -1,0 +1,30 @@
+{
+  "extends": "./packages/tools/config/src/typescript/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@flyingdarts/config": ["./packages/tools/config"],
+      "@flyingdarts/config/*": ["./packages/tools/config/*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "**/*.js",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "apps/**/node_modules",
+    "packages/**/node_modules"
+  ],
+  "references": [
+    {
+      "path": "./packages/tools/config",
+      "composite": true
+    }
+  ]
+} 

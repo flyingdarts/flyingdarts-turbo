@@ -1,0 +1,22 @@
+meta {
+  name: Create resource Claim
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/v1/claims
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "collectionResource": "",
+    "resourceId": ""
+  }
+}

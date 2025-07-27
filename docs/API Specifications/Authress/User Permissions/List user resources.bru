@@ -1,0 +1,27 @@
+meta {
+  name: List user resources
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/users/:userId/resources
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~resourceUri: 
+  ~collectionConfiguration: 
+  ~permissions: 
+  ~limit: 
+  ~cursor: 
+}
+
+params:path {
+  userId: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

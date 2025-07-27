@@ -1,0 +1,28 @@
+name: flyingdarts_workspace
+description: Workspace configuration for Flyingdarts monorepo
+version: 1.0.0
+publish_to: none
+
+# This is a workspace configuration file
+# It doesn't contain any dependencies itself, but defines the workspace structure
+environment:
+  sdk: ^3.8.1
+  flutter: ^3.26.0 
+  
+# Define the workspace packages
+workspace:
+  - apps/frontend/flutter/flyingdarts_mobile
+  - packages/frontend/flutter/core
+  - packages/frontend/flutter/features/keyboard
+  - packages/frontend/flutter/features/language
+  - packages/frontend/flutter/features/profile
+  - packages/frontend/flutter/features/speech
+  - packages/frontend/flutter/features/splash
+  - packages/frontend/flutter/shared/internationalization
+  - packages/frontend/flutter/shared/ui
+  - packages/frontend/flutter/shared/websocket
+  - packages/frontend/flutter/shared/config/app_config_core
+  - packages/frontend/flutter/shared/config/app_config_prefs
+  - packages/frontend/flutter/shared/config/app_config_secrets
+  - packages/frontend/flutter/api/sdk
+  - packages/frontend/flutter/authress/login

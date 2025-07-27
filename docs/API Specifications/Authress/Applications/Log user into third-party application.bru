@@ -1,0 +1,15 @@
+meta {
+  name: Log user into third-party application
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/v1/applications/:applicationId/users/:userId/delegation
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

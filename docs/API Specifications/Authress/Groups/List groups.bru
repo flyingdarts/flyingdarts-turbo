@@ -1,0 +1,21 @@
+meta {
+  name: List groups
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/groups
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~limit: 
+  ~cursor: 
+  ~filter: 
+}
+
+auth:bearer {
+  token: {{token}}
+}

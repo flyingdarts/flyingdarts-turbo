@@ -1,0 +1,139 @@
+{
+  "version": "1.0.0",
+  "name": "flyingdarts-docs-agent",
+  "description": "Background documentation agent for Flying Darts Turbo monorepo",
+
+  "templates": {
+    "readme": "templates/readme.md",
+    "class": "templates/class.md",
+    "api": "templates/api.md",
+    "index": "templates/index.md"
+  },
+
+  "rules": {
+    "requireOverview": true,
+    "requireExamples": false,
+    "maxMethodParams": 5,
+    "includePrivateMembers": false,
+    "includeInternalMembers": false,
+    "generateChangelog": true,
+    "validateLinks": true,
+    "checkMarkdownSyntax": true
+  },
+
+  "output": {
+    "readmePath": "README.md",
+    "docsPath": "docs/",
+    "apiPath": "docs/api/",
+    "examplesPath": "docs/examples/",
+    "guidesPath": "docs/guides/"
+  },
+
+  "languages": {
+    "rust": {
+      "extensions": [".rs"],
+      "configFiles": ["Cargo.toml"],
+      "parser": "rust",
+      "documentationComments": ["///", "//!"],
+      "features": ["modules", "structs", "enums", "traits", "functions"]
+    },
+    "csharp": {
+      "extensions": [".cs"],
+      "configFiles": [".csproj"],
+      "parser": "csharp",
+      "documentationComments": ["///", "//"],
+      "features": [
+        "classes",
+        "interfaces",
+        "properties",
+        "methods",
+        "attributes"
+      ]
+    },
+    "dart": {
+      "extensions": [".dart"],
+      "configFiles": ["pubspec.yaml"],
+      "parser": "dart",
+      "documentationComments": ["///", "//"],
+      "features": [
+        "classes",
+        "mixins",
+        "extensions",
+        "functions",
+        "constructors"
+      ]
+    },
+    "typescript": {
+      "extensions": [".ts", ".tsx"],
+      "configFiles": ["package.json", "tsconfig.json"],
+      "parser": "typescript",
+      "documentationComments": ["/**", "//"],
+      "features": ["classes", "interfaces", "functions", "decorators", "types"]
+    },
+    "javascript": {
+      "extensions": [".js", ".jsx"],
+      "configFiles": ["package.json"],
+      "parser": "javascript",
+      "documentationComments": ["/**", "//"],
+      "features": ["classes", "functions", "modules", "objects"]
+    }
+  },
+
+  "monorepo": {
+    "root": ".",
+    "appsPath": "apps/",
+    "packagesPath": "packages/",
+    "scriptsPath": "scripts/",
+    "docsPath": "docs/"
+  },
+
+  "quality": {
+    "coverageThreshold": 0.8,
+    "maxFileSize": "1MB",
+    "maxLineLength": 100,
+    "requireDescriptions": true,
+    "requireParameterDocs": true,
+    "requireReturnDocs": true
+  },
+
+  "integration": {
+    "ci": {
+      "enabled": true,
+      "onPush": true,
+      "onPullRequest": true,
+      "failOnErrors": false
+    },
+    "ide": {
+      "vscode": true,
+      "intellij": false,
+      "previewOnSave": true
+    },
+    "git": {
+      "commitOnGenerate": false,
+      "branch": "docs/auto-update",
+      "message": "docs: auto-generate documentation"
+    }
+  },
+
+  "performance": {
+    "parallelProcessing": true,
+    "maxConcurrentFiles": 10,
+    "cacheResults": true,
+    "cacheExpiry": "1h",
+    "incrementalUpdates": true
+  },
+
+  "logging": {
+    "level": "info",
+    "file": "logs/docs-agent.log",
+    "maxSize": "10MB",
+    "maxFiles": 5
+  },
+
+  "security": {
+    "validatePaths": true,
+    "sanitizeOutput": true,
+    "maxFileDepth": 10,
+    "allowedExtensions": [".md", ".txt", ".json", ".yaml", ".yml"]
+  }
+}

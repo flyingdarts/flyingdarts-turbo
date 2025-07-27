@@ -1,0 +1,39 @@
+.btn {
+  background: black;
+  i {
+    color: white;
+    font-weight: 900;
+  }
+}
+
+.video-container {
+  height: 100%;
+  width: 100%;
+}
+
+.opponent-video {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.video-hidden {
+  visibility: hidden;
+}
+
+// Video switching classes
+.main-video {
+  display: block !important;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.corner-video {
+  display: none !important;
+}
+
+// When it's the player's turn, show local video in main area and opponent in corner
+// When it's not the player's turn, show opponent video in main area and local in corner
