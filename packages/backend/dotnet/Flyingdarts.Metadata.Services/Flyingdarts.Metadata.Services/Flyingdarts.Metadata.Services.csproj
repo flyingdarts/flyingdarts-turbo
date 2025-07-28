@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -15,15 +14,12 @@
     <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
     <UseSystemTextJson>true</UseSystemTextJson>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Flyingdarts.DynamoDb.Service\Flyingdarts.DynamoDb.Service\Flyingdarts.DynamoDb.Service.csproj" />
     <ProjectReference Include="..\..\Flyingdarts.Persistence\Flyingdarts.Persistence.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="4.0.2.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0-preview.6.25358.103" />
   </ItemGroup>
-
 </Project>

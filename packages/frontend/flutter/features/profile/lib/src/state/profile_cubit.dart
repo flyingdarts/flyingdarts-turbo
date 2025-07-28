@@ -19,7 +19,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     var api = UsersApi(
       UsersApiConfig(
         authorizationToken: credentials.accessToken,
-        rootUri: Uri.parse('https://0ftaw0laa1.execute-api.eu-west-1.amazonaws.com/prod'),
+        rootUri: Uri.parse(
+          'https://0ftaw0laa1.execute-api.eu-west-1.amazonaws.com/prod',
+        ),
       ),
       Dio(),
       ErrorResponseHandler(),

@@ -18,7 +18,7 @@ export const gameStateReducer = createReducer(
       input: `${prevState.input ?? ''}${input}`,
     };
   }),
-  on(clearInput, (prevState) => {
+  on(clearInput, prevState => {
     return {
       ...prevState,
       input: '',

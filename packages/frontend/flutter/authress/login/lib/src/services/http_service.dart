@@ -81,7 +81,9 @@ class HttpService {
 
         // Log response for debugging
         if (kDebugMode) {
-          debugPrint('HTTP ${response.request?.method} ${response.request?.url} -> ${response.statusCode}');
+          debugPrint(
+            'HTTP ${response.request?.method} ${response.request?.url} -> ${response.statusCode}',
+          );
         }
 
         return HttpResponse(
@@ -91,7 +93,9 @@ class HttpService {
           isSuccess: response.statusCode >= 200 && response.statusCode < 300,
         );
       } on TimeoutException {
-        lastException = HttpException('Request timed out after ${timeout.inSeconds}s');
+        lastException = HttpException(
+          'Request timed out after ${timeout.inSeconds}s',
+        );
       } on http.ClientException catch (e) {
         lastException = HttpException('Network error: ${e.message}');
       } catch (e) {
@@ -102,12 +106,15 @@ class HttpService {
       if (attempt <= maxRetries) {
         // Exponential backoff
         final delay = Duration(milliseconds: 1000 * (1 << (attempt - 1)));
-        debugPrint('HTTP request failed, retrying in ${delay.inMilliseconds}ms (attempt $attempt/$maxRetries)');
+        debugPrint(
+          'HTTP request failed, retrying in ${delay.inMilliseconds}ms (attempt $attempt/$maxRetries)',
+        );
         await Future.delayed(delay);
       }
     }
 
-    throw lastException ?? HttpException('Request failed after $maxRetries retries');
+    throw lastException ??
+        HttpException('Request failed after $maxRetries retries');
   }
 
   /// Build request headers with defaults
@@ -165,5 +172,6 @@ class HttpException implements Exception {
   const HttpException(this.message, [this.statusCode]);
 
   @override
-  String toString() => 'HttpException: $message${statusCode != null ? ' (Status: $statusCode)' : ''}';
+  String toString() =>
+      'HttpException: $message${statusCode != null ? ' (Status: $statusCode)' : ''}';
 }

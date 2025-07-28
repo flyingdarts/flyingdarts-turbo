@@ -65,11 +65,7 @@ public class DyteMeetingService : IMeetingService
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException(nameof(name), "Meeting name cannot be null or empty.");
 
-        var request = new CreateMeetingRequest
-        {
-            Title = GetMeetingName(name),
-            PreferredRegion = PreferredRegion
-        };
+        var request = new CreateMeetingRequest { Title = GetMeetingName(name), PreferredRegion = PreferredRegion };
 
         try
         {
@@ -99,17 +95,10 @@ public class DyteMeetingService : IMeetingService
 
         Console.WriteLine($"Getting meeting by name: {name}");
 
-        var response = await _dyteClient.SearchMeetingsAsync(
-            GetMeetingName(name),
-            cancellationToken
-        );
+        var response = await _dyteClient.SearchMeetingsAsync(GetMeetingName(name), cancellationToken);
 
         var meeting = response.Data.SingleOrDefault();
-        Console.WriteLine(
-            meeting != null
-                ? $"Meeting found with ID: {meeting.Id}"
-                : "No meeting found with the specified name."
-        );
+        Console.WriteLine(meeting != null ? $"Meeting found with ID: {meeting.Id}" : "No meeting found with the specified name.");
 
         return meeting;
     }
@@ -128,16 +117,9 @@ public class DyteMeetingService : IMeetingService
 
         Console.WriteLine($"Getting meeting by ID: {meetingId}");
 
-        var response = await _dyteClient.GetMeetingByIdAsync(
-            meetingId.ToString(),
-            cancellationToken
-        );
+        var response = await _dyteClient.GetMeetingByIdAsync(meetingId.ToString(), cancellationToken);
 
-        Console.WriteLine(
-            response.Data != null
-                ? $"Meeting found: {response.Data.Title}"
-                : "Meeting not found with the specified ID."
-        );
+        Console.WriteLine(response.Data != null ? $"Meeting found: {response.Data.Title}" : "Meeting not found with the specified ID.");
 
         return response.Data;
     }
@@ -167,29 +149,16 @@ public class DyteMeetingService : IMeetingService
     /// The task result contains the participant's authentication token if successful, otherwise null.
     /// </returns>
     /// <exception cref="ArgumentNullException">Thrown when request is null.</exception>
-    public async Task<string?> AddParticipantAsync(
-        JoinMeetingRequest request,
-        CancellationToken cancellationToken
-    )
+    public async Task<string?> AddParticipantAsync(JoinMeetingRequest request, CancellationToken cancellationToken)
     {
-        Console.WriteLine(
-            $"[UserRequest] Received request to add participant: {JsonSerializer.Serialize(request)}"
-        );
-        Console.WriteLine(
-            $"[DyteRequest] Converted request to Dyte request: {JsonSerializer.Serialize(request.ToDyteRequest())}"
-        );
+        Console.WriteLine($"[UserRequest] Received request to add participant: {JsonSerializer.Serialize(request)}");
+        Console.WriteLine($"[DyteRequest] Converted request to Dyte request: {JsonSerializer.Serialize(request.ToDyteRequest())}");
 
         try
         {
-            var response = await _dyteClient.AddParticipantAsync(
-                request.MeetingId.ToString(),
-                request.ToDyteRequest(),
-                cancellationToken
-            );
+            var response = await _dyteClient.AddParticipantAsync(request.MeetingId.ToString(), request.ToDyteRequest(), cancellationToken);
 
-            Console.WriteLine(
-                $"[DyteResponse] Response from Dyte: {JsonSerializer.Serialize(response)}"
-            );
+            Console.WriteLine($"[DyteResponse] Response from Dyte: {JsonSerializer.Serialize(response)}");
 
             return response?.Data?.Token;
         }
@@ -224,7 +193,7 @@ static class JoinMeetingRequestExtensions
         {
             Name = request.ParticipantName,
             PresetName = request.PresetName,
-            CustomParticipantId = request.ParticipantId
+            CustomParticipantId = request.ParticipantId,
         };
     }
 }

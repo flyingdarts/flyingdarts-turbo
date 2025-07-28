@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { first } from "rxjs";
-import { WebSocketService } from "./websocket.service";
+import { Injectable } from '@angular/core';
+import { first } from 'rxjs';
+import { WebSocketService } from './websocket.service';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class WebSocketMessageQueueService {
   private messageQueue: any[] = [];
   private isConnected = false;
@@ -26,11 +26,7 @@ export class WebSocketMessageQueueService {
   }
 
   private processMessageQueue(): void {
-    if (
-      this.isProcessing ||
-      !this.isConnected ||
-      this.messageQueue.length === 0
-    ) {
+    if (this.isProcessing || !this.isConnected || this.messageQueue.length === 0) {
       return;
     }
 
@@ -39,14 +35,12 @@ export class WebSocketMessageQueueService {
     const message = this.messageQueue[0];
     this.webSocketService.postMessage(message);
 
-    this.webSocketService.isConnected$
-      .pipe(first())
-      .subscribe((connected: boolean) => {
-        if (connected) {
-          this.messageQueue.shift();
-        }
-        this.isProcessing = false;
-        this.processMessageQueue();
-      });
+    this.webSocketService.isConnected$.pipe(first()).subscribe((connected: boolean) => {
+      if (connected) {
+        this.messageQueue.shift();
+      }
+      this.isProcessing = false;
+      this.processMessageQueue();
+    });
   }
 }

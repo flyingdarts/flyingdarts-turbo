@@ -42,7 +42,11 @@ main() {
         var api = UsersApi(
           UsersApiConfig(
             authorizationToken: "id-token",
-            rootUri: Uri(scheme: "https", host: "0ftaw0laa1.execute-api.eu-west-1.amazonaws.com", path: 'prod'),
+            rootUri: Uri(
+              scheme: "https",
+              host: "0ftaw0laa1.execute-api.eu-west-1.amazonaws.com",
+              path: 'prod',
+            ),
           ),
           dio,
           responseHandler,
@@ -50,7 +54,11 @@ main() {
 
         var res = await api.getUser("google_102211021390759686933");
         var captured = verify(
-          adapterMock.fetch(captureThat(anything), argThat(isNull), argThat(isNull)),
+          adapterMock.fetch(
+            captureThat(anything),
+            argThat(isNull),
+            argThat(isNull),
+          ),
         ).captured.single;
 
         // Verify request made
@@ -61,7 +69,11 @@ main() {
           "https://0ftaw0laa1.execute-api.eu-west-1.amazonaws.com/prod/users/profile",
         );
 
-        expect(res, isInstanceOf<SuccessResponse>(), reason: "request should succeed");
+        expect(
+          res,
+          isInstanceOf<SuccessResponse>(),
+          reason: "request should succeed",
+        );
         var okRes = res.asSuccessResponse();
         expect(okRes.response, isInstanceOf<GetUserProfileSuccessResponse>());
       },

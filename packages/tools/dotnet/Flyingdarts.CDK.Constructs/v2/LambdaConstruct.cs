@@ -8,12 +8,7 @@ public class LambdaConstruct : Construct
 
     public Function AuthLambda { get; }
 
-    public LambdaConstruct(
-        Construct scope,
-        string id,
-        string environment,
-        DynamoDbConstruct dynamoDbConstruct
-    )
+    public LambdaConstruct(Construct scope, string id, string environment, DynamoDbConstruct dynamoDbConstruct)
         : base(scope, id)
     {
         if (dynamoDbConstruct is null)
@@ -32,20 +27,13 @@ public class LambdaConstruct : Construct
                 Runtime = new Runtime("dotnet8"),
                 Timeout = Duration.Seconds(30),
                 MemorySize = 256,
-                Environment = new Dictionary<string, string>
-                {
-                    { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
-                },
+                Environment = new Dictionary<string, string> { { "TableName", dynamoDbConstruct.ApplicationTable.TableName } },
                 InitialPolicy = new[]
                 {
                     new PolicyStatement(
-                        new PolicyStatementProps
-                        {
-                            Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
-                            Resources = new[] { "*" }
-                        }
-                    )
-                }
+                        new PolicyStatementProps { Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" }, Resources = new[] { "*" } }
+                    ),
+                },
             }
         );
         dynamoDbConstruct.ApplicationTable.GrantFullAccess(SignallingApi);
@@ -63,20 +51,13 @@ public class LambdaConstruct : Construct
                 Runtime = new Runtime("dotnet8"),
                 Timeout = Duration.Seconds(30),
                 MemorySize = 256,
-                Environment = new Dictionary<string, string>
-                {
-                    { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
-                },
+                Environment = new Dictionary<string, string> { { "TableName", dynamoDbConstruct.ApplicationTable.TableName } },
                 InitialPolicy = new[]
                 {
                     new PolicyStatement(
-                        new PolicyStatementProps
-                        {
-                            Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" },
-                            Resources = new[] { "*" }
-                        }
-                    )
-                }
+                        new PolicyStatementProps { Actions = new[] { "ssm:GetParametersByPath", "dynamodb:*" }, Resources = new[] { "*" } }
+                    ),
+                },
             }
         );
         dynamoDbConstruct.ApplicationTable.GrantFullAccess(GamesX01Api);
@@ -92,25 +73,17 @@ public class LambdaConstruct : Construct
                 Runtime = new Runtime("dotnet8"),
                 Timeout = Duration.Seconds(30),
                 MemorySize = 256,
-                Environment = new Dictionary<string, string>
-                {
-                    { "TableName", dynamoDbConstruct.ApplicationTable.TableName },
-                },
+                Environment = new Dictionary<string, string> { { "TableName", dynamoDbConstruct.ApplicationTable.TableName } },
                 InitialPolicy = new[]
                 {
                     new PolicyStatement(
                         new PolicyStatementProps
                         {
-                            Actions = new[]
-                            {
-                                "dynamodb:DescribeTable",
-                                "dynamodb:BatchWriteItem",
-                                "ssm:GetParametersByPath"
-                            },
-                            Resources = new[] { "*" }
+                            Actions = new[] { "dynamodb:DescribeTable", "dynamodb:BatchWriteItem", "ssm:GetParametersByPath" },
+                            Resources = new[] { "*" },
                         }
                     ),
-                }
+                },
             }
         );
         dynamoDbConstruct.ApplicationTable.GrantFullAccess(FriendsApi);
@@ -129,24 +102,14 @@ public class LambdaConstruct : Construct
                 InitialPolicy = new[]
                 {
                     new PolicyStatement(
-                        new PolicyStatementProps
-                        {
-                            Actions = new[] { "cognito-idp:ListUsers" },
-                            Resources = new[] { "*" }
-                        }
-                    )
+                        new PolicyStatementProps { Actions = new[] { "cognito-idp:ListUsers" }, Resources = new[] { "*" } }
+                    ),
                 },
                 Environment = new Dictionary<string, string>
                 {
-                    {
-                        "AuthressApiBasePath",
-                        System.Environment.GetEnvironmentVariable("AuthressApiBasePath")!
-                    },
-                    {
-                        "AuthressResourceGroupId",
-                        System.Environment.GetEnvironmentVariable("AuthressResourceGroupId")!
-                    }
-                }
+                    { "AuthressApiBasePath", System.Environment.GetEnvironmentVariable("AuthressApiBasePath")! },
+                    { "AuthressResourceGroupId", System.Environment.GetEnvironmentVariable("AuthressResourceGroupId")! },
+                },
             }
         );
     }

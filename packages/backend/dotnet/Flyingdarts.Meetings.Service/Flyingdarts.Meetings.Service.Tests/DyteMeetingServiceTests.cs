@@ -12,11 +12,7 @@ internal record TestMeetingData(Guid Id, string Name)
     public Meeting ToMeeting() => new() { Id = Id, Title = Title };
 }
 
-internal record TestParticipantData(
-    string Name,
-    string Id,
-    string PresetName = "group_call_participant"
-);
+internal record TestParticipantData(string Name, string Id, string PresetName = "group_call_participant");
 
 internal record TestToken(string Value);
 
@@ -40,31 +36,20 @@ public class DyteMeetingServiceTests
 
     // Test data constants using collection expressions and records
     private static readonly TestMeetingData DefaultMeeting = new(Guid.NewGuid(), "TestMeeting");
-    private static readonly TestParticipantData DefaultParticipant =
-        new("John Doe", "participant123");
+    private static readonly TestParticipantData DefaultParticipant = new("John Doe", "participant123");
     private static readonly TestToken DefaultToken = new("auth_token_123");
 
     // Helper methods for common mock setups
     private void SetupCreateMeetingSuccess(TestMeetingData meetingData) =>
         mockDyteClient
-            .Setup(
-                x =>
-                    x.CreateMeetingAsync(
-                        It.Is<CreateMeetingRequest>(req => req.Title == meetingData.Title),
-                        It.IsAny<CancellationToken>()
-                    )
+            .Setup(x =>
+                x.CreateMeetingAsync(It.Is<CreateMeetingRequest>(req => req.Title == meetingData.Title), It.IsAny<CancellationToken>())
             )
             .ReturnsAsync(new MeetingsPostResponse { Data = meetingData.ToMeeting() });
 
     private void SetupCreateMeetingFailure() =>
         mockDyteClient
-            .Setup(
-                x =>
-                    x.CreateMeetingAsync(
-                        It.IsAny<CreateMeetingRequest>(),
-                        It.IsAny<CancellationToken>()
-                    )
-            )
+            .Setup(x => x.CreateMeetingAsync(It.IsAny<CreateMeetingRequest>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception("Unknown error from dyte client"));
 
     private void SetupGetMeetingById(Guid meetingId, Meeting? meeting = null) =>
@@ -82,32 +67,21 @@ public class DyteMeetingServiceTests
             .Setup(x => x.GetAllMeetingsAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new MeetingsGetResponse { Data = meetings.ToList() });
 
-    private void SetupAddParticipant(
-        Guid meetingId,
-        TestParticipantData participant,
-        string? token = null
-    ) =>
+    private void SetupAddParticipant(Guid meetingId, TestParticipantData participant, string? token = null) =>
         mockDyteClient
-            .Setup(
-                x =>
-                    x.AddParticipantAsync(
-                        meetingId.ToString(),
-                        It.Is<AddParticipantRequest>(
-                            req =>
-                                req.Name == participant.Name
-                                && req.CustomParticipantId == participant.Id
-                                && req.PresetName == participant.PresetName
-                        ),
-                        It.IsAny<CancellationToken>()
-                    )
+            .Setup(x =>
+                x.AddParticipantAsync(
+                    meetingId.ToString(),
+                    It.Is<AddParticipantRequest>(req =>
+                        req.Name == participant.Name
+                        && req.CustomParticipantId == participant.Id
+                        && req.PresetName == participant.PresetName
+                    ),
+                    It.IsAny<CancellationToken>()
+                )
             )
             .ReturnsAsync(
-                new ParticipantsPostResponse
-                {
-                    Data = token is not null
-                        ? new ParticipantsPostResponse_data { Token = token }
-                        : null
-                }
+                new ParticipantsPostResponse { Data = token is not null ? new ParticipantsPostResponse_data { Token = token } : null }
             );
 
     // Generic helper for exception testing
@@ -164,9 +138,7 @@ public class DyteMeetingServiceTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task CreateAsync_WhenNameIsNullOrEmpty_ThrowsArgumentNullException(
-        string? invalidName
-    )
+    public async Task CreateAsync_WhenNameIsNullOrEmpty_ThrowsArgumentNullException(string? invalidName)
     {
         // Act & Assert
         await AssertThrowsWithMessage<ArgumentNullException>(
@@ -176,23 +148,12 @@ public class DyteMeetingServiceTests
         );
 
         // Verify the Dyte client was never called due to validation failure
-        mockDyteClient.Verify(
-            x =>
-                x.CreateMeetingAsync(
-                    It.IsAny<CreateMeetingRequest>(),
-                    It.IsAny<CancellationToken>()
-                ),
-            Times.Never
-        );
+        mockDyteClient.Verify(x => x.CreateMeetingAsync(It.IsAny<CreateMeetingRequest>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     private void VerifyCreateMeetingCalled(string expectedTitle, Func<Times> times) =>
         mockDyteClient.Verify(
-            x =>
-                x.CreateMeetingAsync(
-                    It.Is<CreateMeetingRequest>(req => req.Title == expectedTitle),
-                    It.IsAny<CancellationToken>()
-                ),
+            x => x.CreateMeetingAsync(It.Is<CreateMeetingRequest>(req => req.Title == expectedTitle), It.IsAny<CancellationToken>()),
             times
         );
 
@@ -244,10 +205,7 @@ public class DyteMeetingServiceTests
     }
 
     private void VerifyGetMeetingByIdCalled(Guid meetingId) =>
-        mockDyteClient.Verify(
-            x => x.GetMeetingByIdAsync(meetingId.ToString(), It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        mockDyteClient.Verify(x => x.GetMeetingByIdAsync(meetingId.ToString(), It.IsAny<CancellationToken>()), Times.Once);
 
     #endregion
 
@@ -288,9 +246,7 @@ public class DyteMeetingServiceTests
     [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task GetByNameAsync_WhenNameIsNullOrEmpty_ThrowsArgumentNullException(
-        string? invalidName
-    )
+    public async Task GetByNameAsync_WhenNameIsNullOrEmpty_ThrowsArgumentNullException(string? invalidName)
     {
         // Act & Assert
         await AssertThrowsWithMessage<ArgumentNullException>(
@@ -311,7 +267,7 @@ public class DyteMeetingServiceTests
         var expectedMeetings = new[]
         {
             new Meeting { Id = Guid.NewGuid(), Title = "Meeting 1" },
-            new Meeting { Id = Guid.NewGuid(), Title = "Meeting 2" }
+            new Meeting { Id = Guid.NewGuid(), Title = "Meeting 2" },
         };
 
         SetupGetAllMeetings(expectedMeetings);
@@ -352,12 +308,7 @@ public class DyteMeetingServiceTests
         var participant = DefaultParticipant;
         var expectedToken = DefaultToken.Value;
 
-        var request = new JoinMeetingRequest(
-            meetingId,
-            participant.Name,
-            participant.Id,
-            participant.PresetName
-        );
+        var request = new JoinMeetingRequest(meetingId, participant.Name, participant.Id, participant.PresetName);
         SetupAddParticipant(meetingId, participant, expectedToken);
 
         // Act
@@ -373,21 +324,10 @@ public class DyteMeetingServiceTests
     {
         // Arrange
         var meetingId = Guid.NewGuid();
-        var request = new JoinMeetingRequest(
-            meetingId,
-            DefaultParticipant.Name,
-            DefaultParticipant.Id
-        );
+        var request = new JoinMeetingRequest(meetingId, DefaultParticipant.Name, DefaultParticipant.Id);
 
         mockDyteClient
-            .Setup(
-                x =>
-                    x.AddParticipantAsync(
-                        It.IsAny<string>(),
-                        It.IsAny<AddParticipantRequest>(),
-                        It.IsAny<CancellationToken>()
-                    )
-            )
+            .Setup(x => x.AddParticipantAsync(It.IsAny<string>(), It.IsAny<AddParticipantRequest>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new HttpRequestException("API Error"));
 
         // Act
@@ -402,11 +342,7 @@ public class DyteMeetingServiceTests
     {
         // Arrange
         var meetingId = Guid.NewGuid();
-        var request = new JoinMeetingRequest(
-            meetingId,
-            DefaultParticipant.Name,
-            DefaultParticipant.Id
-        );
+        var request = new JoinMeetingRequest(meetingId, DefaultParticipant.Name, DefaultParticipant.Id);
         SetupAddParticipant(meetingId, DefaultParticipant); // No token provided = null data
 
         // Act
@@ -421,11 +357,10 @@ public class DyteMeetingServiceTests
             x =>
                 x.AddParticipantAsync(
                     meetingId.ToString(),
-                    It.Is<AddParticipantRequest>(
-                        req =>
-                            req.Name == participant.Name
-                            && req.PresetName == participant.PresetName
-                            && req.CustomParticipantId == participant.Id
+                    It.Is<AddParticipantRequest>(req =>
+                        req.Name == participant.Name
+                        && req.PresetName == participant.PresetName
+                        && req.CustomParticipantId == participant.Id
                     ),
                     It.IsAny<CancellationToken>()
                 ),

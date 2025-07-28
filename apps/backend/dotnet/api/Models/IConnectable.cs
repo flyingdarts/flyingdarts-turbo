@@ -16,4 +16,4 @@ public interface IConnectable
     /// Gets a value indicating whether this object has a valid connection ID.
     /// </summary>
     bool IsConnected { get; }
-} 
+}

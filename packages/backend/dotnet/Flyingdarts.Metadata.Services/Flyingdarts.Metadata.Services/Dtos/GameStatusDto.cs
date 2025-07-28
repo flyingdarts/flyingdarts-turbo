@@ -5,5 +5,5 @@ public enum GameStatusDto
     Qualifying,
     Started,
     Finished,
-    Aborted
+    Aborted,
 }

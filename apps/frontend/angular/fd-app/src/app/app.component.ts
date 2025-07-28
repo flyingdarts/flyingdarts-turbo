@@ -1,20 +1,20 @@
-import { Component } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { AnimationOptions } from "ngx-lottie";
-import { Observable } from "rxjs";
-import { AppStateSelectors } from "./state/app";
-import { FriendsStateActions } from "./state/friends";
+import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AnimationOptions } from 'ngx-lottie';
+import { Observable } from 'rxjs';
+import { AppStateSelectors } from './state/app';
+import { FriendsStateActions } from './state/friends';
 
 @Component({
-  selector: "app-root",
-  templateUrl: "./app.component.html",
+  selector: 'app-root',
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
-  title = "flyingdarts";
+  title = 'flyingdarts';
   appStateLoading$: Observable<boolean>;
   themeMode$: Observable<string>;
   lottieOptions: AnimationOptions = {
-    path: "/assets/animations/flyingdarts_icon.json",
+    path: '/assets/animations/flyingdarts_icon.json',
   };
 
   constructor(private readonly store: Store) {

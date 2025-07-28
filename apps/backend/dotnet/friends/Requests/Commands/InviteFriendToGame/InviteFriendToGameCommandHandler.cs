@@ -4,25 +4,18 @@ using Amazon.DynamoDBv2.DocumentModel;
 
 namespace Flyingdarts.Backend.Friends.Api.Requests.Commands.InviteFriendToGame;
 
-public class InviteFriendToGameCommandHandler
-    : IRequestHandler<InviteFriendToGameCommand, APIGatewayProxyResponse>
+public class InviteFriendToGameCommandHandler : IRequestHandler<InviteFriendToGameCommand, APIGatewayProxyResponse>
 {
     private readonly IDynamoDBContext _dbContext;
     private readonly IOptions<ApplicationOptions> _options;
 
-    public InviteFriendToGameCommandHandler(
-        IDynamoDBContext dbContext,
-        IOptions<ApplicationOptions> options
-    )
+    public InviteFriendToGameCommandHandler(IDynamoDBContext dbContext, IOptions<ApplicationOptions> options)
     {
         _dbContext = dbContext;
         _options = options;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(
-        InviteFriendToGameCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<APIGatewayProxyResponse> Handle(InviteFriendToGameCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -33,29 +26,23 @@ public class InviteFriendToGameCommandHandler
             // Validate request
             if (!request.FriendIds.Any())
             {
-                Console.WriteLine(
-                    $"[InviteFriendToGameCommandHandler] No friends selected for invitation by user: {request.InviterId}"
-                );
+                Console.WriteLine($"[InviteFriendToGameCommandHandler] No friends selected for invitation by user: {request.InviterId}");
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
-                    Body = JsonSerializer.Serialize(
-                        new { error = "At least one friend must be selected" }
-                    ),
-                    Headers = GetCorsHeaders()
+                    Body = JsonSerializer.Serialize(new { error = "At least one friend must be selected" }),
+                    Headers = GetCorsHeaders(),
                 };
             }
 
             if (string.IsNullOrWhiteSpace(request.GameType))
             {
-                Console.WriteLine(
-                    $"[InviteFriendToGameCommandHandler] GameType is missing for user: {request.InviterId}"
-                );
+                Console.WriteLine($"[InviteFriendToGameCommandHandler] GameType is missing for user: {request.InviterId}");
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
                     Body = JsonSerializer.Serialize(new { error = "GameType is required" }),
-                    Headers = GetCorsHeaders()
+                    Headers = GetCorsHeaders(),
                 };
             }
 
@@ -63,11 +50,7 @@ public class InviteFriendToGameCommandHandler
             var validFriends = new List<string>();
             foreach (var friendId in request.FriendIds)
             {
-                var isFriend = await VerifyFriendshipAsync(
-                    request.InviterId,
-                    friendId,
-                    cancellationToken
-                );
+                var isFriend = await VerifyFriendshipAsync(request.InviterId, friendId, cancellationToken);
                 if (isFriend)
                 {
                     validFriends.Add(friendId);
@@ -86,16 +69,12 @@ public class InviteFriendToGameCommandHandler
 
             if (!validFriends.Any())
             {
-                Console.WriteLine(
-                    $"[InviteFriendToGameCommandHandler] No valid friends found to invite for user: {request.InviterId}"
-                );
+                Console.WriteLine($"[InviteFriendToGameCommandHandler] No valid friends found to invite for user: {request.InviterId}");
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
-                    Body = JsonSerializer.Serialize(
-                        new { error = "No valid friends found to invite" }
-                    ),
-                    Headers = GetCorsHeaders()
+                    Body = JsonSerializer.Serialize(new { error = "No valid friends found to invite" }),
+                    Headers = GetCorsHeaders(),
                 };
             }
 
@@ -121,10 +100,10 @@ public class InviteFriendToGameCommandHandler
                     {
                         message = "Game invitations sent successfully",
                         invitedFriends = validFriends.Count,
-                        invalidFriends = request.FriendIds.Count - validFriends.Count
+                        invalidFriends = request.FriendIds.Count - validFriends.Count,
                     }
                 ),
-                Headers = GetCorsHeaders()
+                Headers = GetCorsHeaders(),
             };
         }
         catch (Exception ex)
@@ -133,16 +112,12 @@ public class InviteFriendToGameCommandHandler
             {
                 StatusCode = 500,
                 Body = JsonSerializer.Serialize(new { error = ex.Message }),
-                Headers = GetCorsHeaders()
+                Headers = GetCorsHeaders(),
             };
         }
     }
 
-    private async Task<bool> VerifyFriendshipAsync(
-        string userId,
-        string friendId,
-        CancellationToken cancellationToken
-    )
+    private async Task<bool> VerifyFriendshipAsync(string userId, string friendId, CancellationToken cancellationToken)
     {
         try
         {
@@ -187,7 +162,7 @@ public class InviteFriendToGameCommandHandler
                 GameId = gameId,
                 Message = message,
                 CreatedAt = now,
-                Status = GameInvitationStatus.Pending
+                Status = GameInvitationStatus.Pending,
             };
             invitations.Add(invitation);
         }
@@ -210,7 +185,7 @@ public class InviteFriendToGameCommandHandler
         {
             { "Access-Control-Allow-Origin", "*" },
             { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-            { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+            { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
         };
     }
 }
@@ -238,5 +213,5 @@ public enum GameInvitationStatus
     Pending,
     Accepted,
     Declined,
-    Expired
+    Expired,
 }

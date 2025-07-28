@@ -1,6 +1,8 @@
-import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { FriendsService } from "../../services/friends.service";
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { FriendsService } from '../../services/friends.service';
 import {
   FriendsActions,
   loadFriendRequestsFailure,
@@ -11,24 +13,19 @@ import {
   removeFriendSuccess,
   sendFriendRequestFailure,
   sendFriendRequestSuccess,
-} from "./friends.actions";
-import { catchError, map, switchMap } from "rxjs/operators";
-import { of } from "rxjs";
+} from './friends.actions';
 
 @Injectable()
 export class FriendsEffects {
-  constructor(
-    private actions$: Actions,
-    private friendsService: FriendsService
-  ) {}
+  constructor(private actions$: Actions, private friendsService: FriendsService) {}
 
   loadFriends$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(FriendsActions.LoadFriends),
       switchMap(() =>
         this.friendsService.loadFriends().pipe(
-          map((friends) => loadFriendsSuccess({ friends })),
-          catchError((error) => of(loadFriendsFailure({ error })))
+          map(friends => loadFriendsSuccess({ friends })),
+          catchError(error => of(loadFriendsFailure({ error })))
         )
       )
     );
@@ -39,10 +36,8 @@ export class FriendsEffects {
       ofType(FriendsActions.LoadFriendRequests),
       switchMap(() =>
         this.friendsService.loadFriendRequests().pipe(
-          map((friendRequests) =>
-            loadFriendRequestsSuccess({ friendRequests })
-          ),
-          catchError((error) => of(loadFriendRequestsFailure({ error })))
+          map(friendRequests => loadFriendRequestsSuccess({ friendRequests })),
+          catchError(error => of(loadFriendRequestsFailure({ error })))
         )
       )
     );
@@ -54,7 +49,7 @@ export class FriendsEffects {
       switchMap(({ friendId }) =>
         this.friendsService.removeFriend(friendId).pipe(
           map(() => removeFriendSuccess({ friendId })),
-          catchError((error) => of(removeFriendFailure({ error })))
+          catchError(error => of(removeFriendFailure({ error })))
         )
       )
     );
@@ -66,7 +61,7 @@ export class FriendsEffects {
       switchMap(({ friendId }) =>
         this.friendsService.sendFriendRequest(friendId).pipe(
           map(() => sendFriendRequestSuccess({ friendId })),
-          catchError((error) => of(sendFriendRequestFailure({ error })))
+          catchError(error => of(sendFriendRequestFailure({ error })))
         )
       )
     );

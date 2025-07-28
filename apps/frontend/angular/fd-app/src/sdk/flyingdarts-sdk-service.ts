@@ -8,10 +8,7 @@ import { FlyingdartsSdkFactory } from './flyingdarts-sdk-factory';
 export class FlyingdartsSdkService {
   private sdkInstance: FlyingdartsSdk | undefined;
 
-  constructor(
-    private readonly stateService: StateHooksService,
-    private readonly httpClient: HttpClient
-  ) {}
+  constructor(private readonly stateService: StateHooksService, private readonly httpClient: HttpClient) {}
 
   public get instance(): FlyingdartsSdk | undefined {
     return this.sdkInstance;
@@ -20,10 +17,7 @@ export class FlyingdartsSdkService {
   // lets init the sdk
   initSdk(): FlyingdartsSdk {
     if (!this.sdkInstance) {
-      this.sdkInstance = new FlyingdartsSdkFactory(
-        this.stateService,
-        this.httpClient
-      ).create();
+      this.sdkInstance = new FlyingdartsSdkFactory(this.stateService, this.httpClient).create();
     }
     return this.sdkInstance;
   }

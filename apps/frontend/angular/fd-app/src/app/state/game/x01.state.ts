@@ -6,7 +6,6 @@ export interface X01State {
   error: string;
 }
 
-
 export interface X01PlayerState {
   name: string;
   score: number;
@@ -26,7 +25,7 @@ export const initialX01State: X01State = {
     sets: 0,
     score: 501,
     scores: [],
-    total: 6
+    total: 6,
   },
   opponent: {
     name: 'Waiting...',
@@ -34,6 +33,6 @@ export const initialX01State: X01State = {
     sets: 0,
     score: 501,
     scores: [],
-    total: 6
-  }
-}
+    total: 6,
+  },
+};

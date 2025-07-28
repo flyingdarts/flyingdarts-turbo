@@ -22,7 +22,7 @@ void main() {
     group('Token Storage', () {
       test('stores tokens successfully', () async {
         SharedPreferences.setMockInitialValues({});
-        
+
         await tokenService.storeTokens(
           accessToken: TestData.validAccessToken,
           refreshToken: TestData.validRefreshToken,
@@ -31,15 +31,21 @@ void main() {
         );
 
         final prefs = await SharedPreferences.getInstance();
-        expect(prefs.getString('authress_access_token'), equals(TestData.validAccessToken));
-        expect(prefs.getString('authress_refresh_token'), equals(TestData.validRefreshToken));
+        expect(
+          prefs.getString('authress_access_token'),
+          equals(TestData.validAccessToken),
+        );
+        expect(
+          prefs.getString('authress_refresh_token'),
+          equals(TestData.validRefreshToken),
+        );
         expect(prefs.getString('authress_user_profile'), isNotNull);
         expect(prefs.getString('authress_token_expiry'), isNotNull);
       });
 
       test('stores tokens without refresh token', () async {
         SharedPreferences.setMockInitialValues({});
-        
+
         await tokenService.storeTokens(
           accessToken: TestData.validAccessToken,
           userProfile: TestData.validUserProfile,
@@ -47,7 +53,10 @@ void main() {
         );
 
         final prefs = await SharedPreferences.getInstance();
-        expect(prefs.getString('authress_access_token'), equals(TestData.validAccessToken));
+        expect(
+          prefs.getString('authress_access_token'),
+          equals(TestData.validAccessToken),
+        );
         expect(prefs.getString('authress_refresh_token'), isNull);
         expect(prefs.getString('authress_user_profile'), isNotNull);
       });
@@ -57,7 +66,7 @@ void main() {
           'authress_access_token': 'old-token',
           'authress_refresh_token': 'old-refresh',
         });
-        
+
         await tokenService.storeTokens(
           accessToken: 'new-token',
           refreshToken: 'new-refresh',
@@ -67,7 +76,10 @@ void main() {
 
         final prefs = await SharedPreferences.getInstance();
         expect(prefs.getString('authress_access_token'), equals('new-token'));
-        expect(prefs.getString('authress_refresh_token'), equals('new-refresh'));
+        expect(
+          prefs.getString('authress_refresh_token'),
+          equals('new-refresh'),
+        );
       });
     });
 
@@ -77,7 +89,9 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_user_profile': json.encode(TestData.validUserProfile.toJson()),
+          'authress_user_profile': json.encode(
+            TestData.validUserProfile.toJson(),
+          ),
           'authress_token_expiry': expiresAt.toIso8601String(),
         });
 
@@ -103,8 +117,12 @@ void main() {
       test('returns null when access token missing', () async {
         SharedPreferences.setMockInitialValues({
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_user_profile': json.encode(TestData.validUserProfile.toJson()),
-          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
+          'authress_user_profile': json.encode(
+            TestData.validUserProfile.toJson(),
+          ),
+          'authress_token_expiry': DateTime.now()
+              .add(const Duration(hours: 1))
+              .toIso8601String(),
         });
 
         final authState = await tokenService.loadStoredTokens();
@@ -116,7 +134,9 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
+          'authress_token_expiry': DateTime.now()
+              .add(const Duration(hours: 1))
+              .toIso8601String(),
         });
 
         final authState = await tokenService.loadStoredTokens();
@@ -128,7 +148,9 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_user_profile': json.encode(TestData.validUserProfile.toJson()),
+          'authress_user_profile': json.encode(
+            TestData.validUserProfile.toJson(),
+          ),
         });
 
         final authState = await tokenService.loadStoredTokens();
@@ -141,7 +163,9 @@ void main() {
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
           'authress_user_profile': 'invalid-json',
-          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
+          'authress_token_expiry': DateTime.now()
+              .add(const Duration(hours: 1))
+              .toIso8601String(),
         });
 
         final authState = await tokenService.loadStoredTokens();
@@ -153,7 +177,9 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_user_profile': json.encode(TestData.validUserProfile.toJson()),
+          'authress_user_profile': json.encode(
+            TestData.validUserProfile.toJson(),
+          ),
           'authress_token_expiry': 'invalid-date',
         });
 
@@ -168,8 +194,12 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_user_profile': json.encode(TestData.validUserProfile.toJson()),
-          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
+          'authress_user_profile': json.encode(
+            TestData.validUserProfile.toJson(),
+          ),
+          'authress_token_expiry': DateTime.now()
+              .add(const Duration(hours: 1))
+              .toIso8601String(),
         });
 
         await tokenService.clearTokens();
@@ -185,7 +215,9 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           // refresh token missing
-          'authress_user_profile': json.encode(TestData.validUserProfile.toJson()),
+          'authress_user_profile': json.encode(
+            TestData.validUserProfile.toJson(),
+          ),
           // expiry missing
         });
 
@@ -202,8 +234,12 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_user_profile': json.encode(TestData.validUserProfile.toJson()),
-          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
+          'authress_user_profile': json.encode(
+            TestData.validUserProfile.toJson(),
+          ),
+          'authress_token_expiry': DateTime.now()
+              .add(const Duration(hours: 1))
+              .toIso8601String(),
         });
 
         final hasValid = await tokenService.hasValidTokens();
@@ -215,8 +251,12 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_user_profile': json.encode(TestData.validUserProfile.toJson()),
-          'authress_token_expiry': DateTime.now().subtract(const Duration(hours: 1)).toIso8601String(),
+          'authress_user_profile': json.encode(
+            TestData.validUserProfile.toJson(),
+          ),
+          'authress_token_expiry': DateTime.now()
+              .subtract(const Duration(hours: 1))
+              .toIso8601String(),
         });
 
         final hasValid = await tokenService.hasValidTokens();
@@ -235,7 +275,8 @@ void main() {
 
     group('JWT Parsing', () {
       test('parses valid JWT successfully', () {
-        const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJlbWFpbCI6InRlc3RAZW1haWwuY29tIiwibmFtZSI6IlRlc3QgVXNlciIsImV4cCI6OTk5OTk5OTk5OX0.signature';
+        const validJwt =
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJlbWFpbCI6InRlc3RAZW1haWwuY29tIiwibmFtZSI6IlRlc3QgVXNlciIsImV4cCI6OTk5OTk5OTk5OX0.signature';
 
         final payload = tokenService.parseJwtPayload(validJwt);
 
@@ -248,7 +289,8 @@ void main() {
 
       test('handles JWT with padding requirements', () {
         // JWT payload that needs padding
-        const jwtNeedsPadding = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0In0.signature';
+        const jwtNeedsPadding =
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0In0.signature';
 
         final payload = tokenService.parseJwtPayload(jwtNeedsPadding);
 
@@ -327,7 +369,9 @@ void main() {
           return true;
         }
 
-        final soonExpiry = DateTime.now().add(const Duration(minutes: 2)); // Less than 5 minute buffer
+        final soonExpiry = DateTime.now().add(
+          const Duration(minutes: 2),
+        ); // Less than 5 minute buffer
         tokenService.scheduleTokenRefresh(soonExpiry, mockRefresh);
 
         expect(refreshCalled, isFalse);
@@ -370,7 +414,7 @@ void main() {
 
         final expiresAt = DateTime.now().add(const Duration(seconds: 1));
         tokenService.scheduleTokenRefresh(expiresAt, mockRefresh);
-        
+
         // Cancel immediately
         tokenService.cancelTokenRefresh();
 
@@ -385,7 +429,7 @@ void main() {
         }
 
         final expiresAt = DateTime.now().add(const Duration(seconds: 1));
-        
+
         // Should not throw when callback throws
         expect(
           () => tokenService.scheduleTokenRefresh(expiresAt, failingRefresh),
@@ -406,7 +450,7 @@ void main() {
 
         final expiresAt = DateTime.now().add(const Duration(seconds: 1));
         tokenService.scheduleTokenRefresh(expiresAt, mockRefresh);
-        
+
         // Dispose should cancel timer
         tokenService.dispose();
 
@@ -414,4 +458,4 @@ void main() {
       });
     });
   });
-} 
+}

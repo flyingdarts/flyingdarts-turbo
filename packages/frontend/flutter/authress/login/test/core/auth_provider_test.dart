@@ -25,7 +25,9 @@ void main() {
       );
 
       mockAuthService = MockAuthenticationService();
-      when(() => mockAuthService.state).thenReturn(const AuthStateUnauthenticated());
+      when(
+        () => mockAuthService.state,
+      ).thenReturn(const AuthStateUnauthenticated());
       when(() => mockAuthService.initialize()).thenAnswer((_) async {});
       when(() => mockAuthService.addListener(any())).thenReturn(null);
       when(() => mockAuthService.removeListener(any())).thenReturn(null);
@@ -33,17 +35,24 @@ void main() {
     });
 
     group('Widget Creation and Lifecycle', () {
-      testWidgets('creates widget successfully with minimal config', (tester) async {
+      testWidgets('creates widget successfully with minimal config', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           MaterialApp(
-            home: AuthressProvider(config: testConfig, child: const Text('Test Child')),
+            home: AuthressProvider(
+              config: testConfig,
+              child: const Text('Test Child'),
+            ),
           ),
         );
 
         expect(find.text('Test Child'), findsOneWidget);
       });
 
-      testWidgets('creates widget with all optional parameters', (tester) async {
+      testWidgets('creates widget with all optional parameters', (
+        tester,
+      ) async {
         final onStateChangedCalls = <AuthState>[];
         final onAuthenticatedCalls = <UserProfile>[];
         final onLoggedOutCalls = <void>[];
@@ -70,10 +79,15 @@ void main() {
         expect(find.text('Full Config Child'), findsOneWidget);
       });
 
-      testWidgets('initializes authentication service on creation', (tester) async {
+      testWidgets('initializes authentication service on creation', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           MaterialApp(
-            home: AuthressProvider(config: testConfig, child: const Text('Init Test')),
+            home: AuthressProvider(
+              config: testConfig,
+              child: const Text('Init Test'),
+            ),
           ),
         );
 
@@ -86,7 +100,10 @@ void main() {
       testWidgets('disposes properly when removed', (tester) async {
         await tester.pumpWidget(
           MaterialApp(
-            home: AuthressProvider(config: testConfig, child: const Text('Dispose Test')),
+            home: AuthressProvider(
+              config: testConfig,
+              child: const Text('Dispose Test'),
+            ),
           ),
         );
 
@@ -103,7 +120,9 @@ void main() {
     });
 
     group('Context Access Methods', () {
-      testWidgets('of() returns AuthressContext when provider exists', (tester) async {
+      testWidgets('of() returns AuthressContext when provider exists', (
+        tester,
+      ) async {
         late AuthressContext? receivedContext;
 
         await tester.pumpWidget(
@@ -124,7 +143,9 @@ void main() {
         expect(receivedContext, isA<AuthressContext>());
       });
 
-      testWidgets('read() returns AuthressContext without listening', (tester) async {
+      testWidgets('read() returns AuthressContext without listening', (
+        tester,
+      ) async {
         late AuthressContext? receivedContext;
 
         await tester.pumpWidget(
@@ -145,7 +166,9 @@ void main() {
         expect(receivedContext, isA<AuthressContext>());
       });
 
-      testWidgets('maybeOf() returns context when provider exists', (tester) async {
+      testWidgets('maybeOf() returns context when provider exists', (
+        tester,
+      ) async {
         late AuthressContext? receivedContext;
 
         await tester.pumpWidget(
@@ -165,7 +188,9 @@ void main() {
         expect(receivedContext, isNotNull);
       });
 
-      testWidgets('maybeOf() returns null when provider does not exist', (tester) async {
+      testWidgets('maybeOf() returns null when provider does not exist', (
+        tester,
+      ) async {
         late AuthressContext? receivedContext;
 
         await tester.pumpWidget(
@@ -182,12 +207,17 @@ void main() {
         expect(receivedContext, isNull);
       });
 
-      testWidgets('of() throws assertion error when provider not found', (tester) async {
+      testWidgets('of() throws assertion error when provider not found', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           MaterialApp(
             home: Builder(
               builder: (context) {
-                expect(() => AuthressProvider.of(context), throwsA(isA<AssertionError>()));
+                expect(
+                  () => AuthressProvider.of(context),
+                  throwsA(isA<AssertionError>()),
+                );
                 return const Text('Assert Test');
               },
             ),
@@ -301,7 +331,10 @@ void main() {
         // Start with initial config
         await tester.pumpWidget(
           MaterialApp(
-            home: AuthressProvider(config: initialConfig, child: const Text('Config Update Test')),
+            home: AuthressProvider(
+              config: initialConfig,
+              child: const Text('Config Update Test'),
+            ),
           ),
         );
 
@@ -310,7 +343,10 @@ void main() {
         // Update with new config
         await tester.pumpWidget(
           MaterialApp(
-            home: AuthressProvider(config: updatedConfig, child: const Text('Updated Config Test')),
+            home: AuthressProvider(
+              config: updatedConfig,
+              child: const Text('Updated Config Test'),
+            ),
           ),
         );
 
@@ -346,7 +382,11 @@ void main() {
       testWidgets('works without deep link config', (tester) async {
         await tester.pumpWidget(
           MaterialApp(
-            home: AuthressProvider(config: testConfig, deepLinkConfig: null, child: const Text('No Deep Link Test')),
+            home: AuthressProvider(
+              config: testConfig,
+              deepLinkConfig: null,
+              child: const Text('No Deep Link Test'),
+            ),
           ),
         );
 
@@ -361,7 +401,10 @@ void main() {
         // This would require mocking the authentication service to throw errors
         await tester.pumpWidget(
           MaterialApp(
-            home: AuthressProvider(config: testConfig, child: const Text('Error Test')),
+            home: AuthressProvider(
+              config: testConfig,
+              child: const Text('Error Test'),
+            ),
           ),
         );
 
@@ -375,7 +418,10 @@ void main() {
         // Test with valid config
         await tester.pumpWidget(
           MaterialApp(
-            home: AuthressProvider(config: testConfig, child: const Text('Valid Config')),
+            home: AuthressProvider(
+              config: testConfig,
+              child: const Text('Valid Config'),
+            ),
           ),
         );
 
@@ -410,7 +456,9 @@ void main() {
         expect(find.text('Has Error: false'), findsOneWidget);
       });
 
-      testWidgets('provides null user and token when unauthenticated', (tester) async {
+      testWidgets('provides null user and token when unauthenticated', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           MaterialApp(
             home: AuthressProvider(
@@ -447,7 +495,9 @@ void main() {
                 builder: (context) {
                   final authContext = AuthressProvider.of(context);
                   buildCount++;
-                  return Text('Build: $buildCount, State: ${authContext.authState.runtimeType}');
+                  return Text(
+                    'Build: $buildCount, State: ${authContext.authState.runtimeType}',
+                  );
                 },
               ),
             ),
@@ -501,7 +551,9 @@ void main() {
                       Builder(
                         builder: (context) {
                           final authContext = AuthressProvider.of(context);
-                          return Text('Auth Status: ${authContext.isAuthenticated}');
+                          return Text(
+                            'Auth Status: ${authContext.isAuthenticated}',
+                          );
                         },
                       ),
                     ],

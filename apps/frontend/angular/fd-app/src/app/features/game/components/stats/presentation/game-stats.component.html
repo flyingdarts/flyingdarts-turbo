@@ -2,11 +2,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col">
-          Best Of {{ (gameState$ | async)?.game?.sets }}/{{
-            (gameState$ | async)?.game?.legs
-          }}
-        </th>
+        <th scope="col">Best Of {{ (gameState$ | async)?.game?.sets }}/{{ (gameState$ | async)?.game?.legs }}</th>
         <th scope="col">Sets</th>
         <th scope="col">Legs</th>
         <th scope="col"></th>

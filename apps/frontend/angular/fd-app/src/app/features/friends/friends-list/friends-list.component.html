@@ -1,7 +1,5 @@
 <div class="w-100">
-  <div
-    class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-white"
-  >
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-white">
     <h2 class="m-0 text-white fw-bold">My Friends</h2>
     <button
       class="btn"
@@ -21,9 +19,7 @@
         <div>
           <i class="bi bi-people display-1 text-white mb-4"></i>
           <h3 class="text-white mb-2 fw-bold">No friends yet</h3>
-          <p class="text-white mb-4">
-            Start by adding some friends to play darts together!
-          </p>
+          <p class="text-white mb-4">Start by adding some friends to play darts together!</p>
           <button
             class="btn"
             style="background: #ff5e78; color: white; border: none"
@@ -36,23 +32,24 @@
 
       <ng-template #friendsGrid>
         <div class="row g-4">
-          <div *ngFor="let friend of friends" class="col-12 col-md-6 col-lg-6">
-            <div
-              class="d-flex align-items-center p-4 bg-white bg-opacity-10 rounded border border-white border-opacity-25 transition-all"
-            >
+          <div
+            *ngFor="let friend of friends"
+            class="col-12 col-md-6 col-lg-6"
+          >
+            <div class="d-flex align-items-center p-4 bg-white bg-opacity-10 rounded border border-white border-opacity-25 transition-all">
               <div class="position-relative me-3">
                 @if (friend.Picture) {
-                <img
-                  src="{{ friend.Picture }}"
-                  alt="User Avatar"
-                  class="rounded-circle"
-                  style="width: 3rem; height: 3rem"
-                />
+                  <img
+                    src="{{ friend.Picture }}"
+                    alt="User Avatar"
+                    class="rounded-circle"
+                    style="width: 3rem; height: 3rem"
+                  />
                 } @else {
-                <i
-                  class="bi bi-person-circle text-white"
-                  style="font-size: 3rem"
-                ></i>
+                  <i
+                    class="bi bi-person-circle text-white"
+                    style="font-size: 3rem"
+                  ></i>
                 }
                 <div
                   class="position-absolute bottom-0 end-0 rounded-circle border border-white"
@@ -68,19 +65,22 @@
                 <p class="m-0 mb-1 text-white small">
                   {{ friend.Country }}
                 </p>
-                <p class="m-0 text-white" style="font-size: 0.8rem">
-                  Friends since {{ friend.FriendsSince | date : "shortDate" }}
+                <p
+                  class="m-0 text-white"
+                  style="font-size: 0.8rem"
+                >
+                  Friends since {{ friend.FriendsSince | date: 'shortDate' }}
                 </p>
               </div>
               <div class="d-flex flex-column gap-2">
                 @if (friend.OpenGameId) {
-                <button
-                  class="btn btn-sm"
-                  style="background: #ff5e78; color: white; border: none"
-                  (click)="joinGame(friend)"
-                >
-                  <i class="bi bi-controller"></i> Join game
-                </button>
+                  <button
+                    class="btn btn-sm"
+                    style="background: #ff5e78; color: white; border: none"
+                    (click)="joinGame(friend)"
+                  >
+                    <i class="bi bi-controller"></i> Join game
+                  </button>
                 }
                 <button
                   class="btn btn-sm btn-outline-light"
@@ -97,7 +97,10 @@
 
     <ng-template #loadingFriends>
       <div class="text-center py-5">
-        <div class="spinner-border text-white" role="status">
+        <div
+          class="spinner-border text-white"
+          role="status"
+        >
           <span class="visually-hidden">Loading...</span>
         </div>
         <p class="mt-3 text-white">Loading friends...</p>

@@ -18,10 +18,7 @@ public class X01Queue : IGameQueue<X01Queue>, IPrimaryKeyItem, ISortKeyItem
 
     public string ConnectionId { get; set; }
 
-    public X01Queue()
-    {
-
-    }
+    public X01Queue() { }
 
     public static X01Queue Create(string playerId, int average, string connectionId, X01GameSettings? x01)
     {
@@ -30,7 +27,7 @@ public class X01Queue : IGameQueue<X01Queue>, IPrimaryKeyItem, ISortKeyItem
             SortKey = $"{playerId}",
             Average = average,
             ConnectionId = connectionId,
-            PlayerId= playerId,
+            PlayerId = playerId,
             X01 = x01,
             Joined = DateTime.UtcNow,
         };

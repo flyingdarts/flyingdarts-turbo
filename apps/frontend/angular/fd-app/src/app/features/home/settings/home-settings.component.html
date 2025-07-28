@@ -1,36 +1,49 @@
 <div class="card-header-icons d-flex justify-content-between">
-  <i class="bi bi-arrow-left"
-     (click)="onBack()"></i>
-
+  <i
+    class="bi bi-arrow-left"
+    (click)="onBack()"
+  ></i>
 </div>
 
 <h2 class="fw-bold mt-5">configure<br />game<br /></h2>
 
 <div class="d-flex">
   <p class="me-2">sets</p>
-  <button class="circle-button"
-          (click)="action('decrease', 'sets')">
+  <button
+    class="circle-button"
+    (click)="action('decrease', 'sets')"
+  >
     <i class="bi bi-dash"></i>
   </button>
   <p class="mx-2">{{ preferredX01Sets | async }}</p>
-  <button class="circle-button"
-          (click)="action('increase', 'sets')">
+  <button
+    class="circle-button"
+    (click)="action('increase', 'sets')"
+  >
     <i class="bi bi-plus"></i>
   </button>
 </div>
 <div class="d-flex mb-5">
   <p class="me-2 mb-0">legs</p>
-  <button class="circle-button"
-          (click)="action('decrease', 'legs')">
+  <button
+    class="circle-button"
+    (click)="action('decrease', 'legs')"
+  >
     <i class="bi bi-dash"></i>
   </button>
   <p class="mx-2 mb-0">{{ preferredX01Legs | async }}</p>
-  <button class="circle-button"
-          (click)="action('increase', 'legs')">
+  <button
+    class="circle-button"
+    (click)="action('increase', 'legs')"
+  >
     <i class="bi bi-plus"></i>
   </button>
 </div>
 <div class="d-inline-flex">
-  <button class="btn btn-primary mt-2"
-          (click)="onBack()">save</button>
+  <button
+    class="btn btn-primary mt-2"
+    (click)="onBack()"
+  >
+    save
+  </button>
 </div>

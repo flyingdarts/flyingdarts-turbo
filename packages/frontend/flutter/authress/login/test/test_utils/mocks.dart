@@ -69,7 +69,8 @@ class TestData {
 
   // Mock HTTP responses
   static const authUrlResponse = {
-    'authenticationUrl': 'https://test.authress.io/auth?client_id=test-app-123&redirect_uri=flyingdarts://auth',
+    'authenticationUrl':
+        'https://test.authress.io/auth?client_id=test-app-123&redirect_uri=flyingdarts://auth',
   };
 
   static const tokenResponse = {
@@ -121,7 +122,12 @@ class TestWidgetHelper {
         '/login': (context) => const Scaffold(body: Text('Login Page')),
         '/home': (context) => const Scaffold(body: Text('Home Page')),
         '/profile': (context) => const Scaffold(body: Text('Profile Page')),
-        ...?routes?.asMap().map((index, route) => MapEntry(route, (context) => Scaffold(body: Text('Route $route')))),
+        ...?routes?.asMap().map(
+          (index, route) => MapEntry(
+            route,
+            (context) => Scaffold(body: Text('Route $route')),
+          ),
+        ),
       },
     );
   }
@@ -129,7 +135,9 @@ class TestWidgetHelper {
 
 // Helper functions for setting up common mocks
 void setupMockTokenService(MockTokenService mockTokenService) {
-  when(() => mockTokenService.loadStoredTokens()).thenAnswer((_) async => TestData.validAuthenticatedState);
+  when(
+    () => mockTokenService.loadStoredTokens(),
+  ).thenAnswer((_) async => TestData.validAuthenticatedState);
 
   when(
     () => mockTokenService.storeTokens(
@@ -144,12 +152,16 @@ void setupMockTokenService(MockTokenService mockTokenService) {
 
   when(() => mockTokenService.hasValidTokens()).thenAnswer((_) async => true);
 
-  when(() => mockTokenService.parseJwtPayload(any())).thenReturn(TestData.userProfileResponse);
+  when(
+    () => mockTokenService.parseJwtPayload(any()),
+  ).thenReturn(TestData.userProfileResponse);
 }
 
 void setupMockHttpService(MockHttpService mockHttpService) {
   // Mock successful authentication URL request
-  when(() => mockHttpService.post('/api/authentication', body: any(named: 'body'))).thenAnswer(
+  when(
+    () => mockHttpService.post('/api/authentication', body: any(named: 'body')),
+  ).thenAnswer(
     (_) async => HttpResponse(
       statusCode: 200,
       body: json.encode(TestData.authUrlResponse),
@@ -169,7 +181,9 @@ void setupMockHttpService(MockHttpService mockHttpService) {
   );
 
   // Mock successful user profile fetch
-  when(() => mockHttpService.get('/v1/users/me', headers: any(named: 'headers'))).thenAnswer(
+  when(
+    () => mockHttpService.get('/v1/users/me', headers: any(named: 'headers')),
+  ).thenAnswer(
     (_) async => HttpResponse(
       statusCode: 200,
       body: json.encode(TestData.userProfileResponse),
@@ -180,7 +194,9 @@ void setupMockHttpService(MockHttpService mockHttpService) {
 }
 
 void setupMockCryptoService(MockCryptoService mockCryptoService) {
-  when(() => mockCryptoService.generatePKCECodes()).thenReturn(TestData.mockPKCECodes);
+  when(
+    () => mockCryptoService.generatePKCECodes(),
+  ).thenReturn(TestData.mockPKCECodes);
 
   when(
     () => mockCryptoService.calculateAntiAbuseHash(any()),
@@ -190,7 +206,9 @@ void setupMockCryptoService(MockCryptoService mockCryptoService) {
 void setupMockDeepLinkService(MockDeepLinkService mockDeepLinkService) {
   when(() => mockDeepLinkService.initialize()).thenAnswer((_) async {});
 
-  when(() => mockDeepLinkService.waitForAuthCallback()).thenAnswer((_) async => TestData.mockAuthCallbackParams);
+  when(
+    () => mockDeepLinkService.waitForAuthCallback(),
+  ).thenAnswer((_) async => TestData.mockAuthCallbackParams);
 
   when(() => mockDeepLinkService.callbackUrl).thenReturn('flyingdarts://auth');
 

@@ -15,8 +15,5 @@ public interface IMeetingService
     /// <param name="request"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<string?> AddParticipantAsync(
-        JoinMeetingRequest request,
-        CancellationToken cancellationToken
-    );
+    Task<string?> AddParticipantAsync(JoinMeetingRequest request, CancellationToken cancellationToken);
 }

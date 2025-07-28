@@ -1,38 +1,36 @@
-@if(appStateLoading$ | async) {
-<div
-  class="container-fluid d-flex vw-100 vh-100 justify-content-center align-items-center p-5"
-  [ngStyle]="{
-    'background-image':
-      (themeMode$ | async) === 'light'
-        ? 'url(\'./../assets/light-mode-background-arrow.svg\')'
-        : 'url(\'./../assets/dark-mode-background-arrow.svg\')',
-    'background-color':
-      (themeMode$ | async) === 'light' ? '#dddee8' : '#252d49',
-    'background-size': 'cover',
-    'background-position': 'center'
-  }"
->
-  <ng-lottie [options]="lottieOptions"></ng-lottie>
-</div>
+@if (appStateLoading$ | async) {
+  <div
+    class="container-fluid d-flex vw-100 vh-100 justify-content-center align-items-center p-5"
+    [ngStyle]="{
+      'background-image':
+        (themeMode$ | async) === 'light'
+          ? 'url(\'./../assets/light-mode-background-arrow.svg\')'
+          : 'url(\'./../assets/dark-mode-background-arrow.svg\')',
+      'background-color': (themeMode$ | async) === 'light' ? '#dddee8' : '#252d49',
+      'background-size': 'cover',
+      'background-position': 'center',
+    }"
+  >
+    <ng-lottie [options]="lottieOptions"></ng-lottie>
+  </div>
 } @else {
-<div
-  class="container-fluid vw-100 vh-100 d-flex flex-column"
-  [ngStyle]="{
-    'background-image':
-      (themeMode$ | async) === 'light'
-        ? 'url(\'./../assets/light-mode-background-arrow.svg\')'
-        : 'url(\'./../assets/dark-mode-background-arrow.svg\')',
-    'background-color':
-      (themeMode$ | async) === 'light' ? '#dddee8' : '#252d49',
-    'background-size': 'cover',
-    'background-position': 'center'
-  }"
->
-  <app-navbar></app-navbar>
-  <div class="d-flex align-items-center justify-content-center h-100">
-    <div class="w-100 h-100">
-      <router-outlet />
+  <div
+    class="container-fluid vw-100 vh-100 d-flex flex-column"
+    [ngStyle]="{
+      'background-image':
+        (themeMode$ | async) === 'light'
+          ? 'url(\'./../assets/light-mode-background-arrow.svg\')'
+          : 'url(\'./../assets/dark-mode-background-arrow.svg\')',
+      'background-color': (themeMode$ | async) === 'light' ? '#dddee8' : '#252d49',
+      'background-size': 'cover',
+      'background-position': 'center',
+    }"
+  >
+    <app-navbar></app-navbar>
+    <div class="d-flex align-items-center justify-content-center h-100">
+      <div class="w-100 h-100">
+        <router-outlet />
+      </div>
     </div>
   </div>
-</div>
 }

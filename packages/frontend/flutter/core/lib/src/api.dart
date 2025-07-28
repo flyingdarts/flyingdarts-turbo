@@ -16,11 +16,13 @@ abstract class ApiModule {
   @dev
   @acc
   @rootWebSocketUri
-  String get rootWebSocketUriDev => "wss://r051b8g6e7.execute-api.eu-west-1.amazonaws.com/Development/";
+  String get rootWebSocketUriDev =>
+      "wss://r051b8g6e7.execute-api.eu-west-1.amazonaws.com/Development/";
 
   @prod
   @rootWebSocketUri
-  String get rootWebSocketUriProd => "wss://pd3h2kmulf.execute-api.eu-west-1.amazonaws.com/Production/";
+  String get rootWebSocketUriProd =>
+      "wss://pd3h2kmulf.execute-api.eu-west-1.amazonaws.com/Production/";
 
   @dev
   @acc

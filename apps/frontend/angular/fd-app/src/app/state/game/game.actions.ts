@@ -7,14 +7,8 @@ export enum GameStateActions {
   clearInput = `[GameState] Input Clear`,
 }
 
-export const updateState = createAction(
-  GameStateActions.updateState,
-  props<{ state: GameStateStates.GameState }>()
-);
+export const updateState = createAction(GameStateActions.updateState, props<{ state: GameStateStates.GameState }>());
 
-export const updateInput = createAction(
-  GameStateActions.updateInput,
-  props<{ input: string }>()
-);
+export const updateInput = createAction(GameStateActions.updateInput, props<{ input: string }>());
 
 export const clearInput = createAction(GameStateActions.clearInput);

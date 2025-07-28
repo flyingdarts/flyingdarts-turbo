@@ -37,7 +37,7 @@ public class Game : IPrimaryKeyItem, ISortKeyItem, IAlternativeSortKeyItem
             Type = GameType.X01,
             PlayerCount = playerCount,
             X01 = settings,
-            MeetingIdentifier = meetingIdentifier
+            MeetingIdentifier = meetingIdentifier,
         };
     }
 }

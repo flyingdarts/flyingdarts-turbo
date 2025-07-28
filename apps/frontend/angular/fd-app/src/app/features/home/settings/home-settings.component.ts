@@ -17,18 +17,12 @@ export class HomeSettingsComponent {
   preferredX01Legs: Observable<number>;
 
   constructor(private readonly store: Store, private readonly router: Router) {
-    this.preferredX01Sets = this.store.select(
-      AppStateSelectors.selectX01GameSettingsSets
-    );
-    this.preferredX01Legs = this.store.select(
-      AppStateSelectors.selectX01GameSettingsLegs
-    );
+    this.preferredX01Sets = this.store.select(AppStateSelectors.selectX01GameSettingsSets);
+    this.preferredX01Legs = this.store.select(AppStateSelectors.selectX01GameSettingsLegs);
   }
 
   async action(type: 'increase' | 'decrease', property: 'legs' | 'sets') {
-    var currentSettings = await firstValueFrom(
-      this.store.select(AppStateSelectors.selectX01GameSettings)
-    );
+    var currentSettings = await firstValueFrom(this.store.select(AppStateSelectors.selectX01GameSettings));
 
     if (type === 'decrease' && property == 'legs') {
       currentSettings = {
@@ -55,9 +49,7 @@ export class HomeSettingsComponent {
       };
     }
 
-    this.store.dispatch(
-      AppStateActions.setX01GameSettings({ x01: currentSettings })
-    );
+    this.store.dispatch(AppStateActions.setX01GameSettings({ x01: currentSettings }));
   }
 
   async onBack() {

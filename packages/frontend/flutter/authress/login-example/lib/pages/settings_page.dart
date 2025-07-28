@@ -9,7 +9,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authContext = context.authress;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xff1d2f3b),
       appBar: AppBar(
@@ -48,9 +48,9 @@ class SettingsPage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Security section
             _buildSection(
               context,
@@ -74,9 +74,9 @@ class SettingsPage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // App section
             _buildSection(
               context,
@@ -107,9 +107,9 @@ class SettingsPage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Danger zone
             _buildDangerSection(context),
           ],
@@ -148,12 +148,14 @@ class SettingsPage extends StatelessWidget {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         Card(
           elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Column(
             children: children,
           ),
@@ -193,7 +195,11 @@ class SettingsPage extends StatelessWidget {
                 color: Colors.red.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.warning_outlined, size: 20, color: Colors.red),
+              child: const Icon(
+                Icons.warning_outlined,
+                size: 20,
+                color: Colors.red,
+              ),
             ),
             const SizedBox(width: 12),
             const Text(
@@ -206,9 +212,9 @@ class SettingsPage extends StatelessWidget {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         Card(
           elevation: 2,
           shape: RoundedRectangleBorder(
@@ -227,7 +233,11 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 subtitle: const Text('Sign out of your account'),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.red),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.red,
+                ),
                 onTap: () => _showLogoutDialog(context),
               ),
               const Divider(height: 1),
@@ -241,7 +251,11 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ),
                 subtitle: const Text('Permanently delete your account'),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.red),
+                trailing: const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.red,
+                ),
                 onTap: () => _showComingSoon(context),
               ),
             ],
@@ -285,7 +299,7 @@ class SettingsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: SelectableText(
-                accessToken.length > 50 
+                accessToken.length > 50
                     ? '${accessToken.substring(0, 50)}...'
                     : accessToken,
                 style: const TextStyle(
@@ -359,4 +373,4 @@ class SettingsPage extends StatelessWidget {
       ),
     );
   }
-} 
+}

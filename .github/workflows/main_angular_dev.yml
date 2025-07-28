@@ -17,7 +17,7 @@ jobs:
       project-name: "fd-app"
       project-directory: "apps/frontend/angular/fd-app"
       configuration: "development"
-      environment: "staging"
+      environment: "development"
       node-version: "22"
 
   deploy-angular-dev:
@@ -25,5 +25,5 @@ jobs:
     uses: ./.github/workflows/deploy-angular-app.yml
     with:
       project-name: "fd-app"
-      environment: "staging"
+      environment: "development"
     secrets: inherit

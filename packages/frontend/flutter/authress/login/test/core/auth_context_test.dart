@@ -11,7 +11,7 @@ void main() {
 
     setUp(() {
       mockAuthService = MockAuthenticationService();
-      
+
       // Set up fallback values
       registerFallbackValue(TestData.validUserProfile);
       registerFallbackValue(DateTime.now());
@@ -80,15 +80,15 @@ void main() {
           },
         );
 
-                 final context = AuthressContext(
-           authState: AuthStateAuthenticated(
-             user: userWithRoles,
-             accessToken: 'token',
-             expiresAt: DateTime.now().add(const Duration(hours: 1)),
-           ),
-           user: userWithRoles,
-           accessToken: 'token',
-         );
+        final context = AuthressContext(
+          authState: AuthStateAuthenticated(
+            user: userWithRoles,
+            accessToken: 'token',
+            expiresAt: DateTime.now().add(const Duration(hours: 1)),
+          ),
+          user: userWithRoles,
+          accessToken: 'token',
+        );
 
         expect(context.hasRole('admin'), isTrue);
         expect(context.hasRole('user'), isTrue);
@@ -105,15 +105,15 @@ void main() {
           },
         );
 
-                 final context = AuthressContext(
-           authState: AuthStateAuthenticated(
-             user: userWithRole,
-             accessToken: 'token',
-             expiresAt: DateTime.now().add(const Duration(hours: 1)),
-           ),
-           user: userWithRole,
-           accessToken: 'token',
-         );
+        final context = AuthressContext(
+          authState: AuthStateAuthenticated(
+            user: userWithRole,
+            accessToken: 'token',
+            expiresAt: DateTime.now().add(const Duration(hours: 1)),
+          ),
+          user: userWithRole,
+          accessToken: 'token',
+        );
 
         expect(context.hasRole('admin'), isTrue);
         expect(context.hasRole('user'), isFalse);
@@ -128,15 +128,15 @@ void main() {
           },
         );
 
-                 final context = AuthressContext(
-           authState: AuthStateAuthenticated(
-             user: userWithUserRoles,
-             accessToken: 'token',
-             expiresAt: DateTime.now().add(const Duration(hours: 1)),
-           ),
-           user: userWithUserRoles,
-           accessToken: 'token',
-         );
+        final context = AuthressContext(
+          authState: AuthStateAuthenticated(
+            user: userWithUserRoles,
+            accessToken: 'token',
+            expiresAt: DateTime.now().add(const Duration(hours: 1)),
+          ),
+          user: userWithUserRoles,
+          accessToken: 'token',
+        );
 
         expect(context.hasRole('admin'), isTrue);
         expect(context.hasRole('editor'), isTrue);
@@ -170,17 +170,20 @@ void main() {
         expect(context.hasRole('admin'), isFalse);
       });
 
-      test('hasAnyRole returns true if user has any of the specified roles', () {
-        final context = AuthressContext(
-          authState: TestData.validAuthenticatedState,
-          user: TestData.validUserProfile,
-          accessToken: TestData.validAccessToken,
-        );
+      test(
+        'hasAnyRole returns true if user has any of the specified roles',
+        () {
+          final context = AuthressContext(
+            authState: TestData.validAuthenticatedState,
+            user: TestData.validUserProfile,
+            accessToken: TestData.validAccessToken,
+          );
 
-        expect(context.hasAnyRole(['admin', 'guest']), isTrue);
-        expect(context.hasAnyRole(['guest', 'visitor']), isFalse);
-        expect(context.hasAnyRole(['admin', 'user']), isTrue);
-      });
+          expect(context.hasAnyRole(['admin', 'guest']), isTrue);
+          expect(context.hasAnyRole(['guest', 'visitor']), isFalse);
+          expect(context.hasAnyRole(['admin', 'user']), isTrue);
+        },
+      );
 
       test('hasAllRoles returns true if user has all specified roles', () {
         final context = AuthressContext(
@@ -205,15 +208,15 @@ void main() {
           },
         );
 
-                 final context = AuthressContext(
-           authState: AuthStateAuthenticated(
-             user: userWithGroups,
-             accessToken: 'token',
-             expiresAt: DateTime.now().add(const Duration(hours: 1)),
-           ),
-           user: userWithGroups,
-           accessToken: 'token',
-         );
+        final context = AuthressContext(
+          authState: AuthStateAuthenticated(
+            user: userWithGroups,
+            accessToken: 'token',
+            expiresAt: DateTime.now().add(const Duration(hours: 1)),
+          ),
+          user: userWithGroups,
+          accessToken: 'token',
+        );
 
         expect(context.hasGroup('developers'), isTrue);
         expect(context.hasGroup('testers'), isTrue);
@@ -230,15 +233,15 @@ void main() {
           },
         );
 
-                 final context = AuthressContext(
-           authState: AuthStateAuthenticated(
-             user: userWithGroup,
-             accessToken: 'token',
-             expiresAt: DateTime.now().add(const Duration(hours: 1)),
-           ),
-           user: userWithGroup,
-           accessToken: 'token',
-         );
+        final context = AuthressContext(
+          authState: AuthStateAuthenticated(
+            user: userWithGroup,
+            accessToken: 'token',
+            expiresAt: DateTime.now().add(const Duration(hours: 1)),
+          ),
+          user: userWithGroup,
+          accessToken: 'token',
+        );
 
         expect(context.hasGroup('developers'), isTrue);
         expect(context.hasGroup('testers'), isFalse);
@@ -253,15 +256,15 @@ void main() {
           },
         );
 
-                 final context = AuthressContext(
-           authState: AuthStateAuthenticated(
-             user: userWithUserGroups,
-             accessToken: 'token',
-             expiresAt: DateTime.now().add(const Duration(hours: 1)),
-           ),
-           user: userWithUserGroups,
-           accessToken: 'token',
-         );
+        final context = AuthressContext(
+          authState: AuthStateAuthenticated(
+            user: userWithUserGroups,
+            accessToken: 'token',
+            expiresAt: DateTime.now().add(const Duration(hours: 1)),
+          ),
+          user: userWithUserGroups,
+          accessToken: 'token',
+        );
 
         expect(context.hasGroup('engineering'), isTrue);
         expect(context.hasGroup('qa'), isTrue);
@@ -275,17 +278,20 @@ void main() {
         expect(context.hasGroup('testers'), isFalse);
       });
 
-      test('hasAnyGroup returns true if user has any of the specified groups', () {
-        final context = AuthressContext(
-          authState: TestData.validAuthenticatedState,
-          user: TestData.validUserProfile,
-          accessToken: TestData.validAccessToken,
-        );
+      test(
+        'hasAnyGroup returns true if user has any of the specified groups',
+        () {
+          final context = AuthressContext(
+            authState: TestData.validAuthenticatedState,
+            user: TestData.validUserProfile,
+            accessToken: TestData.validAccessToken,
+          );
 
-        expect(context.hasAnyGroup(['developers', 'sales']), isTrue);
-        expect(context.hasAnyGroup(['sales', 'marketing']), isFalse);
-        expect(context.hasAnyGroup(['developers', 'testers']), isTrue);
-      });
+          expect(context.hasAnyGroup(['developers', 'sales']), isTrue);
+          expect(context.hasAnyGroup(['sales', 'marketing']), isFalse);
+          expect(context.hasAnyGroup(['developers', 'testers']), isTrue);
+        },
+      );
 
       test('hasAllGroups returns true if user has all specified groups', () {
         final context = AuthressContext(
@@ -302,11 +308,13 @@ void main() {
 
     group('Authentication Methods', () {
       test('authenticate calls service with parameters', () async {
-        when(() => mockAuthService.authenticate(
-          connectionId: any(named: 'connectionId'),
-          tenantLookupIdentifier: any(named: 'tenantLookupIdentifier'),
-          additionalParams: any(named: 'additionalParams'),
-        )).thenAnswer((_) async {});
+        when(
+          () => mockAuthService.authenticate(
+            connectionId: any(named: 'connectionId'),
+            tenantLookupIdentifier: any(named: 'tenantLookupIdentifier'),
+            additionalParams: any(named: 'additionalParams'),
+          ),
+        ).thenAnswer((_) async {});
 
         final context = AuthressContext(
           authState: const AuthStateUnauthenticated(),
@@ -319,11 +327,13 @@ void main() {
           additionalParams: {'custom': 'value'},
         );
 
-        verify(() => mockAuthService.authenticate(
-          connectionId: 'test-connection',
-          tenantLookupIdentifier: 'test-tenant',
-          additionalParams: {'custom': 'value'},
-        )).called(1);
+        verify(
+          () => mockAuthService.authenticate(
+            connectionId: 'test-connection',
+            tenantLookupIdentifier: 'test-tenant',
+            additionalParams: {'custom': 'value'},
+          ),
+        ).called(1);
       });
 
       test('authenticate throws when no service', () async {
@@ -366,8 +376,9 @@ void main() {
 
     group('Token Management', () {
       test('getValidToken calls service', () async {
-        when(() => mockAuthService.ensureValidToken())
-            .thenAnswer((_) async => TestData.validAccessToken);
+        when(
+          () => mockAuthService.ensureValidToken(),
+        ).thenAnswer((_) async => TestData.validAccessToken);
 
         final context = AuthressContext(
           authState: TestData.validAuthenticatedState,
@@ -393,8 +404,9 @@ void main() {
       });
 
       test('refreshUserProfile calls service', () async {
-        when(() => mockAuthService.fetchUserProfile())
-            .thenAnswer((_) async => TestData.validUserProfile);
+        when(
+          () => mockAuthService.fetchUserProfile(),
+        ).thenAnswer((_) async => TestData.validUserProfile);
 
         final context = AuthressContext(
           authState: TestData.validAuthenticatedState,
@@ -535,4 +547,4 @@ void main() {
       });
     });
   });
-} 
+}

@@ -15,7 +15,8 @@ class OptionsBuilder {
 
   OptionsBuilder useAuthorizationToken() {
     _options.headers ??= {};
-    _options.headers![HttpHeaders.authorizationHeader] = _config.authorizationToken;
+    _options.headers![HttpHeaders.authorizationHeader] =
+        _config.authorizationToken;
     return this;
   }
 

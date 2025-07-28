@@ -3,5 +3,5 @@
 public enum GameTypeDto
 {
     X01,
-    Cricket
+    Cricket,
 }

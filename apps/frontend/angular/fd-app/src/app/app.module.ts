@@ -1,27 +1,27 @@
-import { isDevMode, NgModule } from "@angular/core";
-import { BrowserModule } from "@angular/platform-browser";
-import { CommonModule } from "@angular/common";
-import { provideHttpClient, withInterceptors } from "@angular/common/http";
+import { CommonModule } from '@angular/common';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { isDevMode, NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
-import { EffectsModule } from "@ngrx/effects";
-import { StoreModule } from "@ngrx/store";
-import { provideStoreDevtools } from "@ngrx/store-devtools";
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
-import { DyteComponentsModule } from "@dytesdk/angular-ui-kit";
-import { AuthressModule } from "@mikepattyn/authress-angular";
-import player from "lottie-web";
-import { LottieComponent, provideLottieOptions } from "ngx-lottie";
+import { DyteComponentsModule } from '@dytesdk/angular-ui-kit';
+import { AuthressModule } from '@mikepattyn/authress-angular';
+import player from 'lottie-web';
+import { LottieComponent, provideLottieOptions } from 'ngx-lottie';
 
-import { environment } from "src/environments/environment";
-import { AppComponent } from "./app.component";
-import { AppRoutingModule } from "./app-routing.module";
-import { NavbarComponent } from "./components/navbar/navbar.component";
-import { authInterceptor } from "./interceptors/authentication.interceptor";
-import { AppStateStoreModule } from "./state/app";
-import { AppEffects } from "./state/app/app.effects";
-import { GameStateStoreModule } from "./state/game";
-import { FriendsEffects } from "./state/friends/friends.effects";
-import { FriendsStoreModule } from "./state/friends/friends-store.module";
+import { environment } from 'src/environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { authInterceptor } from './interceptors/authentication.interceptor';
+import { AppStateStoreModule } from './state/app';
+import { AppEffects } from './state/app/app.effects';
+import { FriendsStoreModule } from './state/friends/friends-store.module';
+import { FriendsEffects } from './state/friends/friends.effects';
+import { GameStateStoreModule } from './state/game';
 
 @NgModule({
   declarations: [AppComponent],

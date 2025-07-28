@@ -43,21 +43,30 @@ class AuthressProvider extends StatefulWidget {
 
   /// Get the current AuthressContext from the widget tree
   static AuthressContext of(BuildContext context) {
-    final inherited = context.dependOnInheritedWidgetOfExactType<_InheritedAuthress>();
-    assert(inherited != null, 'ImprovedAuthressProvider not found in widget tree');
+    final inherited = context
+        .dependOnInheritedWidgetOfExactType<_InheritedAuthress>();
+    assert(
+      inherited != null,
+      'ImprovedAuthressProvider not found in widget tree',
+    );
     return inherited!.context;
   }
 
   /// Get the AuthressContext without listening to changes
   static AuthressContext read(BuildContext context) {
-    final inherited = context.getInheritedWidgetOfExactType<_InheritedAuthress>();
-    assert(inherited != null, 'ImprovedAuthressProvider not found in widget tree');
+    final inherited = context
+        .getInheritedWidgetOfExactType<_InheritedAuthress>();
+    assert(
+      inherited != null,
+      'ImprovedAuthressProvider not found in widget tree',
+    );
     return inherited!.context;
   }
 
   /// Check if ImprovedAuthressProvider exists in the widget tree
   static AuthressContext? maybeOf(BuildContext context) {
-    final inherited = context.dependOnInheritedWidgetOfExactType<_InheritedAuthress>();
+    final inherited = context
+        .dependOnInheritedWidgetOfExactType<_InheritedAuthress>();
     return inherited?.context;
   }
 
@@ -83,7 +92,10 @@ class _AuthressProviderState extends State<AuthressProvider> {
     }
 
     // Create authentication service with dependency injection
-    _authService = AuthenticationService.create(config: widget.config, deepLinkConfig: widget.deepLinkConfig);
+    _authService = AuthenticationService.create(
+      config: widget.config,
+      deepLinkConfig: widget.deepLinkConfig,
+    );
 
     // Initialize context
     _context = _createContext(_authService.state);

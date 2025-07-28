@@ -10,6 +10,5 @@ public class OnDefaultCommand : IRequest<APIGatewayProxyResponse>
     public Guid Owner { get; set; }
     public string Date { get; set; } = string.Empty;
     public string ConnectionId { get; set; } = string.Empty;
-    internal AmazonApiGatewayManagementApiClient ApiGatewayManagementApiClient { get; set; } =
-        null!;
+    internal AmazonApiGatewayManagementApiClient ApiGatewayManagementApiClient { get; set; } = null!;
 }

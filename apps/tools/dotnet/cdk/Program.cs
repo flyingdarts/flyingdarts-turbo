@@ -20,8 +20,8 @@ namespace Flyingdarts.CDK
                     Env = new Environment
                     {
                         Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
-                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION")
-                    }
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
                 }
             );
 
@@ -34,8 +34,8 @@ namespace Flyingdarts.CDK
                     Env = new Environment
                     {
                         Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
-                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION")
-                    }
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
                 }
             );
 
@@ -48,12 +48,12 @@ namespace Flyingdarts.CDK
                     Env = new Environment
                     {
                         Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
-                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION")
-                    }
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
                 }
             );
 
-            new AuthStack(app, new StackProps { StackName = $"Auth-Stack", });
+            new AuthStack(app, new StackProps { StackName = $"Auth-Stack" });
 
             app.Synth();
         }

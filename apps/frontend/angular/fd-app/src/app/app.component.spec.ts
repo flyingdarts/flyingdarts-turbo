@@ -1,7 +1,7 @@
-import { AppComponent } from "./app.component";
-import { of } from "rxjs";
+import { of } from 'rxjs';
+import { AppComponent } from './app.component';
 
-describe("AppComponent", () => {
+describe('AppComponent', () => {
   let component: AppComponent;
   let mockStore: any;
 
@@ -13,11 +13,11 @@ describe("AppComponent", () => {
     component = new AppComponent(mockStore);
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
   it("should have title 'flyingdarts'", () => {
-    expect(component.title).toBe("flyingdarts");
+    expect(component.title).toBe('flyingdarts');
   });
 });

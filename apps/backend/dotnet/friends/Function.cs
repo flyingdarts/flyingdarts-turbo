@@ -22,57 +22,47 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
         var userId = request.RequestContext.Authorizer.GetValueOrDefault("UserId").ToString();
         return request.Resource switch
         {
-            "/friends/user" when request.HttpMethod == "GET"
-                => await innerHandler.Handle(new GetUserQuery { UserId = userId }),
+            "/friends/user" when request.HttpMethod == "GET" => await innerHandler.Handle(new GetUserQuery { UserId = userId }),
 
-            "/friends" when request.HttpMethod == "GET"
-                => await innerHandler.Handle(new GetFriendsQuery { UserId = userId }),
+            "/friends" when request.HttpMethod == "GET" => await innerHandler.Handle(new GetFriendsQuery { UserId = userId }),
 
-            "/friends/search" when request.HttpMethod == "POST"
-                => await innerHandler.Handle(
-                    JsonSerializer.Deserialize<SearchUsersQuery>(request.Body) with
-                    {
-                        SearchByUserId = userId
-                    }
-                ),
+            "/friends/search" when request.HttpMethod == "POST" => await innerHandler.Handle(
+                JsonSerializer.Deserialize<SearchUsersQuery>(request.Body) with
+                {
+                    SearchByUserId = userId,
+                }
+            ),
 
-            "/friends/request" when request.HttpMethod == "POST"
-                => await innerHandler.Handle(
-                    JsonSerializer.Deserialize<SendFriendRequestCommand>(request.Body) with
-                    {
-                        RequesterId = userId
-                    }
-                ),
+            "/friends/request" when request.HttpMethod == "POST" => await innerHandler.Handle(
+                JsonSerializer.Deserialize<SendFriendRequestCommand>(request.Body) with
+                {
+                    RequesterId = userId,
+                }
+            ),
 
-            "/friends/request/{requestId}" when request.HttpMethod == "PUT"
-                => await innerHandler.Handle(
-                    JsonSerializer.Deserialize<RespondToFriendRequestCommand>(request.Body) with
-                    {
-                        RequestId = Uri.UnescapeDataString(request.PathParameters["requestId"]), // decode encodeURIComponent
-                        UserId = userId
-                    }
-                ),
+            "/friends/request/{requestId}" when request.HttpMethod == "PUT" => await innerHandler.Handle(
+                JsonSerializer.Deserialize<RespondToFriendRequestCommand>(request.Body) with
+                {
+                    RequestId = Uri.UnescapeDataString(request.PathParameters["requestId"]), // decode encodeURIComponent
+                    UserId = userId,
+                }
+            ),
 
-            "/friends/{friendId}" when request.HttpMethod == "DELETE"
-                => await innerHandler.Handle(
-                    new RemoveFriendCommand
-                    {
-                        UserId = userId,
-                        FriendId = request.PathParameters["friendId"]
-                    }
-                ),
+            "/friends/{friendId}" when request.HttpMethod == "DELETE" => await innerHandler.Handle(
+                new RemoveFriendCommand { UserId = userId, FriendId = request.PathParameters["friendId"] }
+            ),
 
-            "/friends/requests" when request.HttpMethod == "GET"
-                => await innerHandler.Handle(new GetFriendRequestsQuery { UserId = userId }),
+            "/friends/requests" when request.HttpMethod == "GET" => await innerHandler.Handle(
+                new GetFriendRequestsQuery { UserId = userId }
+            ),
 
-            "/friends/invite" when request.HttpMethod == "POST"
-                => await innerHandler.Handle(
-                    JsonSerializer.Deserialize<InviteFriendToGameCommand>(request.Body) with
-                    {
-                        InviterId = userId
-                    }
-                ),
-            _ => new APIGatewayProxyResponse { StatusCode = 404 }
+            "/friends/invite" when request.HttpMethod == "POST" => await innerHandler.Handle(
+                JsonSerializer.Deserialize<InviteFriendToGameCommand>(request.Body) with
+                {
+                    InviterId = userId,
+                }
+            ),
+            _ => new APIGatewayProxyResponse { StatusCode = 404 },
         };
     }
     catch (Exception ex)
@@ -85,8 +75,8 @@ var handler = async (APIGatewayProxyRequest request, ILambdaContext context) =>
             {
                 { "Access-Control-Allow-Origin", "*" },
                 { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-                { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
-            }
+                { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
+            },
         };
     }
 };

@@ -11,13 +11,17 @@ import 'models/websocket_message.dart';
 
 class WebSocketService {
   IOWebSocketChannel? _socket;
-  final BehaviorSubject<bool> _connectedSubject = BehaviorSubject<bool>.seeded(false);
+  final BehaviorSubject<bool> _connectedSubject = BehaviorSubject<bool>.seeded(
+    false,
+  );
   Stream<bool> get connected$ => _connectedSubject.stream;
-  final StreamController<WebSocketMessage<dynamic>> _messages = StreamController<WebSocketMessage>.broadcast();
+  final StreamController<WebSocketMessage<dynamic>> _messages =
+      StreamController<WebSocketMessage>.broadcast();
   Stream<WebSocketMessage> get messages => _messages.stream;
   late String _websocketUri;
 
-  final AuthressLoginClient _authressLoginClient = GetIt.I<AuthressLoginClient>();
+  final AuthressLoginClient _authressLoginClient =
+      GetIt.I<AuthressLoginClient>();
 
   WebSocketService(String websocketUri) {
     _websocketUri = websocketUri;
@@ -28,7 +32,9 @@ class WebSocketService {
     if (await _authressLoginClient.ensureToken() == null) {
       return;
     }
-    _socket = IOWebSocketChannel.connect('${_websocketUri}?token=${(await _authressLoginClient.ensureToken())}');
+    _socket = IOWebSocketChannel.connect(
+      '${_websocketUri}?token=${(await _authressLoginClient.ensureToken())}',
+    );
     _connectedSubject.add(true);
     _connect();
   }
@@ -41,13 +47,17 @@ class WebSocketService {
       },
       onDone: () {
         _connectedSubject.add(false);
-        _messages.add(WebSocketMessage(action: WebSocketActions.Disconnect, message: null));
+        _messages.add(
+          WebSocketMessage(action: WebSocketActions.Disconnect, message: null),
+        );
         Future.delayed(Duration(seconds: 1), () {
           initialize();
         });
       },
       onError: (error) {
-        _messages.add(WebSocketMessage(action: WebSocketActions.Default, message: error));
+        _messages.add(
+          WebSocketMessage(action: WebSocketActions.Default, message: error),
+        );
       },
     );
   }

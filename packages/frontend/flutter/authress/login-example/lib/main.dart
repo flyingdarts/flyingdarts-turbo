@@ -27,7 +27,11 @@ class _MyAppState extends State<MyApp> {
         applicationId: 'app_2YKyhM6M31XVtuCeuDsSJ2',
         authressApiUrl: 'https://authress.flyingdarts.net',
       ),
-      deepLinkConfig: const DeepLinkConfig(scheme: 'flyingdarts', host: 'auth', path: ''),
+      deepLinkConfig: const DeepLinkConfig(
+        scheme: 'flyingdarts',
+        host: 'auth',
+        path: '',
+      ),
       child: MaterialApp.router(
         title: 'Authress Login Demo v2',
         theme: ThemeData(
@@ -58,7 +62,11 @@ class ExampleProtectedPage extends StatelessWidget {
         unauthenticatedChild: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [Icon(Icons.login, size: 48), SizedBox(height: 16), Text('Please log in to view this content')],
+            children: [
+              Icon(Icons.login, size: 48),
+              SizedBox(height: 16),
+              Text('Please log in to view this content'),
+            ],
           ),
         ),
         loadingChild: const Center(child: CircularProgressIndicator()),
@@ -74,7 +82,10 @@ class ExampleProtectedPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Welcome, ${authContext.user?.name ?? 'User'}!', style: Theme.of(context).textTheme.headlineSmall),
+          Text(
+            'Welcome, ${authContext.user?.name ?? 'User'}!',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
           const SizedBox(height: 16),
 
           // User info card
@@ -85,7 +96,8 @@ class ExampleProtectedPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('User ID: ${authContext.user?.userId}'),
-                  if (authContext.user?.email != null) Text('Email: ${authContext.user!.email}'),
+                  if (authContext.user?.email != null)
+                    Text('Email: ${authContext.user!.email}'),
                 ],
               ),
             ),

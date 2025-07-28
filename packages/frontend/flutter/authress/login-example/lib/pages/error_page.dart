@@ -14,7 +14,7 @@ class ErrorPage extends StatelessWidget {
     if (authState is AuthStateError) {
       errorMessage = authState.message;
     }
-    
+
     return Scaffold(
       backgroundColor: const Color(0xff1d2f3b),
       body: SafeArea(
@@ -37,9 +37,9 @@ class ErrorPage extends StatelessWidget {
                   color: Colors.red,
                 ),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Error title
               Text(
                 'Authentication Failed',
@@ -49,9 +49,9 @@ class ErrorPage extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Error message
               Container(
                 padding: const EdgeInsets.all(16),
@@ -68,9 +68,9 @@ class ErrorPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Action buttons
               Column(
                 children: [
@@ -82,7 +82,10 @@ class ErrorPage extends StatelessWidget {
                       icon: const Icon(Icons.refresh_rounded),
                       label: const Text(
                         'Try Again',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Theme.of(context).primaryColor,
@@ -94,9 +97,9 @@ class ErrorPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   // Go back button
                   SizedBox(
                     width: double.infinity,
@@ -114,16 +117,18 @@ class ErrorPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         side: BorderSide(
-                          color: Theme.of(context).primaryColor.withValues(alpha: 0.5),
+                          color: Theme.of(
+                            context,
+                          ).primaryColor.withValues(alpha: 0.5),
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               // Troubleshooting tips
               _TroubleshootingTips(),
             ],
@@ -143,7 +148,7 @@ class _TroubleshootingTips extends StatelessWidget {
       'Try signing in with a different account',
       'Contact support if the problem persists',
     ];
-    
+
     return ExpansionTile(
       leading: Icon(
         Icons.help_outline_rounded,
@@ -174,4 +179,4 @@ class _TroubleshootingTips extends StatelessWidget {
       }).toList(),
     );
   }
-} 
+}

@@ -11,9 +11,7 @@ public static class ServiceFactory
     public static ServiceProvider GetServiceProvider()
     {
         var configuration = new ConfigurationBuilder()
-            .AddSystemsManager(
-                $"/{Environment.GetEnvironmentVariable("EnvironmentName")}/Application"
-            )
+            .AddSystemsManager($"/{Environment.GetEnvironmentVariable("EnvironmentName")}/Application")
             .Build();
 
         var services = new ServiceCollection();
@@ -27,7 +25,7 @@ public static class ServiceFactory
         {
             var config = new AmazonApiGatewayManagementApiConfig
             {
-                ServiceURL = System.Environment.GetEnvironmentVariable("WebSocketApiUrl")!
+                ServiceURL = System.Environment.GetEnvironmentVariable("WebSocketApiUrl")!,
             };
             return new AmazonApiGatewayManagementApiClient(config);
         });
@@ -41,9 +39,7 @@ public static class ServiceFactory
         services.AddTransient<IFriendsDynamoDbService, FriendsDynamoDbService>();
 
         // Register MediatR and register services from the assembly containing SendFriendRequestCommand.
-        services.AddMediatR(
-            cfg => cfg.RegisterServicesFromAssembly(typeof(SendFriendRequestCommand).Assembly)
-        );
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SendFriendRequestCommand).Assembly));
 
         return services.BuildServiceProvider();
     }

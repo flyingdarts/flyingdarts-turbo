@@ -1,16 +1,8 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Input,
-  ViewChild,
-  OnDestroy,
-} from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { DyteComponentsModule } from "@dytesdk/angular-ui-kit";
-import DyteClient from "@dytesdk/web-core";
-import { MeetingService } from "./services/meeting.service";
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DyteComponentsModule } from '@dytesdk/angular-ui-kit';
+import DyteClient from '@dytesdk/web-core';
+import { MeetingService } from './services/meeting.service';
 
 /**
  * Meeting component that supports video switching based on player turn.
@@ -29,9 +21,9 @@ import { MeetingService } from "./services/meeting.service";
  * </app-meeting>
  */
 @Component({
-  selector: "app-meeting",
-  templateUrl: "./meeting.component.html",
-  styleUrl: "./meeting.component.scss",
+  selector: 'app-meeting',
+  templateUrl: './meeting.component.html',
+  styleUrl: './meeting.component.scss',
   imports: [DyteComponentsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
@@ -46,15 +38,15 @@ export class MeetingComponent implements AfterViewInit, OnDestroy {
    */
   @Input() isPlayerTurn: boolean | null = null;
 
-  @ViewChild("localVideo")
+  @ViewChild('localVideo')
   private localVideoElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild("opponentVideo")
+  @ViewChild('opponentVideo')
   private opponentVideoElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild("localVideoSmall")
+  @ViewChild('localVideoSmall')
   private localVideoSmallElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild("opponentVideoSmall")
+  @ViewChild('opponentVideoSmall')
   private opponentVideoSmallElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild("opponentAudio")
+  @ViewChild('opponentAudio')
   private opponentAudioElement!: ElementRef<HTMLAudioElement>;
 
   showSettings = false;
@@ -62,10 +54,7 @@ export class MeetingComponent implements AfterViewInit, OnDestroy {
   private isJoining = false;
   private hasJoined = false;
 
-  constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly meetingService: MeetingService
-  ) {}
+  constructor(private readonly activatedRoute: ActivatedRoute, private readonly meetingService: MeetingService) {}
 
   openSettings() {
     this.showSettings = true;
@@ -83,7 +72,7 @@ export class MeetingComponent implements AfterViewInit, OnDestroy {
 
     try {
       this.isJoining = true;
-      const meetingToken = sessionStorage.getItem("meetingToken")!;
+      const meetingToken = sessionStorage.getItem('meetingToken')!;
 
       // Set up the main video elements
       this.meetingService.setupElements(
@@ -102,7 +91,7 @@ export class MeetingComponent implements AfterViewInit, OnDestroy {
       await this.dyteClient.join();
       this.hasJoined = true;
     } catch (error) {
-      console.error("Error during initialization", error);
+      console.error('Error during initialization', error);
       this.hasJoined = false;
     } finally {
       this.isJoining = false;
@@ -114,7 +103,7 @@ export class MeetingComponent implements AfterViewInit, OnDestroy {
       try {
         this.dyteClient.leave();
       } catch (error) {
-        console.error("Error leaving meeting", error);
+        console.error('Error leaving meeting', error);
       }
     }
   }
@@ -122,19 +111,13 @@ export class MeetingComponent implements AfterViewInit, OnDestroy {
   private setupVideoSwitching(dyteClient: DyteClient) {
     // Set up local video for both main and corner elements
     if (dyteClient.self.videoTrack) {
-      this.attachVideoTrack(
-        dyteClient.self.videoTrack,
-        this.localVideoSmallElement.nativeElement
-      );
+      this.attachVideoTrack(dyteClient.self.videoTrack, this.localVideoSmallElement.nativeElement);
     }
 
     // Set up opponent video for corner element
-    dyteClient.participants.joined.on("videoUpdate", (participant) => {
+    dyteClient.participants.joined.on('videoUpdate', participant => {
       if (participant.videoTrack) {
-        this.attachVideoTrack(
-          participant.videoTrack,
-          this.opponentVideoSmallElement.nativeElement
-        );
+        this.attachVideoTrack(participant.videoTrack, this.opponentVideoSmallElement.nativeElement);
       }
     });
   }
@@ -145,19 +128,15 @@ export class MeetingComponent implements AfterViewInit, OnDestroy {
       stream.addTrack(track);
       element.srcObject = stream;
       element.onloadedmetadata = () => {
-        element
-          .play()
-          .catch((error: unknown) =>
-            console.error("Error playing media", error)
-          );
+        element.play().catch((error: unknown) => console.error('Error playing media', error));
       };
     } catch (error) {
-      console.error("Error attaching video track", error);
+      console.error('Error attaching video track', error);
     }
   }
 
   private setupDyteProvider(dyteClient: DyteClient) {
-    const dyteProvider = document.getElementById("dyte-provider") as any;
+    const dyteProvider = document.getElementById('dyte-provider') as any;
 
     dyteProvider.meeting = dyteClient;
   }

@@ -1,148 +1,214 @@
 <div class="mx-2">
   <div class="row pb-1">
     <div class="col-4 g-0 px-1">
-      <a id="calcButtonClear"
-         (click)="clearScore()"
-         class="btn button clear-button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">CLEAR</a>
+      <a
+        id="calcButtonClear"
+        (click)="clearScore()"
+        class="btn button clear-button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >CLEAR</a
+      >
     </div>
     <div class="col-4 g-0 px-1 d-flex flex-column justify-content-end">
-      <a id="calcInputField2"
-         class="fd-input text-center"
-         [ngClass]="mode == 'dark' ? 'fd-input-dark' : 'fd-input-light'"
-         (click)="focusKeyboardInput()">
-        {{ (input$ | async) }}
+      <a
+        id="calcInputField2"
+        class="fd-input text-center"
+        [ngClass]="mode == 'dark' ? 'fd-input-dark' : 'fd-input-light'"
+        (click)="focusKeyboardInput()"
+      >
+        {{ input$ | async }}
       </a>
-      <a id="calcInputField"
-         class="btn button input"
-         (click)="focusKeyboardInput()"></a>
+      <a
+        id="calcInputField"
+        class="btn button input"
+        (click)="focusKeyboardInput()"
+      ></a>
 
-      <input #hiddenInputField
-             type="hidden"
-             id="calcInputFieldHidden"
-             (keydown)="handleKeyboardInput($event)" />
+      <input
+        #hiddenInputField
+        type="hidden"
+        id="calcInputFieldHidden"
+        (keydown)="handleKeyboardInput($event)"
+      />
     </div>
     <div class="col-4 g-0 px-1">
-      <a id="calcButtonCheck"
-         (click)="check()"
-         class="btn button check-button"
-         [ngClass]="shouldDisableControls || !canCheckOut ? 'disabled' : ''">CHECK</a>
+      <a
+        id="calcButtonCheck"
+        (click)="check()"
+        class="btn button check-button"
+        [ngClass]="shouldDisableControls || !canCheckOut ? 'disabled' : ''"
+        >CHECK</a
+      >
     </div>
   </div>
   <div class="row py-1">
     <div class="col-3 g-0 px-1">
-      <a (click)="quickScore(26)"
-         id="calcButton26"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">26</a>
+      <a
+        (click)="quickScore(26)"
+        id="calcButton26"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >26</a
+      >
     </div>
     <div class="col-2 g-0 px-1">
-      <a (click)="inputScore(1)"
-         id="calcButton1"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">1</a>
+      <a
+        (click)="inputScore(1)"
+        id="calcButton1"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >1</a
+      >
     </div>
     <div class="col-2 g-0 px-1">
-      <a (click)="inputScore(2)"
-         id="calcButton2"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">2</a>
+      <a
+        (click)="inputScore(2)"
+        id="calcButton2"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >2</a
+      >
     </div>
     <div class="col-2 g-0 px-1">
-      <a (click)="inputScore(3)"
-         id="calcButton3"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">3</a>
+      <a
+        (click)="inputScore(3)"
+        id="calcButton3"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >3</a
+      >
     </div>
     <div class="col-3 g-0 px-1">
-      <a (click)="quickScore(41)"
-         id="calcButton41"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">41</a>
+      <a
+        (click)="quickScore(41)"
+        id="calcButton41"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >41</a
+      >
     </div>
   </div>
   <div class="row py-1">
     <div class="col-3 g-0 px-1">
-      <a (click)="quickScore(45)"
-         id="calcButton45"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">45</a>
+      <a
+        (click)="quickScore(45)"
+        id="calcButton45"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >45</a
+      >
     </div>
     <div class="col-2 g-0 px-1">
-      <a (click)="inputScore(4)"
-         id="calcButton4"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">4</a>
+      <a
+        (click)="inputScore(4)"
+        id="calcButton4"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >4</a
+      >
     </div>
     <div class="col-2 g-0 px-1">
-      <a (click)="inputScore(5)"
-         id="calcButton5"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">5</a>
+      <a
+        (click)="inputScore(5)"
+        id="calcButton5"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >5</a
+      >
     </div>
     <div class="col-2 g-0 px-1">
-      <a (click)="inputScore(6)"
-         id="calcButton6"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">6</a>
+      <a
+        (click)="inputScore(6)"
+        id="calcButton6"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >6</a
+      >
     </div>
     <div class="col-3 g-0 px-1">
-      <a (click)="quickScore(60)"
-         id="calcButton60"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">60</a>
+      <a
+        (click)="quickScore(60)"
+        id="calcButton60"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >60</a
+      >
     </div>
   </div>
   <div class="row py-1">
     <div class="col-3 g-0 px-1">
-      <a (click)="quickScore(85)"
-         id="calcButton85"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">85</a>
+      <a
+        (click)="quickScore(85)"
+        id="calcButton85"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >85</a
+      >
     </div>
     <div class="col-2 g-0 px-1">
-      <a (click)="inputScore(7)"
-         id="calcButton7"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">7</a>
+      <a
+        (click)="inputScore(7)"
+        id="calcButton7"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >7</a
+      >
     </div>
     <div class="col-2 g-0 px-1">
-      <a (click)="inputScore(8)"
-         id="calcButton8"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">8</a>
+      <a
+        (click)="inputScore(8)"
+        id="calcButton8"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >8</a
+      >
     </div>
-    <div class="col-2 g-0 px-1 ">
-      <a (click)="inputScore(9)"
-         id="calcButton9"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">9</a>
+    <div class="col-2 g-0 px-1">
+      <a
+        (click)="inputScore(9)"
+        id="calcButton9"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >9</a
+      >
     </div>
     <div class="col-3 g-0 px-1">
-      <a (click)="quickScore(100)"
-         id="calcButton100"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">100</a>
+      <a
+        (click)="quickScore(100)"
+        id="calcButton100"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >100</a
+      >
     </div>
   </div>
   <div class="row pt-1">
     <div class="col-4 g-0 px-1">
-      <a (click)="noScore()"
-         id="calcButtonNOSCORE"
-         class="btn button no-score-button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">NO SCORE</a>
+      <a
+        (click)="noScore()"
+        id="calcButtonNOSCORE"
+        class="btn button no-score-button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >NO SCORE</a
+      >
     </div>
     <div class="col-4 g-0 px-1">
-      <a (click)="inputScore(0)"
-         id="calcButton0"
-         class="btn button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">0</a>
+      <a
+        (click)="inputScore(0)"
+        id="calcButton0"
+        class="btn button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >0</a
+      >
     </div>
     <div class="col-4 g-0 px-1">
-      <a (click)="ok()"
-         id="calcButtonOK"
-         class="btn button ok-button"
-         [ngClass]="shouldDisableControls ? 'disabled' : ''">OK</a>
+      <a
+        (click)="ok()"
+        id="calcButtonOK"
+        class="btn button ok-button"
+        [ngClass]="shouldDisableControls ? 'disabled' : ''"
+        >OK</a
+      >
     </div>
   </div>
 </div>

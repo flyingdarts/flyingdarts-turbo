@@ -38,10 +38,14 @@ class AuthressLoginClient extends ChangeNotifier {
   bool get isAuthenticated => _state is AuthStateAuthenticated;
 
   /// Get the current access token if available
-  String? get accessToken => _state is AuthStateAuthenticated ? (_state as AuthStateAuthenticated).accessToken : null;
+  String? get accessToken => _state is AuthStateAuthenticated
+      ? (_state as AuthStateAuthenticated).accessToken
+      : null;
 
   /// Get the current user profile if available
-  UserProfile? get userProfile => _state is AuthStateAuthenticated ? (_state as AuthStateAuthenticated).user : null;
+  UserProfile? get userProfile => _state is AuthStateAuthenticated
+      ? (_state as AuthStateAuthenticated).user
+      : null;
 
   /// Check if a user session exists and is valid
   Future<bool> userSessionExists() async {
@@ -91,17 +95,26 @@ class AuthressLoginClient extends ChangeNotifier {
 
       final result = await _launchWebViewFlow(authUrl);
 
-      developer.log('🔄 WebView flow completed, result: ${result != null ? 'SUCCESS' : 'NULL'}');
+      developer.log(
+        '🔄 WebView flow completed, result: ${result != null ? 'SUCCESS' : 'NULL'}',
+      );
 
       if (result != null) {
         developer.log('✅ Processing authentication result...');
         await _handleAuthenticationResult(result);
       } else {
         developer.log('❌ Authentication was cancelled or timed out');
-        _setState(const AuthStateError(message: 'Authentication was cancelled'));
+        _setState(
+          const AuthStateError(message: 'Authentication was cancelled'),
+        );
       }
     } catch (e) {
-      _setState(AuthStateError(message: 'Authentication failed: ${e.toString()}', error: e));
+      _setState(
+        AuthStateError(
+          message: 'Authentication failed: ${e.toString()}',
+          error: e,
+        ),
+      );
     }
   }
 
@@ -180,7 +193,12 @@ class AuthressLoginClient extends ChangeNotifier {
       final expiry = DateTime.parse(expiryStr);
 
       _setState(
-        AuthStateAuthenticated(user: userProfile, accessToken: token, refreshToken: refreshToken, expiresAt: expiry),
+        AuthStateAuthenticated(
+          user: userProfile,
+          accessToken: token,
+          refreshToken: refreshToken,
+          expiresAt: expiry,
+        ),
       );
 
       _scheduleTokenRefresh(expiry);
@@ -231,7 +249,10 @@ class AuthressLoginClient extends ChangeNotifier {
 
     try {
       final uri = Uri.parse(_buildUrl('/api/authentication'));
-      final headers = {'Content-Type': 'application/json', 'X-Powered-By': 'Authress Login SDK; Flutter; 1.0.0'};
+      final headers = {
+        'Content-Type': 'application/json',
+        'X-Powered-By': 'Authress Login SDK; Flutter; 1.0.0',
+      };
       final body = json.encode(requestBody);
 
       // DEBUG: Log the exact request being made
@@ -251,11 +272,16 @@ class AuthressLoginClient extends ChangeNotifier {
 
         // Store PKCE verifier for later use in token exchange
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('authress_code_verifier', pkceCodes['codeVerifier']!);
+        await prefs.setString(
+          'authress_code_verifier',
+          pkceCodes['codeVerifier']!,
+        );
 
         return data['authenticationUrl'] as String;
       } else {
-        throw Exception('Failed to get authentication URL: ${response.statusCode} ${response.body}');
+        throw Exception(
+          'Failed to get authentication URL: ${response.statusCode} ${response.body}',
+        );
       }
     } catch (e) {
       throw Exception('Failed to get authentication URL: $e');
@@ -280,7 +306,9 @@ class AuthressLoginClient extends ChangeNotifier {
       } else {
         developer.log('⚠️  No active auth completer or already completed');
         developer.log('   - _authCompleter is null: ${_authCompleter == null}');
-        developer.log('   - already completed: ${_authCompleter?.isCompleted ?? 'N/A'}');
+        developer.log(
+          '   - already completed: ${_authCompleter?.isCompleted ?? 'N/A'}',
+        );
       }
     } else {
       developer.log('🚫 URI scheme/host mismatch: ${uri.scheme}://${uri.host}');
@@ -296,17 +324,25 @@ class AuthressLoginClient extends ChangeNotifier {
       if (await canLaunchUrl(Uri.parse(authUrl))) {
         // Use different approaches based on platform
         if (Platform.isIOS) {
-          developer.log('🚀 Launching in-app WebView for iOS (prevents "Return to Safari" issue)...');
+          developer.log(
+            '🚀 Launching in-app WebView for iOS (prevents "Return to Safari" issue)...',
+          );
           // Using inAppWebView on iOS prevents the "Return to Safari" button issue
           // The WebView will close automatically when the deep link is triggered
           await launchUrl(
             Uri.parse(authUrl),
             mode: LaunchMode.inAppWebView,
-            webViewConfiguration: const WebViewConfiguration(enableJavaScript: true, enableDomStorage: true),
+            webViewConfiguration: const WebViewConfiguration(
+              enableJavaScript: true,
+              enableDomStorage: true,
+            ),
           );
         } else {
           developer.log('🚀 Launching external browser...');
-          await launchUrl(Uri.parse(authUrl), mode: LaunchMode.externalApplication);
+          await launchUrl(
+            Uri.parse(authUrl),
+            mode: LaunchMode.externalApplication,
+          );
         }
 
         developer.log('⏱️  Setting 5-minute timeout...');
@@ -321,7 +357,9 @@ class AuthressLoginClient extends ChangeNotifier {
         developer.log('⏳ Waiting for deep link callback...');
         // Wait for the deep link callback
         final result = await _authCompleter!.future;
-        developer.log('📨 Deep link callback received: ${result != null ? 'SUCCESS' : 'TIMEOUT/CANCEL'}');
+        developer.log(
+          '📨 Deep link callback received: ${result != null ? 'SUCCESS' : 'TIMEOUT/CANCEL'}',
+        );
         return result;
       } else {
         developer.log('❌ Cannot launch URL');
@@ -374,13 +412,18 @@ class AuthressLoginClient extends ChangeNotifier {
   }
 
   /// Exchange authorization code for access tokens (JavaScript-style with nonce)
-  Future<void> _exchangeCodeForTokensWithNonce(String code, String nonce) async {
+  Future<void> _exchangeCodeForTokensWithNonce(
+    String code,
+    String nonce,
+  ) async {
     // Retrieve the stored PKCE code verifier
     final prefs = await SharedPreferences.getInstance();
     final codeVerifier = prefs.getString('authress_code_verifier');
 
     if (codeVerifier == null) {
-      throw Exception('Code verifier not found - authentication flow may have been corrupted');
+      throw Exception(
+        'Code verifier not found - authentication flow may have been corrupted',
+      );
     }
 
     // Calculate anti-abuse hash exactly like JavaScript
@@ -451,7 +494,9 @@ class AuthressLoginClient extends ChangeNotifier {
         throw Exception('Failed to process authentication token: $e');
       }
     } else {
-      throw Exception('Failed to exchange code for tokens: ${response.statusCode} - ${response.body}');
+      throw Exception(
+        'Failed to exchange code for tokens: ${response.statusCode} - ${response.body}',
+      );
     }
   }
 
@@ -481,9 +526,15 @@ class AuthressLoginClient extends ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse(_buildUrl('/v1/clients/${_config.applicationId}/oauth/tokens')),
+        Uri.parse(
+          _buildUrl('/v1/clients/${_config.applicationId}/oauth/tokens'),
+        ),
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: {'grant_type': 'refresh_token', 'client_id': _config.applicationId, 'refresh_token': refreshToken},
+        body: {
+          'grant_type': 'refresh_token',
+          'client_id': _config.applicationId,
+          'refresh_token': refreshToken,
+        },
       );
 
       if (response.statusCode == 200) {
@@ -496,7 +547,12 @@ class AuthressLoginClient extends ChangeNotifier {
         final userProfile = UserProfile.fromJson(payload);
         final expiresAt = DateTime.now().add(Duration(seconds: expiresIn));
 
-        await _storeTokens(newAccessToken, newRefreshToken ?? refreshToken, userProfile, expiresAt);
+        await _storeTokens(
+          newAccessToken,
+          newRefreshToken ?? refreshToken,
+          userProfile,
+          expiresAt,
+        );
 
         _setState(
           AuthStateAuthenticated(
@@ -549,7 +605,9 @@ class AuthressLoginClient extends ChangeNotifier {
   Map<String, String> _generatePKCECodes() {
     final random = Random.secure();
     final codeVerifierBytes = List.generate(32, (_) => random.nextInt(256));
-    final codeVerifier = base64Url.encode(codeVerifierBytes).replaceAll('=', '');
+    final codeVerifier = base64Url
+        .encode(codeVerifierBytes)
+        .replaceAll('=', '');
 
     // Generate code challenge using SHA256
     final bytes = utf8.encode(codeVerifier);
@@ -562,7 +620,9 @@ class AuthressLoginClient extends ChangeNotifier {
   /// Calculate anti-abuse hash (matches JavaScript proof-of-work implementation)
   Future<String> _calculateAntiAbuseHash(Map<String, String?> props) async {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final valueString = props.values.where((v) => v != null && v.isNotEmpty).join('|');
+    final valueString = props.values
+        .where((v) => v != null && v.isNotEmpty)
+        .join('|');
 
     developer.log('Anti-abuse hash props: $props');
     developer.log('Value string: "$valueString"');
@@ -585,7 +645,9 @@ class AuthressLoginClient extends ChangeNotifier {
 
       // Safety valve - don't run forever
       if (fineTuner > 100000) {
-        developer.log('WARNING: Anti-abuse hash calculation took more than 100k iterations');
+        developer.log(
+          'WARNING: Anti-abuse hash calculation took more than 100k iterations',
+        );
         break;
       }
     }
@@ -734,7 +796,9 @@ class AuthressLoginClient extends ChangeNotifier {
       'user_groups',
     ];
 
-    final customClaims = payload.entries.where((entry) => !standardClaims.contains(entry.key)).toList();
+    final customClaims = payload.entries
+        .where((entry) => !standardClaims.contains(entry.key))
+        .toList();
 
     if (customClaims.isNotEmpty) {
       developer.log('🔍 CUSTOM CLAIMS:');

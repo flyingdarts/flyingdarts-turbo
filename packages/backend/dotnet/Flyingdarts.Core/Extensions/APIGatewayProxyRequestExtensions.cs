@@ -19,10 +19,8 @@ public static class APIGatewayProxyRequestExtensions
     /// <param name="serializer">The Lambda serializer to use for deserialization.</param>
     /// <returns>A SocketMessage instance if the request body is valid; otherwise, null.</returns>
     /// <exception cref="ArgumentNullException">Thrown when request or serializer is null.</exception>
-    public static SocketMessage<T>? To<T>(
-        this APIGatewayProxyRequest request,
-        ILambdaSerializer serializer
-    ) where T : class
+    public static SocketMessage<T>? To<T>(this APIGatewayProxyRequest request, ILambdaSerializer serializer)
+        where T : class
     {
         ArgumentNullException.ThrowIfNull(request);
         ArgumentNullException.ThrowIfNull(serializer);

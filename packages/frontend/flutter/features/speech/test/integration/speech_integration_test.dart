@@ -45,7 +45,9 @@ void main() {
       expect(find.byKey(const Key("SpeechCommandStatusText")), findsOneWidget);
     });
 
-    testWidgets('Speech bloc initializes correctly', (WidgetTester tester) async {
+    testWidgets('Speech bloc initializes correctly', (
+      WidgetTester tester,
+    ) async {
       final bloc = getIt<SpeechBloc>();
 
       // Initial state should be initial
@@ -63,12 +65,15 @@ void main() {
 
       // State should be ready or error (depending on device capabilities)
       expect(
-        bloc.state.status == SpeechStatus.ready || bloc.state.status == SpeechStatus.error,
+        bloc.state.status == SpeechStatus.ready ||
+            bloc.state.status == SpeechStatus.error,
         isTrue,
       );
     });
 
-    testWidgets('Speech bloc handles result correctly', (WidgetTester tester) async {
+    testWidgets('Speech bloc handles result correctly', (
+      WidgetTester tester,
+    ) async {
       final bloc = getIt<SpeechBloc>();
 
       // Add a test result
@@ -91,7 +96,9 @@ void main() {
       expect(bloc.state.status, SpeechStatus.ready);
     });
 
-    testWidgets('Speech bloc handles errors correctly', (WidgetTester tester) async {
+    testWidgets('Speech bloc handles errors correctly', (
+      WidgetTester tester,
+    ) async {
       final bloc = getIt<SpeechBloc>();
 
       // Add a test error
