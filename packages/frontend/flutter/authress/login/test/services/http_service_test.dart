@@ -61,7 +61,10 @@ void main() {
 
       test('handles complex paths correctly', () {
         final url = httpService.buildUrl('/v1/clients/123/oauth/tokens');
-        expect(url, equals('https://test.authress.io/v1/clients/123/oauth/tokens'));
+        expect(
+          url,
+          equals('https://test.authress.io/v1/clients/123/oauth/tokens'),
+        );
       });
     });
 
@@ -178,7 +181,10 @@ void main() {
 
         expect(exception.message, equals('Server error'));
         expect(exception.statusCode, equals(500));
-        expect(exception.toString(), equals('HttpException: Server error (Status: 500)'));
+        expect(
+          exception.toString(),
+          equals('HttpException: Server error (Status: 500)'),
+        );
       });
     });
 
@@ -233,7 +239,10 @@ void main() {
           final service = HttpService(config);
           final url = service.buildUrl('/test');
 
-          expect(url, startsWith(config.authressApiUrl.replaceAll(RegExp(r'/$'), '')));
+          expect(
+            url,
+            startsWith(config.authressApiUrl.replaceAll(RegExp(r'/$'), '')),
+          );
           expect(url, endsWith('/test'));
 
           service.dispose();
@@ -296,7 +305,14 @@ void main() {
         (599, false, false, false, true),
       ];
 
-      for (final (statusCode, isSuccess, isClientError, isAuthError, isServerError) in testCases) {
+      for (final (
+            statusCode,
+            isSuccess,
+            isClientError,
+            isAuthError,
+            isServerError,
+          )
+          in testCases) {
         test('categorizes status code $statusCode correctly', () {
           final response = HttpResponse(
             statusCode: statusCode,
@@ -305,10 +321,26 @@ void main() {
             isSuccess: isSuccess,
           );
 
-          expect(response.isSuccess, equals(isSuccess), reason: 'isSuccess for $statusCode');
-          expect(response.isClientError, equals(isClientError), reason: 'isClientError for $statusCode');
-          expect(response.isAuthError, equals(isAuthError), reason: 'isAuthError for $statusCode');
-          expect(response.isServerError, equals(isServerError), reason: 'isServerError for $statusCode');
+          expect(
+            response.isSuccess,
+            equals(isSuccess),
+            reason: 'isSuccess for $statusCode',
+          );
+          expect(
+            response.isClientError,
+            equals(isClientError),
+            reason: 'isClientError for $statusCode',
+          );
+          expect(
+            response.isAuthError,
+            equals(isAuthError),
+            reason: 'isAuthError for $statusCode',
+          );
+          expect(
+            response.isServerError,
+            equals(isServerError),
+            reason: 'isServerError for $statusCode',
+          );
         });
       }
     });

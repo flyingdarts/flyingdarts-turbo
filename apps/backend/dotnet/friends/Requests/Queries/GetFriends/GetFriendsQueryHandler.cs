@@ -13,30 +13,17 @@ public class GetFriendsQueryHandler : IRequestHandler<GetFriendsQuery, APIGatewa
         _friendsDynamoDbService = friendsDynamoDbService;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(
-        GetFriendsQuery request,
-        CancellationToken cancellationToken
-    )
+    public async Task<APIGatewayProxyResponse> Handle(GetFriendsQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(
-                request.UserId,
-                cancellationToken
-            );
+            var user = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(request.UserId, cancellationToken);
 
-            Console.WriteLine(
-                $"[GetFriendsQueryHandler] Starting to get friends for user: {user.UserId}"
-            );
+            Console.WriteLine($"[GetFriendsQueryHandler] Starting to get friends for user: {user.UserId}");
 
-            var friends = await _friendsDynamoDbService.GetUserFriendsAsync(
-                user.UserId,
-                cancellationToken
-            );
+            var friends = await _friendsDynamoDbService.GetUserFriendsAsync(user.UserId, cancellationToken);
 
-            Console.WriteLine(
-                $"[GetFriendsQueryHandler] Found {friends.Count} friend relationships for user: {user.UserId}"
-            );
+            Console.WriteLine($"[GetFriendsQueryHandler] Found {friends.Count} friend relationships for user: {user.UserId}");
 
             var friendDtos = await ConvertToFriendDtosAsync(friends, cancellationToken);
             Console.WriteLine(
@@ -51,8 +38,8 @@ public class GetFriendsQueryHandler : IRequestHandler<GetFriendsQuery, APIGatewa
                 {
                     { "Access-Control-Allow-Origin", "*" },
                     { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
-                }
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
+                },
             };
         }
         catch (Exception ex)
@@ -65,8 +52,8 @@ public class GetFriendsQueryHandler : IRequestHandler<GetFriendsQuery, APIGatewa
                 {
                     { "Access-Control-Allow-Origin", "*" },
                     { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
-                }
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
+                },
             };
         }
     }
@@ -82,10 +69,7 @@ public class GetFriendsQueryHandler : IRequestHandler<GetFriendsQuery, APIGatewa
         {
             try
             {
-                var friendUser = await _friendsDynamoDbService.ReadUserAsync(
-                    relationship.FriendId,
-                    cancellationToken
-                );
+                var friendUser = await _friendsDynamoDbService.ReadUserAsync(relationship.FriendId, cancellationToken);
 
                 var openGameId = await OpenGameId(friendUser.UserId, cancellationToken);
 
@@ -99,7 +83,7 @@ public class GetFriendsQueryHandler : IRequestHandler<GetFriendsQuery, APIGatewa
                         IsOnline = !string.IsNullOrEmpty(friendUser.ConnectionId),
                         ConnectionId = friendUser.ConnectionId,
                         Picture = friendUser.Profile.Picture,
-                        OpenGameId = openGameId
+                        OpenGameId = openGameId,
                     }
                 );
             }
@@ -115,11 +99,7 @@ public class GetFriendsQueryHandler : IRequestHandler<GetFriendsQuery, APIGatewa
 
     private async Task<string?> OpenGameId(string userId, CancellationToken cancellationToken)
     {
-        if (
-            await _friendsDynamoDbService.GetOpenGameByUserIdAsync(long.Parse(userId), cancellationToken)
-                is var game
-            && game is not null
-        )
+        if (await _friendsDynamoDbService.GetOpenGameByUserIdAsync(long.Parse(userId), cancellationToken) is var game && game is not null)
         {
             return game.GameId.ToString();
         }

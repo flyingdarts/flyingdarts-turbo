@@ -1,17 +1,17 @@
-import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { Store } from "@ngrx/store";
-import { firstValueFrom, map, Observable } from "rxjs";
-import { AppStateActions, AppStateSelectors } from "src/app/state/app";
-import { loadX01GameSettingsFromStorage } from "src/app/state/app/app.actions";
-import { X01Settings } from "src/app/state/app/app.state";
-import { FlyingdartsSdkService } from "src/sdk/flyingdarts-sdk-service";
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { firstValueFrom, map, Observable } from 'rxjs';
+import { AppStateActions, AppStateSelectors } from 'src/app/state/app';
+import { loadX01GameSettingsFromStorage } from 'src/app/state/app/app.actions';
+import { X01Settings } from 'src/app/state/app/app.state';
+import { FlyingdartsSdkService } from 'src/sdk/flyingdarts-sdk-service';
 
 @Component({
-  selector: "app-home",
+  selector: 'app-home',
   imports: [CommonModule],
-  templateUrl: "./home-lobby.component.html",
+  templateUrl: './home-lobby.component.html',
   standalone: true,
 })
 export class HomeLobbyComponent {
@@ -24,7 +24,7 @@ export class HomeLobbyComponent {
   ) {
     this.x01SetsAndLegsText$ = this.store
       .select(AppStateSelectors.selectX01GameSettings)
-      .pipe(map((data) => `sets (${data.sets}) legs (${data.legs})`));
+      .pipe(map(data => `sets (${data.sets}) legs (${data.legs})`));
 
     this.store.dispatch(loadX01GameSettingsFromStorage());
   }
@@ -34,22 +34,14 @@ export class HomeLobbyComponent {
   }
 
   async goToSettings() {
-    await this.router.navigate(["/", "settings"]);
+    await this.router.navigate(['/', 'settings']);
   }
   async createGame() {
-    const userId = await firstValueFrom(
-      this.store.select(AppStateSelectors.selectUserId)
-    );
+    const userId = await firstValueFrom(this.store.select(AppStateSelectors.selectUserId));
 
-    const gameSettings = JSON.parse(
-      localStorage.getItem("X01GameSettings")!
-    ) as X01Settings;
+    const gameSettings = JSON.parse(localStorage.getItem('X01GameSettings')!) as X01Settings;
 
-    this.flyingdartsSdkService.instance?.createGame(
-      userId,
-      gameSettings.sets,
-      gameSettings.legs
-    );
+    this.flyingdartsSdkService.instance?.createGame(userId, gameSettings.sets, gameSettings.legs);
 
     this.store.dispatch(AppStateActions.setLoading({ loading: true }));
   }

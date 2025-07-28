@@ -1,4 +1,4 @@
-name: Deploy Lambda Function
+name: Deploy Angular App
 
 on:
   workflow_call:
@@ -9,9 +9,8 @@ on:
         type: string
       environment:
         description: "Environment to deploy to (for manual approval)"
-        required: false
+        required: true
         type: string
-        default: "staging"
     secrets:
       AWS_ACCESS_KEY_ID:
         description: "AWS Access Key ID"

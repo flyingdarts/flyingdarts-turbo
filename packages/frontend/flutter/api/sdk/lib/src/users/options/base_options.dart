@@ -6,8 +6,8 @@ class BaseOptionsFactory {
   static const dioReceiveTimeout = 20 * 1000;
 
   BaseOptions fromConfig(FlyingdartsApiConfig config) => BaseOptions(
-        baseUrl: config.rootUri.toString(),
-        connectTimeout: Duration(milliseconds: dioConnectTimeout),
-        receiveTimeout: Duration(milliseconds: dioReceiveTimeout),
-      );
+    baseUrl: config.rootUri.toString(),
+    connectTimeout: Duration(milliseconds: dioConnectTimeout),
+    receiveTimeout: Duration(milliseconds: dioReceiveTimeout),
+  );
 }

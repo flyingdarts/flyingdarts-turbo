@@ -34,7 +34,7 @@ class TokenService {
   Future<AuthStateAuthenticated?> loadStoredTokens() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      
+
       final token = prefs.getString(_tokenKey);
       final userProfileJson = prefs.getString(_userProfileKey);
       final expiryStr = prefs.getString(_tokenExpiryKey);
@@ -77,7 +77,10 @@ class TokenService {
   }
 
   /// Schedule automatic token refresh
-  void scheduleTokenRefresh(DateTime expiresAt, Future<bool> Function() refreshCallback) {
+  void scheduleTokenRefresh(
+    DateTime expiresAt,
+    Future<bool> Function() refreshCallback,
+  ) {
     cancelTokenRefresh();
 
     final refreshTime = expiresAt.subtract(const Duration(minutes: 5));
@@ -107,11 +110,15 @@ class TokenService {
       if (parts.length != 3) return null;
 
       String payload = parts[1];
-      
+
       // Add padding if needed
       switch (payload.length % 4) {
-        case 2: payload += '=='; break;
-        case 3: payload += '='; break;
+        case 2:
+          payload += '==';
+          break;
+        case 3:
+          payload += '=';
+          break;
       }
 
       final decodedBytes = base64Decode(payload);
@@ -126,4 +133,4 @@ class TokenService {
   void dispose() {
     cancelTokenRefresh();
   }
-} 
+}

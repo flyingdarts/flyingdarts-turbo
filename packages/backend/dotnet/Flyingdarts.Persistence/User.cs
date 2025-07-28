@@ -31,7 +31,7 @@
             {
                 AuthProviderUserId = authProviderUserId,
                 ConnectionId = connectionId,
-                Profile = userProfile
+                Profile = userProfile,
             };
             user.SortKey = $"{user.UserId}#{userProfile.Country}";
             user.LSI1 = $"{user.AuthProviderUserId}#{user.CreatedAt}";

@@ -1,1 +1,31 @@
-[{"description":"","id":"login","keyword":"Feature","line":3,"name":"Login","uri":"C:\\Users\\mikep\\OneDrive\\Bureaublad\\Flyingdarts\\Flyingdarts.Frontend.Flutter\\test_driver\\features\\login.feature","elements":[{"keyword":"Scenario","type":"scenario","id":"login;screen opens when button is clicked","name":"Screen opens when button is clicked","description":"","line":6,"steps":[{"keyword":"When ","name":"I tap the \"SIGN_IN_%WITH_FACEBOOK\" button","line":7,"match":{"location":"C:\\Users\\mikep\\OneDrive\\Bureaublad\\Flyingdarts\\Flyingdarts.Frontend.Flutter\\test_driver\\features\\login.feature:7"},"result":{"status":"passed","duration":4000000}}]}]}]
+[
+  {
+    "description": "",
+    "id": "login",
+    "keyword": "Feature",
+    "line": 3,
+    "name": "Login",
+    "uri": "C:\\Users\\mikep\\OneDrive\\Bureaublad\\Flyingdarts\\Flyingdarts.Frontend.Flutter\\test_driver\\features\\login.feature",
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "type": "scenario",
+        "id": "login;screen opens when button is clicked",
+        "name": "Screen opens when button is clicked",
+        "description": "",
+        "line": 6,
+        "steps": [
+          {
+            "keyword": "When ",
+            "name": "I tap the \"SIGN_IN_%WITH_FACEBOOK\" button",
+            "line": 7,
+            "match": {
+              "location": "C:\\Users\\mikep\\OneDrive\\Bureaublad\\Flyingdarts\\Flyingdarts.Frontend.Flutter\\test_driver\\features\\login.feature:7"
+            },
+            "result": { "status": "passed", "duration": 4000000 }
+          }
+        ]
+      }
+    ]
+  }
+]

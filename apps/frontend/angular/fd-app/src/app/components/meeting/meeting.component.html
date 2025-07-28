@@ -32,7 +32,10 @@
       (click)="openSettings()"
       class="dyte"
     ></dyte-settings-toggle>
-    <div class="row" [hidden]="!showSettings">
+    <div
+      class="row"
+      [hidden]="!showSettings"
+    >
       <div class="col g-0 me-3">
         <button
           [hidden]="!showSettings"
@@ -75,5 +78,10 @@
       ></video>
     </div>
   </div>
-  <audio #opponentAudio id="opponentAudio" class="rounded" hidden></audio>
+  <audio
+    #opponentAudio
+    id="opponentAudio"
+    class="rounded"
+    hidden
+  ></audio>
 </dyte-ui-provider>

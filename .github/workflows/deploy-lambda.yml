@@ -15,7 +15,6 @@ on:
         description: "Environment to deploy to (for manual approval)"
         required: true
         type: string
-        default: "development"
     secrets:
       AWS_REGION:
         description: "AWS Region"

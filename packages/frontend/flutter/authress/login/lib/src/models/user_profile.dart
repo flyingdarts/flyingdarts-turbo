@@ -35,22 +35,35 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     // Extract claims - could be nested or the entire JWT payload
     Map<String, dynamic>? claims;
-    
+
     if (json['claims'] != null && json['claims'] is Map<String, dynamic>) {
       // Claims are in a nested object
       claims = json['claims'] as Map<String, dynamic>;
     } else {
       // JWT payload itself contains the claims - extract non-standard claims
       final standardJwtClaims = {
-        'sub', 'email', 'name', 'given_name', 'picture', 'avatar',
-        'iss', 'aud', 'exp', 'iat', 'nbf', 'jti', 'userId', 'createdDate', 'lastLoginDate'
+        'sub',
+        'email',
+        'name',
+        'given_name',
+        'picture',
+        'avatar',
+        'iss',
+        'aud',
+        'exp',
+        'iat',
+        'nbf',
+        'jti',
+        'userId',
+        'createdDate',
+        'lastLoginDate',
       };
-      
+
       // Include all non-standard claims (including roles, groups, etc.)
       claims = Map<String, dynamic>.fromEntries(
-        json.entries.where((entry) => !standardJwtClaims.contains(entry.key))
+        json.entries.where((entry) => !standardJwtClaims.contains(entry.key)),
       );
-      
+
       // Ensure we have something even if empty
       if (claims.isEmpty) claims = null;
     }
@@ -61,8 +74,12 @@ class UserProfile {
       name: json['name'] ?? json['given_name'],
       picture: json['picture'] ?? json['avatar'],
       claims: claims,
-      createdDate: json['createdDate'] != null ? DateTime.tryParse(json['createdDate']) : null,
-      lastLoginDate: json['lastLoginDate'] != null ? DateTime.tryParse(json['lastLoginDate']) : null,
+      createdDate: json['createdDate'] != null
+          ? DateTime.tryParse(json['createdDate'])
+          : null,
+      lastLoginDate: json['lastLoginDate'] != null
+          ? DateTime.tryParse(json['lastLoginDate'])
+          : null,
     );
   }
 

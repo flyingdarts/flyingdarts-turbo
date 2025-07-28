@@ -24,10 +24,7 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         _mockMeetingService = new Mock<IMeetingService>();
         _mockDynamoDbService = new Mock<IDynamoDbService>();
 
-        _handler = new OnConnectCommandHandler(
-            _mockMeetingService.Object,
-            _mockDynamoDbService.Object
-        );
+        _handler = new OnConnectCommandHandler(_mockMeetingService.Object, _mockDynamoDbService.Object);
 
         Setup(services =>
         {
@@ -37,9 +34,7 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
             services.AddSingleton(_handler);
         });
 
-        _lambdaHandler = new MediatRLambdaHandler<OnConnectCommand>(
-            ServiceProvider.GetRequiredService<IMediator>()
-        );
+        _lambdaHandler = new MediatRLambdaHandler<OnConnectCommand>(ServiceProvider.GetRequiredService<IMediator>());
     }
 
     /// <summary>
@@ -48,9 +43,7 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
     protected override void ConfigureMockServices(IServiceCollection services)
     {
         // Configure real MediatR for testing with the correct assembly
-        services.AddMediatR(
-            cfg => cfg.RegisterServicesFromAssembly(typeof(OnConnectCommand).Assembly)
-        );
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(OnConnectCommand).Assembly));
     }
 
     [Fact]
@@ -60,32 +53,15 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         var connectionId = "test-connection-id";
         var authProviderUserId = "test-auth-provider-user-id";
         var meetingId = "9a9c7096-1ca5-440e-bb59-b612a56145e9";
-        var command = new OnConnectCommand
-        {
-            ConnectionId = connectionId,
-            AuthProviderUserId = authProviderUserId
-        };
+        var command = new OnConnectCommand { ConnectionId = connectionId, AuthProviderUserId = authProviderUserId };
 
         // Mock DynamoDbService to return null (user not found)
         _mockDynamoDbService
-            .Setup(
-                x =>
-                    x.ReadUserByAuthProviderUserIdAsync(
-                        authProviderUserId,
-                        It.IsAny<CancellationToken>()
-                    )
-            )
-            .ThrowsAsync(
-                new DynamoDbService.UserNotFoundException(
-                    nameof(authProviderUserId),
-                    authProviderUserId
-                )
-            );
+            .Setup(x => x.ReadUserByAuthProviderUserIdAsync(authProviderUserId, It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new DynamoDbService.UserNotFoundException(nameof(authProviderUserId), authProviderUserId));
 
         // Mock DynamoDbService to handle user creation
-        _mockDynamoDbService
-            .Setup(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+        _mockDynamoDbService.Setup(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
         // Mock MeetingService to return a meeting ID
         _mockMeetingService
@@ -100,21 +76,14 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
 
         // Verify that ReadUserByAuthProviderUserIdAsync was called
         _mockDynamoDbService.Verify(
-            x =>
-                x.ReadUserByAuthProviderUserIdAsync(
-                    authProviderUserId,
-                    It.IsAny<CancellationToken>()
-                ),
+            x => x.ReadUserByAuthProviderUserIdAsync(authProviderUserId, It.IsAny<CancellationToken>()),
             Times.Once
         );
 
         // Verify that WriteUserAsync was called twice:
         // 1. When creating the new user
         // 2. When creating a new meeting
-        _mockDynamoDbService.Verify(
-            x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
-            Times.Exactly(2)
-        );
+        _mockDynamoDbService.Verify(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
     }
 
     [Fact]
@@ -125,11 +94,7 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         var authProviderUserId = "test-auth-provider-user-id";
         var testUserId = DateTime.UtcNow.Ticks.ToString();
         var meetingId = Guid.Parse("9a9c7096-1ca5-440e-bb59-b612a56145e9");
-        var command = new OnConnectCommand
-        {
-            ConnectionId = connectionId,
-            AuthProviderUserId = authProviderUserId
-        };
+        var command = new OnConnectCommand { ConnectionId = connectionId, AuthProviderUserId = authProviderUserId };
 
         // Create an existing user
         var existingUser = new User
@@ -141,8 +106,8 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
             {
                 UserName = "Test User",
                 Email = "test@example.com",
-                Country = "US"
-            }
+                Country = "US",
+            },
         };
 
         var existingMeeting = new Meeting { Id = meetingId };
@@ -150,29 +115,19 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         var expectedResponseBody = new Dictionary<string, string?>
         {
             { "UserId", testUserId },
-            { "MeetingIdentifier", existingMeeting.Id.ToString() }
+            { "MeetingIdentifier", existingMeeting.Id.ToString() },
         };
 
         // Mock DynamoDbService to return existing user
         _mockDynamoDbService
-            .Setup(
-                x =>
-                    x.ReadUserByAuthProviderUserIdAsync(
-                        authProviderUserId,
-                        It.IsAny<CancellationToken>()
-                    )
-            )
+            .Setup(x => x.ReadUserByAuthProviderUserIdAsync(authProviderUserId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingUser);
 
         // Mock MeetingService to return existing meeting
-        _mockMeetingService
-            .Setup(x => x.GetByNameAsync(testUserId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(existingMeeting);
+        _mockMeetingService.Setup(x => x.GetByNameAsync(testUserId, It.IsAny<CancellationToken>())).ReturnsAsync(existingMeeting);
 
         // Mock DynamoDbService to handle user update
-        _mockDynamoDbService
-            .Setup(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+        _mockDynamoDbService.Setup(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
         // Act
         var result = await _lambdaHandler.Handle(command);
@@ -183,31 +138,18 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
 
         // Verify that ReadUserByAuthProviderUserIdAsync was called
         _mockDynamoDbService.Verify(
-            x =>
-                x.ReadUserByAuthProviderUserIdAsync(
-                    authProviderUserId,
-                    It.IsAny<CancellationToken>()
-                ),
+            x => x.ReadUserByAuthProviderUserIdAsync(authProviderUserId, It.IsAny<CancellationToken>()),
             Times.Once
         );
 
         // Verify that GetByNameAsync was called to check for existing meeting
-        _mockMeetingService.Verify(
-            x => x.GetByNameAsync(testUserId, It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _mockMeetingService.Verify(x => x.GetByNameAsync(testUserId, It.IsAny<CancellationToken>()), Times.Once);
 
         // Verify that CreateAsync was NOT called (since meeting already exists)
-        _mockMeetingService.Verify(
-            x => x.CreateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()),
-            Times.Never
-        );
+        _mockMeetingService.Verify(x => x.CreateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
 
         // Verify that WriteUserAsync was NOT called (since user exists and meeting exists)
-        _mockDynamoDbService.Verify(
-            x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
-            Times.Never
-        );
+        _mockDynamoDbService.Verify(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -217,11 +159,7 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         var connectionId = "test-connection-id";
         var authProviderUserId = "test-auth-provider-user-id";
         var existingUserId = "existing-user-id";
-        var command = new OnConnectCommand
-        {
-            ConnectionId = connectionId,
-            AuthProviderUserId = authProviderUserId
-        };
+        var command = new OnConnectCommand { ConnectionId = connectionId, AuthProviderUserId = authProviderUserId };
 
         // Create an existing user
         var existingUser = new User
@@ -233,26 +171,18 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
             {
                 UserName = "Test User",
                 Email = "test@example.com",
-                Country = "US"
-            }
+                Country = "US",
+            },
         };
         var newMeetingId = Guid.NewGuid();
 
         // Mock DynamoDbService to return existing user
         _mockDynamoDbService
-            .Setup(
-                x =>
-                    x.ReadUserByAuthProviderUserIdAsync(
-                        authProviderUserId,
-                        It.IsAny<CancellationToken>()
-                    )
-            )
+            .Setup(x => x.ReadUserByAuthProviderUserIdAsync(authProviderUserId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(existingUser);
 
         // Mock MeetingService to return null (no existing meeting)
-        _mockMeetingService
-            .Setup(x => x.GetByNameAsync(existingUserId, It.IsAny<CancellationToken>()))
-            .ReturnsAsync((Meeting?)null);
+        _mockMeetingService.Setup(x => x.GetByNameAsync(existingUserId, It.IsAny<CancellationToken>())).ReturnsAsync((Meeting?)null);
 
         // Mock MeetingService to return a new meeting ID
         _mockMeetingService
@@ -260,9 +190,7 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
             .ReturnsAsync(new Meeting { Id = newMeetingId });
 
         // Mock DynamoDbService to handle user update
-        _mockDynamoDbService
-            .Setup(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()))
-            .Returns(Task.CompletedTask);
+        _mockDynamoDbService.Setup(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
         // Act
         var result = await _lambdaHandler.Handle(command);
@@ -272,31 +200,18 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
 
         // Verify that ReadUserByAuthProviderUserIdAsync was called
         _mockDynamoDbService.Verify(
-            x =>
-                x.ReadUserByAuthProviderUserIdAsync(
-                    authProviderUserId,
-                    It.IsAny<CancellationToken>()
-                ),
+            x => x.ReadUserByAuthProviderUserIdAsync(authProviderUserId, It.IsAny<CancellationToken>()),
             Times.Once
         );
 
         // Verify that GetByNameAsync was called to check for existing meeting
-        _mockMeetingService.Verify(
-            x => x.GetByNameAsync(existingUserId, It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _mockMeetingService.Verify(x => x.GetByNameAsync(existingUserId, It.IsAny<CancellationToken>()), Times.Once);
 
         // Verify that CreateAsync was called to create a new meeting
-        _mockMeetingService.Verify(
-            x => x.CreateAsync(existingUserId, It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _mockMeetingService.Verify(x => x.CreateAsync(existingUserId, It.IsAny<CancellationToken>()), Times.Once);
 
         // Verify that WriteUserAsync was called to update the user with the new meeting ID
-        _mockDynamoDbService.Verify(
-            x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        _mockDynamoDbService.Verify(x => x.WriteUserAsync(It.IsAny<User>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -305,23 +220,13 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         // Arrange
         var connectionId = "test-connection-id";
         var authProviderUserId = "test-auth-provider-user-id";
-        var command = new OnConnectCommand
-        {
-            ConnectionId = connectionId,
-            AuthProviderUserId = authProviderUserId
-        };
+        var command = new OnConnectCommand { ConnectionId = connectionId, AuthProviderUserId = authProviderUserId };
 
-        var expectedResponse = new APIGatewayProxyResponse
-        {
-            StatusCode = 201,
-            Body = "test response"
-        };
+        var expectedResponse = new APIGatewayProxyResponse { StatusCode = 201, Body = "test response" };
 
         // Create a Moq mock for IMediator
         var mockMediator = new Mock<IMediator>();
-        mockMediator
-            .Setup(x => x.Send(command, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(expectedResponse);
+        mockMediator.Setup(x => x.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(expectedResponse);
 
         // Use the mock mediator for this handler
         var handler = new MediatRLambdaHandler<OnConnectCommand>(mockMediator.Object);
@@ -346,28 +251,19 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         var mockMediator = new Mock<IMediator>();
         mockMediator
             .Setup(x => x.Send(It.IsAny<OnConnectCommand>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(
-                Flyingdarts.Lambda.Core.Infrastructure.ResponseBuilder.SuccessJson(new { }, 201)
-            );
+            .ReturnsAsync(Flyingdarts.Lambda.Core.Infrastructure.ResponseBuilder.SuccessJson(new { }, 201));
 
         // Use the mock mediator for this handler
         var handler = new MediatRLambdaHandler<OnConnectCommand>(mockMediator.Object);
 
         // Act & Assert using the base test utilities
         // This demonstrates how to use the base test utilities for WebSocket requests
-        var command = new OnConnectCommand
-        {
-            ConnectionId = connectionId,
-            AuthProviderUserId = userId
-        };
+        var command = new OnConnectCommand { ConnectionId = connectionId, AuthProviderUserId = userId };
 
         var result = await handler.Handle(command);
 
         // Assert
         AssertSuccess(result, 201);
-        mockMediator.Verify(
-            x => x.Send(It.IsAny<OnConnectCommand>(), It.IsAny<CancellationToken>()),
-            Times.Once
-        );
+        mockMediator.Verify(x => x.Send(It.IsAny<OnConnectCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 }

@@ -12,11 +12,11 @@ class ProfileState {
   );
 
   static ProfileState get initialState => ProfileState(
-        '',
-        '',
-        '',
-        '',
-      );
+    '',
+    '',
+    '',
+    '',
+  );
 
   ProfileState copyWith({
     String? userId,

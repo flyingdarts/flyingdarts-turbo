@@ -48,5 +48,9 @@ public interface IDyteApiClientWrapper
     /// <param name="request">The participant request.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The participant response.</returns>
-    Task<ParticipantsPostResponse> AddParticipantAsync(string meetingId, AddParticipantRequest request, CancellationToken cancellationToken);
-} 
+    Task<ParticipantsPostResponse> AddParticipantAsync(
+        string meetingId,
+        AddParticipantRequest request,
+        CancellationToken cancellationToken
+    );
+}

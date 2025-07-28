@@ -8,7 +8,8 @@ class LocaleSettings {
 
   const LocaleSettings({required this.localeIdentifier});
 
-  factory LocaleSettings.fromJson(Map<String, dynamic> json) => _$LocaleSettingsFromJson(json);
+  factory LocaleSettings.fromJson(Map<String, dynamic> json) =>
+      _$LocaleSettingsFromJson(json);
 
   Map<String, dynamic> toJson() => _$LocaleSettingsToJson(this);
 }

@@ -36,10 +36,15 @@ class AuthenticationService extends ChangeNotifier {
        _cryptoService = cryptoService;
 
   /// Factory constructor with dependency injection
-  factory AuthenticationService.create({required AuthressConfiguration config, DeepLinkConfig? deepLinkConfig}) {
+  factory AuthenticationService.create({
+    required AuthressConfiguration config,
+    DeepLinkConfig? deepLinkConfig,
+  }) {
     final tokenService = TokenService();
     final httpService = HttpService(config);
-    final deepLinkService = DeepLinkService(deepLinkConfig ?? const DeepLinkConfig());
+    final deepLinkService = DeepLinkService(
+      deepLinkConfig ?? const DeepLinkConfig(),
+    );
     final cryptoService = CryptoService();
 
     return AuthenticationService._(
@@ -58,10 +63,14 @@ class AuthenticationService extends ChangeNotifier {
   bool get isAuthenticated => _state is AuthStateAuthenticated;
 
   /// Get the current access token if available
-  String? get accessToken => _state is AuthStateAuthenticated ? (_state as AuthStateAuthenticated).accessToken : null;
+  String? get accessToken => _state is AuthStateAuthenticated
+      ? (_state as AuthStateAuthenticated).accessToken
+      : null;
 
   /// Get the current user profile if available
-  UserProfile? get userProfile => _state is AuthStateAuthenticated ? (_state as AuthStateAuthenticated).user : null;
+  UserProfile? get userProfile => _state is AuthStateAuthenticated
+      ? (_state as AuthStateAuthenticated).user
+      : null;
 
   /// Initialize the service and check for existing sessions
   Future<void> initialize() async {
@@ -118,33 +127,52 @@ class AuthenticationService extends ChangeNotifier {
           await launchUrl(
             Uri.parse(authUrl),
             mode: LaunchMode.inAppWebView,
-            webViewConfiguration: const WebViewConfiguration(enableJavaScript: true, enableDomStorage: true),
+            webViewConfiguration: const WebViewConfiguration(
+              enableJavaScript: true,
+              enableDomStorage: true,
+            ),
           );
         } else {
           // Use external browser on other platforms
-          await launchUrl(Uri.parse(authUrl), mode: LaunchMode.externalApplication);
+          await launchUrl(
+            Uri.parse(authUrl),
+            mode: LaunchMode.externalApplication,
+          );
         }
 
         // Wait for deep link callback
         final authParams = await _deepLinkService.waitForAuthCallback();
 
         if (authParams == null) {
-          _setState(const AuthStateError(message: 'Authentication was cancelled or timed out'));
+          _setState(
+            const AuthStateError(
+              message: 'Authentication was cancelled or timed out',
+            ),
+          );
           return;
         }
 
         // Process authentication result
         await _processAuthenticationCallback(authParams);
       } else {
-        _setState(const AuthStateError(message: 'Cannot launch authentication URL'));
+        _setState(
+          const AuthStateError(message: 'Cannot launch authentication URL'),
+        );
       }
     } catch (e) {
-      _setState(AuthStateError(message: 'Authentication failed: ${e.toString()}', error: e));
+      _setState(
+        AuthStateError(
+          message: 'Authentication failed: ${e.toString()}',
+          error: e,
+        ),
+      );
     }
   }
 
   /// Process authentication callback
-  Future<void> _processAuthenticationCallback(Map<String, String> params) async {
+  Future<void> _processAuthenticationCallback(
+    Map<String, String> params,
+  ) async {
     final error = params['error'];
     final code = params['code'];
     final nonce = params['nonce'];
@@ -188,15 +216,21 @@ class AuthenticationService extends ChangeNotifier {
       'codeChallenge': pkceCodes.codeChallenge,
       'applicationId': _config.applicationId,
       if (connectionId != null) 'connectionId': connectionId,
-      if (tenantLookupIdentifier != null) 'tenantLookupIdentifier': tenantLookupIdentifier,
+      if (tenantLookupIdentifier != null)
+        'tenantLookupIdentifier': tenantLookupIdentifier,
       if (additionalParams != null) ...additionalParams,
     };
 
     try {
-      final response = await _httpService.post('/api/authentication', body: requestBody);
+      final response = await _httpService.post(
+        '/api/authentication',
+        body: requestBody,
+      );
 
       if (!response.isSuccess) {
-        throw Exception('Failed to get authentication URL: ${response.statusCode} ${response.body}');
+        throw Exception(
+          'Failed to get authentication URL: ${response.statusCode} ${response.body}',
+        );
       }
 
       return response.jsonBody['authenticationUrl'] as String;
@@ -209,7 +243,9 @@ class AuthenticationService extends ChangeNotifier {
   Future<void> _exchangeCodeForTokens(String code, String nonce) async {
     final codeVerifier = await _retrievePKCEVerifier();
     if (codeVerifier == null) {
-      throw Exception('Code verifier not found - authentication flow corrupted');
+      throw Exception(
+        'Code verifier not found - authentication flow corrupted',
+      );
     }
 
     // Calculate anti-abuse hash for token exchange
@@ -229,10 +265,15 @@ class AuthenticationService extends ChangeNotifier {
     };
 
     try {
-      final response = await _httpService.post('/api/authentication/$nonce/tokens', body: requestBody);
+      final response = await _httpService.post(
+        '/api/authentication/$nonce/tokens',
+        body: requestBody,
+      );
 
       if (!response.isSuccess) {
-        throw Exception('Token exchange failed: ${response.statusCode} ${response.body}');
+        throw Exception(
+          'Token exchange failed: ${response.statusCode} ${response.body}',
+        );
       }
 
       final data = response.jsonBody;
@@ -326,7 +367,9 @@ class AuthenticationService extends ChangeNotifier {
 
       // Get the updated state
       final updatedState = _state;
-      return updatedState is AuthStateAuthenticated ? updatedState.accessToken : null;
+      return updatedState is AuthStateAuthenticated
+          ? updatedState.accessToken
+          : null;
     }
 
     return currentState.accessToken;
@@ -338,7 +381,10 @@ class AuthenticationService extends ChangeNotifier {
     if (token == null) return null;
 
     try {
-      final response = await _httpService.get('/v1/users/me', headers: {'Authorization': 'Bearer $token'});
+      final response = await _httpService.get(
+        '/v1/users/me',
+        headers: {'Authorization': 'Bearer $token'},
+      );
 
       if (response.isSuccess) {
         return UserProfile.fromJson(response.jsonBody);
@@ -374,7 +420,9 @@ class AuthenticationService extends ChangeNotifier {
   /// Update internal state and notify listeners
   void _setState(AuthState newState) {
     if (_state != newState) {
-      debugPrint('🔄 AuthService: ${_state.runtimeType} → ${newState.runtimeType}');
+      debugPrint(
+        '🔄 AuthService: ${_state.runtimeType} → ${newState.runtimeType}',
+      );
       _state = newState;
       notifyListeners();
     }

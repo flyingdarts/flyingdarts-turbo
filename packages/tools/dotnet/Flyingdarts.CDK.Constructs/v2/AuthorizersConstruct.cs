@@ -5,12 +5,7 @@ public class AuthorizersConstruct : Construct
     public WebSocketLambdaAuthorizer WebSocketApiConnectAuthorizer { get; }
     public RequestAuthorizer UsersAuthorizer { get; }
 
-    public AuthorizersConstruct(
-        Construct scope,
-        string id,
-        string environment,
-        LambdaConstruct lambdaConstruct
-    )
+    public AuthorizersConstruct(Construct scope, string id, string environment, LambdaConstruct lambdaConstruct)
         : base(scope, id)
     {
         UsersAuthorizer = new RequestAuthorizer(
@@ -20,7 +15,7 @@ public class AuthorizersConstruct : Construct
             {
                 AuthorizerName = $"FlyingdartsBackendApiUsersAuthorizer{environment}",
                 Handler = lambdaConstruct.AuthLambda,
-                IdentitySources = new[] { IdentitySource.Header("Authorization") }
+                IdentitySources = new[] { IdentitySource.Header("Authorization") },
             }
         );
 
@@ -30,7 +25,7 @@ public class AuthorizersConstruct : Construct
             new WebSocketLambdaAuthorizerProps
             {
                 AuthorizerName = $"FlyingdartsBackendApiOnConnectAuthorizer{environment}",
-                IdentitySource = new[] { "route.request.querystring.token" }
+                IdentitySource = new[] { "route.request.querystring.token" },
             }
         );
     }

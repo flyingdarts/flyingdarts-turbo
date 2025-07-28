@@ -20,11 +20,14 @@ class _SplashPageState extends State<SplashPage> {
     });
   }
 
-  Future<void> _initializeAuth() async { // COMMENT: DO WE NEED THIS REALLY?
+  Future<void> _initializeAuth() async {
+    // COMMENT: DO WE NEED THIS REALLY?
     // The AuthressProvider handles initialization automatically
     // We can access the context if needed for any additional setup
     final authContext = context.authress;
-    debugPrint('🚀 SplashPage: Auth context available - ${authContext.isAuthenticated}');
+    debugPrint(
+      '🚀 SplashPage: Auth context available - ${authContext.isAuthenticated}',
+    );
   }
 
   @override
@@ -56,9 +59,9 @@ class _SplashPageState extends State<SplashPage> {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // App name
             Text(
               'Flutter Auth Demo',
@@ -67,25 +70,25 @@ class _SplashPageState extends State<SplashPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             Text(
               'with Authress Login',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Colors.white.withValues(alpha: 0.8),
               ),
             ),
-            
+
             const SizedBox(height: 48),
-            
+
             // Loading indicator
             const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             Text(
               'Initializing...',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -97,4 +100,4 @@ class _SplashPageState extends State<SplashPage> {
       ),
     );
   }
-} 
+}

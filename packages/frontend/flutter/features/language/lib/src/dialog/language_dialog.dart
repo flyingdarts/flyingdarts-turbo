@@ -59,21 +59,26 @@ class LanguageDialog extends StatelessWidget {
                             (LocaleName item) => Column(
                               children: [
                                 Padding(
-                                  padding: EdgeInsets.only(left: 20, right: 20, top: 0),
+                                  padding: EdgeInsets.only(
+                                    left: 20,
+                                    right: 20,
+                                    top: 0,
+                                  ),
                                   child: MaterialButton(
-                                      onPressed: () {
-                                        cubit.setPreferedLocale(item);
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(item.name)),
+                                    onPressed: () {
+                                      cubit.setPreferedLocale(item);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(item.name),
+                                  ),
                                 ),
                               ],
                             ),
                           )
-                          .toList()
+                          .toList(),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),

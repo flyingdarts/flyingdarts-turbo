@@ -1,4 +1,5 @@
 ﻿namespace Flyingdarts.Metadata.Services.Dtos;
+
 /// <summary>
 /// Represents game information in the metadata.
 /// </summary>

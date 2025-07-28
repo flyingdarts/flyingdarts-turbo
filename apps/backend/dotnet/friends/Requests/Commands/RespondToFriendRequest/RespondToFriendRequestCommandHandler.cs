@@ -8,8 +8,7 @@ using Flyingdarts.Core.Models;
 
 namespace Flyingdarts.Backend.Friends.Api.Requests.Commands.RespondToFriendRequest;
 
-public class RespondToFriendRequestCommandHandler
-    : IRequestHandler<RespondToFriendRequestCommand, APIGatewayProxyResponse>
+public class RespondToFriendRequestCommandHandler : IRequestHandler<RespondToFriendRequestCommand, APIGatewayProxyResponse>
 {
     private readonly IFriendsDynamoDbService _friendsDynamoDbService;
     private readonly IAmazonApiGatewayManagementApi _apiGatewayClient;
@@ -23,38 +22,27 @@ public class RespondToFriendRequestCommandHandler
         _apiGatewayClient = apiGatewayClient;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(
-        RespondToFriendRequestCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<APIGatewayProxyResponse> Handle(RespondToFriendRequestCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(
-                request.UserId,
-                cancellationToken
-            );
+            var user = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(request.UserId, cancellationToken);
 
             Console.WriteLine(
                 $"[RespondToFriendRequestCommandHandler] User {user.UserId} responding to friend request {request.RequestId} with Accept={request.Accept}"
             );
 
             // Find the friend request
-            var friendRequest = await _friendsDynamoDbService.GetFriendRequestAsync(
-                request.RequestId,
-                cancellationToken
-            );
+            var friendRequest = await _friendsDynamoDbService.GetFriendRequestAsync(request.RequestId, cancellationToken);
 
             if (friendRequest == null)
             {
-                Console.WriteLine(
-                    $"[RespondToFriendRequestCommandHandler] Friend request not found: {request.RequestId}"
-                );
+                Console.WriteLine($"[RespondToFriendRequestCommandHandler] Friend request not found: {request.RequestId}");
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 404,
                     Body = JsonSerializer.Serialize(new { error = "Friend request not found" }),
-                    Headers = GetCorsHeaders()
+                    Headers = GetCorsHeaders(),
                 };
             }
 
@@ -67,10 +55,8 @@ public class RespondToFriendRequestCommandHandler
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 403,
-                    Body = JsonSerializer.Serialize(
-                        new { error = "Not authorized to respond to this request" }
-                    ),
-                    Headers = GetCorsHeaders()
+                    Body = JsonSerializer.Serialize(new { error = "Not authorized to respond to this request" }),
+                    Headers = GetCorsHeaders(),
                 };
             }
 
@@ -83,10 +69,8 @@ public class RespondToFriendRequestCommandHandler
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
-                    Body = JsonSerializer.Serialize(
-                        new { error = "Friend request is no longer pending" }
-                    ),
-                    Headers = GetCorsHeaders()
+                    Body = JsonSerializer.Serialize(new { error = "Friend request is no longer pending" }),
+                    Headers = GetCorsHeaders(),
                 };
             }
 
@@ -95,25 +79,16 @@ public class RespondToFriendRequestCommandHandler
                 Console.WriteLine(
                     $"[RespondToFriendRequestCommandHandler] Accepting friend request {request.RequestId} from {friendRequest.RequesterId} to {friendRequest.TargetUserId}"
                 );
-                await _friendsDynamoDbService.AcceptFriendRequestAsync(
-                    friendRequest,
-                    cancellationToken
-                );
-                Console.WriteLine(
-                    $"[RespondToFriendRequestCommandHandler] Successfully accepted friend request {request.RequestId}"
-                );
+                await _friendsDynamoDbService.AcceptFriendRequestAsync(friendRequest, cancellationToken);
+                Console.WriteLine($"[RespondToFriendRequestCommandHandler] Successfully accepted friend request {request.RequestId}");
 
-                await NotifyFriendsRequestUser(
-                    friendRequest.RequesterId,
-                    friendRequest,
-                    cancellationToken
-                );
+                await NotifyFriendsRequestUser(friendRequest.RequesterId, friendRequest, cancellationToken);
 
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 200,
                     Body = JsonSerializer.Serialize(new { message = "Friend request accepted" }),
-                    Headers = GetCorsHeaders()
+                    Headers = GetCorsHeaders(),
                 };
             }
             else
@@ -121,19 +96,14 @@ public class RespondToFriendRequestCommandHandler
                 Console.WriteLine(
                     $"[RespondToFriendRequestCommandHandler] Declining friend request {request.RequestId} from {friendRequest.RequesterId} to {friendRequest.TargetUserId}"
                 );
-                await _friendsDynamoDbService.DeclineFriendRequestAsync(
-                    friendRequest,
-                    cancellationToken
-                );
-                Console.WriteLine(
-                    $"[RespondToFriendRequestCommandHandler] Successfully declined friend request {request.RequestId}"
-                );
+                await _friendsDynamoDbService.DeclineFriendRequestAsync(friendRequest, cancellationToken);
+                Console.WriteLine($"[RespondToFriendRequestCommandHandler] Successfully declined friend request {request.RequestId}");
 
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 200,
                     Body = JsonSerializer.Serialize(new { message = "Friend request declined" }),
-                    Headers = GetCorsHeaders()
+                    Headers = GetCorsHeaders(),
                 };
             }
         }
@@ -143,7 +113,7 @@ public class RespondToFriendRequestCommandHandler
             {
                 StatusCode = 500,
                 Body = JsonSerializer.Serialize(new { error = ex.Message }),
-                Headers = GetCorsHeaders()
+                Headers = GetCorsHeaders(),
             };
         }
     }
@@ -154,25 +124,18 @@ public class RespondToFriendRequestCommandHandler
         CancellationToken cancellationToken
     )
     {
-        var user = await _friendsDynamoDbService.ReadUserAsync(
-            requestTargetUserId,
-            cancellationToken
-        );
+        var user = await _friendsDynamoDbService.ReadUserAsync(requestTargetUserId, cancellationToken);
         var connectionId = user.ConnectionId;
         var socketMessage = new SocketMessage<string>
         {
             ConnectionId = connectionId,
             Action = "friends/requests/responded",
-            Message = JsonSerializer.Serialize(friendRequest)
+            Message = JsonSerializer.Serialize(friendRequest),
         };
         var messageJson = JsonSerializer.Serialize(socketMessage);
         var messageBytes = Encoding.UTF8.GetBytes(messageJson);
         var messageStream = new MemoryStream(messageBytes);
-        var postConnectionRequest = new PostToConnectionRequest
-        {
-            ConnectionId = connectionId,
-            Data = messageStream
-        };
+        var postConnectionRequest = new PostToConnectionRequest { ConnectionId = connectionId, Data = messageStream };
 
         await _apiGatewayClient.PostToConnectionAsync(postConnectionRequest, cancellationToken);
     }
@@ -183,7 +146,7 @@ public class RespondToFriendRequestCommandHandler
         {
             { "Access-Control-Allow-Origin", "*" },
             { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-            { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+            { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
         };
     }
 }

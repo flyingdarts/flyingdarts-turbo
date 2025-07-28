@@ -1,25 +1,25 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { FriendsRootComponent } from "./friends-root.component";
-import { FriendsListComponent } from "./friends-list/friends-list.component";
-import { AddFriendComponent } from "./add-friend/add-friend.component";
-import { FriendRequestsComponent } from "./friend-requests/friend-requests.component";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { AddFriendComponent } from './add-friend/add-friend.component';
+import { FriendRequestsComponent } from './friend-requests/friend-requests.component';
+import { FriendsListComponent } from './friends-list/friends-list.component';
+import { FriendsRootComponent } from './friends-root.component';
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     component: FriendsRootComponent,
     children: [
       {
-        path: "",
+        path: '',
         component: FriendsListComponent,
       },
       {
-        path: "add",
+        path: 'add',
         component: AddFriendComponent,
       },
       {
-        path: "requests",
+        path: 'requests',
         component: FriendRequestsComponent,
       },
     ],

@@ -24,9 +24,7 @@ public abstract class ServiceFactory
     /// </summary>
     /// <param name="configureServices">Action to configure additional services</param>
     /// <returns>The configured service provider</returns>
-    public static ServiceProvider GetServiceProvider(
-        Action<IServiceCollection, IConfiguration> configureServices
-    )
+    public static ServiceProvider GetServiceProvider(Action<IServiceCollection, IConfiguration> configureServices)
     {
         var configuration = BuildConfiguration();
         var services = new ServiceCollection();
@@ -44,9 +42,7 @@ public abstract class ServiceFactory
     protected static IConfiguration BuildConfiguration()
     {
         return new ConfigurationBuilder()
-            .AddSystemsManager(
-                $"/{Environment.GetEnvironmentVariable("EnvironmentName")}/Application"
-            )
+            .AddSystemsManager($"/{Environment.GetEnvironmentVariable("EnvironmentName")}/Application")
             .Build();
     }
 
@@ -55,10 +51,7 @@ public abstract class ServiceFactory
     /// </summary>
     /// <param name="services">The service collection</param>
     /// <param name="configuration">The configuration</param>
-    protected static void ConfigureCommonServices(
-        IServiceCollection services,
-        IConfiguration configuration
-    )
+    protected static void ConfigureCommonServices(IServiceCollection services, IConfiguration configuration)
     {
         // Configure AWS services
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
@@ -69,7 +62,7 @@ public abstract class ServiceFactory
         {
             var config = new AmazonApiGatewayManagementApiConfig
             {
-                ServiceURL = System.Environment.GetEnvironmentVariable("WebSocketApiUrl")!
+                ServiceURL = System.Environment.GetEnvironmentVariable("WebSocketApiUrl")!,
             };
             return new AmazonApiGatewayManagementApiClient(config);
         });

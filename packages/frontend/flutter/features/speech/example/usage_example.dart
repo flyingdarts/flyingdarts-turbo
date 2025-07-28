@@ -52,7 +52,8 @@ class SpeechProgrammaticExample extends StatefulWidget {
   const SpeechProgrammaticExample({super.key});
 
   @override
-  State<SpeechProgrammaticExample> createState() => _SpeechProgrammaticExampleState();
+  State<SpeechProgrammaticExample> createState() =>
+      _SpeechProgrammaticExampleState();
 }
 
 class _SpeechProgrammaticExampleState extends State<SpeechProgrammaticExample> {
@@ -90,15 +91,22 @@ class _SpeechProgrammaticExampleState extends State<SpeechProgrammaticExample> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text('Status: $_status', style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              'Status: $_status',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             const SizedBox(height: 16),
-            Text('Last Result: $_lastResult', style: Theme.of(context).textTheme.bodyLarge),
+            Text(
+              'Last Result: $_lastResult',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
             const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () => _speechBloc.add(const SpeechStartListening()),
+                  onPressed: () =>
+                      _speechBloc.add(const SpeechStartListening()),
                   child: const Text('Start Listening'),
                 ),
                 ElevatedButton(

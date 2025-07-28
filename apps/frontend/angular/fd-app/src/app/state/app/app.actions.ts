@@ -15,37 +15,17 @@ export enum AppStateActions {
   ToggleTheme = '[AppState] Theme Toggle',
 }
 
-export const setUser = createAction(
-  AppStateActions.SetUser,
-  props<{ user: UserProfileDetails | undefined }>()
-);
+export const setUser = createAction(AppStateActions.SetUser, props<{ user: UserProfileDetails | undefined }>());
 export const loadUser = createAction(AppStateActions.LoadUser);
-export const loadUserSuccess = createAction(
-  AppStateActions.LoadUserSuccess,
-  props<{ user: UserProfileDetails }>()
-);
-export const loadUserFailure = createAction(
-  AppStateActions.LoadUserFailure,
-  props<{ error: any }>()
-);
-export const setIdToken = createAction(
-  AppStateActions.SetIdToken,
-  props<{ idToken: string | undefined }>()
-);
+export const loadUserSuccess = createAction(AppStateActions.LoadUserSuccess, props<{ user: UserProfileDetails }>());
+export const loadUserFailure = createAction(AppStateActions.LoadUserFailure, props<{ error: any }>());
+export const setIdToken = createAction(AppStateActions.SetIdToken, props<{ idToken: string | undefined }>());
 
-export const setLoading = createAction(
-  AppStateActions.SetLoading,
-  props<{ loading: boolean }>()
-);
+export const setLoading = createAction(AppStateActions.SetLoading, props<{ loading: boolean }>());
 
-export const setX01GameSettings = createAction(
-  AppStateActions.SetX01GameSettings,
-  props<{ x01: { legs: number; sets: number } }>()
-);
+export const setX01GameSettings = createAction(AppStateActions.SetX01GameSettings, props<{ x01: { legs: number; sets: number } }>());
 
-export const loadX01GameSettingsFromStorage = createAction(
-  AppStateActions.LoadX01GameSettingsFromStorage
-);
+export const loadX01GameSettingsFromStorage = createAction(AppStateActions.LoadX01GameSettingsFromStorage);
 
 export const loadX01GameSettingsFromStorageSuccess = createAction(
   AppStateActions.LoadX01GameSettingsFromStorageSuccess,

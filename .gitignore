@@ -170,11 +170,6 @@ yarn-error.log
 *.launch
 .settings/
 *.sublime-workspace
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 .history/*
 
 # Miscellaneous
@@ -189,7 +184,6 @@ Thumbs.db
 *.pem
 *.crt
 *.key
-.vscode
 e2e/**/**.*.js
 e2e/local.properties
 e2e/.env
@@ -284,7 +278,6 @@ key.properties
 
 # Rust IDE specific
 **/.idea/
-**/.vscode/
 **/*.swp
 **/*.swo
 **/*~
@@ -389,3 +382,10 @@ migrate_working_dir/
 !**/*/tsconfig.angular.json
 **/*/cdk.out
 .runners
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

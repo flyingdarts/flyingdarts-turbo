@@ -16,9 +16,7 @@ public class DyteApiClientFactory
 
     public DyteApiClient GetClient()
     {
-        return new DyteApiClient(
-            new HttpClientRequestAdapter(_authenticationProvider, httpClient: _httpClient)
-        );
+        return new DyteApiClient(new HttpClientRequestAdapter(_authenticationProvider, httpClient: _httpClient));
     }
 }
 
@@ -35,14 +33,10 @@ public class DyteAuthenticationProvider : IAuthenticationProvider
 
         if (string.IsNullOrEmpty(dyteOrganizationId) || string.IsNullOrEmpty(dyteApiKey))
         {
-            throw new InvalidOperationException(
-                "DyteOrganizationId and DyteApiKey environment variables must be set"
-            );
+            throw new InvalidOperationException("DyteOrganizationId and DyteApiKey environment variables must be set");
         }
 
-        var authHeaderValue = Convert.ToBase64String(
-            Encoding.UTF8.GetBytes($"{dyteOrganizationId}:{dyteApiKey}")
-        );
+        var authHeaderValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{dyteOrganizationId}:{dyteApiKey}"));
         request.Headers.Add("Authorization", $"Basic {authHeaderValue}");
         await Task.CompletedTask;
     }

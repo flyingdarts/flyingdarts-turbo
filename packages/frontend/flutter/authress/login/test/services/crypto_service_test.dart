@@ -16,14 +16,17 @@ void main() {
         expect(pkceCodes.codeVerifier, isNotNull);
         expect(pkceCodes.codeChallenge, isNotNull);
         expect(pkceCodes.codeChallengeMethod, equals('S256'));
-        
+
         // Code verifier should be base64url encoded string without padding
         expect(pkceCodes.codeVerifier.length, greaterThanOrEqualTo(43));
         expect(pkceCodes.codeVerifier.length, lessThanOrEqualTo(128));
         expect(pkceCodes.codeVerifier.contains('='), isFalse);
-        
+
         // Code challenge should be base64url encoded SHA256 hash without padding
-        expect(pkceCodes.codeChallenge.length, equals(43)); // SHA256 -> 32 bytes -> 43 chars in base64url without padding
+        expect(
+          pkceCodes.codeChallenge.length,
+          equals(43),
+        ); // SHA256 -> 32 bytes -> 43 chars in base64url without padding
         expect(pkceCodes.codeChallenge.contains('='), isFalse);
       });
 
@@ -40,14 +43,14 @@ void main() {
 
         // Base64url characters: A-Z, a-z, 0-9, -, _
         final validPattern = RegExp(r'^[A-Za-z0-9\-_]+$');
-        
+
         expect(validPattern.hasMatch(pkceCodes.codeVerifier), isTrue);
         expect(validPattern.hasMatch(pkceCodes.codeChallenge), isTrue);
       });
 
       test('code challenge is derived from code verifier', () {
         final pkceCodes = cryptoService.generatePKCECodes();
-        
+
         // We can't directly verify the SHA256 calculation without exposing internal methods,
         // but we can verify the relationship is consistent
         expect(pkceCodes.codeChallenge, isNotNull);
@@ -70,7 +73,10 @@ void main() {
         expect(map, isA<Map<String, String>>());
         expect(map['codeVerifier'], equals(pkceCodes.codeVerifier));
         expect(map['codeChallenge'], equals(pkceCodes.codeChallenge));
-        expect(map['codeChallengeMethod'], equals(pkceCodes.codeChallengeMethod));
+        expect(
+          map['codeChallengeMethod'],
+          equals(pkceCodes.codeChallengeMethod),
+        );
       });
     });
 
@@ -86,7 +92,7 @@ void main() {
 
         expect(hash, isNotNull);
         expect(hash.startsWith('v2;'), isTrue);
-        
+
         final parts = hash.split(';');
         expect(parts.length, equals(4));
         expect(parts[0], equals('v2')); // version
@@ -151,11 +157,14 @@ void main() {
         };
 
         // Use a very low max iterations to test the safety valve
-        final hash = await cryptoService.calculateAntiAbuseHash(props, maxIterations: 10);
+        final hash = await cryptoService.calculateAntiAbuseHash(
+          props,
+          maxIterations: 10,
+        );
 
         expect(hash, isNotNull);
         expect(hash.startsWith('v2;'), isTrue);
-        
+
         final parts = hash.split(';');
         final fineTuner = int.parse(parts[2]);
         expect(fineTuner, lessThanOrEqualTo(10));
@@ -190,13 +199,13 @@ void main() {
 
       test('timestamp is reasonable', () async {
         final startTime = DateTime.now().millisecondsSinceEpoch;
-        
+
         final props = {
           'applicationId': 'test-app-123',
         };
 
         final hash = await cryptoService.calculateAntiAbuseHash(props);
-        
+
         final endTime = DateTime.now().millisecondsSinceEpoch;
         final parts = hash.split(';');
         final timestamp = int.parse(parts[1]);
@@ -217,7 +226,7 @@ void main() {
 
         // Fine tuner should be at least 1 (since we start from 1 and increment)
         expect(fineTuner, greaterThanOrEqualTo(1));
-        
+
         // Should be reasonable (not hit the safety valve for normal cases)
         expect(fineTuner, lessThan(100000));
       });
@@ -264,4 +273,4 @@ void main() {
       });
     });
   });
-} 
+}

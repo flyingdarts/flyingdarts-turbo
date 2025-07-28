@@ -6,7 +6,6 @@ class LoadingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: const Color(0xff1d2f3b),
       body: Center(
@@ -37,9 +36,9 @@ class LoadingPage extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Loading text
             Text(
               'Authenticating...',
@@ -47,9 +46,9 @@ class LoadingPage extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             Text(
               'Please wait while we sign you in securely',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -57,9 +56,9 @@ class LoadingPage extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 32),
-            
+
             // Progress indicator steps
             _ProgressSteps(),
           ],
@@ -79,7 +78,7 @@ class _ProgressStepsState extends State<_ProgressSteps>
   late AnimationController _controller;
   late Animation<double> _animation;
   int _currentStep = 0;
-  
+
   final List<String> _steps = [
     'Generating security keys...',
     'Connecting to Authress...',
@@ -95,7 +94,7 @@ class _ProgressStepsState extends State<_ProgressSteps>
       vsync: this,
     );
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
-    
+
     // Cycle through steps
     _controller.repeat();
     _controller.addListener(() {
@@ -144,7 +143,9 @@ class _ProgressStepsState extends State<_ProgressSteps>
           ),
           const SizedBox(width: 12),
           Text(
-            _currentStep < _steps.length ? _steps[_currentStep] : 'Completing...',
+            _currentStep < _steps.length
+                ? _steps[_currentStep]
+                : 'Completing...',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: Colors.grey[700],
             ),
@@ -153,4 +154,4 @@ class _ProgressStepsState extends State<_ProgressSteps>
       ),
     );
   }
-} 
+}

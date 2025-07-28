@@ -8,9 +8,7 @@ namespace Flyingdarts.Metadata.Services.Tests.Services;
 
 public class X01MetadataServiceTests
 {
-    private static readonly Guid MeetingIdentifier = Guid.Parse(
-        "12345678-1234-1234-1234-123456789012"
-    );
+    private static readonly Guid MeetingIdentifier = Guid.Parse("12345678-1234-1234-1234-123456789012");
 
     private readonly Mock<IDynamoDbService> _mockDynamoDbService;
     private readonly Mock<CachingService<X01State>> _mockCachingService;
@@ -30,18 +28,9 @@ public class X01MetadataServiceTests
         var game = Game.Create(2, X01GameSettings.Create(3, 3), MeetingIdentifier);
         var player1WithToken = GamePlayer.Create(game.GameId, "player1", $"meeting-token-player1");
         var player2WithToken = GamePlayer.Create(game.GameId, "player2", $"meeting-token-player2");
-        SetupMockDynamoDbService(
-            game,
-            new List<GamePlayer> { player1WithToken, player2WithToken },
-            new List<User>(),
-            new List<GameDart>()
-        );
+        SetupMockDynamoDbService(game, new List<GamePlayer> { player1WithToken, player2WithToken }, new List<User>(), new List<GameDart>());
 
-        var metadata = await _service.GetMetadataAsync(
-            game.GameId.ToString(),
-            "player1",
-            CancellationToken.None
-        );
+        var metadata = await _service.GetMetadataAsync(game.GameId.ToString(), "player1", CancellationToken.None);
 
         Assert.Equal(metadata.MeetingToken, player1WithToken.MeetingToken);
         Assert.NotEqual(metadata.MeetingToken, player2WithToken.MeetingToken);
@@ -52,18 +41,9 @@ public class X01MetadataServiceTests
     {
         var game = Game.Create(2, X01GameSettings.Create(3, 3), MeetingIdentifier);
 
-        SetupMockDynamoDbService(
-            game,
-            new List<GamePlayer>(),
-            new List<User>(),
-            new List<GameDart>()
-        );
+        SetupMockDynamoDbService(game, new List<GamePlayer>(), new List<User>(), new List<GameDart>());
 
-        var metadata = await _service.GetMetadataAsync(
-            game.GameId.ToString(),
-            "player1",
-            CancellationToken.None
-        );
+        var metadata = await _service.GetMetadataAsync(game.GameId.ToString(), "player1", CancellationToken.None);
         Assert.Null(metadata.MeetingToken);
     }
 
@@ -136,9 +116,7 @@ public class X01MetadataServiceTests
             var legWinner = random.Next(2) == 0 ? "player1" : "player2";
 
             // Generate darts for this leg
-            darts.AddRange(
-                GenerateLegDarts(gameIdLong, nextPlayer, legWinner, currentSet, currentLeg)
-            );
+            darts.AddRange(GenerateLegDarts(gameIdLong, nextPlayer, legWinner, currentSet, currentLeg));
 
             // Update leg counts
             if (legWinner == "player1")
@@ -253,10 +231,7 @@ public class X01MetadataServiceTests
         SetupMockDynamoDbService(game, players, users, darts);
         var initialResult = await _service.GetMetadataAsync(gameId, null, CancellationToken.None);
         var set1Starter =
-            initialResult.NextPlayer
-            ?? throw new InvalidOperationException(
-                "NextPlayer should not be null for a game with no darts"
-            );
+            initialResult.NextPlayer ?? throw new InvalidOperationException("NextPlayer should not be null for a game with no darts");
         var set1NonStarter = set1Starter == "player1" ? "player2" : "player1";
 
         // Set 1: Leg 1: Player 1 wins (regardless of who starts)
@@ -343,27 +318,19 @@ public class X01MetadataServiceTests
         var game = CreateTestGame(gameIdLong);
 
         // Scenario 1: No game players - next player should be null
-        SetupMockDynamoDbService(
-            game,
-            new List<GamePlayer>(),
-            new List<User>(),
-            new List<GameDart>()
-        );
+        SetupMockDynamoDbService(game, new List<GamePlayer>(), new List<User>(), new List<GameDart>());
         var result = await _service.GetMetadataAsync(gameId, null, CancellationToken.None);
         Assert.Null(result.NextPlayer);
 
         // Scenario 2: 1 game player and no darts - next player should still be null
-        var singlePlayer = new List<GamePlayer>
-        {
-            GamePlayer.Create(gameIdLong, "player1", "meeting-token-player1")
-        };
+        var singlePlayer = new List<GamePlayer> { GamePlayer.Create(gameIdLong, "player1", "meeting-token-player1") };
         var singleUser = new List<User>
         {
             new User
             {
                 UserId = "player1",
-                Profile = new UserProfile { UserName = "Player1", Country = "US" }
-            }
+                Profile = new UserProfile { UserName = "Player1", Country = "US" },
+            },
         };
         SetupMockDynamoDbService(game, singlePlayer, singleUser, new List<GameDart>());
         result = await _service.GetMetadataAsync(gameId, null, CancellationToken.None);
@@ -385,23 +352,13 @@ public class X01MetadataServiceTests
 
         // Scenario 5: Second player throws dart - next player should be player 1
         var secondDart = GameDart.Create(gameIdLong, "player2", 60, 381, 1, 1);
-        SetupMockDynamoDbService(
-            game,
-            twoPlayers,
-            twoUsers,
-            new List<GameDart> { firstDart, secondDart }
-        );
+        SetupMockDynamoDbService(game, twoPlayers, twoUsers, new List<GameDart> { firstDart, secondDart });
         result = await _service.GetMetadataAsync(gameId, null, CancellationToken.None);
         Assert.Equal("player1", result.NextPlayer);
 
         // Scenario 6: First player throws another dart - next player should be player 2
         var thirdDart = GameDart.Create(gameIdLong, "player1", 60, 321, 1, 1);
-        SetupMockDynamoDbService(
-            game,
-            twoPlayers,
-            twoUsers,
-            new List<GameDart> { firstDart, secondDart, thirdDart }
-        );
+        SetupMockDynamoDbService(game, twoPlayers, twoUsers, new List<GameDart> { firstDart, secondDart, thirdDart });
         result = await _service.GetMetadataAsync(gameId, null, CancellationToken.None);
         Assert.Equal("player2", result.NextPlayer);
     }
@@ -421,25 +378,18 @@ public class X01MetadataServiceTests
         return new List<GamePlayer>
         {
             GamePlayer.Create(gameId, "player1", "meeting-token-player1"),
-            GamePlayer.Create(gameId, "player2", "meeting-token-player2")
+            GamePlayer.Create(gameId, "player2", "meeting-token-player2"),
         };
     }
 
     private List<User> CreateTestUsers(List<GamePlayer> players)
     {
         return players
-            .Select(
-                p =>
-                    new User
-                    {
-                        UserId = p.PlayerId,
-                        Profile = new UserProfile
-                        {
-                            UserName = $"Player{p.PlayerId.Last()}",
-                            Country = p.PlayerId == "player1" ? "US" : "UK"
-                        }
-                    }
-            )
+            .Select(p => new User
+            {
+                UserId = p.PlayerId,
+                Profile = new UserProfile { UserName = $"Player{p.PlayerId.Last()}", Country = p.PlayerId == "player1" ? "US" : "UK" },
+            })
             .ToList();
     }
 
@@ -450,32 +400,21 @@ public class X01MetadataServiceTests
             GameDart.Create(gameId, player1Id, 60, 441, 1, 1),
             GameDart.Create(gameId, player2Id, 60, 441, 1, 1),
             GameDart.Create(gameId, player1Id, 60, 381, 1, 1),
-            GameDart.Create(gameId, player2Id, 60, 381, 1, 1)
+            GameDart.Create(gameId, player2Id, 60, 381, 1, 1),
         };
     }
 
-    private void SetupMockDynamoDbService(
-        Game game,
-        List<GamePlayer> players,
-        List<User> users,
-        List<GameDart> darts
-    )
+    private void SetupMockDynamoDbService(Game game, List<GamePlayer> players, List<User> users, List<GameDart> darts)
     {
         _mockDynamoDbService
             .Setup(x => x.ReadGameAsync(It.IsAny<long>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Game> { game });
 
-        _mockDynamoDbService
-            .Setup(x => x.ReadGamePlayersAsync(It.IsAny<long>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(players);
+        _mockDynamoDbService.Setup(x => x.ReadGamePlayersAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(players);
 
-        _mockDynamoDbService
-            .Setup(x => x.ReadGameDartsAsync(It.IsAny<long>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(darts);
+        _mockDynamoDbService.Setup(x => x.ReadGameDartsAsync(It.IsAny<long>(), It.IsAny<CancellationToken>())).ReturnsAsync(darts);
 
-        _mockDynamoDbService
-            .Setup(x => x.ReadUsersAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(users);
+        _mockDynamoDbService.Setup(x => x.ReadUsersAsync(It.IsAny<string[]>(), It.IsAny<CancellationToken>())).ReturnsAsync(users);
     }
 
     /// <summary>
@@ -488,13 +427,7 @@ public class X01MetadataServiceTests
     /// <param name="setNumber">The set number</param>
     /// <param name="legNumber">The leg number</param>
     /// <returns>List of darts for the leg</returns>
-    private List<GameDart> GenerateLegDarts(
-        long gameId,
-        string startingPlayer,
-        string winningPlayer,
-        int setNumber,
-        int legNumber
-    )
+    private List<GameDart> GenerateLegDarts(long gameId, string startingPlayer, string winningPlayer, int setNumber, int legNumber)
     {
         var darts = new List<GameDart>();
         var currentScore = 501;
@@ -504,16 +437,7 @@ public class X01MetadataServiceTests
         // Generate darts until we need the final winning dart
         while (currentScore > 141)
         {
-            darts.Add(
-                GameDart.Create(
-                    gameId,
-                    currentPlayer,
-                    180,
-                    currentScore - 180,
-                    setNumber,
-                    legNumber
-                )
-            );
+            darts.Add(GameDart.Create(gameId, currentPlayer, 180, currentScore - 180, setNumber, legNumber));
             currentScore -= 180;
 
             // Alternate players

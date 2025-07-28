@@ -12,11 +12,7 @@ public class GithubAuthConstruct : Construct
         OIDCProvider = new OpenIdConnectProvider(
             this,
             $"GithubOIDCProvider".Replace(".", string.Empty),
-            new OpenIdConnectProviderProps
-            {
-                Url = $"https://{githubDomain}",
-                ClientIds = new string[] { "sts.amazonaws.com" },
-            }
+            new OpenIdConnectProviderProps { Url = $"https://{githubDomain}", ClientIds = new string[] { "sts.amazonaws.com" } }
         );
 
         foreach (var repository in repositories)
@@ -32,18 +28,12 @@ public class GithubAuthConstruct : Construct
                         {
                             {
                                 "StringEquals",
-                                new Dictionary<string, string>
-                                {
-                                    { $"{githubDomain}:aud", "sts.amazonaws.com" }
-                                }
+                                new Dictionary<string, string> { { $"{githubDomain}:aud", "sts.amazonaws.com" } }
                             },
                             {
                                 "StringLike",
-                                new Dictionary<string, string>
-                                {
-                                    { $"{githubDomain}:sub", $"repo:flyingdarts/{repository}:*" }
-                                }
-                            }
+                                new Dictionary<string, string> { { $"{githubDomain}:sub", $"repo:flyingdarts/{repository}:*" } }
+                            },
                         }
                     ),
                     Path = "/github-actions/flyingdarts/",
@@ -73,30 +63,25 @@ public class GithubAuthConstruct : Construct
                                                     "lambda:UpdateFunctionCode",
                                                     "cloudfront:CreateInvalidation",
                                                     "sts:AssumeRole",
-                                                    "sts:AssumeRoleWithWebIdentity"
+                                                    "sts:AssumeRoleWithWebIdentity",
                                                 },
-                                                Resources = new string[] { "*" }
+                                                Resources = new string[] { "*" },
                                             }
-                                        )
-                                    }
+                                        ),
+                                    },
                                 }
                             )
-                        }
+                        },
                     },
-                    Description =
-                        "This role is used for Github Actions to deploy functions to lambda",
-                    MaxSessionDuration = Duration.Hours(1)
+                    Description = "This role is used for Github Actions to deploy functions to lambda",
+                    MaxSessionDuration = Duration.Hours(1),
                 }
             );
 
             new CfnOutput(
                 scope,
                 $"{repository.Replace(".", string.Empty)}CfnOutput",
-                new CfnOutputProps
-                {
-                    ExportName = $"{repository.Replace(".", string.Empty)}GithubOIDCRoleArn",
-                    Value = role.RoleArn
-                }
+                new CfnOutputProps { ExportName = $"{repository.Replace(".", string.Empty)}GithubOIDCRoleArn", Value = role.RoleArn }
             );
         }
     }

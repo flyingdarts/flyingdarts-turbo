@@ -37,8 +37,9 @@ public class DyteApiClientWrapper : IDyteApiClientWrapper
     public async Task<MeetingsGetResponse> SearchMeetingsAsync(string searchQuery, CancellationToken cancellationToken)
     {
         return await _client.Meetings.GetAsMeetingsGetResponseAsync(
-            config => config.QueryParameters.Search = searchQuery, 
-            cancellationToken);
+            config => config.QueryParameters.Search = searchQuery,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc />
@@ -48,8 +49,12 @@ public class DyteApiClientWrapper : IDyteApiClientWrapper
     }
 
     /// <inheritdoc />
-    public async Task<ParticipantsPostResponse> AddParticipantAsync(string meetingId, AddParticipantRequest request, CancellationToken cancellationToken)
+    public async Task<ParticipantsPostResponse> AddParticipantAsync(
+        string meetingId,
+        AddParticipantRequest request,
+        CancellationToken cancellationToken
+    )
     {
         return await _client.Meetings[meetingId].Participants.PostAsParticipantsPostResponseAsync(request, null, cancellationToken);
     }
-} 
+}

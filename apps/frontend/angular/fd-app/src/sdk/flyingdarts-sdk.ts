@@ -1,16 +1,12 @@
-import { filter, Observable, Subject, tap } from "rxjs";
-import { CreateX01GameCommand } from "src/app/requests/CreateX01GameCommand";
-import { CreateX01ScoreCommand } from "src/app/requests/CreateX01ScoreCommand";
-import { JoinGameCommand } from "src/app/requests/JoinGameCommand";
-import { JoinX01QueueCommand } from "src/app/requests/JoinX01QueueCommand";
-import { WebSocketMessageQueueService } from "src/app/services/websocket/websocket-message-queue.service";
-import { WebSocketActions } from "src/app/services/websocket/websocket.actions.enum";
-import {
-  Metadata,
-  WebSocketMessage,
-} from "src/app/services/websocket/websocket.message.model";
-import { WebSocketService } from "src/app/services/websocket/websocket.service";
-import { FlyingdartsRepository } from "./flyingdarts.repository";
+import { filter, Observable, Subject, tap } from 'rxjs';
+import { CreateX01GameCommand } from 'src/app/requests/CreateX01GameCommand';
+import { CreateX01ScoreCommand } from 'src/app/requests/CreateX01ScoreCommand';
+import { JoinGameCommand } from 'src/app/requests/JoinGameCommand';
+import { WebSocketMessageQueueService } from 'src/app/services/websocket/websocket-message-queue.service';
+import { WebSocketActions } from 'src/app/services/websocket/websocket.actions.enum';
+import { Metadata, WebSocketMessage } from 'src/app/services/websocket/websocket.message.model';
+import { WebSocketService } from 'src/app/services/websocket/websocket.service';
+import { FlyingdartsRepository } from './flyingdarts.repository';
 
 export interface StateNavigationHooks {
   gameCreated(gameId: string): void;
@@ -18,8 +14,7 @@ export interface StateNavigationHooks {
 export class FlyingdartsSdk {
   private metadataSubject = new Subject<Metadata>();
 
-  readonly metadata$: Observable<Metadata> =
-    this.metadataSubject.asObservable();
+  readonly metadata$: Observable<Metadata> = this.metadataSubject.asObservable();
 
   constructor(
     public readonly webSocketService: WebSocketService,
@@ -28,27 +23,14 @@ export class FlyingdartsSdk {
   ) {
     this.webSocketService.messages$
       .pipe(
-        tap((message) => {
-          console.log(
-            "[SDK] WebSocket message received:",
-            JSON.stringify(message, null, 2)
-          );
+        tap(message => {
+          console.log('[SDK] WebSocket message received:', JSON.stringify(message, null, 2));
         }),
-        filter((message) =>
-          [WebSocketActions.X01Join, WebSocketActions.X01Score].includes(
-            message.action
-          )
-        ),
-        tap((message) => {
-          console.log(
-            "[SDK] WebSocket message passed filter:",
-            JSON.stringify(message, null, 2)
-          );
+        filter(message => [WebSocketActions.X01Join, WebSocketActions.X01Score].includes(message.action)),
+        tap(message => {
+          console.log('[SDK] WebSocket message passed filter:', JSON.stringify(message, null, 2));
           if (message.metadata) {
-            console.log(
-              "[SDK] Emitting metadata:",
-              JSON.stringify(message.metadata, null, 2)
-            );
+            console.log('[SDK] Emitting metadata:', JSON.stringify(message.metadata, null, 2));
             this.metadataSubject.next(message.metadata);
           }
         })
@@ -71,10 +53,7 @@ export class FlyingdartsSdk {
       action: WebSocketActions.X01Create,
       message: message,
     };
-    console.log(
-      "[SDK] Sending CreateX01GameCommand:",
-      JSON.stringify(body, null, 2)
-    );
+    console.log('[SDK] Sending CreateX01GameCommand:', JSON.stringify(body, null, 2));
     this.webSocketMessageQueueService.sendMessage(JSON.stringify(body));
   }
 
@@ -88,19 +67,11 @@ export class FlyingdartsSdk {
       action: WebSocketActions.X01Join,
       message: message,
     };
-    console.log(
-      "[SDK] Sending JoinGameCommand:",
-      JSON.stringify(body, null, 2)
-    );
+    console.log('[SDK] Sending JoinGameCommand:', JSON.stringify(body, null, 2));
     this.webSocketMessageQueueService.sendMessage(JSON.stringify(body));
   }
 
-  public sendScore(
-    gameId: string,
-    playerId: string,
-    score: number,
-    input: number
-  ) {
+  public sendScore(gameId: string, playerId: string, score: number, input: number) {
     var message: CreateX01ScoreCommand = {
       GameId: gameId,
       PlayerId: playerId,
@@ -111,10 +82,7 @@ export class FlyingdartsSdk {
       action: WebSocketActions.X01Score,
       message: message,
     };
-    console.log(
-      "[SDK] Sending CreateX01ScoreCommand:",
-      JSON.stringify(body, null, 2)
-    );
+    console.log('[SDK] Sending CreateX01ScoreCommand:', JSON.stringify(body, null, 2));
     this.webSocketMessageQueueService.sendMessage(JSON.stringify(body));
   }
 }

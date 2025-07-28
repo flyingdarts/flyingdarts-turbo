@@ -1,13 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
@@ -23,14 +16,7 @@ export class UserProfileComponent {
 
   constructor(private readonly formBuilder: FormBuilder) {
     this.userProfileForm = this.formBuilder.group({
-      userName: [
-        this.userName,
-        [
-          Validators.required,
-          Validators.minLength(3),
-          this.validateDifferenceFromInitial(this.userName),
-        ],
-      ],
+      userName: [this.userName, [Validators.required, Validators.minLength(3), this.validateDifferenceFromInitial(this.userName)]],
     });
   }
 

@@ -1,0 +1,37 @@
+name: Check for change files
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project within Turbo context. (package.json name)"
+        required: true
+        type: string
+
+      node-version:
+        description: "Version of Node.js to use"
+        required: false
+        type: string
+        default: "22"
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 # Fetch all history for turbo prune
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: "npm"
+
+      # Install Turbo
+      - name: Install Turbo
+        run: npm install -g beachball
+
+      # Check for change files
+      - name: Check for change files
+        run: beachball change --package ${{ inputs.project-name }}

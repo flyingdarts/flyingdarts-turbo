@@ -17,7 +17,7 @@ public static class ResponseBuilder
         {
             StatusCode = statusCode,
             Body = body,
-            Headers = GetDefaultHeaders()
+            Headers = GetDefaultHeaders(),
         };
     }
 
@@ -44,7 +44,7 @@ public static class ResponseBuilder
         {
             StatusCode = statusCode,
             Body = JsonSerializer.Serialize(new { error = message }),
-            Headers = GetDefaultHeaders()
+            Headers = GetDefaultHeaders(),
         };
     }
 
@@ -69,14 +69,14 @@ public static class ResponseBuilder
         {
             error = "Internal server error",
             message = exception.Message,
-            stackTrace = exception.StackTrace
+            stackTrace = exception.StackTrace,
         };
 
         return new APIGatewayProxyResponse
         {
             StatusCode = 500,
             Body = JsonSerializer.Serialize(errorResponse),
-            Headers = GetDefaultHeaders()
+            Headers = GetDefaultHeaders(),
         };
     }
 
@@ -91,7 +91,7 @@ public static class ResponseBuilder
             { "Access-Control-Allow-Origin", "*" },
             { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
             { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
-            { "Content-Type", "application/json" }
+            { "Content-Type", "application/json" },
         };
     }
 }

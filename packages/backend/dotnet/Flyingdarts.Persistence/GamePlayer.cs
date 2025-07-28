@@ -20,6 +20,7 @@ public class GamePlayer : IPrimaryKeyItem, ISortKeyItem, IAlternativeSortKeyItem
     {
         PrimaryKey = Constants.GamePlayer;
     }
+
     public static GamePlayer Create(long gameId, string playerId, string meetingToken)
     {
         var now = DateTime.UtcNow;
@@ -31,7 +32,7 @@ public class GamePlayer : IPrimaryKeyItem, ISortKeyItem, IAlternativeSortKeyItem
             CreatedAt = now,
             PlayerId = playerId,
             GameId = gameId,
-            MeetingToken = meetingToken
+            MeetingToken = meetingToken,
         };
     }
 }
