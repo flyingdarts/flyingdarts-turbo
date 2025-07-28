@@ -1,7 +1,10 @@
-name: Main Staging Workflow
+name: Main Development Workflow
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - development
 
 jobs:
   # Test jobs - run before builds
