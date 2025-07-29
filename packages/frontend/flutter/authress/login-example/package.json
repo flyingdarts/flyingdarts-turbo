@@ -1,6 +1,6 @@
 {
   "name": "authress_login_example",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A package for Authress login",
   "private": false,
   "scripts": {

@@ -1,6 +1,6 @@
 {
   "name": "core",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A flutter package used to configure dependencies and modules",
   "private": false,
   "dependencies": {

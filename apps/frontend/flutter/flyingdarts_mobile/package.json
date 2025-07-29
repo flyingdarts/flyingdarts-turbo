@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts_mobile",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A flutter app to send score to Flyingdarts.net",
   "main": "lib/main.dart",
   "scripts": {

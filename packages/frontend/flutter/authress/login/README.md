@@ -9,13 +9,12 @@ The package is built using modern Flutter patterns with dependency injection, se
 ## Features
 
 - **Provider-based Authentication**: Wrap your app with authentication state management
-- **Go Router Integration**: Built-in route guards for protected routes
-- **Smart Browser Management**: Platform-optimized browser handling for authentication flows
+- **Go Router Integration**: Built-in route guards for protected routes (also to be tested (guards are role/group based))
 - **Automatic Token Management**: Handles token storage, refresh, and expiration
 - **Secure Token Storage**: Uses Flutter's secure storage mechanisms
 - **Real-time Auth State**: Listen to authentication state changes
-- **Cross-Platform Support**: Works on iOS, Android, and Web
-- **Role & Group Based Access**: Support for role and group-based authorization
+- **Cross-Platform Support**: Works on iOS, Android
+- **Role & Group Based Access**: Support for role and group-based authorization (to be tested / discussed)
 - **Type-Safe State Management**: Sealed classes for authentication states
 - **Comprehensive Error Handling**: Detailed error states and handling
 
@@ -29,23 +28,28 @@ The package is built using modern Flutter patterns with dependency injection, se
 ## Installation
 
 ### From Source
+
 1. **Clone the repository** (if not already done):
+
    ```bash
    git clone <repository-url>
    cd flyingdarts-turbo
    ```
 
 2. **Navigate to the authress login package**:
+
    ```bash
    cd packages/frontend/flutter/authress/login
    ```
 
 3. **Get dependencies**:
+
    ```bash
    flutter pub get
    ```
 
 ### In Your Flutter Project
+
 Add the package to your `pubspec.yaml`:
 
 ```yaml
@@ -55,6 +59,7 @@ dependencies:
 ```
 
 Then run:
+
 ```bash
 flutter pub get
 ```
@@ -313,6 +318,7 @@ class MyService {
 ### Core Components
 
 #### AuthressProvider Widget
+
 The main provider widget that manages authentication state.
 
 ```dart
@@ -328,6 +334,7 @@ class AuthressProvider extends StatefulWidget {
 ```
 
 #### AuthressConfiguration Class
+
 Configuration for the Authress service.
 
 ```dart
@@ -346,6 +353,7 @@ class AuthressConfiguration {
 ```
 
 #### AuthressRouteGuard Class
+
 Static methods for protecting routes with Go Router.
 
 ```dart
@@ -363,6 +371,7 @@ class AuthressRouteGuard {
 ```
 
 ### Context Extensions
+
 Convenient extensions for accessing auth data:
 
 ```dart
@@ -378,6 +387,7 @@ extension AuthressProviderBuilderContextExtension on BuildContext {
 ```
 
 ### Authentication States
+
 The package uses sealed classes for type-safe state management:
 
 ```dart
@@ -403,6 +413,7 @@ class AuthStateError extends AuthState {
 ### Data Models
 
 #### UserProfile
+
 Represents a user profile in the system.
 
 ```dart
@@ -418,6 +429,7 @@ class UserProfile {
 ```
 
 #### DeepLinkConfig
+
 Configuration for deep link handling.
 
 ```dart
@@ -430,6 +442,7 @@ class DeepLinkConfig {
 ## Configuration
 
 ### Environment Setup
+
 Configure different environments:
 
 ```dart
@@ -456,6 +469,7 @@ class EnvironmentConfig {
 ```
 
 ### Deep Link Configuration
+
 For production apps, configure custom URL schemes:
 
 ```dart
@@ -472,6 +486,7 @@ AuthressProvider(
 ## Development
 
 ### Project Structure
+
 ```
 authress_login/
 ├── lib/
@@ -496,6 +511,7 @@ authress_login/
 ```
 
 ### Architecture Patterns
+
 - **Provider Pattern**: State management with InheritedWidget
 - **Sealed Classes**: Type-safe authentication states
 - **Extension Pattern**: Context extensions for easy access
@@ -503,12 +519,15 @@ authress_login/
 - **Service Pattern**: Authentication service abstraction
 
 ### Testing
+
 Run unit tests to ensure code quality:
+
 ```bash
 flutter test
 ```
 
 ### Code Quality
+
 - Follow Dart coding conventions
 - Use proper documentation for public APIs
 - Implement comprehensive error handling
@@ -518,6 +537,7 @@ flutter test
 ## Dependencies
 
 ### Runtime Dependencies
+
 - **flutter**: Flutter SDK
 - **go_router**: ^16.0.0 - Routing integration
 - **webview_flutter**: ^4.4.2 - In-app browser authentication
@@ -529,6 +549,7 @@ flutter test
 - **crypto**: ^3.0.3 - Cryptographic operations
 
 ### Development Dependencies
+
 - **flutter_test**: Flutter testing framework
 - **flutter_lints**: ^6.0.0 - Linting rules
 - **mockito**: ^5.4.4 - Mocking framework
@@ -539,15 +560,18 @@ flutter test
 ## Related Projects
 
 ### Backend Services
+
 - **[Friends API](../../../../backend/dotnet/friends/)**: Friend management and social features
 - **[Games API](../../../../backend/dotnet/games/)**: Game management and scoring
 - **[Auth API](../../../../backend/dotnet/auth/)**: Authentication and authorization
 
 ### Frontend Applications
+
 - **[Flutter Mobile App](../../../flyingdarts_mobile/)**: Mobile application
 - **[Angular Web App](../../../../angular/fd-app/)**: Web application
 
 ### Shared Packages
+
 - **[Core Package](../../../../backend/dotnet/Flyingdarts.Core/)**: Shared business logic
 - **[Persistence Package](../../../../backend/dotnet/Flyingdarts.Persistence/)**: Data access layer
 - **[API SDK](../../../api/sdk/)**: Flutter API client
@@ -592,4 +616,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms. 
+This project is part of the Flying Darts platform and is subject to the project's licensing terms.

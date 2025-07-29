@@ -2,6 +2,21 @@
   "name": "authress_login",
   "entries": [
     {
+      "date": "Tue, 29 Jul 2025 21:25:33 GMT",
+      "version": "0.0.2",
+      "tag": "authress_login_v0.0.2",
+      "comments": {
+        "patch": [
+          {
+            "author": "mike.pattyn1@gmail.com",
+            "package": "authress_login",
+            "commit": "e72d1cc74fc68c8417b9cba5a28dfbb6573a094b",
+            "comment": "Updated readme and added license for flutter authress login"
+          }
+        ]
+      }
+    },
+    {
       "date": "Sat, 26 Jul 2025 20:04:36 GMT",
       "version": "0.0.2",
       "tag": "authress_login_v0.0.2",
