@@ -10,7 +10,7 @@ using Flyingdarts.Metadata.Services.Services.X01;
 using Flyingdarts.Persistence;
 using MediatR;
 
-namespace Flyingdarts.Backend.Games.X01.Api.Requests.Score;
+namespace Flyingdarts.Backend.Api.Requests.Score;
 
 public record CreateX01ScoreCommandHandler(
     IDynamoDbService DynamoDbService,

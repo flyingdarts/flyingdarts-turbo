@@ -1,4 +1,4 @@
-using Flyingdarts.Backend.Games.X01.Api;
+using Flyingdarts.Backend.Api;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -7,11 +7,11 @@ var services = ServiceFactory.GetServiceProvider();
 var mediator = services.GetRequiredService<IMediator>();
 
 // Create and run the Lambda function using the new bootstrap pattern
-var bootstrap = new X01ApiBootstrap(mediator);
+var bootstrap = new BackendApi(mediator);
 
 await bootstrap.RunAsync();
 
-namespace Flyingdarts.Backend.Games.X01.Api
+namespace Flyingdarts.Backend.Api
 {
     static class X01ApiWebSocketMethods
     {

@@ -1,9 +1,9 @@
 ﻿using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Backend.Games.X01.Api.Models;
+using Flyingdarts.Backend.Api.Models;
 using Flyingdarts.Persistence;
 using MediatR;
 
-namespace Flyingdarts.Backend.Games.X01.Api.Requests.Join;
+namespace Flyingdarts.Backend.Api.Requests.Join;
 
 /// <summary>
 /// Command for joining an existing X01 game.

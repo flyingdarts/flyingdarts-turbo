@@ -9,7 +9,7 @@ using Flyingdarts.Metadata.Services.Services.X01;
 using Flyingdarts.Persistence;
 using MediatR;
 
-namespace Flyingdarts.Backend.Games.X01.Api.Requests.Create;
+namespace Flyingdarts.Backend.Api.Requests.Create;
 
 record CreateGameRequest(int Sets, int Legs, int PlayerCount, Guid MeetingIdentifier);
 
