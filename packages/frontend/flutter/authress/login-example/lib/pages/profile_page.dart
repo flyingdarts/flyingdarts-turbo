@@ -1,4 +1,4 @@
-import 'package:authress_login/authress_login.dart';
+import 'package:flyingdarts_authress_login/flyingdarts_authress_login.dart';
 import 'package:flutter/material.dart';
 
 /// Profile page that displays user information
@@ -188,10 +188,8 @@ class ProfilePage extends StatelessWidget {
             _buildDetailRow('User ID', user.userId),
             if (user.email != null) _buildDetailRow('Email', user.email!),
             if (user.name != null) _buildDetailRow('Display Name', user.name!),
-            if (user.createdDate != null)
-              _buildDetailRow('Member Since', _formatDate(user.createdDate!)),
-            if (user.lastLoginDate != null)
-              _buildDetailRow('Last Login', _formatDate(user.lastLoginDate!)),
+            if (user.createdDate != null) _buildDetailRow('Member Since', _formatDate(user.createdDate!)),
+            if (user.lastLoginDate != null) _buildDetailRow('Last Login', _formatDate(user.lastLoginDate!)),
           ],
         ),
       ),

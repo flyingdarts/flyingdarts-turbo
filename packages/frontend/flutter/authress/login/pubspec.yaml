@@ -1,6 +1,8 @@
 name: flyingdarts_authress_login
 description: A Dart/Flutter package for Authress authentication with widget-based authentication guards
-version: 0.0.2
+homepage: https://flyingdarts.net
+repository: https://github.com/flyingdarts/flyingdarts/tree/main/packages/frontend/flutter/authress/login
+version: 0.0.2-dev.1
 
 environment:
   sdk: ^3.8.1
@@ -29,3 +31,4 @@ dev_dependencies:
   mocktail: ^1.0.3
 
 flutter:
+

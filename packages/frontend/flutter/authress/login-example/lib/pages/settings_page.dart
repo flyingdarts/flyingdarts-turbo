@@ -1,4 +1,4 @@
-import 'package:authress_login/authress_login.dart';
+import 'package:flyingdarts_authress_login/flyingdarts_authress_login.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -299,9 +299,7 @@ class SettingsPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: SelectableText(
-                accessToken.length > 50
-                    ? '${accessToken.substring(0, 50)}...'
-                    : accessToken,
+                accessToken.length > 50 ? '${accessToken.substring(0, 50)}...' : accessToken,
                 style: const TextStyle(
                   fontFamily: 'monospace',
                   fontSize: 12,

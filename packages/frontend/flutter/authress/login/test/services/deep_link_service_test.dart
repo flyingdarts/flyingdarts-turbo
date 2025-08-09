@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
+
 import 'package:app_links/app_links.dart';
-import 'package:authress_login/src/services/deep_link_service.dart';
-import 'package:authress_login/src/models/deep_link_config.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flyingdarts_authress_login/src/models/deep_link_config.dart';
+import 'package:flyingdarts_authress_login/src/services/deep_link_service.dart';
+import 'package:mocktail/mocktail.dart';
 
 // Mock for AppLinks
 class MockAppLinks extends Mock implements AppLinks {}

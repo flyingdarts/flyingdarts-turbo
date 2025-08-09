@@ -67,7 +67,7 @@ flutter pub get
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:authress_login/authress_login.dart';
+import 'package:flyingdarts_authress_login/authress_login.dart';
 import 'package:go_router/go_router.dart';
 
 void main() {
@@ -572,7 +572,7 @@ flutter test
    - Check that you're using the correct guard methods
 
 3. **Context extensions not available**
-   - Make sure you've imported `package:authress_login/authress_login.dart`
+   - Make sure you've imported `package:flyingdarts_authress_login/authress_login.dart`
    - Verify that your widget is within the provider tree
    - Check that context is properly passed down
 
