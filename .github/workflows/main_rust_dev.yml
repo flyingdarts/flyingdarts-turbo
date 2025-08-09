@@ -1,6 +1,7 @@
 name: Build Rust Applications
 
 on:
+  workflow_dispatch:
   workflow_call:
   push:
     paths:
