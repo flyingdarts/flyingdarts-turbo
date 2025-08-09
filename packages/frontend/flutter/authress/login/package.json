@@ -1,6 +1,6 @@
 {
   "name": "flyingdarts_authress_login",
-  "version": "0.0.2-dev.1",
+  "version": "0.0.2-dev.2",
   "description": "A package for Authress login",
   "private": false,
   "scripts": {

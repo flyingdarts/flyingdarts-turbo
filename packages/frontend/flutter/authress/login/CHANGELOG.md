@@ -6,7 +6,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [0.0.2-dev.1] - 2025-08-09
 
-### Added
+### Initial changelog
 
 - Provider-based authentication context and state management
 - Go Router integration with redirect logic and route guards
@@ -19,3 +19,8 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 - Core models: `AuthressConfiguration`, `AuthState` variants, `UserProfile`, `DeepLinkConfig`
 - Example usage and API documentation in `README.md`
 
+## [0.0.2-dev.2] - 2025-08-09
+
+### Update docs
+
+- Update docs
