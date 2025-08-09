@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# flyingdarts-turbo Solution Rebuilder Script (POSIX sh compatible)
+# flyingdarts Solution Rebuilder Script (POSIX sh compatible)
 # This script will:
 # 1. Find all .csproj files in the repo, but only in directories specified by the workspaces in package.json
 # 2. Delete the existing .sln file at the root (after confirmation)
@@ -11,7 +11,7 @@ set -e
 
 # Operate relative to the current working directory
 ROOT_DIR="."
-SOLUTION_NAME="flyingdarts-turbo.sln"
+SOLUTION_NAME="flyingdarts.sln"
 SOLUTION_PATH="$ROOT_DIR/$SOLUTION_NAME"
 PACKAGE_JSON="$ROOT_DIR/package.json"
 
@@ -71,7 +71,7 @@ if [ -f "$SOLUTION_PATH" ]; then
 fi
 
 echo "🆕 Creating new solution file: $SOLUTION_NAME"
-dotnet new sln -n "flyingdarts-turbo" --output "$ROOT_DIR"
+dotnet new sln -n "flyingdarts" --output "$ROOT_DIR"
 
 # Add each project
 echo "$CSPROJ_FILES" | while IFS= read PROJECT; do

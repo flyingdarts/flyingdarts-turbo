@@ -28,8 +28,8 @@ The service is built using modern .NET patterns with dependency injection, provi
 
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Navigate to the meetings service**:

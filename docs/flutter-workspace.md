@@ -40,7 +40,7 @@ The workspace is configured in the root `pubspec.yaml` file and includes:
 
 1. **Navigate to the workspace root** (repository root):
    ```bash
-   cd /path/to/flyingdarts-turbo
+   cd /path/to/flyingdarts
    ```
 
 2. **Get dependencies for all packages**:
@@ -103,7 +103,7 @@ cd packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_auth
 dart pub add package_name
 
 # Or use the workspace script
-cd /path/to/flyingdarts-turbo
+cd /path/to/flyingdarts
 dart pub -C packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_auth add package_name
 ```
 
@@ -131,7 +131,7 @@ cd packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_auth
 dart pub publish
 
 # Or use the workspace script
-cd /path/to/flyingdarts-turbo
+cd /path/to/flyingdarts
 dart pub -C packages/frontend/flutter/features/flyingdarts_frontend_flutter_features_auth publish
 ```
 
