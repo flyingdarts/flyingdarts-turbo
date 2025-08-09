@@ -2,6 +2,12 @@ name: Main Angular Workflow (Development)
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "The environment to deploy to"
+        required: true
+        default: "development"
+
   workflow_call:
   push:
     paths:
