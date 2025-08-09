@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Flyingdarts.Core package provides essential core functionality and shared components for the Flying Darts Turbo platform. This package contains fundamental models, extensions, and utilities that are used across multiple services in the backend infrastructure.
+The Flyingdarts.Core package provides essential core functionality and shared components for the Flyingdarts Turbo platform. This package contains fundamental models, extensions, and utilities that are used across multiple services in the backend infrastructure.
 
 The package is designed to:
 - Provide shared data models for WebSocket communication
@@ -227,4 +227,4 @@ When contributing to this package:
 
 ## License
 
-This package is part of the Flying Darts Turbo monorepo and follows the same licensing terms.
+This package is part of the Flyingdarts Turbo monorepo and follows the same licensing terms.

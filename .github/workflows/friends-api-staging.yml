@@ -1,0 +1,29 @@
+name: Friends API Lambda (Staging)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - staging
+    paths:
+      - "apps/backend/dotnet/friends/**"
+      - "packages/backend/dotnet/**"
+      - ".github/workflows/friends-api-staging.yml"
+jobs:
+  build-friends-api-staging:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.friends.api"
+      project-directory: "apps/backend/dotnet/friends"
+      lambda-function-name: "Flyingdarts-Friends-Api-Staging"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-friends-api-staging:
+    needs: build-friends-api-staging
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Friends-Api-Staging"
+      artifact-name: "Flyingdarts-Friends-Api-Staging-package"
+      environment: "staging"
+    secrets: inherit

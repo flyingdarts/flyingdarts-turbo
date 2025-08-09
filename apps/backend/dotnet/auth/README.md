@@ -1,8 +1,8 @@
-# Flying Darts Auth API
+# Flyingdarts Auth API
 
 ## Overview
 
-The Flying Darts Auth API is a .NET 8 AWS Lambda function that serves as a custom authorizer for API Gateway. It provides authentication and authorization services for the Flying Darts Turbo platform by validating tokens through Authress integration and generating appropriate IAM policies for AWS resource access.
+The Flyingdarts Auth API is a .NET 8 AWS Lambda function that serves as a custom authorizer for API Gateway. It provides authentication and authorization services for the Flyingdarts Turbo platform by validating tokens through Authress integration and generating appropriate IAM policies for AWS resource access.
 
 This service is responsible for:
 - Validating authentication tokens from API Gateway requests
@@ -355,4 +355,4 @@ Common log messages:
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.

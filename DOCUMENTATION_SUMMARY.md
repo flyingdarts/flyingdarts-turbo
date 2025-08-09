@@ -1,8 +1,8 @@
-# Flying Darts Turbo Monorepo - Documentation Summary
+# Flyingdarts Turbo Monorepo - Documentation Summary
 
 ## Overview
 
-This document provides a comprehensive summary of all packages that have been documented in the Flying Darts Turbo monorepo. The documentation follows the specifications outlined in `docs/agent/documentation-agent-specification.md` and provides consistent, detailed documentation for all packages across the platform.
+This document provides a comprehensive summary of all packages that have been documented in the Flyingdarts Turbo monorepo. The documentation follows the specifications outlined in `docs/agent/documentation-agent-specification.md` and provides consistent, detailed documentation for all packages across the platform.
 
 ## Documentation Standards Applied
 
@@ -211,8 +211,8 @@ The following packages still require documentation according to the specificatio
 
 ## Conclusion
 
-The documentation effort has successfully covered 8 key packages in the Flying Darts Turbo monorepo, providing comprehensive documentation that follows the established specifications. The documented packages represent the core infrastructure and key features of the platform.
+The documentation effort has successfully covered 8 key packages in the Flyingdarts Turbo monorepo, providing comprehensive documentation that follows the established specifications. The documented packages represent the core infrastructure and key features of the platform.
 
 The remaining packages require similar comprehensive documentation to complete the monorepo documentation coverage. Each package should follow the same high standards established in the documented packages, ensuring consistency and completeness across the entire codebase.
 
-This documentation foundation will significantly improve developer experience, onboarding, and maintenance of the Flying Darts Turbo platform.
+This documentation foundation will significantly improve developer experience, onboarding, and maintenance of the Flyingdarts Turbo platform.

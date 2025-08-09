@@ -1,0 +1,29 @@
+name: Signalling API Lambda (Production)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - production
+    paths:
+      - "apps/backend/dotnet/signalling/**"
+      - "packages/backend/dotnet/**"
+      - ".github/workflows/signalling-api-production.yml"
+jobs:
+  build-signalling-api-production:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.signalling.api"
+      project-directory: "apps/backend/dotnet/signalling/api"
+      lambda-function-name: "Flyingdarts-Signalling-Api-Production"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-signalling-api-production:
+    needs: build-signalling-api-production
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Signalling-Api-Production"
+      artifact-name: "Flyingdarts-Signalling-Api-Production-package"
+      environment: "production"
+    secrets: inherit

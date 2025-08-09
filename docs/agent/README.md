@@ -1,6 +1,6 @@
-# Flying Darts Documentation Agent
+# Flyingdarts Documentation Agent
 
-This directory contains the specification and implementation for a comprehensive background documentation agent that automatically generates and maintains documentation for the entire Flying Darts Turbo monorepo.
+This directory contains the specification and implementation for a comprehensive background documentation agent that automatically generates and maintains documentation for the entire Flyingdarts Turbo monorepo.
 
 ## Overview
 
@@ -253,7 +253,7 @@ To contribute to the documentation agent:
 
 ## License
 
-This documentation agent is part of the Flying Darts Turbo monorepo and follows the same licensing terms.
+This documentation agent is part of the Flyingdarts Turbo monorepo and follows the same licensing terms.
 
 ---
 

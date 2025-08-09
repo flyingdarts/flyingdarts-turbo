@@ -1,4 +1,4 @@
-# Flying Darts Turbo Monorepo
+# Flyingdarts Turbo Monorepo
 
 ## Recommended VS Code Extensions
 
