@@ -1,8 +1,8 @@
-# Flying Darts Mobile App
+# Flyingdarts Mobile App
 
 ## Overview
 
-The Flying Darts Mobile App is a cross-platform mobile application built with Flutter that provides a comprehensive darts gaming experience on iOS, Android, and Web platforms. This application offers real-time multiplayer gameplay, voice communication, and social features optimized for mobile devices.
+The Flyingdarts Mobile App is a cross-platform mobile application built with Flutter that provides a comprehensive darts gaming experience on iOS, Android, and Web platforms. This application offers real-time multiplayer gameplay, voice communication, and social features optimized for mobile devices.
 
 This application is responsible for:
 - Providing a native mobile experience for darts games
@@ -639,4 +639,4 @@ void main() {
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.

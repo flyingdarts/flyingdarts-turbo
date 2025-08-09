@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Flyingdarts.Backend.Friends.Api service is a .NET 8 AWS Lambda function that provides friends management functionality for the Flying Darts Turbo platform. This service handles friend requests, friend lists, and social features through REST API endpoints, enabling users to connect and play darts with their friends.
+The Flyingdarts.Backend.Friends.Api service is a .NET 8 AWS Lambda function that provides friends management functionality for the Flyingdarts Turbo platform. This service handles friend requests, friend lists, and social features through REST API endpoints, enabling users to connect and play darts with their friends.
 
 This service is responsible for:
 - Managing friend relationships and friend requests
@@ -534,4 +534,4 @@ Check CloudWatch logs for detailed execution information.
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.

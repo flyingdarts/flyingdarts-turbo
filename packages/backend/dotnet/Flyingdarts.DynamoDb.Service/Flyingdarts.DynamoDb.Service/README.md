@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Flyingdarts.DynamoDb.Service package provides a comprehensive data access layer for DynamoDB operations in the Flying Darts Turbo platform. This package abstracts DynamoDB interactions and provides a clean, type-safe interface for managing game data, user information, and application state.
+The Flyingdarts.DynamoDb.Service package provides a comprehensive data access layer for DynamoDB operations in the Flyingdarts Turbo platform. This package abstracts DynamoDB interactions and provides a clean, type-safe interface for managing game data, user information, and application state.
 
 The package is designed to:
 - Provide a unified interface for DynamoDB operations
@@ -519,4 +519,4 @@ When contributing to this package:
 
 ## License
 
-This package is part of the Flying Darts Turbo monorepo and follows the same licensing terms.
+This package is part of the Flyingdarts Turbo monorepo and follows the same licensing terms.

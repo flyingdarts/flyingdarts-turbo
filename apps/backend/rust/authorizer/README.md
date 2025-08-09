@@ -1,8 +1,8 @@
-# Flying Darts Authorizer
+# Flyingdarts Authorizer
 
 ## Overview
 
-The Flying Darts Authorizer is a Rust-based AWS Lambda function that provides authorization services for the Flying Darts Turbo monorepo. It serves as an API Gateway authorizer and handles token validation using both custom authentication logic and Authress integration.
+The Flyingdarts Authorizer is a Rust-based AWS Lambda function that provides authorization services for the Flyingdarts Turbo monorepo. It serves as an API Gateway authorizer and handles token validation using both custom authentication logic and Authress integration.
 
 This service is responsible for:
 - Validating authorization tokens for API Gateway requests
@@ -277,4 +277,4 @@ Check CloudWatch logs for detailed execution information.
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details. 
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details. 

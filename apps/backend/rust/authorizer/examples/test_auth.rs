@@ -1,11 +1,10 @@
 use flyingdarts_auth::{
-    create_auth_response, create_default_authress_service, get_user_id_from_token, AuthService,
-    ExampleAuthService,
+    create_auth_response, create_default_authress_service, get_user_id_from_token, AuthService, ExampleAuthService,
 };
 
 #[tokio::main]
 async fn main() {
-    println!("🚀 Flying Darts Auth Service Demo\n");
+    println!("🚀 Flyingdarts Auth Service Demo\n");
 
     // Test the basic auth service
     println!("=== Basic Auth Service ===");

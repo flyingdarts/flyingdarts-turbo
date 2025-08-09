@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Keyboard Feature Package is a Flutter library that provides a comprehensive darts scoring keyboard interface for the Flying Darts Turbo platform. This package implements a specialized numeric keypad with darts-specific functionality, including score shortcuts, validation, and state management.
+The Keyboard Feature Package is a Flutter library that provides a comprehensive darts scoring keyboard interface for the Flyingdarts Turbo platform. This package implements a specialized numeric keypad with darts-specific functionality, including score shortcuts, validation, and state management.
 
 The package is designed to:
 - Provide a darts-specific scoring keyboard interface
@@ -382,4 +382,4 @@ When contributing to this package:
 
 ## License
 
-This package is part of the Flying Darts Turbo monorepo and follows the same licensing terms.
+This package is part of the Flyingdarts Turbo monorepo and follows the same licensing terms.

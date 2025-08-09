@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "name": "flyingdarts-docs-agent",
-  "description": "Background documentation agent for Flying Darts Turbo monorepo",
+  "description": "Background documentation agent for Flyingdarts Turbo monorepo",
 
   "templates": {
     "readme": "templates/readme.md",

@@ -8,6 +8,7 @@ on:
     paths:
       - "apps/frontend/angular/**"
       - ".github/workflows/main_angular_production.yml"
+      - "angular.json"
 jobs:
   build-angular-production:
     uses: ./.github/workflows/build-angular-app.yml

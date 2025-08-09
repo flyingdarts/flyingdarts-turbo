@@ -1,8 +1,8 @@
-# Flying Darts Core Package
+# Flyingdarts Core Package
 
 ## Overview
 
-The Flying Darts Core Package is a Flutter library that provides essential infrastructure and configuration management for the Flying Darts Turbo platform. It serves as the foundation for dependency injection, network configuration, and application setup across all Flutter applications in the monorepo.
+The Flyingdarts Core Package is a Flutter library that provides essential infrastructure and configuration management for the Flyingdarts Turbo platform. It serves as the foundation for dependency injection, network configuration, and application setup across all Flutter applications in the monorepo.
 
 This package is responsible for:
 - Configuring dependency injection with GetIt and Injectable
@@ -376,7 +376,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flying Darts',
+      title: 'Flyingdarts',
       home: MyHomePage(),
     );
   }
@@ -495,4 +495,4 @@ print('Dio instance: $dio');
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.
