@@ -44,7 +44,24 @@
               "outputHashing": "all",
               "optimization": true,
               "sourceMap": false,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "apps/frontend/angular/fd-app/src/environments/environment.ts",
+                  "with": "apps/frontend/angular/fd-app/src/environments/environment.production.ts"
+                }
+              ]
+            },
+            "staging": {
+              "optimization": false,
+              "sourceMap": false,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "apps/frontend/angular/fd-app/src/environments/environment.ts",
+                  "with": "apps/frontend/angular/fd-app/src/environments/environment.staging.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
