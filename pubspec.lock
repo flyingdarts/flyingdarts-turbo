@@ -514,6 +514,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flyingdarts_authress_login:
+    dependency: transitive
+    description:
+      name: flyingdarts_authress_login
+      sha256: "15df6bdaad56a51644d4eb43602d115f11a18da42d07c950fc9dc3b36ff93d61"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2-dev.3"
   frontend_server_client:
     dependency: transitive
     description:
