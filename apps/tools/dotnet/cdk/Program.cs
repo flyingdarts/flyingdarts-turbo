@@ -24,6 +24,22 @@ namespace Flyingdarts.CDK
                 }
             );
 
+            // Frontend stack - Marketing - Prod only
+            new FrontendStack(
+                app,
+                new FrontendStackProps
+                {
+                    DeploymentEnvironment = DeploymentEnvironment.Marketing,
+                    StackEnvironment = new StackEnvironment
+                    {
+                        Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
+                    HostedZone = domainResources.FlyingdartsHostedZone,
+                    Certificate = domainResources.FlyingdartsCertificate,
+                }
+            );
+
             // Frontend stack - Development
             new FrontendStack(
                 app,

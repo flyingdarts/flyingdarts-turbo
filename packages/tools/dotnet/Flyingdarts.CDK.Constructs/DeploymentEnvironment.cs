@@ -14,6 +14,7 @@ public readonly struct DeploymentEnvironment
         Subdomain = subdomain;
     }
 
+    public static readonly DeploymentEnvironment Marketing = new("Marketing", "marketing");
     public static readonly DeploymentEnvironment Development = new("Development", "dev");
     public static readonly DeploymentEnvironment Staging = new("Staging", "staging");
     public static readonly DeploymentEnvironment Production = new("Production", "www");

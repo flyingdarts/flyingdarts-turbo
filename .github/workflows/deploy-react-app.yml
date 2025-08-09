@@ -1,0 +1,52 @@
+name: Deploy React App
+
+on:
+  workflow_call:
+    inputs:
+      project-name:
+        description: "Name of the project to deploy"
+        required: true
+        type: string
+
+      app-name:
+        description: "Name of the app to deploy"
+        required: true
+        type: string
+
+    secrets:
+      AWS_REGION:
+        description: "AWS Region"
+        required: true
+      AWS_DEPLOYMENT_ROLE_ARN:
+        description: "AWS Deployment Role ARN used for deploying to S3"
+        required: true
+      AWS_CLOUDFRONT_DISTRIBUTION_ID:
+        description: "AWS CloudFront Distribution for invalidating the cache"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download Angular package from specific workflow run
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.project-name }}
+          path: ./dist
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.2.1
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to S3
+        run: aws s3 sync ./dist/${{ inputs.project-name }} s3://webappflyingdartsbucket${{ inputs.app-name }} --delete
+
+      - name: Purge CloudFront cache
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

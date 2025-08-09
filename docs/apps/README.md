@@ -11,6 +11,7 @@ apps/
 │   └── rust/         # Rust backend applications
 ├── frontend/         # Frontend applications
 │   ├── angular/      # Angular web applications
+│   ├── react/        # React web applications
 │   └── flutter/      # Flutter mobile applications
 └── tools/            # Development and deployment tools
     └── dotnet/       # .NET tools and utilities
@@ -59,6 +60,12 @@ apps/
   - Cross-platform mobile application
   - iOS, Android, and Web support
 
+#### React Apps (`frontend/react/`)
+
+- **[marketing/](frontend/react/marketing/)** - Marketing Website
+  - React + Vite marketing website
+  - Public-facing landing pages and content
+
 ### Tools Applications
 
 #### .NET Tools (`tools/dotnet/`)
@@ -77,6 +84,7 @@ apps/
 ## 🔗 Quick Navigation
 
 ### Backend Services
+
 - [X01 Game API](backend/dotnet/api/) - Core game logic and scoring
 - [Authentication Service](backend/dotnet/auth/) - User authentication and authorization
 - [Friends Service](backend/dotnet/friends/) - Social features and friend management
@@ -84,10 +92,13 @@ apps/
 - [Rust Authorizer](backend/rust/authorizer/) - Custom authorization logic
 
 ### Frontend Applications
+
 - [Angular Web App](frontend/angular/fd-app/) - Web-based darts application
+- [React Marketing Website](frontend/react/marketing/) - Marketing website
 - [Flutter Mobile App](frontend/flutter/flyingdarts_mobile/) - Cross-platform mobile app
 
 ### Development Tools
+
 - [CDK Infrastructure](tools/dotnet/cdk/) - AWS infrastructure as code
 
 ## 🛠️ Technology Stack
@@ -95,11 +106,13 @@ apps/
 - **.NET/C#**: 5 projects (4 backend + 1 tools)
 - **Rust**: 1 project (backend authorization)
 - **Angular/TypeScript**: 1 project (web frontend)
+- **React/TypeScript**: 1 project (marketing website)
 - **Flutter/Dart**: 1 project (mobile frontend)
 
 ## 📋 Development Guidelines
 
 ### Prerequisites
+
 - .NET 8.0 SDK for .NET applications
 - Rust toolchain for Rust applications
 - Node.js and Angular CLI for Angular applications
@@ -107,12 +120,14 @@ apps/
 - AWS CLI and CDK for infrastructure tools
 
 ### Getting Started
+
 1. Clone the repository
 2. Install required dependencies for your target application
 3. Follow the specific setup instructions in each application's README
 4. Run the application using the provided scripts or commands
 
 ### Contributing
+
 - Each application has its own development guidelines
 - Follow the coding standards and patterns established in each project
 - Ensure all tests pass before submitting changes

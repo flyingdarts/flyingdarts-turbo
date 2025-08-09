@@ -1,8 +1,66 @@
+## Flyingdarts Marketing Website (React)
+
+### Overview
+
+Public marketing website for Flyingdarts, built with React 18, TypeScript, Tailwind, and Vite.
+
+### Location
+
+`apps/frontend/react/marketing`
+
+### Prerequisites
+
+- Node.js 18+
+- npm or bun
+
+### Setup
+
+```bash
+cd apps/frontend/react/marketing
+npm install
+```
+
+### Development
+
+```bash
+npm run dev
+# Opens on http://localhost:5173
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Preview (serve production build)
+
+```bash
+npm run preview
+```
+
+### Scripts
+
+- `dev` / `start`: Vite dev server
+- `build`: Production build
+- `preview`: Preview production build
+- `lint`: Lint sources
+
+### Tech Stack
+
+- React 18, TypeScript, Vite
+- Tailwind CSS, Radix UI, Lucide Icons
+- React Router, TanStack Query
+
+### Deployment
+
+Outputs to `dist/`. Host on any static host (CloudFront, Netlify, Vercel, etc.).
+
 # Welcome to your Lovable project
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/0c35da6e-a86d-429e-9956-7be4181ec407
+**URL**: <https://lovable.dev/projects/0c35da6e-a86d-429e-9956-7be4181ec407>
 
 ## How can I edit this code?
 
