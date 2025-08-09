@@ -52,7 +52,10 @@ class ConnectToGameWidget extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyTheme.secondaryColor,
                       foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -73,7 +76,10 @@ class ConnectToGameWidget extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyTheme.primaryColor[700],
                       foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -110,7 +116,9 @@ class ConnectToGameWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: MyTheme.primaryColor[800],
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: MyTheme.secondaryColor.withOpacity(0.3)),
+              border: Border.all(
+                color: MyTheme.secondaryColor.withOpacity(0.3),
+              ),
             ),
             child: Center(
               child: Column(
@@ -213,7 +221,9 @@ class ConnectToGameWidget extends StatelessWidget {
                   fillColor: MyTheme.primaryColor[700],
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
-                    borderSide: BorderSide(color: MyTheme.secondaryColor.withOpacity(0.3)),
+                    borderSide: BorderSide(
+                      color: MyTheme.secondaryColor.withOpacity(0.3),
+                    ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),

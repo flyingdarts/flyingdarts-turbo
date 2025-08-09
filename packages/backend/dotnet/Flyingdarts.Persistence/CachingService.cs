@@ -22,16 +22,10 @@ public class CachingService<T> : ICachingService<T>
 
         try
         {
-            var results = await DbContext
-                .FromQueryAsync<T>(Query(gameId), OperationConfig)
-                .GetRemainingAsync(cancellationToken);
+            var results = await DbContext.FromQueryAsync<T>(Query(gameId), OperationConfig).GetRemainingAsync(cancellationToken);
 
-            Console.WriteLine(
-                $"[DEBUG] CachingService.Load - Query completed, found {results.Count()} results"
-            );
-            Console.WriteLine(
-                $"[DEBUG] CachingService.Load - Query results: {JsonSerializer.Serialize(results)}"
-            );
+            Console.WriteLine($"[DEBUG] CachingService.Load - Query completed, found {results.Count()} results");
+            Console.WriteLine($"[DEBUG] CachingService.Load - Query results: {JsonSerializer.Serialize(results)}");
 
             if (results.Any())
             {
@@ -42,17 +36,13 @@ public class CachingService<T> : ICachingService<T>
             }
             else
             {
-                Console.WriteLine(
-                    $"[WARNING] CachingService.Load - No state found for gameId: {gameId}"
-                );
+                Console.WriteLine($"[WARNING] CachingService.Load - No state found for gameId: {gameId}");
                 State = default(T);
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine(
-                $"[ERROR] CachingService.Load - Failed to load state for gameId {gameId}: {ex.Message}"
-            );
+            Console.WriteLine($"[ERROR] CachingService.Load - Failed to load state for gameId {gameId}: {ex.Message}");
             Console.WriteLine($"[ERROR] CachingService.Load - Exception type: {ex.GetType().Name}");
             Console.WriteLine($"[ERROR] CachingService.Load - Stack trace: {ex.StackTrace}");
             throw;
@@ -107,8 +97,7 @@ public class CachingService<T> : ICachingService<T>
         get
         {
             var stateType = typeof(T);
-            var tableName =
-                $"Flyingdarts-{stateType.Name}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}";
+            var tableName = $"Flyingdarts-{stateType.Name}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}";
             return new DynamoDBOperationConfig { OverrideTableName = tableName };
         }
     }
@@ -135,9 +124,7 @@ public class CachingService<T> : ICachingService<T>
         Console.WriteLine(
             $"[DEBUG] CachingService.AddDart - Starting with dart: Id={dart.Id}, GameId={dart.GameId}, PlayerId={dart.PlayerId}"
         );
-        Console.WriteLine(
-            $"[DEBUG] CachingService.AddDart - Current State is null: {State == null}"
-        );
+        Console.WriteLine($"[DEBUG] CachingService.AddDart - Current State is null: {State == null}");
 
         if (State == null)
         {
@@ -145,13 +132,9 @@ public class CachingService<T> : ICachingService<T>
             throw new InvalidOperationException("State is null, cannot add dart");
         }
 
-        Console.WriteLine(
-            $"[DEBUG] CachingService.AddDart - Current darts count before adding: {State.Darts?.Count ?? 0}"
-        );
+        Console.WriteLine($"[DEBUG] CachingService.AddDart - Current darts count before adding: {State.Darts?.Count ?? 0}");
         State.Darts.Add(dart);
-        Console.WriteLine(
-            $"[DEBUG] CachingService.AddDart - Dart added successfully. New darts count: {State.Darts.Count}"
-        );
+        Console.WriteLine($"[DEBUG] CachingService.AddDart - Dart added successfully. New darts count: {State.Darts.Count}");
     }
 
     public void AddUser(User user)

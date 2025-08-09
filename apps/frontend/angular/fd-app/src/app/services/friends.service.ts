@@ -1,24 +1,17 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable, tap } from "rxjs";
-import {
-  FriendDto,
-  FriendRequestDto,
-  FriendRequestResponseDto,
-  UserSearchDto,
-} from "../dtos/friend.dto";
-import { FriendsRepository } from "../repositories/friends.repository";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { FriendDto, FriendRequestResponseDto, UserSearchDto } from '../dtos/friend.dto';
+import { FriendsRepository } from '../repositories/friends.repository';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class FriendsService {
   private friendsSubject = new BehaviorSubject<FriendDto[]>([]);
-  private friendRequestsSubject = new BehaviorSubject<FriendRequestResponseDto>(
-    {
-      IncomingRequests: [],
-      OutgoingRequests: [],
-      any: false,
-      length: 0,
-    }
-  );
+  private friendRequestsSubject = new BehaviorSubject<FriendRequestResponseDto>({
+    IncomingRequests: [],
+    OutgoingRequests: [],
+    any: false,
+    length: 0,
+  });
 
   public friends$ = this.friendsSubject.asObservable();
   public friendRequests$ = this.friendRequestsSubject.asObservable();
@@ -27,15 +20,13 @@ export class FriendsService {
 
   // Load friends
   public loadFriends(): Observable<FriendDto[]> {
-    return this.friendsRepository
-      .getFriends()
-      .pipe(tap((friends) => this.friendsSubject.next(friends)));
+    return this.friendsRepository.getFriends().pipe(tap(friends => this.friendsSubject.next(friends)));
   }
 
   // Load friend requests
   public loadFriendRequests(): Observable<FriendRequestResponseDto> {
     return this.friendsRepository.getFriendRequests().pipe(
-      tap((requests) => {
+      tap(requests => {
         console.log(requests);
         return this.friendRequestsSubject.next(requests);
       })
@@ -43,10 +34,7 @@ export class FriendsService {
   }
 
   // Send friend request
-  public sendFriendRequest(
-    targetUserId: string,
-    message?: string
-  ): Observable<any> {
+  public sendFriendRequest(targetUserId: string, message?: string): Observable<any> {
     return this.friendsRepository.sendFriendRequest(targetUserId, message).pipe(
       tap(() => {
         // Reload friend requests after sending

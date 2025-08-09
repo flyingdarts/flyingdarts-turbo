@@ -25,9 +25,7 @@
             "inlineStyleLanguage": "scss",
             "assets": ["apps/frontend/angular/fd-app/src/favicon.ico", "apps/frontend/angular/fd-app/src/assets"],
             "styles": ["apps/frontend/angular/fd-app/src/styles.scss"],
-            "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ]
+            "scripts": ["node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           },
           "configurations": {
             "production": {
@@ -110,4 +108,4 @@
       }
     }
   }
-} 
+}

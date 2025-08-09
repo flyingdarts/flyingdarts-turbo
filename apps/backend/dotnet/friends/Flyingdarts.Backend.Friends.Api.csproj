@@ -18,7 +18,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
     <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
     <UseSystemTextJson>true</UseSystemTextJson>
-    <RootNamespace>Flyingdarts.Backend.Friends.Api</RootNamespace>  
+    <RootNamespace>Flyingdarts.Backend.Friends.Api</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.1" />
@@ -35,7 +35,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0-preview.6.25358.103" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.6.25358.103" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0-preview.6.25358.103" />
-
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\packages\backend\dotnet\Flyingdarts.Core\Flyingdarts.Core.csproj" />

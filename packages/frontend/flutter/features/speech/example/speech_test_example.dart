@@ -17,7 +17,8 @@ class SpeechTestExample extends StatelessWidget {
         backgroundColor: Colors.blue,
       ),
       body: BlocProvider(
-        create: (context) => GetIt.instance<SpeechBloc>()..add(const SpeechInitialize()),
+        create: (context) =>
+            GetIt.instance<SpeechBloc>()..add(const SpeechInitialize()),
         child: const SpeechTestContent(),
       ),
     );

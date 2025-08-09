@@ -22,11 +22,7 @@ export class WinnerPopupComponent implements OnInit {
   }
 
   haveWinner(winnerName: string | null | undefined): boolean {
-    return (
-      winnerName !== undefined &&
-      winnerName !== null &&
-      winnerName.trim() !== ''
-    );
+    return winnerName !== undefined && winnerName !== null && winnerName.trim() !== '';
   }
 
   private setHeight() {
@@ -38,11 +34,7 @@ export class WinnerPopupComponent implements OnInit {
       container.style.height = `calc(100% - ${navbarHeight}px)`;
       container.style.display = 'none';
     } else {
-      console.error(
-        'Navbar or Home Container element not found',
-        navbar,
-        container
-      );
+      console.error('Navbar or Home Container element not found', navbar, container);
     }
   }
 }

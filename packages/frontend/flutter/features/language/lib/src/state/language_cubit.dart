@@ -8,12 +8,16 @@ import 'language_state.dart';
 
 @lazySingleton
 class LanguageCubit extends Cubit<LanguageState> {
-  final ConfigWriter<LocaleSettings> _languageConfig = GetIt.I<ConfigWriter<LocaleSettings>>();
+  final ConfigWriter<LocaleSettings> _languageConfig =
+      GetIt.I<ConfigWriter<LocaleSettings>>();
 
-  LanguageCubit() : super(LanguageState(LocaleName("en-US", "English (United States)"), []));
+  LanguageCubit()
+    : super(LanguageState(LocaleName("en-US", "English (United States)"), []));
 
   void setPreferedLocale(LocaleName preferedLocale) async {
-    await _languageConfig.persist(LocaleSettings(localeIdentifier: preferedLocale.localeId));
+    await _languageConfig.persist(
+      LocaleSettings(localeIdentifier: preferedLocale.localeId),
+    );
     emit(state.copyWith(preferedLocale: preferedLocale));
   }
 
@@ -32,7 +36,10 @@ class LanguageCubit extends Cubit<LanguageState> {
         setAvailableLanguages(locales);
         if (_languageConfig.data.localeIdentifier != "") {
           setPreferedLocale(
-            locales.firstWhere((element) => element.localeId == _languageConfig.data.localeIdentifier),
+            locales.firstWhere(
+              (element) =>
+                  element.localeId == _languageConfig.data.localeIdentifier,
+            ),
           );
         } else {
           var locale = await _speechToText.systemLocale();

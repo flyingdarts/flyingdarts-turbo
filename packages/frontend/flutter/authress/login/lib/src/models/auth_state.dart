@@ -39,7 +39,8 @@ class AuthStateAuthenticated extends AuthState {
   bool get isTokenExpired => DateTime.now().isAfter(expiresAt);
 
   /// Check if the token will expire soon (within 5 minutes)
-  bool get willExpireSoon => DateTime.now().add(const Duration(minutes: 5)).isAfter(expiresAt);
+  bool get willExpireSoon =>
+      DateTime.now().add(const Duration(minutes: 5)).isAfter(expiresAt);
 
   @override
   String toString() {

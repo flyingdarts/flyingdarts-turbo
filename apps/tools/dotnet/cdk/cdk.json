@@ -2,15 +2,7 @@
   "app": "dotnet run --project Flyingdarts.CDK.csproj",
   "watch": {
     "include": ["**"],
-    "exclude": [
-      "README.md",
-      "cdk*.json",
-      "src/*/obj",
-      "src/*/bin",
-      "src/*.sln",
-      "src/*/GlobalSuppressions.cs",
-      "src/*/*.csproj"
-    ]
+    "exclude": ["README.md", "cdk*.json", "src/*/obj", "src/*/bin", "src/*.sln", "src/*/GlobalSuppressions.cs", "src/*/*.csproj"]
   },
   "context": {
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,

@@ -1,0 +1,231 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Default indentation
+indent_style = space
+indent_size = 2
+max_line_length = 140
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+
+# JavaScript/TypeScript files
+[*.{js,jsx,ts,tsx}]
+indent_size = 2
+
+# Angular specific
+[angular.json]
+indent_size = 2
+
+# Package.json files
+[package.json]
+indent_size = 2
+
+# C# files
+[*.{cs,csx}]
+indent_size = 4
+
+# C# project files
+[*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
+indent_size = 2
+
+# C# solution files
+[*.{sln,sw?}]
+indent_size = 2
+
+# Rust files
+[*.rs]
+indent_size = 4
+
+# Rust configuration files
+[Cargo.toml]
+indent_size = 4
+
+# Dart files
+[*.dart]
+indent_size = 2
+
+# Flutter/Dart specific
+[pubspec.yaml]
+indent_size = 2
+
+[pubspec.lock]
+indent_size = 2
+
+# Analysis options
+[analysis_options.yaml]
+indent_size = 2
+
+# Makefiles
+[Makefile]
+indent_style = tab
+
+# Shell scripts
+[*.{sh,bash}]
+indent_size = 2
+
+# PowerShell scripts
+[*.ps1]
+indent_size = 2
+
+# XML files
+[*.{xml,xsd,xslt}]
+indent_size = 2
+
+# HTML files
+[*.{html,htm}]
+indent_size = 2
+max_line_length = 140
+# HTML formatting preferences
+html_format_wrap_attributes = force-aligned
+html_format_wrap_line_length = 140
+
+# CSS/SCSS files
+[*.{css,scss,sass,less}]
+indent_size = 2
+
+# Configuration files
+[*.{config,conf,ini}]
+indent_size = 2
+
+# Docker files
+[Dockerfile]
+indent_size = 2
+
+# Git ignore files
+[.gitignore]
+indent_size = 2
+
+# EditorConfig files
+[.editorconfig]
+indent_size = 2
+
+# Turbo configuration
+[turbo.json]
+indent_size = 2
+
+# Beachball configuration
+[beachball.config.js]
+indent_size = 2
+
+# Jest configuration
+[.jestrc.js]
+indent_size = 2
+
+# TypeScript configuration
+[tsconfig.json]
+indent_size = 2
+
+# Rust toolchain
+[rust-toolchain.toml]
+indent_size = 4
+
+# Clippy configuration
+[.clippy.toml]
+indent_size = 4
+
+# Rustfmt configuration
+[rustfmt.toml]
+indent_size = 4
+
+# Setup files
+[setup-jest.ts]
+indent_size = 2
+
+# Fix scripts
+[fix-clean-scripts.js]
+indent_size = 2
+
+# Documentation
+[DOCUMENTATION_SUMMARY.md]
+trim_trailing_whitespace = false
+
+[combined-dotnet-blazor-rules.md]
+trim_trailing_whitespace = false
+
+[BEACHBALL.md]
+trim_trailing_whitespace = false
+
+# VS Code settings
+[.vscode/settings.json]
+indent_size = 2
+
+[.vscode/launch.json]
+indent_size = 2
+
+[.vscode/tasks.json]
+indent_size = 2
+
+# GitHub workflows
+[.github/workflows/*.yml]
+indent_size = 2
+
+# CDK files
+[cdk.json]
+indent_size = 2
+
+[cdk.context.json]
+indent_size = 2
+
+# Lambda tools defaults
+[aws-lambda-tools-defaults.json]
+indent_size = 2
+
+# Bruno API collection files
+[*.bru]
+indent_size = 2
+
+# Lock files (keep as-is)
+[package-lock.json]
+indent_size = 2
+
+[pubspec.lock]
+indent_size = 2
+
+[Cargo.lock]
+indent_size = 4
+
+# Generated files (keep as-is)
+[.flutter-plugins-dependencies]
+indent_size = 2
+
+# Binary files (no formatting)
+[*.{exe,dll,so,dylib,pdb,obj,bin}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset
+
+# Image files (no formatting)
+[*.{png,jpg,jpeg,gif,bmp,ico,svg,webp}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset
+
+# Font files (no formatting)
+[*.{woff,woff2,ttf,otf,eot}]
+charset = unset
+end_of_line = unset
+insert_final_newline = unset
+trim_trailing_whitespace = unset
+indent_style = unset
+indent_size = unset

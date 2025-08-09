@@ -36,8 +36,8 @@ dotnet add package Flyingdarts.Persistence
 ### From Source
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Navigate to the persistence package**:

@@ -3,7 +3,8 @@ import 'package:flutter_gherkin/flutter_gherkin.dart';
 import 'package:gherkin/gherkin.dart';
 
 class TapButtonStep extends When1WithWorld<String, FlutterWorld> {
-  TapButtonStep() : super(StepDefinitionConfiguration()..timeout = Duration(seconds: 10));
+  TapButtonStep()
+    : super(StepDefinitionConfiguration()..timeout = Duration(seconds: 10));
 
   @override
   Future<void> executeStep(String input1) async {

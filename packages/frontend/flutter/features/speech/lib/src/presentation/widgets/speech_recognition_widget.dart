@@ -96,7 +96,9 @@ class SpeechRecognitionWidget extends StatelessWidget {
           context.read<SpeechBloc>().add(const SpeechButtonLongPressEnded());
         },
         onLongPressCancel: () {
-          context.read<SpeechBloc>().add(const SpeechButtonLongPressCancelled());
+          context.read<SpeechBloc>().add(
+            const SpeechButtonLongPressCancelled(),
+          );
         },
         child: Icon(
           size: 300,

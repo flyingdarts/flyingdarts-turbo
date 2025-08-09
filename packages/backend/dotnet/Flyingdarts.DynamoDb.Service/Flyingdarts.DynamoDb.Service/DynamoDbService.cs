@@ -10,10 +10,7 @@ public class DynamoDbService : IDynamoDbService
     private IDynamoDBContext DbContext;
     private DynamoDBOperationConfig OperationConfig;
 
-    public DynamoDbService(
-        IDynamoDBContext dbContext,
-        IOptions<ApplicationOptions> applicationOptions
-    )
+    public DynamoDbService(IDynamoDBContext dbContext, IOptions<ApplicationOptions> applicationOptions)
     {
         DbContext = dbContext;
         OperationConfig = applicationOptions.Value.ToOperationConfig();
@@ -28,10 +25,7 @@ public class DynamoDbService : IDynamoDbService
         return games;
     }
 
-    public async Task<Game?> GetOpenGameByUserIdAsync(
-        long gameId,
-        CancellationToken cancellationToken
-    )
+    public async Task<Game?> GetOpenGameByUserIdAsync(long gameId, CancellationToken cancellationToken)
     {
         var games = await DbContext
             .FromQueryAsync<Game>(QueryGameConfigByGameCreator(gameId.ToString()), OperationConfig)
@@ -46,10 +40,7 @@ public class DynamoDbService : IDynamoDbService
         return null;
     }
 
-    public async Task<List<Game>> ReadStartedGameAsync(
-        long gameId,
-        CancellationToken cancellationToken
-    )
+    public async Task<List<Game>> ReadStartedGameAsync(long gameId, CancellationToken cancellationToken)
     {
         var games = await DbContext
             .FromQueryAsync<Game>(QueryStartedGameConfig(gameId.ToString()), OperationConfig)
@@ -58,10 +49,7 @@ public class DynamoDbService : IDynamoDbService
         return games;
     }
 
-    public async Task<List<GamePlayer>> ReadGamePlayersAsync(
-        long gameId,
-        CancellationToken cancellationToken
-    )
+    public async Task<List<GamePlayer>> ReadGamePlayersAsync(long gameId, CancellationToken cancellationToken)
     {
         var gamePlayers = await DbContext
             .FromQueryAsync<GamePlayer>(QueryGamePlayersConfig(gameId.ToString()), OperationConfig)
@@ -70,10 +58,7 @@ public class DynamoDbService : IDynamoDbService
         return gamePlayers;
     }
 
-    public async Task<List<GameDart>> ReadGameDartsAsync(
-        long gameId,
-        CancellationToken cancellationToken
-    )
+    public async Task<List<GameDart>> ReadGameDartsAsync(long gameId, CancellationToken cancellationToken)
     {
         var gameDarts = await DbContext
             .FromQueryAsync<GameDart>(QueryGameDartsConfig(gameId.ToString()), OperationConfig)
@@ -82,10 +67,7 @@ public class DynamoDbService : IDynamoDbService
         return gameDarts.ToList();
     }
 
-    public async Task<List<User>> ReadUsersAsync(
-        string[] userIds,
-        CancellationToken cancellationToken
-    )
+    public async Task<List<User>> ReadUsersAsync(string[] userIds, CancellationToken cancellationToken)
     {
         List<User> users = new List<User>();
         for (var i = 0; i < userIds.Length; i++)
@@ -104,26 +86,16 @@ public class DynamoDbService : IDynamoDbService
         return results.FirstOrDefault() ?? throw new UserNotFoundException(nameof(userId), userId);
     }
 
-    public async Task<User> ReadUserByAuthProviderUserIdAsync(
-        string authProviderUserId,
-        CancellationToken cancellationToken
-    )
+    public async Task<User> ReadUserByAuthProviderUserIdAsync(string authProviderUserId, CancellationToken cancellationToken)
     {
         var results = await DbContext
-            .FromQueryAsync<User>(
-                QueryUserConfigByAuthProviderUserId(authProviderUserId),
-                OperationConfig
-            )
+            .FromQueryAsync<User>(QueryUserConfigByAuthProviderUserId(authProviderUserId), OperationConfig)
             .GetRemainingAsync(cancellationToken);
 
-        return results.FirstOrDefault()
-            ?? throw new UserNotFoundException(nameof(authProviderUserId), authProviderUserId);
+        return results.FirstOrDefault() ?? throw new UserNotFoundException(nameof(authProviderUserId), authProviderUserId);
     }
 
-    public async Task<User?> ReadUserByConnectionIdAsync(
-        string connectionId,
-        CancellationToken cancellationToken
-    )
+    public async Task<User?> ReadUserByConnectionIdAsync(string connectionId, CancellationToken cancellationToken)
     {
         var results = await DbContext
             .FromQueryAsync<User>(QueryUserConfigByConnectionId(connectionId), OperationConfig)
@@ -134,9 +106,7 @@ public class DynamoDbService : IDynamoDbService
 
     public async Task<List<User>> ReadAllUsersAsync(CancellationToken cancellationToken)
     {
-        var results = await DbContext
-            .FromQueryAsync<User>(QueryAllUsersConfig(), OperationConfig)
-            .GetRemainingAsync(cancellationToken);
+        var results = await DbContext.FromQueryAsync<User>(QueryAllUsersConfig(), OperationConfig).GetRemainingAsync(cancellationToken);
 
         return results;
     }
@@ -193,34 +163,20 @@ public class DynamoDbService : IDynamoDbService
         try
         {
             var write = DbContext.CreateBatchWrite<GameDart>(OperationConfig);
-            Console.WriteLine(
-                $"[DEBUG] DynamoDbService.WriteGameDartAsync - Created batch write operation"
-            );
+            Console.WriteLine($"[DEBUG] DynamoDbService.WriteGameDartAsync - Created batch write operation");
 
             write.AddPutItem(dart);
-            Console.WriteLine(
-                $"[DEBUG] DynamoDbService.WriteGameDartAsync - Added dart to batch write"
-            );
+            Console.WriteLine($"[DEBUG] DynamoDbService.WriteGameDartAsync - Added dart to batch write");
 
-            Console.WriteLine(
-                $"[DEBUG] DynamoDbService.WriteGameDartAsync - Executing batch write"
-            );
+            Console.WriteLine($"[DEBUG] DynamoDbService.WriteGameDartAsync - Executing batch write");
             await write.ExecuteAsync(cancellationToken);
-            Console.WriteLine(
-                $"[DEBUG] DynamoDbService.WriteGameDartAsync - Batch write executed successfully"
-            );
+            Console.WriteLine($"[DEBUG] DynamoDbService.WriteGameDartAsync - Batch write executed successfully");
         }
         catch (Exception ex)
         {
-            Console.WriteLine(
-                $"[ERROR] DynamoDbService.WriteGameDartAsync - Failed to write dart to database: {ex.Message}"
-            );
-            Console.WriteLine(
-                $"[ERROR] DynamoDbService.WriteGameDartAsync - Exception type: {ex.GetType().Name}"
-            );
-            Console.WriteLine(
-                $"[ERROR] DynamoDbService.WriteGameDartAsync - Stack trace: {ex.StackTrace}"
-            );
+            Console.WriteLine($"[ERROR] DynamoDbService.WriteGameDartAsync - Failed to write dart to database: {ex.Message}");
+            Console.WriteLine($"[ERROR] DynamoDbService.WriteGameDartAsync - Exception type: {ex.GetType().Name}");
+            Console.WriteLine($"[ERROR] DynamoDbService.WriteGameDartAsync - Stack trace: {ex.StackTrace}");
             throw;
         }
     }
@@ -232,9 +188,7 @@ public class DynamoDbService : IDynamoDbService
         return new QueryOperationConfig { Filter = queryFilter };
     }
 
-    private static QueryOperationConfig QueryUserConfigByAuthProviderUserId(
-        string authProviderUserId
-    )
+    private static QueryOperationConfig QueryUserConfigByAuthProviderUserId(string authProviderUserId)
     {
         var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.User);
         queryFilter.AddCondition("AuthProviderUserId", QueryOperator.Equal, authProviderUserId);

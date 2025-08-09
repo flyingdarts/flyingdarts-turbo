@@ -9,7 +9,8 @@ class GetUserProfileQuery {
     required this.cognitoUserName,
   });
 
-  factory GetUserProfileQuery.fromJson(Map<String, dynamic> json) => _$GetUserProfileQueryFromJson(json);
+  factory GetUserProfileQuery.fromJson(Map<String, dynamic> json) =>
+      _$GetUserProfileQueryFromJson(json);
 
   Map<String, dynamic> toJson() => _$GetUserProfileQueryToJson(this);
 }

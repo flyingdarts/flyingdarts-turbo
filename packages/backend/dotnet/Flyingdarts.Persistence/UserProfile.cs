@@ -20,19 +20,14 @@
             Picture = picture;
         }
 
-        public static UserProfile Create(
-            string userName,
-            string email,
-            string country,
-            string picture
-        )
+        public static UserProfile Create(string userName, string email, string country, string picture)
         {
             return new UserProfile
             {
                 UserName = userName,
                 Email = email,
                 Country = country,
-                Picture = picture
+                Picture = picture,
             };
         }
     }

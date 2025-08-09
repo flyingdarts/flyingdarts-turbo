@@ -1,22 +1,17 @@
-import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from "@angular/forms";
-import { Router } from "@angular/router";
-import { debounceTime, distinctUntilChanged, switchMap } from "rxjs";
-import { UserSearchDto } from "../../../dtos/friend.dto";
-import { FriendsService } from "../../../services/friends.service";
-import { Store } from "@ngrx/store";
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { UserSearchDto } from '../../../dtos/friend.dto';
+import { FriendsService } from '../../../services/friends.service';
 
 @Component({
-  selector: "app-add-friend",
+  selector: 'app-add-friend',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: "./add-friend.component.html",
+  templateUrl: './add-friend.component.html',
 })
 export class AddFriendComponent implements OnInit {
   searchForm: FormGroup;
@@ -24,32 +19,27 @@ export class AddFriendComponent implements OnInit {
   hasSearched = false;
   sendingRequest: string | null = null;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private friendsService: FriendsService,
-    private router: Router,
-    private store: Store
-  ) {
+  constructor(private formBuilder: FormBuilder, private friendsService: FriendsService, private router: Router, private store: Store) {
     this.searchForm = this.formBuilder.group({
-      searchQuery: ["", [Validators.required, Validators.minLength(2)]],
+      searchQuery: ['', [Validators.required, Validators.minLength(2)]],
     });
   }
 
   ngOnInit(): void {
     // Set up search with debounce
     this.searchForm
-      .get("searchQuery")
+      .get('searchQuery')
       ?.valueChanges.pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((query) => {
+        switchMap(query => {
           if (query && query.length >= 2) {
             return this.friendsService.searchUsers(query);
           }
           return [];
         })
       )
-      .subscribe((results) => {
+      .subscribe(results => {
         this.searchResults = results;
         this.hasSearched = true;
       });
@@ -57,14 +47,14 @@ export class AddFriendComponent implements OnInit {
 
   onSearch(): void {
     if (this.searchForm.valid) {
-      const query = this.searchForm.get("searchQuery")?.value;
+      const query = this.searchForm.get('searchQuery')?.value;
       this.friendsService.searchUsers(query).subscribe({
-        next: (results) => {
+        next: results => {
           this.searchResults = results;
           this.hasSearched = true;
         },
-        error: (error) => {
-          console.error("Error searching users:", error);
+        error: error => {
+          console.error('Error searching users:', error);
         },
       });
     }
@@ -75,24 +65,22 @@ export class AddFriendComponent implements OnInit {
 
     this.friendsService.sendFriendRequest(user.UserId).subscribe({
       next: () => {
-        console.log("Friend request sent successfully");
+        console.log('Friend request sent successfully');
         // Update the user's status to show pending request
-        const userIndex = this.searchResults.findIndex(
-          (u) => u.UserId === user.UserId
-        );
+        const userIndex = this.searchResults.findIndex(u => u.UserId === user.UserId);
         if (userIndex !== -1) {
           this.searchResults[userIndex].HasPendingRequest = true;
         }
         this.sendingRequest = null;
       },
-      error: (error) => {
-        console.error("Error sending friend request:", error);
+      error: error => {
+        console.error('Error sending friend request:', error);
         this.sendingRequest = null;
       },
     });
   }
 
   goBack(): void {
-    this.router.navigate(["/friends"]);
+    this.router.navigate(['/friends']);
   }
 }

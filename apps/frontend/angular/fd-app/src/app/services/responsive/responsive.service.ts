@@ -1,5 +1,5 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface ResponsiveState {
   isMobile: boolean;
@@ -12,22 +12,20 @@ export interface ResponsiveState {
 }
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class ResponsiveService {
-  private readonly responsiveStateSubject =
-    new BehaviorSubject<ResponsiveState>({
-      isMobile: false,
-      isTablet: false,
-      isDesktop: false,
-      isLandscape: false,
-      isPortrait: false,
-      screenWidth: 0,
-      screenHeight: 0,
-    });
+  private readonly responsiveStateSubject = new BehaviorSubject<ResponsiveState>({
+    isMobile: false,
+    isTablet: false,
+    isDesktop: false,
+    isLandscape: false,
+    isPortrait: false,
+    screenWidth: 0,
+    screenHeight: 0,
+  });
 
-  public readonly responsiveState$: Observable<ResponsiveState> =
-    this.responsiveStateSubject.asObservable();
+  public readonly responsiveState$: Observable<ResponsiveState> = this.responsiveStateSubject.asObservable();
 
   // Breakpoints
   private readonly MOBILE_BREAKPOINT = 768;
@@ -44,11 +42,11 @@ export class ResponsiveService {
   }
 
   private setupResizeListener(): void {
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       this.updateResponsiveState();
     });
 
-    window.addEventListener("orientationchange", () => {
+    window.addEventListener('orientationchange', () => {
       // Add a small delay to ensure orientation change is complete
       setTimeout(() => {
         this.updateResponsiveState();
@@ -63,9 +61,7 @@ export class ResponsiveService {
     const isPortrait = screenHeight > screenWidth;
 
     const isMobile = screenWidth < this.MOBILE_BREAKPOINT;
-    const isTablet =
-      screenWidth >= this.MOBILE_BREAKPOINT &&
-      screenWidth < this.TABLET_BREAKPOINT;
+    const isTablet = screenWidth >= this.MOBILE_BREAKPOINT && screenWidth < this.TABLET_BREAKPOINT;
     const isDesktop = screenWidth >= this.TABLET_BREAKPOINT; // Changed from DESKTOP_BREAKPOINT to TABLET_BREAKPOINT
 
     this.responsiveStateSubject.next({

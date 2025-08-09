@@ -42,26 +42,14 @@
       "configFiles": [".csproj"],
       "parser": "csharp",
       "documentationComments": ["///", "//"],
-      "features": [
-        "classes",
-        "interfaces",
-        "properties",
-        "methods",
-        "attributes"
-      ]
+      "features": ["classes", "interfaces", "properties", "methods", "attributes"]
     },
     "dart": {
       "extensions": [".dart"],
       "configFiles": ["pubspec.yaml"],
       "parser": "dart",
       "documentationComments": ["///", "//"],
-      "features": [
-        "classes",
-        "mixins",
-        "extensions",
-        "functions",
-        "constructors"
-      ]
+      "features": ["classes", "mixins", "extensions", "functions", "constructors"]
     },
     "typescript": {
       "extensions": [".ts", ".tsx"],

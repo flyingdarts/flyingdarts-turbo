@@ -33,7 +33,10 @@ class ValidationResult {
   }
 
   /// Creates a failed validation result
-  factory ValidationResult.failure(String message, [List<ValidationError> errors = const []]) {
+  factory ValidationResult.failure(
+    String message, [
+    List<ValidationError> errors = const [],
+  ]) {
     return ValidationResult(
       isValid: false,
       errorMessage: message,

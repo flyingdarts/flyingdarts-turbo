@@ -24,16 +24,11 @@ public class NotifyRoomsService : INotifyRoomsService
     {
         try
         {
-            Console.WriteLine(
-                $"[NotifyRoomsService] Notifying connections: [{string.Join(", ", connectionIds)}]"
-            );
+            Console.WriteLine($"[NotifyRoomsService] Notifying connections: [{string.Join(", ", connectionIds)}]");
 
             // Create a timeout cancellation token to prevent hanging
             using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(20)); // 20 second timeout
-            using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                cancellationToken,
-                timeoutCts.Token
-            );
+            using var combinedCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCts.Token);
 
             // Serialize the message once
             var messageJson = JsonSerializer.Serialize(request);
@@ -53,51 +48,34 @@ public class NotifyRoomsService : INotifyRoomsService
                     // Create a NEW stream for each connection to avoid position issues in .NET 8
                     var messageStream = new MemoryStream(messageBytes);
 
-                    var postConnectionRequest = new PostToConnectionRequest
-                    {
-                        ConnectionId = connectionId,
-                        Data = messageStream
-                    };
+                    var postConnectionRequest = new PostToConnectionRequest { ConnectionId = connectionId, Data = messageStream };
 
-                    await _apiGatewayClient.PostToConnectionAsync(
-                        postConnectionRequest,
-                        combinedCts.Token
-                    );
+                    await _apiGatewayClient.PostToConnectionAsync(postConnectionRequest, combinedCts.Token);
 
                     successfulCount++;
-                    Console.WriteLine(
-                        $"[NotifyRoomsService] Successfully sent message to connection: {connectionId}"
-                    );
+                    Console.WriteLine($"[NotifyRoomsService] Successfully sent message to connection: {connectionId}");
                 }
                 catch (GoneException)
                 {
                     // Connection is no longer available, log and continue
-                    Console.WriteLine(
-                        $"[NotifyRoomsService] Connection {connectionId} is no longer available"
-                    );
+                    Console.WriteLine($"[NotifyRoomsService] Connection {connectionId} is no longer available");
                     failedCount++;
                 }
                 catch (OperationCanceledException) when (timeoutCts.Token.IsCancellationRequested)
                 {
-                    Console.WriteLine(
-                        $"[NotifyRoomsService] Timeout sending to connection {connectionId}"
-                    );
+                    Console.WriteLine($"[NotifyRoomsService] Timeout sending to connection {connectionId}");
                     failedCount++;
                     break; // Exit the loop on timeout
                 }
                 catch (Exception ex)
                 {
                     // Log other errors but don't fail the entire operation
-                    Console.WriteLine(
-                        $"[NotifyRoomsService] Error sending to connection {connectionId}: {ex.Message}"
-                    );
+                    Console.WriteLine($"[NotifyRoomsService] Error sending to connection {connectionId}: {ex.Message}");
                     failedCount++;
                 }
             }
 
-            Console.WriteLine(
-                $"[NotifyRoomsService] Completed: {successfulCount} successful, {failedCount} failed"
-            );
+            Console.WriteLine($"[NotifyRoomsService] Completed: {successfulCount} successful, {failedCount} failed");
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -111,9 +89,7 @@ public class NotifyRoomsService : INotifyRoomsService
         }
         finally
         {
-            Console.WriteLine(
-                $"[NotifyRoomsService] Done processing request: {JsonSerializer.Serialize(request)}"
-            );
+            Console.WriteLine($"[NotifyRoomsService] Done processing request: {JsonSerializer.Serialize(request)}");
         }
     }
 }

@@ -19,7 +19,9 @@ class LocalStorageManager<T> extends ConfigWriter<T> with FallbackProvider<T> {
       return fallbackValue!;
     }
 
-    final Map<String, dynamic> jsonData = storedValue == null ? {} : jsonDecode(storedValue);
+    final Map<String, dynamic> jsonData = storedValue == null
+        ? {}
+        : jsonDecode(storedValue);
     return _deserializer(jsonData);
   }
 

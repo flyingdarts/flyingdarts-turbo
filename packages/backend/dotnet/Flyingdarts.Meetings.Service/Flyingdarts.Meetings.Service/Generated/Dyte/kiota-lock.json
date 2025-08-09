@@ -11,18 +11,9 @@
   "excludeBackwardCompatible": false,
   "includeAdditionalData": true,
   "disableSSLValidation": false,
-  "serializers": [
-    "Microsoft.Kiota.Serialization.Json.JsonSerializationWriterFactory"
-  ],
-  "deserializers": [
-    "Microsoft.Kiota.Serialization.Json.JsonParseNodeFactory"
-  ],
-  "structuredMimeTypes": [
-    "application/json",
-    "text/plain;q=0.9",
-    "application/x-www-form-urlencoded;q=0.2",
-    "multipart/form-data;q=0.1"
-  ],
+  "serializers": ["Microsoft.Kiota.Serialization.Json.JsonSerializationWriterFactory"],
+  "deserializers": ["Microsoft.Kiota.Serialization.Json.JsonParseNodeFactory"],
+  "structuredMimeTypes": ["application/json", "text/plain;q=0.9", "application/x-www-form-urlencoded;q=0.2", "multipart/form-data;q=0.1"],
   "includePatterns": [],
   "excludePatterns": [],
   "disabledValidationRules": []

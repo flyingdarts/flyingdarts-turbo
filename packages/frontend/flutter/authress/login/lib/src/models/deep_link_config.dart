@@ -14,9 +14,9 @@ class DeepLinkConfig {
 
   /// Check if a URI matches this configuration
   bool matches(Uri uri) {
-    return uri.scheme == scheme && 
-           uri.host == host && 
-           (path.isEmpty || uri.path.startsWith(path));
+    return uri.scheme == scheme &&
+        uri.host == host &&
+        (path.isEmpty || uri.path.startsWith(path));
   }
 
   /// Generate callback URL for this configuration

@@ -27,22 +27,26 @@ The API is built using a clean architecture approach with CQRS (Command Query Re
 ## Installation
 
 1. **Clone the repository** (if not already done):
+
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Navigate to the friends project**:
+
    ```bash
    cd apps/backend/dotnet/friends
    ```
 
 3. **Restore dependencies**:
+
    ```bash
    dotnet restore
    ```
 
 4. **Build the project**:
+
    ```bash
    dotnet build
    ```
@@ -52,11 +56,13 @@ The API is built using a clean architecture approach with CQRS (Command Query Re
 ### Local Development
 
 1. **Build for development**:
+
    ```bash
    npm run build:dev
    ```
 
 2. **Run tests** (if available):
+
    ```bash
    dotnet test
    ```
@@ -64,16 +70,19 @@ The API is built using a clean architecture approach with CQRS (Command Query Re
 ### Deployment
 
 1. **Build for production**:
+
    ```bash
    npm run build:prod
    ```
 
 2. **Deploy to development environment**:
+
    ```bash
    npm run deploy:dev
    ```
 
 3. **Deploy to production environment**:
+
    ```bash
    npm run deploy:prod
    ```
@@ -81,32 +90,40 @@ The API is built using a clean architecture approach with CQRS (Command Query Re
 ## API Reference
 
 ### Authentication
+
 All endpoints require authentication via AWS API Gateway authorizer. The user ID is extracted from the JWT token and passed to the Lambda function.
 
 ### Endpoints
 
 #### User Management
+
 - `GET /friends/user` - Get current user information
 
 #### Friend Management
+
 - `GET /friends` - Get user's friends list
 - `DELETE /friends/{friendId}` - Remove a friend
 
 #### Friend Requests
+
 - `GET /friends/requests` - Get incoming friend requests
 - `POST /friends/request` - Send a friend request
 - `PUT /friends/request/{requestId}` - Respond to a friend request (accept/decline)
 
 #### User Search
+
 - `POST /friends/search` - Search for users to add as friends
 
 #### Game Invitations
+
 - `POST /friends/invite` - Invite a friend to join a game
 
 ### Data Models
 
 #### FriendDto
+
 Represents a friend of the current user.
+
 ```csharp
 public class FriendDto
 {
@@ -122,7 +139,9 @@ public class FriendDto
 ```
 
 #### FriendRequestDto
+
 Represents a friend request sent by the current user.
+
 ```csharp
 public class FriendRequestDto
 {
@@ -137,7 +156,9 @@ public class FriendRequestDto
 ```
 
 #### UserSearchDto
+
 Represents a user search result.
+
 ```csharp
 public class UserSearchDto
 {
@@ -153,19 +174,24 @@ public class UserSearchDto
 ## Configuration
 
 ### AWS Lambda Configuration
+
 The function is configured with the following settings:
+
 - **Runtime**: .NET 8
 - **Memory**: 256 MB
 - **Timeout**: 30 seconds
 - **Region**: eu-west-1
 
 ### Environment Variables
+
 - DynamoDB table names and configuration
 - AWS region settings
 - Application-specific options
 
 ### DynamoDB Schema
+
 The service uses DynamoDB with the following key patterns:
+
 - **Friend Relationships**: `FRIEND#RELATIONSHIP` with composite keys
 - **Friend Requests**: `FRIEND#REQUEST` with request IDs
 - **Users**: `USER#` with user IDs
@@ -173,6 +199,7 @@ The service uses DynamoDB with the following key patterns:
 ## Development
 
 ### Project Structure
+
 ```
 friends/
 ├── Function.cs                    # Lambda function entry point
@@ -197,18 +224,22 @@ friends/
 ```
 
 ### Architecture Patterns
+
 - **CQRS**: Separates read and write operations
 - **MediatR**: Implements command/query pattern
 - **Repository Pattern**: Data access abstraction
 - **Dependency Injection**: Service lifecycle management
 
 ### Testing
+
 Run unit tests to ensure code quality:
+
 ```bash
 dotnet test
 ```
 
 ### Code Quality
+
 - Follow C# coding conventions
 - Use XML documentation for public APIs
 - Implement proper error handling
@@ -217,11 +248,13 @@ dotnet test
 ## Dependencies
 
 ### Internal Dependencies
+
 - **Flyingdarts.Core**: Core business logic and models
 - **Flyingdarts.Persistence**: Data persistence abstractions
 - **Flyingdarts.DynamoDb.Service**: DynamoDB service implementations
 
 ### External Dependencies
+
 - **Amazon.Lambda.APIGatewayEvents** (2.7.1): API Gateway integration
 - **Amazon.Lambda.Core** (2.7.0): Lambda runtime support
 - **Amazon.Lambda.RuntimeSupport** (1.13.1): .NET Lambda runtime
@@ -234,15 +267,18 @@ dotnet test
 ## Related Projects
 
 ### Backend Services
+
 - **[Auth API](../auth/)**: Authentication and authorization
 - **[Games API](../games/)**: Game management and scoring
 - **[Signalling API](../signalling/)**: Real-time communication
 
 ### Frontend Applications
+
 - **[Flutter Mobile App](../../../frontend/flutter/flyingdarts_mobile/)**: Mobile application
 - **[Angular Web App](../../../frontend/angular/fd-app/)**: Web application
 
 ### Shared Packages
+
 - **[Core Package](../../../../packages/backend/dotnet/Flyingdarts.Core/)**: Shared business logic
 - **[Persistence Package](../../../../packages/backend/dotnet/Flyingdarts.Persistence/)**: Data access layer
 - **[DynamoDB Service](../../../../packages/backend/dotnet/Flyingdarts.DynamoDb.Service/)**: Database operations

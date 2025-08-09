@@ -18,8 +18,16 @@ void main() {
       },
       expect: () => [
         const SpeechState(isListening: true),
-        const SpeechState(isListening: true, lastEntry: "12", error: 'Great success!'),
-        const SpeechState(isListening: false, lastEntry: "12", error: 'Great success!'),
+        const SpeechState(
+          isListening: true,
+          lastEntry: "12",
+          error: 'Great success!',
+        ),
+        const SpeechState(
+          isListening: false,
+          lastEntry: "12",
+          error: 'Great success!',
+        ),
       ],
     );
     blocTest<SpeechBloc, SpeechState>(

@@ -11,6 +11,6 @@
   "function-runtime": "dotnet8",
   "function-memory-size": 256,
   "function-timeout": 30,
-  "function-handler": "Flyingdarts.Backend.Games.X01.Api",
+  "function-handler": "Flyingdarts.Backend.Api",
   "msbuild-parameters": "--self-contained true"
 }

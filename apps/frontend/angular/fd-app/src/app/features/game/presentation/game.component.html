@@ -9,12 +9,93 @@
 
 <!-- Desktop Layout: Two columns - Score/Keyboard and Meeting -->
 @if (isDesktopLayout()) {
-<div class="row h-100 w-100 g-0">
-  <!-- Left Column: Score and Keyboard -->
-  <div class="col-5 col-lg-4 g-0">
-    <div class="d-flex h-100 flex-column justify-content-between">
+  <div class="row h-100 w-100 g-0">
+    <!-- Left Column: Score and Keyboard -->
+    <div class="col-5 col-lg-4 g-0">
+      <div class="d-flex h-100 flex-column justify-content-between">
+        <app-game-stats></app-game-stats>
+        <div class="mb-2">
+          <app-game-input
+            [shouldDisableControls]="shouldDisableControls"
+            [canCheckOut]="canCheckOut"
+            (checkHandler)="check()"
+            (okHandler)="ok()"
+            (noScoreHandler)="noScore()"
+            (clearScoreHandler)="clear()"
+            (inputScoreHandler)="inputScore($event)"
+            (quickScoreHandler)="quickScore($event)"
+          >
+          </app-game-input>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Meeting -->
+    <div class="col-7 col-lg-8 g-0">
+      <app-meeting
+        meetingId="replace-with-meeting-id"
+        [isVisible]="showMeeting"
+        [isPlayerTurn]="isPlayerTurn"
+      ></app-meeting>
+    </div>
+  </div>
+}
+
+<!-- Mobile/Tablet Portrait Layout: Stacked layout with conditional visibility -->
+@if (isMobileLayout()) {
+  <div class="h-100 w-100 d-flex flex-column">
+    <!-- Always show stats at top -->
+    <div class="flex-shrink-0">
       <app-game-stats></app-game-stats>
-      <div class="mb-2">
+    </div>
+
+    <!-- Conditional content based on turn -->
+    <div class="flex-grow-1 d-flex flex-column">
+      <!-- Always show meeting container, but control video visibility based on turn -->
+      <div class="flex-grow-1">
+        <app-meeting
+          meetingId="replace-with-meeting-id"
+          [isVisible]="showMeeting && shouldShowMeeting()"
+        ></app-meeting>
+      </div>
+
+      <!-- Show game controls when it's my turn -->
+      @if (shouldShowGameControls()) {
+        <div class="flex-grow-1 d-flex flex-column justify-content-end">
+          <app-game-input
+            [shouldDisableControls]="shouldDisableControls"
+            [canCheckOut]="canCheckOut"
+            (checkHandler)="check()"
+            (okHandler)="ok()"
+            (noScoreHandler)="noScore()"
+            (clearScoreHandler)="clear()"
+            (inputScoreHandler)="inputScore($event)"
+            (quickScoreHandler)="quickScore($event)"
+          >
+          </app-game-input>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Fallback Layout: Ensures something is always shown -->
+@if (shouldShowFallbackLayout()) {
+  <div class="h-100 w-100 d-flex flex-column">
+    <!-- Always show stats at top -->
+    <div class="flex-shrink-0">
+      <app-game-stats></app-game-stats>
+    </div>
+
+    <!-- Show both meeting and controls in a responsive layout -->
+    <div class="flex-grow-1 d-flex flex-column">
+      <div class="flex-grow-1">
+        <app-meeting
+          meetingId="replace-with-meeting-id"
+          [isVisible]="showMeeting"
+        ></app-meeting>
+      </div>
+      <div class="flex-shrink-0 mt-2">
         <app-game-input
           [shouldDisableControls]="shouldDisableControls"
           [canCheckOut]="canCheckOut"
@@ -29,85 +110,4 @@
       </div>
     </div>
   </div>
-
-  <!-- Right Column: Meeting -->
-  <div class="col-7 col-lg-8 g-0">
-    <app-meeting
-      meetingId="replace-with-meeting-id"
-      [isVisible]="showMeeting"
-      [isPlayerTurn]="isPlayerTurn"
-    ></app-meeting>
-  </div>
-</div>
-}
-
-<!-- Mobile/Tablet Portrait Layout: Stacked layout with conditional visibility -->
-@if (isMobileLayout()) {
-<div class="h-100 w-100 d-flex flex-column">
-  <!-- Always show stats at top -->
-  <div class="flex-shrink-0">
-    <app-game-stats></app-game-stats>
-  </div>
-
-  <!-- Conditional content based on turn -->
-  <div class="flex-grow-1 d-flex flex-column">
-    <!-- Always show meeting container, but control video visibility based on turn -->
-    <div class="flex-grow-1">
-      <app-meeting
-        meetingId="replace-with-meeting-id"
-        [isVisible]="showMeeting && shouldShowMeeting()"
-      ></app-meeting>
-    </div>
-
-    <!-- Show game controls when it's my turn -->
-    @if (shouldShowGameControls()) {
-    <div class="flex-grow-1 d-flex flex-column justify-content-end">
-      <app-game-input
-        [shouldDisableControls]="shouldDisableControls"
-        [canCheckOut]="canCheckOut"
-        (checkHandler)="check()"
-        (okHandler)="ok()"
-        (noScoreHandler)="noScore()"
-        (clearScoreHandler)="clear()"
-        (inputScoreHandler)="inputScore($event)"
-        (quickScoreHandler)="quickScore($event)"
-      >
-      </app-game-input>
-    </div>
-    }
-  </div>
-</div>
-}
-
-<!-- Fallback Layout: Ensures something is always shown -->
-@if (shouldShowFallbackLayout()) {
-<div class="h-100 w-100 d-flex flex-column">
-  <!-- Always show stats at top -->
-  <div class="flex-shrink-0">
-    <app-game-stats></app-game-stats>
-  </div>
-
-  <!-- Show both meeting and controls in a responsive layout -->
-  <div class="flex-grow-1 d-flex flex-column">
-    <div class="flex-grow-1">
-      <app-meeting
-        meetingId="replace-with-meeting-id"
-        [isVisible]="showMeeting"
-      ></app-meeting>
-    </div>
-    <div class="flex-shrink-0 mt-2">
-      <app-game-input
-        [shouldDisableControls]="shouldDisableControls"
-        [canCheckOut]="canCheckOut"
-        (checkHandler)="check()"
-        (okHandler)="ok()"
-        (noScoreHandler)="noScore()"
-        (clearScoreHandler)="clear()"
-        (inputScoreHandler)="inputScore($event)"
-        (quickScoreHandler)="quickScore($event)"
-      >
-      </app-game-input>
-    </div>
-  </div>
-</div>
 }

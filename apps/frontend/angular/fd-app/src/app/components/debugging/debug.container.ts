@@ -1,25 +1,22 @@
-import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { firstValueFrom, Observable, of, Subject, combineLatest } from "rxjs";
-import { takeUntil, map, take } from "rxjs/operators";
-import { GameStateActions, GameStateSelectors } from "../../state/game";
-import { JoinGameCommand } from "../../requests/JoinGameCommand";
-import { CreateX01ScoreCommand } from "../../requests/CreateX01ScoreCommand";
-import { WebSocketService } from "../../services/websocket/websocket.service";
-import { WebSocketActions } from "../../services/websocket/websocket.actions.enum";
-import { WebSocketMessage } from "../../services/websocket/websocket.message.model";
-import { FlyingdartsRepository } from "src/sdk/flyingdarts.repository";
-import { FlyingdartsSdk } from "src/sdk/flyingdarts-sdk";
-import { FlyingdartsSdkService } from "src/sdk/flyingdarts-sdk-service";
-import { ActivatedRoute } from "@angular/router";
+import { CommonModule } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable, Subject, combineLatest, firstValueFrom, of } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+import { FlyingdartsSdkService } from 'src/sdk/flyingdarts-sdk-service';
+import { CreateX01ScoreCommand } from '../../requests/CreateX01ScoreCommand';
+import { JoinGameCommand } from '../../requests/JoinGameCommand';
+import { WebSocketActions } from '../../services/websocket/websocket.actions.enum';
+import { WebSocketMessage } from '../../services/websocket/websocket.message.model';
+import { GameStateSelectors } from '../../state/game';
 
 @Component({
-  selector: "app-game-debug",
+  selector: 'app-game-debug',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: "./debug.container.html",
-  styleUrls: ["./debug.container.scss"],
+  templateUrl: './debug.container.html',
+  styleUrls: ['./debug.container.scss'],
 })
 export class GameDebugComponent implements OnInit, OnDestroy {
   userId$: Observable<string>;
@@ -54,38 +51,25 @@ export class GameDebugComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(
-    private readonly store: Store,
-    private readonly route: ActivatedRoute,
-    private readonly sdk: FlyingdartsSdkService
-  ) {
-    this.userId$ = of(sessionStorage.getItem("userId")!);
+  constructor(private readonly store: Store, private readonly route: ActivatedRoute, private readonly sdk: FlyingdartsSdkService) {
+    this.userId$ = of(sessionStorage.getItem('userId')!);
     this.nextPlayer$ = this.store.select(GameStateSelectors.selectNextPlayer);
-    this.winningPlayer$ = this.store.select(
-      GameStateSelectors.selectWinningPlayer
-    );
-    this.enableControls$ = combineLatest([
-      this.store.select(GameStateSelectors.selectNextPlayer),
-      this.userId$,
-    ]).pipe(
+    this.winningPlayer$ = this.store.select(GameStateSelectors.selectWinningPlayer);
+    this.enableControls$ = combineLatest([this.store.select(GameStateSelectors.selectNextPlayer), this.userId$]).pipe(
       map(([nextPlayer, userId]) => {
         return nextPlayer !== null && nextPlayer === userId;
       })
     );
 
-    this.remainingScore$ = this.store.select(
-      GameStateSelectors.selectPlayerScore
-    );
+    this.remainingScore$ = this.store.select(GameStateSelectors.selectPlayerScore);
 
-    this.gameId = this.route.snapshot.paramMap.get("gameId")!;
+    this.gameId = this.route.snapshot.paramMap.get('gameId')!;
   }
 
   ngOnInit(): void {
-    this.sdk.instance?.webSocketService.messages$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((message: WebSocketMessage) => {
-        this.handleWebSocketMessage(message);
-      });
+    this.sdk.instance?.webSocketService.messages$.pipe(takeUntil(this.destroy$)).subscribe((message: WebSocketMessage) => {
+      this.handleWebSocketMessage(message);
+    });
   }
 
   ngOnDestroy(): void {
@@ -94,7 +78,7 @@ export class GameDebugComponent implements OnInit, OnDestroy {
   }
 
   private handleWebSocketMessage(message: WebSocketMessage): void {
-    console.log("[DEBUG] Received WebSocket message:", {
+    console.log('[DEBUG] Received WebSocket message:', {
       action: message.action,
       hasMessage: !!message.message,
       hasMetadata: !!message.metadata,
@@ -117,10 +101,7 @@ export class GameDebugComponent implements OnInit, OnDestroy {
 
     if (message.action === WebSocketActions.X01Join && message.message) {
       const joinEvent = message.message as JoinGameCommand;
-      console.log(
-        "[DEBUG] Processing X01Join event with metadata:",
-        message.metadata
-      );
+      console.log('[DEBUG] Processing X01Join event with metadata:', message.metadata);
       this.joinGameEvents.unshift({
         timestamp: new Date(),
         data: joinEvent,
@@ -131,15 +112,9 @@ export class GameDebugComponent implements OnInit, OnDestroy {
       if (this.joinGameEvents.length > 10) {
         this.joinGameEvents = this.joinGameEvents.slice(0, 10);
       }
-    } else if (
-      message.action === WebSocketActions.X01Score &&
-      message.message
-    ) {
+    } else if (message.action === WebSocketActions.X01Score && message.message) {
       const scoreEvent = message.message as CreateX01ScoreCommand;
-      console.log(
-        "[DEBUG] Processing X01Score event with metadata:",
-        message.metadata
-      );
+      console.log('[DEBUG] Processing X01Score event with metadata:', message.metadata);
       this.scoreEvents.unshift({
         timestamp: new Date(),
         data: scoreEvent,
@@ -191,7 +166,7 @@ export class GameDebugComponent implements OnInit, OnDestroy {
     const remainingScore = await firstValueFrom(this.remainingScore$);
     const score = remainingScore > 170 ? randomNumber : remainingScore;
     const newScore = score + remainingScore;
-    const userId = sessionStorage.getItem("userId")!;
+    const userId = sessionStorage.getItem('userId')!;
     this.sdk.instance?.sendScore(this.gameId, userId, newScore, score);
   }
 

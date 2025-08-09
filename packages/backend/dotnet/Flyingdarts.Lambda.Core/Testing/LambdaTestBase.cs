@@ -52,11 +52,8 @@ public abstract class LambdaTestBase<TRequest, TResponse>
             RequestContext = new APIGatewayProxyRequest.ProxyRequestContext
             {
                 ConnectionId = Guid.NewGuid().ToString(),
-                Authorizer =
-                    userId != null
-                        ? new APIGatewayCustomAuthorizerContext { { "UserId", userId } }
-                        : null
-            }
+                Authorizer = userId != null ? new APIGatewayCustomAuthorizerContext { { "UserId", userId } } : null,
+            },
         };
 
         return request;
@@ -68,21 +65,15 @@ public abstract class LambdaTestBase<TRequest, TResponse>
     /// <param name="connectionId">The connection ID</param>
     /// <param name="userId">The user ID</param>
     /// <returns>The mock API Gateway request</returns>
-    protected static APIGatewayProxyRequest CreateMockWebSocketRequest(
-        string? connectionId = null,
-        string? userId = null
-    )
+    protected static APIGatewayProxyRequest CreateMockWebSocketRequest(string? connectionId = null, string? userId = null)
     {
         return new APIGatewayProxyRequest
         {
             RequestContext = new APIGatewayProxyRequest.ProxyRequestContext
             {
                 ConnectionId = connectionId ?? Guid.NewGuid().ToString(),
-                Authorizer =
-                    userId != null
-                        ? new APIGatewayCustomAuthorizerContext { { "UserId", userId } }
-                        : null
-            }
+                Authorizer = userId != null ? new APIGatewayCustomAuthorizerContext { { "UserId", userId } } : null,
+            },
         };
     }
 
@@ -91,23 +82,15 @@ public abstract class LambdaTestBase<TRequest, TResponse>
     /// </summary>
     /// <param name="response">The response to check</param>
     /// <param name="expectedStatusCode">The expected status code (default: 200)</param>
-    protected static void AssertSuccess(
-        APIGatewayProxyResponse response,
-        int expectedStatusCode = 200
-    )
+    protected static void AssertSuccess(APIGatewayProxyResponse response, int expectedStatusCode = 200)
     {
         if (response == null)
             throw new ArgumentNullException(nameof(response), "Response cannot be null");
 
         if (response.StatusCode != expectedStatusCode)
-            throw new InvalidOperationException(
-                $"Expected status code {expectedStatusCode}, but got {response.StatusCode}"
-            );
+            throw new InvalidOperationException($"Expected status code {expectedStatusCode}, but got {response.StatusCode}");
 
-        if (
-            response.Headers == null
-            || !response.Headers.ContainsKey("Access-Control-Allow-Origin")
-        )
+        if (response.Headers == null || !response.Headers.ContainsKey("Access-Control-Allow-Origin"))
             throw new InvalidOperationException("Response must include CORS headers");
     }
 
@@ -122,14 +105,10 @@ public abstract class LambdaTestBase<TRequest, TResponse>
             throw new ArgumentNullException(nameof(response), "Response cannot be null");
 
         if (response.StatusCode != expectedStatusCode)
-            throw new InvalidOperationException(
-                $"Expected status code {expectedStatusCode}, but got {response.StatusCode}"
-            );
+            throw new InvalidOperationException($"Expected status code {expectedStatusCode}, but got {response.StatusCode}");
 
         if (string.IsNullOrEmpty(response.Body) || !response.Body.Contains("error"))
-            throw new InvalidOperationException(
-                "Error response must include error message in body"
-            );
+            throw new InvalidOperationException("Error response must include error message in body");
     }
 
     /// <summary>
@@ -139,12 +118,7 @@ public abstract class LambdaTestBase<TRequest, TResponse>
     protected virtual void ConfigureMockServices(IServiceCollection services)
     {
         // Configure real MediatR for testing
-        services.AddMediatR(
-            cfg =>
-                cfg.RegisterServicesFromAssembly(
-                    typeof(LambdaTestBase<TRequest, TResponse>).Assembly
-                )
-        );
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LambdaTestBase<TRequest, TResponse>).Assembly));
 
         // Configure real FluentValidation for testing
         services.AddValidatorsFromAssemblyContaining(typeof(LambdaTestBase<TRequest, TResponse>));

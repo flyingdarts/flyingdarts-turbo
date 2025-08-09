@@ -4,16 +4,13 @@ import { Observable, from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthressService } from '../services/authress.service';
 
-export function authInterceptor(
-  req: HttpRequest<unknown>,
-  next: HttpHandlerFn
-): Observable<any> {
+export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<any> {
   // Inject the current `AuthressService` and use it to get an authentication token
   const authressService = inject(AuthressService);
 
   // Convert the promise to an observable
   return from(authressService.getToken()).pipe(
-    switchMap((userToken) => {
+    switchMap(userToken => {
       // Clone the HTTP request and add the authorization header with the token
       const modifiedReq = req.clone({
         setHeaders: { Authorization: `${userToken}` },

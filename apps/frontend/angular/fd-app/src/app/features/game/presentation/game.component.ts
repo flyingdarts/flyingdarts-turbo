@@ -1,26 +1,20 @@
-import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { firstValueFrom } from "rxjs";
-import { MeetingComponent } from "src/app/components/meeting/meeting.component";
-import { GameStateSelectors } from "src/app/state/game";
-import { ResponsiveService } from "src/app/services/responsive/responsive.service";
-import { GameInputContainerComponent } from "../components/input/container/game-input.container";
-import { GameStatsContainerComponent } from "../components/stats/container/game-stats.container";
-import { WinnerPopupComponent } from "../components/winner-popup/winner-popup.component";
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { firstValueFrom } from 'rxjs';
+import { MeetingComponent } from 'src/app/components/meeting/meeting.component';
+import { ResponsiveService } from 'src/app/services/responsive/responsive.service';
+import { GameStateSelectors } from 'src/app/state/game';
+import { GameInputContainerComponent } from '../components/input/container/game-input.container';
+import { GameStatsContainerComponent } from '../components/stats/container/game-stats.container';
+import { WinnerPopupComponent } from '../components/winner-popup/winner-popup.component';
 
 @Component({
-  selector: "app-game-ui",
+  selector: 'app-game-ui',
   standalone: true,
-  imports: [
-    CommonModule,
-    GameStatsContainerComponent,
-    GameInputContainerComponent,
-    MeetingComponent,
-    WinnerPopupComponent,
-  ],
-  templateUrl: "./game.component.html",
-  styleUrl: "./game.component.scss",
+  imports: [CommonModule, GameStatsContainerComponent, GameInputContainerComponent, MeetingComponent, WinnerPopupComponent],
+  templateUrl: './game.component.html',
+  styleUrl: './game.component.scss',
 })
 export class GameComponent {
   @Input() isPlayerTurn: boolean | null = null;
@@ -46,10 +40,7 @@ export class GameComponent {
 
   @Output() handleClosePopup = new EventEmitter<string>();
 
-  constructor(
-    private readonly store: Store,
-    private readonly responsiveService: ResponsiveService
-  ) {}
+  constructor(private readonly store: Store, private readonly responsiveService: ResponsiveService) {}
 
   // Responsive helper methods
   isDesktopLayout(): boolean {
@@ -104,9 +95,7 @@ export class GameComponent {
     this.handleInputScore.emit(score);
   }
   public async noScore() {
-    const currentScore = await firstValueFrom(
-      this.store.select(GameStateSelectors.selectPlayerScore)
-    );
+    const currentScore = await firstValueFrom(this.store.select(GameStateSelectors.selectPlayerScore));
 
     this.shouldDisableControls = true;
     this.handleNoScore.emit(currentScore);
@@ -123,9 +112,7 @@ export class GameComponent {
     const updatedScore = currentScore - score;
 
     if (updatedScore === 0 && (score > 170 || bogeyScores.includes(score))) {
-      console.warn(
-        "Invalid operation: Updated score cannot be zero for this input."
-      );
+      console.warn('Invalid operation: Updated score cannot be zero for this input.');
       return;
     }
 
@@ -137,9 +124,7 @@ export class GameComponent {
     this.handleOk.emit({ score, updatedScore });
   }
   public async check() {
-    const currentScore = await firstValueFrom(
-      this.store.select(GameStateSelectors.selectPlayerScore)
-    );
+    const currentScore = await firstValueFrom(this.store.select(GameStateSelectors.selectPlayerScore));
     const bogeyScores = [159, 162, 163, 165, 166, 168, 169];
 
     if (currentScore > 170 || bogeyScores.includes(currentScore)) {
@@ -154,9 +139,7 @@ export class GameComponent {
   }
 
   public async quickScore(score: number) {
-    const currentScore = await firstValueFrom(
-      this.store.select(GameStateSelectors.selectPlayerScore)
-    );
+    const currentScore = await firstValueFrom(this.store.select(GameStateSelectors.selectPlayerScore));
 
     const updatedScore = currentScore - score;
     if (updatedScore < 0) {

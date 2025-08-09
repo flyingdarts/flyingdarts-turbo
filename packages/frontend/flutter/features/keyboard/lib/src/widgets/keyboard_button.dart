@@ -26,9 +26,13 @@ class KeyboardButton extends StatelessWidget {
                 child: Text(
                   input,
                   textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).primaryTextTheme.labelSmall?.copyWith(fontSize: 12, fontWeight: FontWeight.bold),
+                  style:
+                      Theme.of(
+                        context,
+                      ).primaryTextTheme.labelSmall?.copyWith(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               )
             : ElevatedButton(
@@ -39,9 +43,13 @@ class KeyboardButton extends StatelessWidget {
                 child: Text(
                   input,
                   textAlign: TextAlign.center,
-                  style: Theme.of(
-                    context,
-                  ).primaryTextTheme.labelSmall?.copyWith(fontSize: 12, fontWeight: FontWeight.bold),
+                  style:
+                      Theme.of(
+                        context,
+                      ).primaryTextTheme.labelSmall?.copyWith(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
       ),

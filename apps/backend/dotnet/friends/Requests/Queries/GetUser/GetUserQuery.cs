@@ -14,17 +14,11 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, APIGatewayProxy
         DynamoDbService = dynamoDbService;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(
-        GetUserQuery request,
-        CancellationToken cancellationToken
-    )
+    public async Task<APIGatewayProxyResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await DynamoDbService.ReadUserByAuthProviderUserIdAsync(
-                request.UserId,
-                cancellationToken
-            );
+            var user = await DynamoDbService.ReadUserByAuthProviderUserIdAsync(request.UserId, cancellationToken);
 
             var userDto = new UserDto { UserId = user.UserId };
 
@@ -36,8 +30,8 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, APIGatewayProxy
                 {
                     { "Access-Control-Allow-Origin", "*" },
                     { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
-                }
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
+                },
             };
         }
         catch (Exception ex)
@@ -50,8 +44,8 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, APIGatewayProxy
                 {
                     { "Access-Control-Allow-Origin", "*" },
                     { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
-                }
+                    { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
+                },
             };
         }
     }

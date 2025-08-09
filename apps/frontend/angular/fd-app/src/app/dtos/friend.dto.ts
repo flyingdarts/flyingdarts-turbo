@@ -48,8 +48,8 @@ export class UserSearchDto {
 }
 
 export enum FriendRequestStatus {
-  Pending = "Pending",
-  Accepted = "Accepted",
-  Declined = "Declined",
-  Cancelled = "Cancelled",
+  Pending = 'Pending',
+  Accepted = 'Accepted',
+  Declined = 'Declined',
+  Cancelled = 'Cancelled',
 }

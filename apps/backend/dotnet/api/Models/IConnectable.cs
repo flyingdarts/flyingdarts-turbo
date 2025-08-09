@@ -1,4 +1,4 @@
-namespace Flyingdarts.Backend.Games.X01.Api.Models;
+namespace Flyingdarts.Backend.Api.Models;
 
 /// <summary>
 /// Interface for objects that can be connected via WebSocket connections.
@@ -16,4 +16,4 @@ public interface IConnectable
     /// Gets a value indicating whether this object has a valid connection ID.
     /// </summary>
     bool IsConnected { get; }
-} 
+}

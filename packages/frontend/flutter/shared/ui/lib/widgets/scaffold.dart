@@ -26,7 +26,10 @@ class FlyingdartsScaffold extends StatelessWidget {
           ? AppBar(
               title: const Text(
                 'Flyingdarts',
-                style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
               ),
               backgroundColor: MyTheme.primaryColor,
               actions: showActionBar ? actionButtons : null,

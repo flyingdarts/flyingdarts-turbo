@@ -18,7 +18,9 @@ class SecureStorageManager<T> extends ConfigWriter<T> with FallbackProvider<T> {
       return fallbackValue!;
     }
 
-    final Map<String, dynamic> jsonData = encryptedValue == null ? {} : jsonDecode(encryptedValue);
+    final Map<String, dynamic> jsonData = encryptedValue == null
+        ? {}
+        : jsonDecode(encryptedValue);
     return _deserializer(jsonData);
   }
 

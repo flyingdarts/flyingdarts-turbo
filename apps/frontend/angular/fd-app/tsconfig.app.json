@@ -7,9 +7,15 @@
     "types": [],
     "baseUrl": "./src",
     "paths": {
-      "src/*": ["./*"]
+      "src/*": [
+        "./*"
+      ]
     }
   },
-  "files": ["src/main.ts"],
-  "include": ["src/**/*.d.ts"]
+  "files": [
+    "src/main.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
 }

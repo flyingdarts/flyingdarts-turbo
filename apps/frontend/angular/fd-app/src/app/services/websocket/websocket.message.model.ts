@@ -1,8 +1,8 @@
-import { DartDto } from "src/app/dtos/dart.dto";
-import { GameDto } from "src/app/dtos/game.dto";
-import { PlayerDto } from "src/app/dtos/player.dto";
-import { WebSocketActions } from "./websocket.actions.enum";
-import { WebSocketRequest } from "./websocket.request.model";
+import { DartDto } from 'src/app/dtos/dart.dto';
+import { GameDto } from 'src/app/dtos/game.dto';
+import { PlayerDto } from 'src/app/dtos/player.dto';
+import { WebSocketActions } from './websocket.actions.enum';
+import { WebSocketRequest } from './websocket.request.model';
 
 export interface WebSocketMessage<T = WebSocketRequest> {
   action: WebSocketActions;

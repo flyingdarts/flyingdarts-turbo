@@ -6,10 +6,10 @@ import 'package:authress_login/src/services/authentication_service.dart';
 class AuthressContext {
   /// Current authentication state
   final AuthState authState;
-  
+
   /// Current user profile (null if not authenticated)
   final UserProfile? user;
-  
+
   /// Access token for API calls (null if not authenticated)
   final String? accessToken;
 
@@ -25,10 +25,10 @@ class AuthressContext {
 
   /// Empty context for initial state
   const AuthressContext.initial()
-      : authState = const AuthStateUnauthenticated(),
-        user = null,
-        accessToken = null,
-        _authService = null;
+    : authState = const AuthStateUnauthenticated(),
+      user = null,
+      accessToken = null,
+      _authService = null;
 
   /// Whether the user is authenticated
   bool get isAuthenticated => authState is AuthStateAuthenticated;
@@ -41,7 +41,9 @@ class AuthressContext {
 
   /// Get error message if any
   String? get errorMessage {
-    return authState is AuthStateError ? (authState as AuthStateError).message : null;
+    return authState is AuthStateError
+        ? (authState as AuthStateError).message
+        : null;
   }
 
   /// Start authentication flow
@@ -51,9 +53,11 @@ class AuthressContext {
     Map<String, String>? additionalParams,
   }) async {
     if (_authService == null) {
-      throw StateError('AuthressContext is not initialized with authentication service');
+      throw StateError(
+        'AuthressContext is not initialized with authentication service',
+      );
     }
-    
+
     await _authService.authenticate(
       connectionId: connectionId,
       tenantLookupIdentifier: tenantLookupIdentifier,
@@ -64,7 +68,9 @@ class AuthressContext {
   /// Logout current user
   Future<void> logout() async {
     if (_authService == null) {
-      throw StateError('AuthressContext is not initialized with authentication service');
+      throw StateError(
+        'AuthressContext is not initialized with authentication service',
+      );
     }
     await _authService.logout();
   }
@@ -84,44 +90,44 @@ class AuthressContext {
   /// Check if user has a specific role
   bool hasRole(String roleName) {
     if (user?.claims == null) return false;
-    
+
     final claims = user!.claims!;
-    
+
     // Check various possible locations for roles
     if (claims['roles'] is List) {
       return (claims['roles'] as List).contains(roleName);
     }
-    
+
     if (claims['role'] is String) {
       return claims['role'] == roleName;
     }
-    
+
     if (claims['user_roles'] is List) {
       return (claims['user_roles'] as List).contains(roleName);
     }
-    
+
     return false;
   }
 
   /// Check if user belongs to a specific group
   bool hasGroup(String groupName) {
     if (user?.claims == null) return false;
-    
+
     final claims = user!.claims!;
-    
+
     // Check various possible locations for groups
     if (claims['groups'] is List) {
       return (claims['groups'] as List).contains(groupName);
     }
-    
+
     if (claims['group'] is String) {
       return claims['group'] == groupName;
     }
-    
+
     if (claims['user_groups'] is List) {
       return (claims['user_groups'] as List).contains(groupName);
     }
-    
+
     return false;
   }
 

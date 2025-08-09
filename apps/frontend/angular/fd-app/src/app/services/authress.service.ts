@@ -1,18 +1,13 @@
-import { Injectable } from "@angular/core";
-import {
-  AuthenticateResponse,
-  LoginClient,
-} from "@mikepattyn/authress-angular";
+import { Injectable } from '@angular/core';
+import { AuthenticateResponse, LoginClient } from '@mikepattyn/authress-angular';
 
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable } from 'rxjs';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class AuthressService {
-  private isLoggedInSubject: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
+  private isLoggedInSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  public isLoggedIn$: Observable<boolean> =
-    this.isLoggedInSubject.asObservable();
+  public isLoggedIn$: Observable<boolean> = this.isLoggedInSubject.asObservable();
 
   constructor(private readonly loginClient: LoginClient) {}
 
@@ -42,7 +37,7 @@ export class AuthressService {
 
   getUserId(): string {
     var userIdentity = this.loginClient.getUserIdentity();
-    var userId: string = userIdentity["userId"] as string;
+    var userId: string = userIdentity['userId'] as string;
     return userId;
   }
 
@@ -54,19 +49,19 @@ export class AuthressService {
   private getName(token: string | null): string | null {
     try {
       // Split the token into its parts
-      const parts = token?.split(".");
+      const parts = token?.split('.');
       if (parts && parts.length !== 3) {
-        throw new Error("Invalid JWT token");
+        throw new Error('Invalid JWT token');
       }
 
       // Decode the payload part of the token
-      const payloadBase64 = parts![1].replace(/-/g, "+").replace(/_/g, "/");
+      const payloadBase64 = parts![1].replace(/-/g, '+').replace(/_/g, '/');
       const payloadJson = atob(payloadBase64);
       const payload = JSON.parse(payloadJson);
       // Return the 'name' property if it exists
       return payload.name || null;
     } catch (error) {
-      console.error("Failed to decode JWT:", error);
+      console.error('Failed to decode JWT:', error);
       return null;
     }
   }

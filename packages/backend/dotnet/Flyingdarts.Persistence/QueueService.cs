@@ -20,8 +20,7 @@ public class QueueService<T> : IQueueService<T>
         {
             var request = new DeleteItemRequest
             {
-                TableName =
-                    $"Flyingdarts-{typeof(T)}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}",
+                TableName = $"Flyingdarts-{typeof(T)}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}",
                 Key = new Dictionary<string, AttributeValue>
                 {
                     {
@@ -31,8 +30,8 @@ public class QueueService<T> : IQueueService<T>
                     {
                         "SK",
                         new AttributeValue { S = record.SortKey }
-                    }
-                }
+                    },
+                },
             };
 
             await DynamoDBClient.DeleteItemAsync(request);
@@ -50,9 +49,7 @@ public class QueueService<T> : IQueueService<T>
 
     public async Task<List<T>> GetRecords(CancellationToken cancellationToken)
     {
-        var results = await DbContext
-            .FromQueryAsync<T>(Query(), OperationConfig)
-            .GetRemainingAsync(cancellationToken);
+        var results = await DbContext.FromQueryAsync<T>(Query(), OperationConfig).GetRemainingAsync(cancellationToken);
         return results;
     }
 
@@ -67,8 +64,7 @@ public class QueueService<T> : IQueueService<T>
         get
         {
             var stateType = typeof(T);
-            var tableName =
-                $"Flyingdarts-{stateType}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}";
+            var tableName = $"Flyingdarts-{stateType}-Table-{Environment.GetEnvironmentVariable("EnvironmentName")}";
             return new DynamoDBOperationConfig { OverrideTableName = tableName };
         }
     }

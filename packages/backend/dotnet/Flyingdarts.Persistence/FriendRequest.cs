@@ -26,7 +26,7 @@ public class FriendRequest : IPrimaryKeyItem, ISortKeyItem
             TargetUserId = targetUserId,
             Message = message,
             CreatedAt = now,
-            Status = FriendRequestStatus.Pending
+            Status = FriendRequestStatus.Pending,
         };
     }
 }

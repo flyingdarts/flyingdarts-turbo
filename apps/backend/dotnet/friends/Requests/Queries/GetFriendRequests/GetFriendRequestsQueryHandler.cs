@@ -5,8 +5,7 @@ using Flyingdarts.Backend.Friends.Api.Services;
 
 namespace Flyingdarts.Backend.Friends.Api.Requests.Queries.GetFriendRequests;
 
-public class GetFriendRequestsQueryHandler
-    : IRequestHandler<GetFriendRequestsQuery, APIGatewayProxyResponse>
+public class GetFriendRequestsQueryHandler : IRequestHandler<GetFriendRequestsQuery, APIGatewayProxyResponse>
 {
     private readonly IFriendsDynamoDbService _friendsDynamoDbService;
 
@@ -15,58 +14,38 @@ public class GetFriendRequestsQueryHandler
         _friendsDynamoDbService = friendsDynamoDbService;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(
-        GetFriendRequestsQuery request,
-        CancellationToken cancellationToken
-    )
+    public async Task<APIGatewayProxyResponse> Handle(GetFriendRequestsQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(
-                request.UserId,
-                cancellationToken
-            );
+            var user = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(request.UserId, cancellationToken);
 
-            Console.WriteLine(
-                $"[GetFriendRequestsQueryHandler] Starting to get friend requests for user: {request.UserId}"
-            );
+            Console.WriteLine($"[GetFriendRequestsQueryHandler] Starting to get friend requests for user: {request.UserId}");
 
-            var incomingRequests = await _friendsDynamoDbService.GetIncomingFriendRequestsAsync(
-                user.UserId,
-                cancellationToken
-            );
+            var incomingRequests = await _friendsDynamoDbService.GetIncomingFriendRequestsAsync(user.UserId, cancellationToken);
             Console.WriteLine(
                 $"[GetFriendRequestsQueryHandler] Found {incomingRequests.Count} incoming friend requests for user: {user.UserId}"
             );
 
-            var outgoingRequests = await _friendsDynamoDbService.GetOutgoingFriendRequestsAsync(
-                user.UserId,
-                cancellationToken
-            );
+            var outgoingRequests = await _friendsDynamoDbService.GetOutgoingFriendRequestsAsync(user.UserId, cancellationToken);
             Console.WriteLine(
                 $"[GetFriendRequestsQueryHandler] Found {outgoingRequests.Count} outgoing friend requests for user: {user.UserId}"
             );
 
-            var requestDtos = await ConvertToFriendRequestDtosAsync(
-                incomingRequests,
-                outgoingRequests,
-                cancellationToken
-            );
-            Console.WriteLine(
-                $"[GetFriendRequestsQueryHandler] Successfully converted {requestDtos.Count} friend requests to DTOs"
-            );
+            var requestDtos = await ConvertToFriendRequestDtosAsync(incomingRequests, outgoingRequests, cancellationToken);
+            Console.WriteLine($"[GetFriendRequestsQueryHandler] Successfully converted {requestDtos.Count} friend requests to DTOs");
 
             var response = new
             {
                 IncomingRequests = requestDtos.Where(r => r.TargetUserId == user.UserId).ToList(),
-                OutgoingRequests = requestDtos.Where(r => r.RequesterId == user.UserId).ToList()
+                OutgoingRequests = requestDtos.Where(r => r.RequesterId == user.UserId).ToList(),
             };
 
             return new APIGatewayProxyResponse
             {
                 StatusCode = 200,
                 Body = JsonSerializer.Serialize(response),
-                Headers = GetCorsHeaders()
+                Headers = GetCorsHeaders(),
             };
         }
         catch (Exception ex)
@@ -75,7 +54,7 @@ public class GetFriendRequestsQueryHandler
             {
                 StatusCode = 500,
                 Body = JsonSerializer.Serialize(new { error = ex.Message }),
-                Headers = GetCorsHeaders()
+                Headers = GetCorsHeaders(),
             };
         }
     }
@@ -93,10 +72,7 @@ public class GetFriendRequestsQueryHandler
         {
             try
             {
-                var requesterUser = await _friendsDynamoDbService.ReadUserAsync(
-                    request.RequesterId,
-                    cancellationToken
-                );
+                var requesterUser = await _friendsDynamoDbService.ReadUserAsync(request.RequesterId, cancellationToken);
                 requestDtos.Add(
                     new FriendRequestDto
                     {
@@ -106,7 +82,7 @@ public class GetFriendRequestsQueryHandler
                         TargetUserId = request.TargetUserId,
                         Message = request.Message,
                         CreatedAt = request.CreatedAt,
-                        Status = request.Status
+                        Status = request.Status,
                     }
                 );
             }
@@ -122,21 +98,17 @@ public class GetFriendRequestsQueryHandler
         {
             try
             {
-                var targetUser = await _friendsDynamoDbService.ReadUserAsync(
-                    request.TargetUserId,
-                    cancellationToken
-                );
+                var targetUser = await _friendsDynamoDbService.ReadUserAsync(request.TargetUserId, cancellationToken);
                 requestDtos.Add(
                     new FriendRequestDto
                     {
-                        RequestId =
-                            $"{request.TargetUserId}#{request.RequesterId}#{request.CreatedAt.Ticks}",
+                        RequestId = $"{request.TargetUserId}#{request.RequesterId}#{request.CreatedAt.Ticks}",
                         RequesterId = request.RequesterId,
                         RequesterUserName = targetUser.Profile.UserName ?? "", // For outgoing, show target user name
                         TargetUserId = request.TargetUserId,
                         Message = request.Message,
                         CreatedAt = request.CreatedAt,
-                        Status = request.Status
+                        Status = request.Status,
                     }
                 );
             }
@@ -156,7 +128,7 @@ public class GetFriendRequestsQueryHandler
         {
             { "Access-Control-Allow-Origin", "*" },
             { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-            { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+            { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
         };
     }
 }

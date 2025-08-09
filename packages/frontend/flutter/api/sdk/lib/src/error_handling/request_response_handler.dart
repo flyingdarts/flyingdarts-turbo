@@ -12,7 +12,9 @@ import 'strategy/server_error_response_type_strategy.dart';
 
 @injectable
 class ErrorResponseHandler {
-  ErrorResponse<TSuccess, RequestFailedResponse> handleErrorResponse<TSuccess>(DioError errorResponse) {
+  ErrorResponse<TSuccess, RequestFailedResponse> handleErrorResponse<TSuccess>(
+    DioError errorResponse,
+  ) {
     Response<dynamic>? response = errorResponse.response;
     if (response == null || response.statusCode == null) {
       throw response!;

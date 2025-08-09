@@ -18,8 +18,12 @@ class SpeechConfig extends Equatable {
     this.enablePartialResults = true,
     this.enableDebugMode = false,
     this.maxAlternatives = 1,
-    this.pauseFor = const Duration(seconds: 2), // Shorter pause for better responsiveness
-    this.listenFor = const Duration(seconds: 10), // Shorter listen duration for commands
+    this.pauseFor = const Duration(
+      seconds: 2,
+    ), // Shorter pause for better responsiveness
+    this.listenFor = const Duration(
+      seconds: 10,
+    ), // Shorter listen duration for commands
   });
 
   /// Creates a default configuration
@@ -45,8 +49,12 @@ class SpeechConfig extends Equatable {
       enablePartialResults: true,
       enableDebugMode: false,
       maxAlternatives: 1,
-      pauseFor: const Duration(seconds: 2), // Shorter pause for better responsiveness
-      listenFor: const Duration(seconds: 10), // Shorter listen duration for commands
+      pauseFor: const Duration(
+        seconds: 2,
+      ), // Shorter pause for better responsiveness
+      listenFor: const Duration(
+        seconds: 10,
+      ), // Shorter listen duration for commands
     );
   }
 

@@ -11,11 +11,12 @@ class KeyboardState {
   final bool shouldDisableShortcuts;
   final bool shouldDisableFunctions;
 
-  KeyboardState copyWith(
-      {int? lastInput,
-      bool? shouldDisableNumpad,
-      bool? shouldDisableShortcuts,
-      bool? shouldDisableFunctions}) {
+  KeyboardState copyWith({
+    int? lastInput,
+    bool? shouldDisableNumpad,
+    bool? shouldDisableShortcuts,
+    bool? shouldDisableFunctions,
+  }) {
     return KeyboardState(
       lastInput ?? this.lastInput,
       shouldDisableNumpad ?? this.shouldDisableNumpad,

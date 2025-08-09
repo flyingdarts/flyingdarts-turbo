@@ -32,7 +32,7 @@ public class FriendRelationship : IPrimaryKeyItem, ISortKeyItem, IAlternativeSor
             Status = FriendshipStatus.Accepted,
             CreatedAt = requestTime,
             AcceptedAt = now,
-            RequestMessage = message
+            RequestMessage = message,
         };
     }
 }

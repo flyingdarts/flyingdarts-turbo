@@ -2,14 +2,15 @@
 
 ## Overview
 
-The Flyingdarts.CDK.Constructs package provides reusable AWS CDK constructs for the Flying Darts Turbo platform infrastructure. This package contains pre-built, tested, and production-ready CDK constructs that simplify the deployment and management of Flying Darts services on AWS.
+The Flyingdarts.CDK.Constructs package provides reusable AWS CDK constructs for the Flyingdarts platform infrastructure.
 
 The package is designed to:
-- Provide standardized AWS infrastructure components
-- Simplify CDK stack creation and management
+- Provide Flyingdarts specific Constructs containing AWS Resources
+- Easily create a new stack and as easily destroy it again.
 - Ensure consistent infrastructure across environments
 - Support multiple AWS services integration
 - Enable rapid infrastructure deployment
+- No need for a local backend environment.
 - Maintain security and best practices
 
 ## Features

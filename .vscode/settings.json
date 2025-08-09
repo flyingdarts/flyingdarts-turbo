@@ -1,0 +1,135 @@
+{
+    "cSpell.words": [
+        "Authress",
+        "beachball",
+        "flyingdarts",
+        "mikepattyn"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit"
+    },
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.rulers": [
+        140
+    ],
+    "prettier.printWidth": 140,
+    "typescript.preferences.includePackageJsonAutoImports": "auto",
+    // Enhanced file associations for better language detection
+    "files.associations": {
+        "*.cs": "csharp",
+        "**/apps/backend/**/*.rs": "rust",
+        "**/apps/backend/**/*.cs": "csharp",
+        "**/apps/frontend/flutter/**/*.dart": "dart",
+        "**/apps/frontend/angular/**/*.ts": "typescript",
+        "**/apps/frontend/angular/**/*.html": "html",
+        "**/apps/tools/**/*.ts": "typescript",
+        "**/packages/**/*.dart": "dart",
+        "**/packages/**/*.ts": "typescript",
+        "**/docs/**/*.md": "markdown"
+    },
+    // Language-specific editor settings
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code",
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+        "editor.fontSize": 14,
+        "editor.fontFamily": "JetBrains Mono, Consolas, 'Courier New', monospace",
+        "editor.rulers": [
+            140
+        ]
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+        "editor.rulers": [
+            140
+        ]
+    },
+    "[csharp]": {
+        "editor.defaultFormatter": "csharpier.csharpier-vscode",
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit",
+            "source.addMissingUsings": "explicit",
+            "source.removeUnusedUsings": "explicit"
+        },
+        "editor.rulers": [
+            140
+        ]
+    },
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit",
+            "source.addMissingImports": "explicit",
+            "source.removeUnusedImports": "explicit"
+        },
+        "editor.rulers": [
+            140
+        ]
+    },
+    "[markdown]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.wordWrap": "on"
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit"
+        },
+        "editor.rulers": [
+            140
+        ]
+    },
+    "makefile.configureOnOpen": false,
+    // Exclude build folders and generated files from formatting
+    "files.exclude": {
+        "**/build/": true,
+        "**/bin/": true,
+        "**/obj/": true,
+        "**/target/": true,
+        "**/dist/": true,
+        "**/node_modules/": true,
+        "**/.dart_tool/": true,
+        "**/*.g.dart": true,
+        "**/*.mocks.dart": true,
+        "**/*.module.dart": true,
+        "**/*.config.dart": true
+    },
+    "dart.lineLength": 140,
+    "dart.enableSdkFormatter": true,
+    "rust-analyzer.checkOnSave": true,
+    "rust-analyzer.cargo.buildScripts.enable": true,
+    "rust-analyzer.procMacro.enable": true,
+    "prettier.requireConfig": true,
+    "prettier.useEditorConfig": false
+}

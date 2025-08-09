@@ -14,10 +14,10 @@ This guide provides a quick way to set up GitHub wikis from your FlyingDarts Tur
 
 ### Step 1: Enable Wiki on GitHub
 
-1. Go to your GitHub repository: `https://github.com/your-username/flyingdarts-turbo`
+1. Go to your GitHub repository: `https://github.com/your-username/flyingdarts`
 2. Click on the **"Wiki"** tab
 3. Click **"Create the first page"** or **"Add page"**
-4. This creates a wiki repository at: `https://github.com/your-username/flyingdarts-turbo.wiki.git`
+4. This creates a wiki repository at: `https://github.com/your-username/flyingdarts.wiki.git`
 
 ### Step 2: Run the Automation Script
 
@@ -27,7 +27,7 @@ This guide provides a quick way to set up GitHub wikis from your FlyingDarts Tur
 ```
 
 This will:
-- Create a `flyingdarts-turbo.wiki` directory
+- Create a `flyingdarts.wiki` directory
 - Convert all README files to wiki pages with proper naming
 - Set up navigation and structure
 - Initialize a Git repository
@@ -35,8 +35,8 @@ This will:
 ### Step 3: Push to GitHub
 
 ```bash
-cd flyingdarts-turbo.wiki
-git remote add origin https://github.com/your-username/flyingdarts-turbo.wiki.git
+cd flyingdarts.wiki
+git remote add origin https://github.com/your-username/flyingdarts.wiki.git
 git push -u origin main
 ```
 
@@ -60,7 +60,7 @@ The script creates a structured wiki with:
 The wiki uses a flat file structure with dot-separated names that match your repository structure:
 
 ```
-flyingdarts-turbo.wiki/
+flyingdarts.wiki/
 ├── Home.md                                    # Main landing page
 ├── apps.md                                    # Applications overview
 ├── apps.backend.md                           # Backend applications overview
@@ -226,7 +226,7 @@ When you update README files in your main repository:
 ./scripts/setup-github-wikis.sh
 
 # Review changes and push
-cd flyingdarts-turbo.wiki
+cd flyingdarts.wiki
 git add .
 git commit -m "Update wiki from README files"
 git push
@@ -237,7 +237,7 @@ git push
 You can also edit wiki pages directly on GitHub or clone the wiki repository:
 
 ```bash
-git clone https://github.com/your-username/flyingdarts-turbo.wiki.git
+git clone https://github.com/your-username/flyingdarts.wiki.git
 # Make changes
 git add .
 git commit -m "Update wiki content"

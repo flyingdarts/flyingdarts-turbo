@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Flyingdarts.Metadata.Services.Tests</RootNamespace>
@@ -8,7 +7,6 @@
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="4.0.2.4" />
     <PackageReference Include="coverlet.collector" Version="6.0.4">
@@ -24,7 +22,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\..\Flyingdarts.DynamoDb.Service\Flyingdarts.DynamoDb.Service\Flyingdarts.DynamoDb.Service.csproj" />
     <ProjectReference Include="..\Flyingdarts.Metadata.Services\Flyingdarts.Metadata.Services.csproj" />

@@ -7,9 +7,12 @@ import '../../responses/request_failed_response.dart';
 import '../../responses/request_response.dart';
 import 'response_type_strategy.dart';
 
-class ClientErrorResponseTypeStrategy<TSuccess> implements ResponseTypeStrategy<TSuccess> {
+class ClientErrorResponseTypeStrategy<TSuccess>
+    implements ResponseTypeStrategy<TSuccess> {
   @override
-  ErrorResponse<TSuccess, RequestFailedResponse> handleResponse(Response<dynamic> response) {
+  ErrorResponse<TSuccess, RequestFailedResponse> handleResponse(
+    Response<dynamic> response,
+  ) {
     switch (response.statusCode) {
       case 401:
         return ErrorResponse(UnauthorizedResponse(response.statusCode!));

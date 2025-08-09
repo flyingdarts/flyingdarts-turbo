@@ -5,16 +5,10 @@
  * by individual projects in the workspace.
  */
 
-import path from "path";
-
 // Import Jest configurations
-import { jestAngular } from "./src/jest/angular";
-import {
-  tsconfigAngular,
-  tsconfigBase,
-  tsconfigStrict,
-} from "./src/typescript";
-import { jestBase } from "./src/jest/base";
+import { jestAngular } from './src/jest/angular';
+import { jestBase } from './src/jest/base';
+import { tsconfigAngular, tsconfigBase, tsconfigStrict } from './src/typescript';
 
 export interface ConfigPackage {
   jest: {

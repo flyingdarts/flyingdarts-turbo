@@ -1,4 +1,4 @@
-import { FriendDto, FriendRequestsDto } from "../../dtos/friend.dto";
+import { FriendDto, FriendRequestsDto } from '../../dtos/friend.dto';
 
 export interface FriendsState {
   friends: FriendDto[];

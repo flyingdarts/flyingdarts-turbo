@@ -8,7 +8,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authContext = context.authress;
-    
+
     // Handle loading state
     if (authContext.isLoading) {
       return Scaffold(
@@ -19,7 +19,7 @@ class ProfilePage extends StatelessWidget {
         ),
       );
     }
-    
+
     // Handle error state
     if (authContext.hasError) {
       return Scaffold(
@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
         ),
       );
     }
-    
+
     // Handle case where user is null
     if (authContext.user == null) {
       return Scaffold(
@@ -55,9 +55,9 @@ class ProfilePage extends StatelessWidget {
         ),
       );
     }
-    
+
     final user = authContext.user!;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xff1d2f3b),
       appBar: AppBar(
@@ -84,19 +84,19 @@ class ProfilePage extends StatelessWidget {
           children: [
             // Profile header
             _buildProfileHeader(user),
-            
+
             const SizedBox(height: 32),
-            
+
             // User details
             _buildUserDetails(user),
-            
+
             const SizedBox(height: 24),
-            
+
             // Account info
             _buildAccountInfo(authContext),
-            
+
             const SizedBox(height: 32),
-            
+
             // Action buttons
             _buildActionButtons(context),
           ],
@@ -119,15 +119,19 @@ class ProfilePage extends StatelessWidget {
                     height: 120,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.person, size: 60, color: Colors.grey);
+                      return const Icon(
+                        Icons.person,
+                        size: 60,
+                        color: Colors.grey,
+                      );
                     },
                   ),
                 )
               : const Icon(Icons.person, size: 60, color: Colors.grey),
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         Text(
           user.name ?? 'No name provided',
           style: const TextStyle(
@@ -135,7 +139,7 @@ class ProfilePage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        
+
         if (user.email != null) ...[
           const SizedBox(height: 4),
           Text(
@@ -176,15 +180,15 @@ class ProfilePage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
             const Divider(),
             const SizedBox(height: 16),
-            
+
             _buildDetailRow('User ID', user.userId),
             if (user.email != null) _buildDetailRow('Email', user.email!),
             if (user.name != null) _buildDetailRow('Display Name', user.name!),
-            if (user.createdDate != null) 
+            if (user.createdDate != null)
               _buildDetailRow('Member Since', _formatDate(user.createdDate!)),
             if (user.lastLoginDate != null)
               _buildDetailRow('Last Login', _formatDate(user.lastLoginDate!)),
@@ -197,7 +201,7 @@ class ProfilePage extends StatelessWidget {
   Widget _buildAccountInfo(AuthressContext authContext) {
     final user = authContext.user!;
     final claims = user.claims ?? {};
-    
+
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -223,14 +227,14 @@ class ProfilePage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
             const Divider(),
             const SizedBox(height: 16),
-            
+
             _buildDetailRow('Authentication Status', 'Verified'),
             _buildDetailRow('Account Type', 'Standard'),
-            
+
             if (claims.isNotEmpty) ...[
               const SizedBox(height: 16),
               const Text(
@@ -241,33 +245,35 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              ...claims.entries.map((entry) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      width: 120,
-                      child: Text(
-                        entry.key,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
+              ...claims.entries.map(
+                (entry) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 120,
+                        child: Text(
+                          entry.key,
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        entry.value.toString(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                      Expanded(
+                        child: Text(
+                          entry.value.toString(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              )),
+              ),
             ],
           ],
         ),
@@ -296,9 +302,9 @@ class ProfilePage extends StatelessWidget {
             ),
           ),
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         SizedBox(
           width: double.infinity,
           child: OutlinedButton.icon(
@@ -324,7 +330,7 @@ class ProfilePage extends StatelessWidget {
                   ],
                 ),
               );
-              
+
               if (shouldLogout == true && context.mounted) {
                 await context.authress.logout();
               }
@@ -373,10 +379,20 @@ class ProfilePage extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     final months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
-    
+
     return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
-} 
+}

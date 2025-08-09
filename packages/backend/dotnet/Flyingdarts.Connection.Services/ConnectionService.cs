@@ -11,11 +11,7 @@ namespace Flyingdarts.Connection.Services
             DynamoDbService = dynamoDbService;
         }
 
-        public async Task UpdateConnectionIdAsync(
-            string playerId,
-            string connectionId,
-            CancellationToken cancellationToken
-        )
+        public async Task UpdateConnectionIdAsync(string playerId, string connectionId, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(connectionId))
             {

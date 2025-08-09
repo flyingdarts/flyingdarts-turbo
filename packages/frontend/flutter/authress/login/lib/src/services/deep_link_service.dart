@@ -4,12 +4,11 @@ import 'package:app_links/app_links.dart';
 
 import '../models/deep_link_config.dart';
 
-
 /// Service for handling deep links with configurable schemes and timeouts
 class DeepLinkService {
   final DeepLinkConfig _config;
   final AppLinks _appLinks = AppLinks();
-  
+
   StreamSubscription<Uri>? _linkSubscription;
   Completer<Map<String, String>?>? _authCompleter;
   Timer? _timeoutTimer;
@@ -44,7 +43,9 @@ class DeepLinkService {
   /// Wait for an authentication deep link with timeout
   Future<Map<String, String>?> waitForAuthCallback() async {
     if (_authCompleter != null && !_authCompleter!.isCompleted) {
-      debugPrint('⚠️ DeepLinkService: Previous auth flow still active, cancelling');
+      debugPrint(
+        '⚠️ DeepLinkService: Previous auth flow still active, cancelling',
+      );
       _authCompleter!.complete(null);
     }
 
@@ -53,7 +54,9 @@ class DeepLinkService {
     // Set timeout
     _timeoutTimer = Timer(_config.timeoutDuration, () {
       if (_authCompleter != null && !_authCompleter!.isCompleted) {
-        debugPrint('⏰ DeepLinkService: Auth callback timed out after ${_config.timeoutDuration.inMinutes} minutes');
+        debugPrint(
+          '⏰ DeepLinkService: Auth callback timed out after ${_config.timeoutDuration.inMinutes} minutes',
+        );
         _authCompleter!.complete(null);
       }
     });
@@ -110,4 +113,4 @@ class DeepLinkService {
       _authCompleter!.complete(null);
     }
   }
-} 
+}
