@@ -10,8 +10,19 @@ public static class ServiceFactory
 {
     public static ServiceProvider GetServiceProvider()
     {
+        var environmentName =
+            Environment.GetEnvironmentVariable("EnvironmentName")
+            ?? Environment.GetEnvironmentVariable("Environment");
+
+        if (string.IsNullOrWhiteSpace(environmentName))
+        {
+            throw new InvalidOperationException(
+                "Missing required environment variable 'Environment' or 'EnvironmentName' for configuration path."
+            );
+        }
+
         var configuration = new ConfigurationBuilder()
-            .AddSystemsManager($"/{Environment.GetEnvironmentVariable("EnvironmentName")}/Application")
+            .AddSystemsManager($"/{environmentName}/Application")
             .Build();
 
         var services = new ServiceCollection();
@@ -39,7 +50,9 @@ public static class ServiceFactory
         services.AddTransient<IFriendsDynamoDbService, FriendsDynamoDbService>();
 
         // Register MediatR and register services from the assembly containing SendFriendRequestCommand.
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(SendFriendRequestCommand).Assembly));
+        services.AddMediatR(cfg =>
+            cfg.RegisterServicesFromAssembly(typeof(SendFriendRequestCommand).Assembly)
+        );
 
         return services.BuildServiceProvider();
     }

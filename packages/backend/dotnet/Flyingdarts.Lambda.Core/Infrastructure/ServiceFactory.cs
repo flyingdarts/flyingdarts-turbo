@@ -24,7 +24,9 @@ public abstract class ServiceFactory
     /// </summary>
     /// <param name="configureServices">Action to configure additional services</param>
     /// <returns>The configured service provider</returns>
-    public static ServiceProvider GetServiceProvider(Action<IServiceCollection, IConfiguration> configureServices)
+    public static ServiceProvider GetServiceProvider(
+        Action<IServiceCollection, IConfiguration> configureServices
+    )
     {
         var configuration = BuildConfiguration();
         var services = new ServiceCollection();
@@ -41,8 +43,19 @@ public abstract class ServiceFactory
     /// <returns>The configuration</returns>
     protected static IConfiguration BuildConfiguration()
     {
+        var environmentName =
+            Environment.GetEnvironmentVariable("EnvironmentName")
+            ?? Environment.GetEnvironmentVariable("Environment");
+
+        if (string.IsNullOrWhiteSpace(environmentName))
+        {
+            throw new InvalidOperationException(
+                "Missing required environment variable 'Environment' or 'EnvironmentName' for configuration path."
+            );
+        }
+
         return new ConfigurationBuilder()
-            .AddSystemsManager($"/{Environment.GetEnvironmentVariable("EnvironmentName")}/Application")
+            .AddSystemsManager($"/{environmentName}/Application")
             .Build();
     }
 
@@ -51,7 +64,10 @@ public abstract class ServiceFactory
     /// </summary>
     /// <param name="services">The service collection</param>
     /// <param name="configuration">The configuration</param>
-    protected static void ConfigureCommonServices(IServiceCollection services, IConfiguration configuration)
+    protected static void ConfigureCommonServices(
+        IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         // Configure AWS services
         services.AddDefaultAWSOptions(configuration.GetAWSOptions());
