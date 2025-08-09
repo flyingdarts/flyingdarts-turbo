@@ -56,7 +56,7 @@ jobs:
 
       # Build the application
       - name: Build
-        run: npm run build
+        run: npm run build:${{ inputs.configuration }}
         working-directory: ./pruned/full/${{ inputs.project-directory }}
 
       # Upload artifact
