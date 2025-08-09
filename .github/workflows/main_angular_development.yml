@@ -1,27 +1,20 @@
 name: Main Angular Workflow (Development)
 
 on:
-  workflow_dispatch:
-    inputs:
-      environment:
-        description: "The environment to deploy to"
-        required: true
-        default: "development"
-
   workflow_call:
   push:
     paths:
       - "apps/frontend/angular/**"
-      - ".github/workflows/main_angular_dev.yml"
+      - ".github/workflows/main_angular_development.yml"
 
   pull_request:
     paths:
       - "apps/frontend/angular/**"
-      - ".github/workflows/main_angular_dev.yml"
+      - ".github/workflows/main_angular_development.yml"
 
 
 jobs:
-  build-angular-dev:
+  build-angular-development:
     uses: ./.github/workflows/build-angular-app.yml
     with:
       project-name: "fd-app"
@@ -30,8 +23,8 @@ jobs:
       environment: "development"
       node-version: "22"
 
-  deploy-angular-dev:
-    needs: build-angular-dev
+  deploy-angular-development:
+    needs: build-angular-development
     uses: ./.github/workflows/deploy-angular-app.yml
     with:
       project-name: "fd-app"
