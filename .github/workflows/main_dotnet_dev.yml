@@ -1,12 +1,12 @@
 name: Main .NET Workflow (Development)
 on:
-  workflow_dispatch:
   workflow_call:
   push:
     branches:
       - development
     paths:
       - "apps/backend/dotnet/**"
+      - "packages/backend/dotnet/**"
       - ".github/workflows/main_dotnet_dev.yml"
       - "flyingdarts.sln"
 jobs:
