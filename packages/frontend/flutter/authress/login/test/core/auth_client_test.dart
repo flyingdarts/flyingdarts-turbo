@@ -74,7 +74,10 @@ void main() {
         final expiredTime = DateTime.now().subtract(const Duration(hours: 1));
 
         await prefs.setString('authress_access_token', 'expired_token');
-        await prefs.setString('authress_token_expiry', expiredTime.toIso8601String());
+        await prefs.setString(
+          'authress_token_expiry',
+          expiredTime.toIso8601String(),
+        );
 
         final result = await authClient.userSessionExists();
         expect(result, isFalse);
@@ -120,26 +123,32 @@ void main() {
     });
 
     group('Logout Functionality', () {
-      test('logout clears stored tokens and sets unauthenticated state', () async {
-        final prefs = await SharedPreferences.getInstance();
+      test(
+        'logout clears stored tokens and sets unauthenticated state',
+        () async {
+          final prefs = await SharedPreferences.getInstance();
 
-        // Set up stored tokens
-        await prefs.setString('authress_access_token', 'test_token');
-        await prefs.setString('authress_refresh_token', 'refresh_token');
-        await prefs.setString('authress_user_profile', '{"userId": "test"}');
-        await prefs.setString('authress_token_expiry', DateTime.now().add(const Duration(hours: 1)).toIso8601String());
+          // Set up stored tokens
+          await prefs.setString('authress_access_token', 'test_token');
+          await prefs.setString('authress_refresh_token', 'refresh_token');
+          await prefs.setString('authress_user_profile', '{"userId": "test"}');
+          await prefs.setString(
+            'authress_token_expiry',
+            DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
+          );
 
-        await authClient.logout();
+          await authClient.logout();
 
-        // Verify tokens are cleared
-        expect(prefs.getString('authress_access_token'), isNull);
-        expect(prefs.getString('authress_refresh_token'), isNull);
-        expect(prefs.getString('authress_user_profile'), isNull);
-        expect(prefs.getString('authress_token_expiry'), isNull);
+          // Verify tokens are cleared
+          expect(prefs.getString('authress_access_token'), isNull);
+          expect(prefs.getString('authress_refresh_token'), isNull);
+          expect(prefs.getString('authress_user_profile'), isNull);
+          expect(prefs.getString('authress_token_expiry'), isNull);
 
-        // Verify state is unauthenticated
-        expect(authClient.state, isA<AuthStateUnauthenticated>());
-      });
+          // Verify state is unauthenticated
+          expect(authClient.state, isA<AuthStateUnauthenticated>());
+        },
+      );
 
       test('logout handles missing stored data gracefully', () async {
         // Call logout without any stored data
@@ -164,7 +173,9 @@ void main() {
       });
 
       test('handleAuthCallback extracts parameters correctly', () async {
-        final uri = Uri.parse('flyingdarts://auth?code=test123&nonce=abc456&state=xyz');
+        final uri = Uri.parse(
+          'flyingdarts://auth?code=test123&nonce=abc456&state=xyz',
+        );
 
         expect(() => authClient.handleAuthCallback(uri), returnsNormally);
       });
@@ -182,7 +193,10 @@ void main() {
         final expiredTime = DateTime.now().subtract(const Duration(hours: 1));
 
         await prefs.setString('authress_access_token', 'expired_token');
-        await prefs.setString('authress_token_expiry', expiredTime.toIso8601String());
+        await prefs.setString(
+          'authress_token_expiry',
+          expiredTime.toIso8601String(),
+        );
 
         final result = await authClient.userSessionExists();
         expect(result, isFalse);
@@ -213,8 +227,12 @@ void main() {
       test('JWT payload parsing handles valid tokens', () {
         // This tests private method indirectly
         // Create a simple valid JWT for testing
-        final header = base64Url.encode(utf8.encode('{"typ":"JWT","alg":"HS256"}'));
-        final payload = base64Url.encode(utf8.encode('{"sub":"test","exp":9999999999}'));
+        final header = base64Url.encode(
+          utf8.encode('{"typ":"JWT","alg":"HS256"}'),
+        );
+        final payload = base64Url.encode(
+          utf8.encode('{"sub":"test","exp":9999999999}'),
+        );
         final signature = 'signature';
         final jwt = '$header.$payload.$signature';
 
@@ -263,7 +281,12 @@ void main() {
         }
 
         // Should have at least attempted to set loading state
-        expect(stateChanges.any((state) => state is AuthStateLoading || state is AuthStateError), isTrue);
+        expect(
+          stateChanges.any(
+            (state) => state is AuthStateLoading || state is AuthStateError,
+          ),
+          isTrue,
+        );
       });
 
       test('authenticate with custom parameters', () async {

@@ -2,7 +2,6 @@
 
 // Create a serializer for JSON serialization and deserialization
 
-
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.RuntimeSupport;
@@ -20,9 +19,7 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
         $"[AUTH] Request context: ConnectionId={apiGatewayEvent.RequestContext?.ConnectionId}, RouteKey={apiGatewayEvent.RequestContext?.RouteKey}"
     );
     Console.WriteLine($"[AUTH] Headers count: {apiGatewayEvent.Headers?.Count ?? 0}");
-    Console.WriteLine(
-        $"[AUTH] Query string parameters count: {apiGatewayEvent.QueryStringParameters?.Count ?? 0}"
-    );
+    Console.WriteLine($"[AUTH] Query string parameters count: {apiGatewayEvent.QueryStringParameters?.Count ?? 0}");
 
     if (apiGatewayEvent.Headers != null)
     {
@@ -47,13 +44,9 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
 
         if (string.IsNullOrEmpty(apiGatewayEvent.RequestContext?.ConnectionId))
         {
-            Console.WriteLine(
-                $"[AUTH] No ConnectionId found, extracting from Authorization header"
-            );
+            Console.WriteLine($"[AUTH] No ConnectionId found, extracting from Authorization header");
             var authHeader =
-                apiGatewayEvent.Headers?.ContainsKey("Authorization") == true
-                    ? apiGatewayEvent.Headers["Authorization"]
-                    : null;
+                apiGatewayEvent.Headers?.ContainsKey("Authorization") == true ? apiGatewayEvent.Headers["Authorization"] : null;
             Console.WriteLine($"[AUTH] Authorization header value: '{authHeader}'");
 
             if (string.IsNullOrEmpty(authHeader))
@@ -68,13 +61,9 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
             return token;
         }
 
-        Console.WriteLine(
-            $"[AUTH] ConnectionId found, extracting from query string token parameter"
-        );
+        Console.WriteLine($"[AUTH] ConnectionId found, extracting from query string token parameter");
         var queryToken =
-            apiGatewayEvent.QueryStringParameters?.ContainsKey("token") == true
-                ? apiGatewayEvent.QueryStringParameters["token"]
-                : null;
+            apiGatewayEvent.QueryStringParameters?.ContainsKey("token") == true ? apiGatewayEvent.QueryStringParameters["token"] : null;
 
         Console.WriteLine($"[AUTH] Query string token value: '{queryToken}'");
 
@@ -106,16 +95,12 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
             if (string.IsNullOrEmpty(authressApiUrl))
             {
                 Console.WriteLine($"[AUTH] ERROR: AuthressApiUrl environment variable is not set");
-                throw new InvalidOperationException(
-                    "AuthressApiUrl environment variable is not set"
-                );
+                throw new InvalidOperationException("AuthressApiUrl environment variable is not set");
             }
 
             var authressSettings = new AuthressSettings { AuthressApiUrl = authressApiUrl };
 
-            Console.WriteLine(
-                $"[AUTH] Created AuthressSettings with URL: {authressSettings.AuthressApiUrl}"
-            );
+            Console.WriteLine($"[AUTH] Created AuthressSettings with URL: {authressSettings.AuthressApiUrl}");
 
             var tokenProvider = new ManualTokenProvider();
             tokenProvider.SetToken(token);
@@ -126,9 +111,7 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
 
             Console.WriteLine($"[AUTH] Calling AuthressClient.VerifyToken...");
             var authressIdentity = await authressClient.VerifyToken(token);
-            Console.WriteLine(
-                $"[AUTH] Token verification successful. UserId: '{authressIdentity.UserId}'"
-            );
+            Console.WriteLine($"[AUTH] Token verification successful. UserId: '{authressIdentity.UserId}'");
 
             return authressIdentity.UserId;
         }
@@ -160,10 +143,10 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
                         {
                             Effect = "Deny",
                             Resource = new HashSet<string> { apiGatewayEvent.MethodArn },
-                            Action = new HashSet<string> { "execute-api:Invoke" }
-                        }
-                    }
-                }
+                            Action = new HashSet<string> { "execute-api:Invoke" },
+                        },
+                    },
+                },
             };
         }
 
@@ -171,9 +154,7 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
         var userId = await ValidateToken(token);
         var connectionId = apiGatewayEvent.RequestContext?.ConnectionId;
 
-        Console.WriteLine(
-            $"[AUTH] Authorization successful. UserId: '{userId}', ConnectionId: '{connectionId}'"
-        );
+        Console.WriteLine($"[AUTH] Authorization successful. UserId: '{userId}', ConnectionId: '{connectionId}'");
         Console.WriteLine($"[AUTH] MethodArn: '{apiGatewayEvent.MethodArn}'");
 
         return new APIGatewayCustomAuthorizerResponse
@@ -187,15 +168,15 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
                     {
                         Effect = "Allow",
                         Resource = new HashSet<string> { "*" },
-                        Action = new HashSet<string> { "execute-api:Invoke" }
-                    }
-                }
+                        Action = new HashSet<string> { "execute-api:Invoke" },
+                    },
+                },
             },
             Context = new APIGatewayCustomAuthorizerContextOutput
             {
                 { "UserId", userId },
-                { "ConnectionId", connectionId ?? string.Empty }
-            }
+                { "ConnectionId", connectionId ?? string.Empty },
+            },
         };
     }
     catch (Exception ex)
@@ -216,10 +197,10 @@ var handler = async (APIGatewayCustomAuthorizerRequest apiGatewayEvent, ILambdaC
                     {
                         Effect = "Deny",
                         Resource = new HashSet<string> { apiGatewayEvent.MethodArn },
-                        Action = new HashSet<string> { "execute-api:Invoke" }
-                    }
-                }
-            }
+                        Action = new HashSet<string> { "execute-api:Invoke" },
+                    },
+                },
+            },
         };
     }
 };

@@ -98,10 +98,7 @@ pub fn create_auth_response(authorized: bool) -> AuthResponse {
 }
 
 /// Helper function to create an auth response with user identity
-pub fn create_auth_response_with_user(
-    authorized: bool,
-    user_identity: Option<UserIdentity>,
-) -> AuthResponse {
+pub fn create_auth_response_with_user(authorized: bool, user_identity: Option<UserIdentity>) -> AuthResponse {
     let message = if authorized {
         "Successfully authorized!".to_string()
     } else {
@@ -126,11 +123,9 @@ pub fn get_user_id_from_token(token: &str) -> Result<String> {
         .decode(parts[1])
         .map_err(|_| anyhow!("Failed to decode token"))?;
 
-    let stringified =
-        String::from_utf8(decoded).map_err(|_| anyhow!("Failed to convert token to string"))?;
+    let stringified = String::from_utf8(decoded).map_err(|_| anyhow!("Failed to convert token to string"))?;
 
-    let v: Value =
-        serde_json::from_str(&stringified).map_err(|_| anyhow!("Unable to parse token JSON"))?;
+    let v: Value = serde_json::from_str(&stringified).map_err(|_| anyhow!("Unable to parse token JSON"))?;
 
     let user_id = v["sub"]
         .as_str()
@@ -179,10 +174,7 @@ mod tests {
 
         let response = create_auth_response(false);
         assert!(!response.authorized);
-        assert_eq!(
-            response.message,
-            "You are not trespassing, leave immediately! 😂"
-        );
+        assert_eq!(response.message, "You are not trespassing, leave immediately! 😂");
         assert!(response.user_identity.is_none());
     }
 

@@ -19,7 +19,8 @@ class UserProfile extends Equatable {
     required this.Email,
   });
 
-  factory UserProfile.fromJson(Map<String, dynamic> json) => _$UserProfileFromJson(json);
+  factory UserProfile.fromJson(Map<String, dynamic> json) =>
+      _$UserProfileFromJson(json);
 
   @override
   List<Object?> get props => [UserId, UserName, Country, Email];

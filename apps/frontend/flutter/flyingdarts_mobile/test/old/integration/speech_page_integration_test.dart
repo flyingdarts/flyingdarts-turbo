@@ -13,7 +13,9 @@ void main() {
 
       final buttonFinder = find.byKey(const Key("QrCodeScannerButton"));
       final dialogFinder = find.byKey(const Key("QrCodeScannerDialog"));
-      final closeButtonFinder = find.byKey(const Key("QrCodeScannerCloseDialog"));
+      final closeButtonFinder = find.byKey(
+        const Key("QrCodeScannerCloseDialog"),
+      );
 
       // open the dialog
       await tester.tap(buttonFinder);

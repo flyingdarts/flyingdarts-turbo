@@ -56,7 +56,7 @@ class ProfileDialog extends StatelessWidget {
                   padding: EdgeInsets.only(right: 5),
                   child: Text("Username:"),
                 ),
-                Text(cubit.state.userName)
+                Text(cubit.state.userName),
               ],
             ),
             Row(
@@ -67,7 +67,7 @@ class ProfileDialog extends StatelessWidget {
                   padding: EdgeInsets.only(right: 5),
                   child: Text("Email:"),
                 ),
-                Text(cubit.state.email)
+                Text(cubit.state.email),
               ],
             ),
             Row(
@@ -78,7 +78,7 @@ class ProfileDialog extends StatelessWidget {
                   padding: EdgeInsets.only(right: 5),
                   child: Text("Country:"),
                 ),
-                Text(cubit.state.country)
+                Text(cubit.state.country),
               ],
             ),
           ],

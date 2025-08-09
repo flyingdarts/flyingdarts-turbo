@@ -1,12 +1,14 @@
 sealed class RequestResponse<TSucceeded, TFailed> {}
 
-class SuccessResponse<TSucceeded, TFailed> implements RequestResponse<TSucceeded, TFailed> {
+class SuccessResponse<TSucceeded, TFailed>
+    implements RequestResponse<TSucceeded, TFailed> {
   final TSucceeded response;
 
   const SuccessResponse(this.response);
 }
 
-class ErrorResponse<TSucceeded, TFailed> implements RequestResponse<TSucceeded, TFailed> {
+class ErrorResponse<TSucceeded, TFailed>
+    implements RequestResponse<TSucceeded, TFailed> {
   final TFailed failure;
   const ErrorResponse(this.failure);
 }
@@ -35,7 +37,9 @@ extension Expect<TSucceeded, TFailed> on RequestResponse<TSucceeded, TFailed> {
     throw Exception(asErrorResponse().failure);
   }
 
-  SuccessResponse<TSucceeded, TFailed> unwrapOr(SuccessResponse<TSucceeded, TFailed> or) {
+  SuccessResponse<TSucceeded, TFailed> unwrapOr(
+    SuccessResponse<TSucceeded, TFailed> or,
+  ) {
     if (this is SuccessResponse) return asSuccessResponse();
     return or;
   }

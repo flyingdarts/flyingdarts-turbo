@@ -2,135 +2,136 @@
   id="fdNavBar"
   class="navbar navbar-expand-lg navbar-light bg-transparent mx-2"
 >
-  <a class="navbar-brand fw-bold" routerLink="/" style="color: #ff5e78"
+  <a
+    class="navbar-brand fw-bold"
+    routerLink="/"
+    style="color: #ff5e78"
     >Flyingdarts</a
   >
-  @if(isLoggedIn$ | async) {
+  @if (isLoggedIn$ | async) {
+    <button
+      class="navbar-toggler ms-auto"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarContent"
+      aria-controls="navbarContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <button
-    class="navbar-toggler ms-auto"
-    type="button"
-    data-bs-toggle="collapse"
-    data-bs-target="#navbarContent"
-    aria-controls="navbarContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <div
+      id="navbarContent"
+      class="collapse navbar-collapse justify-content-end"
+    >
+      <!-- Large devices and up -->
+      <div class="d-none d-lg-block">
+        <div class="dropdown d-flex align-items-center">
+          <app-theme-toggler></app-theme-toggler>
+          <a
+            class="navbar-brand fw-bold text-white dropdown-toggle"
+            href="#"
+            id="userDropdown"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            {{ userName$ | async }}
+            <img
+              [src]="userPicture$ | async"
+              alt="User Picture"
+              class="rounded-circle mx-2"
+              style="width: 30px; height: 30px"
+            />
+          </a>
+          <ul
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="userDropdown"
+          >
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/friends"
+                routerLinkActive="active"
+              >
+                <i class="bi bi-people"></i> Friends
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item disabled">Stats <small>(soon)</small></a>
+            </li>
+            <li>
+              <a class="dropdown-item disabled">History <small>(soon)</small></a>
+            </li>
+            <li>
+              <a class="dropdown-item disabled">Profile <small>(soon)</small></a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item cursor-pointer"
+                (click)="logout()"
+                >Logout</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
 
-  <div id="navbarContent" class="collapse navbar-collapse justify-content-end">
-    <!-- Large devices and up -->
-    <div class="d-none d-lg-block">
-      <div class="dropdown d-flex align-items-center">
-        <app-theme-toggler></app-theme-toggler>
-        <a
-          class="navbar-brand fw-bold text-white dropdown-toggle"
-          href="#"
-          id="userDropdown"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          {{ userName$ | async }}
-          <img
-            [src]="userPicture$ | async"
-            alt="User Picture"
-            class="rounded-circle mx-2"
-            style="width: 30px; height: 30px"
-          />
-        </a>
-        <ul
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="userDropdown"
-        >
-          <li>
+      <!-- Small to large devices -->
+      <div class="d-block d-lg-none w-100">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
             <a
-              class="dropdown-item"
+              class="nav-link text-white"
               routerLink="/friends"
               routerLinkActive="active"
             >
               <i class="bi bi-people"></i> Friends
             </a>
           </li>
-          <li>
-            <a class="dropdown-item disabled">Stats <small>(soon)</small></a>
+          <li class="nav-item">
+            <a class="nav-link text-white disabled">Stats <small>(soon)</small></a>
           </li>
-          <li>
-            <a class="dropdown-item disabled">History <small>(soon)</small></a>
+          <li class="nav-item">
+            <a class="nav-link text-white disabled">History <small>(soon)</small></a>
           </li>
-          <li>
-            <a class="dropdown-item disabled">Profile <small>(soon)</small></a>
+          <li class="nav-item">
+            <a class="nav-link text-white disabled">Profile <small>(soon)</small></a>
           </li>
-          <li>
-            <a class="dropdown-item cursor-pointer" (click)="logout()"
-              >Logout</a
-            >
+          <li class="nav-item">
+            <div class="nav-link text-white d-flex align-items-center">
+              <app-theme-toggler></app-theme-toggler>
+              @if (isDarkMode$ | async) {
+                <small>Light Mode</small>
+              } @else {
+                <small>Dark Mode</small>
+              }
+            </div>
           </li>
         </ul>
-      </div>
-    </div>
 
-    <!-- Small to large devices -->
-    <div class="d-block d-lg-none w-100">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a
-            class="nav-link text-white"
-            routerLink="/friends"
-            routerLinkActive="active"
-          >
-            <i class="bi bi-people"></i> Friends
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white disabled"
-            >Stats <small>(soon)</small></a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white disabled"
-            >History <small>(soon)</small></a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white disabled"
-            >Profile <small>(soon)</small></a
-          >
-        </li>
-        <li class="nav-item">
-          <div class="nav-link text-white d-flex align-items-center">
-            <app-theme-toggler></app-theme-toggler>
-            @if(isDarkMode$ | async) {
-            <small>Light Mode</small>
-            } @else {
-            <small>Dark Mode</small>
-            }
+        <div class="d-flex align-items-center justify-content-between w-100 mt-3">
+          <span class="navbar-brand fw-bold text-white d-flex align-items-center">
+            <img
+              [src]="userPicture$ | async"
+              alt="User Picture"
+              class="rounded-circle ms-2 me-3"
+              style="width: 30px; height: 30px"
+            />
+            {{ userName$ | async }}
+          </span>
+          <div class="d-flex align-items-center">
+            <button
+              class="btn btn-link text-white p-0 ms-2"
+              (click)="logout()"
+              title="Logout"
+            >
+              <i class="bi bi-box-arrow-right fs-5"></i>
+            </button>
           </div>
-        </li>
-      </ul>
-
-      <div class="d-flex align-items-center justify-content-between w-100 mt-3">
-        <span class="navbar-brand fw-bold text-white d-flex align-items-center">
-          <img
-            [src]="userPicture$ | async"
-            alt="User Picture"
-            class="rounded-circle ms-2 me-3"
-            style="width: 30px; height: 30px"
-          />
-          {{ userName$ | async }}
-        </span>
-        <div class="d-flex align-items-center">
-          <button
-            class="btn btn-link text-white p-0 ms-2"
-            (click)="logout()"
-            title="Logout"
-          >
-            <i class="bi bi-box-arrow-right fs-5"></i>
-          </button>
         </div>
       </div>
     </div>
-  </div>
   }
 </nav>

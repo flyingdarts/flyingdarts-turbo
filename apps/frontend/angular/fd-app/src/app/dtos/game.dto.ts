@@ -1,4 +1,4 @@
-import { X01SettingsDto } from "./x01-settings.dto";
+import { X01SettingsDto } from './x01-settings.dto';
 
 export class GameDto {
   Id!: string;

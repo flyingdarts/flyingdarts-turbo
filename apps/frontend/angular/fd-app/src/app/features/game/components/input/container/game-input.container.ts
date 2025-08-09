@@ -1,18 +1,18 @@
-import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { Store } from "@ngrx/store";
-import { Observable } from "rxjs";
-import { AppStateSelectors } from "src/app/state/app";
-import { GameInputComponent } from "../presentation/game-input.component";
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppStateSelectors } from 'src/app/state/app';
+import { GameInputComponent } from '../presentation/game-input.component';
 
 @Component({
-  selector: "app-game-input",
+  selector: 'app-game-input',
   standalone: true,
   imports: [CommonModule, GameInputComponent],
-  templateUrl: "./game-input.container.html",
+  templateUrl: './game-input.container.html',
 })
 export class GameInputContainerComponent {
-  themeMode$: Observable<"light" | "dark">;
+  themeMode$: Observable<'light' | 'dark'>;
 
   constructor(private readonly store: Store) {
     this.themeMode$ = this.store.select(AppStateSelectors.selectThemeMode);

@@ -15,7 +15,9 @@ abstract class ConfigReader<TData> {
 
   TData get data {
     if (!isInitialized) {
-      throw StateError('ConfigReader must be initialized before accessing data');
+      throw StateError(
+        'ConfigReader must be initialized before accessing data',
+      );
     }
     return cachedData!;
   }

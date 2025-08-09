@@ -53,8 +53,14 @@ class AuthressPageGuard extends StatelessWidget {
               children: [
                 const Icon(Icons.error_outline, size: 48, color: Colors.red),
                 const SizedBox(height: 16),
-                Text('Authentication Error', style: Theme.of(context).textTheme.headlineSmall),
-                if (authContext.errorMessage != null) ...[const SizedBox(height: 8), Text(authContext.errorMessage!)],
+                Text(
+                  'Authentication Error',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                if (authContext.errorMessage != null) ...[
+                  const SizedBox(height: 8),
+                  Text(authContext.errorMessage!),
+                ],
               ],
             ),
           );
@@ -62,7 +68,8 @@ class AuthressPageGuard extends StatelessWidget {
 
     // Check authentication
     if (!authContext.isAuthenticated) {
-      return unauthenticatedChild ?? const Center(child: Text('Please log in to access this content'));
+      return unauthenticatedChild ??
+          const Center(child: Text('Please log in to access this content'));
     }
 
     // Check role requirements
@@ -76,7 +83,9 @@ class AuthressPageGuard extends StatelessWidget {
                 SizedBox(height: 16),
                 Text('Access Denied'),
                 SizedBox(height: 8),
-                Text('You do not have the required permissions to access this content.'),
+                Text(
+                  'You do not have the required permissions to access this content.',
+                ),
               ],
             ),
           );
@@ -93,7 +102,9 @@ class AuthressPageGuard extends StatelessWidget {
                 SizedBox(height: 16),
                 Text('Access Denied'),
                 SizedBox(height: 8),
-                Text('You do not belong to the required groups to access this content.'),
+                Text(
+                  'You do not belong to the required groups to access this content.',
+                ),
               ],
             ),
           );

@@ -10,6 +10,7 @@ public class X01GameSettings : IGameSettings
     {
         // will be required for dynamodb
     }
+
     public X01GameSettings(int sets, int legs, bool doubleIn, bool doubleOut, int startingScore)
     {
         Sets = sets;
@@ -27,7 +28,7 @@ public class X01GameSettings : IGameSettings
             Legs = legs,
             DoubleIn = false,
             DoubleOut = true,
-            StartingScore = 501
+            StartingScore = 501,
         };
     }
 

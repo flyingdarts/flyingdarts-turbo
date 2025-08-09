@@ -15,9 +15,7 @@ export class UserProfileComponent {
   public userName$!: Observable<string>;
 
   constructor(private store: Store) {
-    this.userName$ = this.store
-      .select(AppStateSelectors.selectUser)
-      .pipe(map((data) => data?.UserName ?? ''));
+    this.userName$ = this.store.select(AppStateSelectors.selectUser).pipe(map(data => data?.UserName ?? ''));
   }
 
   onSubmit(userName: string): void {

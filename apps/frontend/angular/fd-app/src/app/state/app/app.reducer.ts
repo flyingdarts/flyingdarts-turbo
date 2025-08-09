@@ -1,4 +1,4 @@
-import { createReducer, on } from "@ngrx/store";
+import { createReducer, on } from '@ngrx/store';
 
 import {
   loadUser,
@@ -12,8 +12,8 @@ import {
   setUser,
   setX01GameSettings,
   toggleTheme,
-} from "./app.actions";
-import { initialAppState } from "./app.state";
+} from './app.actions';
+import { initialAppState } from './app.state';
 
 export const appStateReducer = createReducer(
   initialAppState,
@@ -21,7 +21,7 @@ export const appStateReducer = createReducer(
     ...prevState,
     user: user,
   })),
-  on(loadUser, (prevState) => ({
+  on(loadUser, prevState => ({
     ...prevState,
     loading: true,
   })),
@@ -35,7 +35,7 @@ export const appStateReducer = createReducer(
     loading: false,
     error: error,
   })),
-  on(loadX01GameSettingsFromStorage, (prevState) => {
+  on(loadX01GameSettingsFromStorage, prevState => {
     return {
       ...prevState,
       loading: true,
@@ -73,9 +73,8 @@ export const appStateReducer = createReducer(
       x01: x01,
     },
   })),
-  on(toggleTheme, (prevState) => {
-    const nextTheme: "light" | "dark" =
-      prevState.themeSettings.mode == "light" ? "dark" : "light";
+  on(toggleTheme, prevState => {
+    const nextTheme: 'light' | 'dark' = prevState.themeSettings.mode == 'light' ? 'dark' : 'light';
     return {
       ...prevState,
       themeSettings: {

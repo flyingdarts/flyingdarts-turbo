@@ -1,17 +1,12 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { environment } from "src/environments/environment";
-import {
-  FriendDto,
-  FriendRequestDto,
-  FriendRequestResponseDto,
-  UserSearchDto,
-} from "../dtos/friend.dto";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { FriendDto, FriendRequestResponseDto, UserSearchDto } from '../dtos/friend.dto';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class FriendsRepository {
-  private baseHref = "";
+  private baseHref = '';
 
   constructor(private httpClient: HttpClient) {
     this.baseHref = environment.friendsApi;
@@ -24,16 +19,11 @@ export class FriendsRepository {
 
   // Get friend requests
   public getFriendRequests(): Observable<FriendRequestResponseDto> {
-    return this.httpClient.get<FriendRequestResponseDto>(
-      `${this.baseHref}/requests`
-    );
+    return this.httpClient.get<FriendRequestResponseDto>(`${this.baseHref}/requests`);
   }
 
   // Send friend request
-  public sendFriendRequest(
-    targetUserId: string,
-    message?: string
-  ): Observable<any> {
+  public sendFriendRequest(targetUserId: string, message?: string): Observable<any> {
     return this.httpClient.post(`${this.baseHref}/request`, {
       TargetUserId: targetUserId,
       Message: message,
@@ -42,22 +32,16 @@ export class FriendsRepository {
 
   // Accept friend request
   public acceptFriendRequest(requestId: string): Observable<any> {
-    return this.httpClient.put(
-      `${this.baseHref}/request/${encodeURIComponent(requestId)}`,
-      {
-        Accept: true,
-      }
-    );
+    return this.httpClient.put(`${this.baseHref}/request/${encodeURIComponent(requestId)}`, {
+      Accept: true,
+    });
   }
 
   // Decline friend request
   public declineFriendRequest(requestId: string): Observable<any> {
-    return this.httpClient.put(
-      `${this.baseHref}/request/${encodeURIComponent(requestId)}`,
-      {
-        Accept: false,
-      }
-    );
+    return this.httpClient.put(`${this.baseHref}/request/${encodeURIComponent(requestId)}`, {
+      Accept: false,
+    });
   }
 
   // Cancel friend request

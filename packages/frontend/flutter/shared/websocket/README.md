@@ -37,8 +37,8 @@ The package is built using Flutter's WebSocket capabilities with RxDart for reac
 ### From Source
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Navigate to the WebSocket package**:

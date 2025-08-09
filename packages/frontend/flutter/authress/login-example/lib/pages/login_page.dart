@@ -51,9 +51,9 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 40),
-              
+
               // Welcome Text
               const Text(
                 'Welcome Back',
@@ -63,9 +63,9 @@ class LoginPage extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              
+
               const SizedBox(height: 12),
-              
+
               const Text(
                 'Sign in to access your account',
                 style: TextStyle(
@@ -73,9 +73,9 @@ class LoginPage extends StatelessWidget {
                   color: Colors.white70,
                 ),
               ),
-              
+
               const SizedBox(height: 60),
-              
+
               // Login Button
               SizedBox(
                 width: double.infinity,
@@ -120,14 +120,14 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Auth state display
               _buildAuthStateWidget(context),
-              
+
               const SizedBox(height: 40),
-              
+
               // Footer text
               Text(
                 'Powered by Authress',
@@ -145,7 +145,7 @@ class LoginPage extends StatelessWidget {
 
   Widget _buildAuthStateWidget(BuildContext context) {
     final authContext = context.authress;
-    
+
     if (authContext.isLoading) {
       return const Column(
         children: [
@@ -160,7 +160,7 @@ class LoginPage extends StatelessWidget {
         ],
       );
     }
-    
+
     if (authContext.hasError) {
       return Container(
         padding: const EdgeInsets.all(16),
@@ -189,7 +189,7 @@ class LoginPage extends StatelessWidget {
         ),
       );
     }
-    
+
     if (authContext.isAuthenticated) {
       return Container(
         padding: const EdgeInsets.all(16),
@@ -218,7 +218,7 @@ class LoginPage extends StatelessWidget {
         ),
       );
     }
-    
+
     return const SizedBox.shrink();
   }
-} 
+}

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+
 import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 
@@ -11,13 +12,15 @@ class CryptoService {
   PKCECodes generatePKCECodes() {
     final random = Random.secure();
     final codeVerifierBytes = List.generate(32, (_) => random.nextInt(256));
-    final codeVerifier = base64Url.encode(codeVerifierBytes).replaceAll('=', '');
-    
+    final codeVerifier = base64Url
+        .encode(codeVerifierBytes)
+        .replaceAll('=', '');
+
     // Generate code challenge using SHA256
     final bytes = utf8.encode(codeVerifier);
     final digest = sha256.convert(bytes);
     final codeChallenge = base64Url.encode(digest.bytes).replaceAll('=', '');
-    
+
     return PKCECodes(
       codeVerifier: codeVerifier,
       codeChallenge: codeChallenge,
@@ -35,34 +38,39 @@ class CryptoService {
     final valueString = props.values
         .where((v) => v != null && v.isNotEmpty)
         .join('|');
-    
+
     debugPrint('🔐 CryptoService: Calculating anti-abuse hash');
     debugPrint('   Props: $props');
     debugPrint('   Value string: "$valueString"');
-    
+
     return _computeProofOfWork(timestamp, valueString, maxIterations);
   }
 
   /// Compute proof-of-work hash (can be moved to isolate for heavy computation)
   Future<String> _computeProofOfWork(
-    int timestamp, 
-    String valueString, 
+    int timestamp,
+    String valueString,
     int maxIterations,
   ) async {
     // For expensive computations, consider using compute() to run in isolate
     if (maxIterations > 10000) {
-      return compute(_computeProofOfWorkSync, _ProofOfWorkParams(
+      return compute(
+        _computeProofOfWorkSync,
+        _ProofOfWorkParams(
+          timestamp: timestamp,
+          valueString: valueString,
+          maxIterations: maxIterations,
+        ),
+      );
+    }
+
+    return _computeProofOfWorkSync(
+      _ProofOfWorkParams(
         timestamp: timestamp,
         valueString: valueString,
         maxIterations: maxIterations,
-      ));
-    }
-
-    return _computeProofOfWorkSync(_ProofOfWorkParams(
-      timestamp: timestamp,
-      valueString: valueString,
-      maxIterations: maxIterations,
-    ));
+      ),
+    );
   }
 
   /// Generate random state string for CSRF protection
@@ -77,15 +85,18 @@ class CryptoService {
   /// Generate random nonce
   String generateNonce([int length = 16]) {
     final random = Random.secure();
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    return List.generate(length, (_) => chars[random.nextInt(chars.length)]).join();
+    const chars =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    return List.generate(
+      length,
+      (_) => chars[random.nextInt(chars.length)],
+    ).join();
   }
 
   /// Validate JWT token format without parsing
   bool isValidJWTFormat(String token) {
     final parts = token.split('.');
-    return parts.length == 3 && 
-           parts.every((part) => part.isNotEmpty);
+    return parts.length == 3 && parts.every((part) => part.isNotEmpty);
   }
 }
 
@@ -93,7 +104,7 @@ class CryptoService {
 String _computeProofOfWorkSync(_ProofOfWorkParams params) {
   int fineTuner = 0;
   String hash = '';
-  
+
   // Find hash starting with "00"
   while (fineTuner < params.maxIterations) {
     fineTuner++;
@@ -101,17 +112,19 @@ String _computeProofOfWorkSync(_ProofOfWorkParams params) {
     final bytes = utf8.encode(input);
     final digest = sha256.convert(bytes);
     hash = base64Url.encode(digest.bytes).replaceAll('=', '');
-    
+
     if (hash.startsWith('00')) {
       debugPrint('🔐 Anti-abuse hash found after $fineTuner iterations');
       break;
     }
   }
-  
+
   if (fineTuner >= params.maxIterations) {
-    debugPrint('⚠️ WARNING: Anti-abuse hash calculation reached max iterations');
+    debugPrint(
+      '⚠️ WARNING: Anti-abuse hash calculation reached max iterations',
+    );
   }
-  
+
   final result = 'v2;${params.timestamp};$fineTuner;$hash';
   debugPrint('🔐 Final anti-abuse hash: $result');
   return result;
@@ -147,4 +160,4 @@ class PKCECodes {
     'codeChallenge': codeChallenge,
     'codeChallengeMethod': codeChallengeMethod,
   };
-} 
+}

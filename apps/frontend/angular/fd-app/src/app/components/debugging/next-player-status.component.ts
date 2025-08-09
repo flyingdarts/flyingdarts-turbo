@@ -1,6 +1,6 @@
-import { CommonModule } from "@angular/common";
-import { Component, Input, forwardRef } from "@angular/core";
-import { Observable } from "rxjs";
+import { CommonModule } from '@angular/common';
+import { Component, Input, forwardRef } from '@angular/core';
+import { Observable } from 'rxjs';
 
 export enum NextPlayerType {
   Nobody,
@@ -9,25 +9,24 @@ export enum NextPlayerType {
 }
 
 @Component({
-  selector: "app-next-player-status",
+  selector: 'app-next-player-status',
   standalone: true,
   imports: [CommonModule, forwardRef(() => NextPlayerStatusComponent)],
-  template: `
-    <app-next-player-status-ui
-      [nextPlayerType$]="nextPlayerType$ | async"
-    ></app-next-player-status-ui>
-  `,
+  template: ` <app-next-player-status-ui [nextPlayerType$]="nextPlayerType$ | async"></app-next-player-status-ui> `,
 })
 export class NextPlayerStatusContainerComponent {
   @Input() nextPlayerType$!: Observable<NextPlayerType>;
 }
 
 @Component({
-  selector: "app-next-player-status-ui",
+  selector: 'app-next-player-status-ui',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="next-player-status" [class]="getStatusClass()">
+    <div
+      class="next-player-status"
+      [class]="getStatusClass()"
+    >
       <span class="status-icon">
         <i [class]="getStatusIcon()"></i>
       </span>
@@ -85,39 +84,39 @@ export class NextPlayerStatusComponent {
   getStatusClass(): string {
     switch (this.currentType) {
       case NextPlayerType.Nobody:
-        return "nobody";
+        return 'nobody';
       case NextPlayerType.Me:
-        return "me";
+        return 'me';
       case NextPlayerType.Other:
-        return "other";
+        return 'other';
       default:
-        return "nobody";
+        return 'nobody';
     }
   }
 
   getStatusIcon(): string {
     switch (this.currentType) {
       case NextPlayerType.Nobody:
-        return "bi bi-pause-circle";
+        return 'bi bi-pause-circle';
       case NextPlayerType.Me:
-        return "bi bi-person-check-fill";
+        return 'bi bi-person-check-fill';
       case NextPlayerType.Other:
-        return "bi bi-person-fill";
+        return 'bi bi-person-fill';
       default:
-        return "bi bi-pause-circle";
+        return 'bi bi-pause-circle';
     }
   }
 
   getStatusText(): string {
     switch (this.currentType) {
       case NextPlayerType.Nobody:
-        return "Waiting...";
+        return 'Waiting...';
       case NextPlayerType.Me:
-        return "Your turn";
+        return 'Your turn';
       case NextPlayerType.Other:
         return "Opponent's turn";
       default:
-        return "Unknown";
+        return 'Unknown';
     }
   }
 }

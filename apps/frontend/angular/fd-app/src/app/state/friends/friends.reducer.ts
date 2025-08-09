@@ -1,23 +1,23 @@
-import { createReducer, on } from "@ngrx/store";
-import { initialFriendsState } from "./friends.state";
+import { createReducer, on } from '@ngrx/store';
 import {
   loadFriendRequests,
   loadFriendRequestsFailure,
   loadFriendRequestsSuccess,
   loadFriends,
   loadFriendsFailure,
+  loadFriendsSuccess,
   removeFriend,
   removeFriendFailure,
   removeFriendSuccess,
   sendFriendRequest,
   sendFriendRequestFailure,
   sendFriendRequestSuccess,
-} from "./friends.actions";
-import { loadFriendsSuccess } from "./friends.actions";
+} from './friends.actions';
+import { initialFriendsState } from './friends.state';
 
 export const friendsReducer = createReducer(
   initialFriendsState,
-  on(loadFriends, (state) => ({
+  on(loadFriends, state => ({
     ...state,
     isLoading: true,
   })),
@@ -31,7 +31,7 @@ export const friendsReducer = createReducer(
     error,
     isLoading: false,
   })),
-  on(loadFriendRequests, (state) => ({
+  on(loadFriendRequests, state => ({
     ...state,
     isLoading: true,
   })),
@@ -45,13 +45,13 @@ export const friendsReducer = createReducer(
     error,
     isLoading: false,
   })),
-  on(removeFriend, (state) => ({
+  on(removeFriend, state => ({
     ...state,
     isLoading: true,
   })),
   on(removeFriendSuccess, (state, { friendId }) => ({
     ...state,
-    friends: state.friends.filter((friend) => friend.UserId !== friendId),
+    friends: state.friends.filter(friend => friend.UserId !== friendId),
     isLoading: false,
   })),
   on(removeFriendFailure, (state, { error }) => ({
@@ -59,7 +59,7 @@ export const friendsReducer = createReducer(
     error,
     isLoading: false,
   })),
-  on(sendFriendRequest, (state) => ({
+  on(sendFriendRequest, state => ({
     ...state,
     isLoading: true,
   })),

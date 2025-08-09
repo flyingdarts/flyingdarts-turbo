@@ -27,90 +27,133 @@ void main() {
     });
 
     group('redirectLogic', () {
-      testWidgets('allows navigation when authenticated and not accessing login', (tester) async {
-        when(() => mockRouterState.matchedLocation).thenReturn('/dashboard');
+      testWidgets(
+        'allows navigation when authenticated and not accessing login',
+        (tester) async {
+          when(() => mockRouterState.matchedLocation).thenReturn('/dashboard');
 
-        final authContext = AuthressContext(
-          authState: AuthStateAuthenticated(
-            user: const UserProfile(userId: 'user-123'),
-            accessToken: 'token',
-            expiresAt: DateTime.now().add(const Duration(hours: 1)),
-          ),
-        );
-
-        await tester.pumpWidget(
-          TestAuthressProvider(
-            authContext: authContext,
-            child: Builder(
-              builder: (context) {
-                final result = AuthressRouteGuard.redirectLogic(context, mockRouterState);
-                expect(result, isNull);
-                return const SizedBox();
-              },
+          final authContext = AuthressContext(
+            authState: AuthStateAuthenticated(
+              user: const UserProfile(userId: 'user-123'),
+              accessToken: 'token',
+              expiresAt: DateTime.now().add(const Duration(hours: 1)),
             ),
-          ),
-        );
-      });
-
-      testWidgets('redirects to home when authenticated user tries to access login', (tester) async {
-        when(() => mockRouterState.matchedLocation).thenReturn('/login');
-
-        final authContext = AuthressContext(
-          authState: AuthStateAuthenticated(
-            user: const UserProfile(userId: 'user-123'),
-            accessToken: 'token',
-            expiresAt: DateTime.now().add(const Duration(hours: 1)),
-          ),
-        );
-
-        await tester.pumpWidget(
-          TestAuthressProvider(
-            authContext: authContext,
-            child: Builder(
-              builder: (context) {
-                final result = AuthressRouteGuard.redirectLogic(context, mockRouterState);
-                expect(result, equals('/'));
-                return const SizedBox();
-              },
-            ),
-          ),
-        );
-      });
-
-      testWidgets('redirects to login when unauthenticated user tries to access protected route', (tester) async {
-        when(() => mockRouterState.matchedLocation).thenReturn('/dashboard');
-
-        final authContext = AuthressContext(authState: AuthStateUnauthenticated());
-
-        await tester.pumpWidget(
-          TestAuthressProvider(
-            authContext: authContext,
-            child: Builder(
-              builder: (context) {
-                final result = AuthressRouteGuard.redirectLogic(context, mockRouterState);
-                expect(result, equals('/login?redirect=${Uri.encodeComponent('/dashboard')}'));
-                return const SizedBox();
-              },
-            ),
-          ),
-        );
-      });
-
-      testWidgets('allows access to public routes when unauthenticated', (tester) async {
-        final publicRoutes = ['/login', '/auth', '/signup', '/privacy', '/terms', '/about'];
-
-        for (final route in publicRoutes) {
-          when(() => mockRouterState.matchedLocation).thenReturn(route);
-
-          final authContext = AuthressContext(authState: AuthStateUnauthenticated());
+          );
 
           await tester.pumpWidget(
             TestAuthressProvider(
               authContext: authContext,
               child: Builder(
                 builder: (context) {
-                  final result = AuthressRouteGuard.redirectLogic(context, mockRouterState);
-                  expect(result, isNull, reason: 'Public route $route should allow access');
+                  final result = AuthressRouteGuard.redirectLogic(
+                    context,
+                    mockRouterState,
+                  );
+                  expect(result, isNull);
+                  return const SizedBox();
+                },
+              ),
+            ),
+          );
+        },
+      );
+
+      testWidgets(
+        'redirects to home when authenticated user tries to access login',
+        (tester) async {
+          when(() => mockRouterState.matchedLocation).thenReturn('/login');
+
+          final authContext = AuthressContext(
+            authState: AuthStateAuthenticated(
+              user: const UserProfile(userId: 'user-123'),
+              accessToken: 'token',
+              expiresAt: DateTime.now().add(const Duration(hours: 1)),
+            ),
+          );
+
+          await tester.pumpWidget(
+            TestAuthressProvider(
+              authContext: authContext,
+              child: Builder(
+                builder: (context) {
+                  final result = AuthressRouteGuard.redirectLogic(
+                    context,
+                    mockRouterState,
+                  );
+                  expect(result, equals('/'));
+                  return const SizedBox();
+                },
+              ),
+            ),
+          );
+        },
+      );
+
+      testWidgets(
+        'redirects to login when unauthenticated user tries to access protected route',
+        (tester) async {
+          when(() => mockRouterState.matchedLocation).thenReturn('/dashboard');
+
+          final authContext = AuthressContext(
+            authState: AuthStateUnauthenticated(),
+          );
+
+          await tester.pumpWidget(
+            TestAuthressProvider(
+              authContext: authContext,
+              child: Builder(
+                builder: (context) {
+                  final result = AuthressRouteGuard.redirectLogic(
+                    context,
+                    mockRouterState,
+                  );
+                  expect(
+                    result,
+                    equals(
+                      '/login?redirect=${Uri.encodeComponent('/dashboard')}',
+                    ),
+                  );
+                  return const SizedBox();
+                },
+              ),
+            ),
+          );
+        },
+      );
+
+      testWidgets('allows access to public routes when unauthenticated', (
+        tester,
+      ) async {
+        final publicRoutes = [
+          '/login',
+          '/auth',
+          '/signup',
+          '/privacy',
+          '/terms',
+          '/about',
+        ];
+
+        for (final route in publicRoutes) {
+          when(() => mockRouterState.matchedLocation).thenReturn(route);
+
+          final authContext = AuthressContext(
+            authState: AuthStateUnauthenticated(),
+          );
+
+          await tester.pumpWidget(
+            TestAuthressProvider(
+              authContext: authContext,
+              child: Builder(
+                builder: (context) {
+                  final result = AuthressRouteGuard.redirectLogic(
+                    context,
+                    mockRouterState,
+                  );
+                  expect(
+                    result,
+                    isNull,
+                    reason: 'Public route $route should allow access',
+                  );
                   return const SizedBox();
                 },
               ),
@@ -129,8 +172,15 @@ void main() {
             authContext: authContext,
             child: Builder(
               builder: (context) {
-                final result = AuthressRouteGuard.redirectLogic(context, mockRouterState);
-                expect(result, isNull, reason: 'Loading state should stay on current route');
+                final result = AuthressRouteGuard.redirectLogic(
+                  context,
+                  mockRouterState,
+                );
+                expect(
+                  result,
+                  isNull,
+                  reason: 'Loading state should stay on current route',
+                );
                 return const SizedBox();
               },
             ),
@@ -141,17 +191,24 @@ void main() {
       testWidgets('handles error state gracefully', (tester) async {
         when(() => mockRouterState.matchedLocation).thenReturn('/dashboard');
 
-        final authContext = AuthressContext(authState: AuthStateError(message: 'Test error'));
+        final authContext = AuthressContext(
+          authState: AuthStateError(message: 'Test error'),
+        );
 
         await tester.pumpWidget(
           TestAuthressProvider(
             authContext: authContext,
             child: Builder(
               builder: (context) {
-                final result = AuthressRouteGuard.redirectLogic(context, mockRouterState);
+                final result = AuthressRouteGuard.redirectLogic(
+                  context,
+                  mockRouterState,
+                );
                 expect(
                   result,
-                  equals('/login?redirect=${Uri.encodeComponent('/dashboard')}'),
+                  equals(
+                    '/login?redirect=${Uri.encodeComponent('/dashboard')}',
+                  ),
                   reason: 'Error state should redirect to login',
                 );
                 return const SizedBox();
@@ -184,7 +241,11 @@ void main() {
             authContext: authContext,
             child: Builder(
               builder: (context) {
-                final result = AuthressRouteGuard.roleGuard(context, mockRouterState, requiredRoles: ['admin']);
+                final result = AuthressRouteGuard.roleGuard(
+                  context,
+                  mockRouterState,
+                  requiredRoles: ['admin'],
+                );
                 expect(result, isNull);
                 return const SizedBox();
               },
@@ -193,7 +254,9 @@ void main() {
         );
       });
 
-      testWidgets('denies access when user lacks required roles', (tester) async {
+      testWidgets('denies access when user lacks required roles', (
+        tester,
+      ) async {
         when(() => mockRouterState.matchedLocation).thenReturn('/admin');
 
         final authContext = AuthressContext(
@@ -231,15 +294,24 @@ void main() {
       testWidgets('handles unauthenticated users', (tester) async {
         when(() => mockRouterState.matchedLocation).thenReturn('/admin');
 
-        final authContext = AuthressContext(authState: AuthStateUnauthenticated());
+        final authContext = AuthressContext(
+          authState: AuthStateUnauthenticated(),
+        );
 
         await tester.pumpWidget(
           TestAuthressProvider(
             authContext: authContext,
             child: Builder(
               builder: (context) {
-                final result = AuthressRouteGuard.roleGuard(context, mockRouterState, requiredRoles: ['admin']);
-                expect(result, equals('/login?redirect=${Uri.encodeComponent('/admin')}'));
+                final result = AuthressRouteGuard.roleGuard(
+                  context,
+                  mockRouterState,
+                  requiredRoles: ['admin'],
+                );
+                expect(
+                  result,
+                  equals('/login?redirect=${Uri.encodeComponent('/admin')}'),
+                );
                 return const SizedBox();
               },
             ),
@@ -249,7 +321,9 @@ void main() {
     });
 
     group('AuthressGuard Widget', () {
-      testWidgets('shows authenticated child when user is authenticated', (tester) async {
+      testWidgets('shows authenticated child when user is authenticated', (
+        tester,
+      ) async {
         final authContext = AuthressContext(
           authState: AuthStateAuthenticated(
             user: const UserProfile(userId: 'user-123'),
@@ -261,29 +335,36 @@ void main() {
         await tester.pumpWidget(
           TestAuthressProvider(
             authContext: authContext,
-            child: const AuthressPageGuard(authenticatedChild: Text('Welcome User')),
+            child: const AuthressPageGuard(
+              authenticatedChild: Text('Welcome User'),
+            ),
           ),
         );
 
         expect(find.text('Welcome User'), findsOneWidget);
       });
 
-      testWidgets('shows unauthenticated child when user is not authenticated', (tester) async {
-        final authContext = AuthressContext(authState: AuthStateUnauthenticated());
+      testWidgets(
+        'shows unauthenticated child when user is not authenticated',
+        (tester) async {
+          final authContext = AuthressContext(
+            authState: AuthStateUnauthenticated(),
+          );
 
-        await tester.pumpWidget(
-          TestAuthressProvider(
-            authContext: authContext,
-            child: const AuthressPageGuard(
-              authenticatedChild: Text('Welcome User'),
-              unauthenticatedChild: Text('Please Login'),
+          await tester.pumpWidget(
+            TestAuthressProvider(
+              authContext: authContext,
+              child: const AuthressPageGuard(
+                authenticatedChild: Text('Welcome User'),
+                unauthenticatedChild: Text('Please Login'),
+              ),
             ),
-          ),
-        );
+          );
 
-        expect(find.text('Please Login'), findsOneWidget);
-        expect(find.text('Welcome User'), findsNothing);
-      });
+          expect(find.text('Please Login'), findsOneWidget);
+          expect(find.text('Welcome User'), findsNothing);
+        },
+      );
 
       testWidgets('shows loading child when in loading state', (tester) async {
         final authContext = AuthressContext(authState: AuthStateLoading());
@@ -305,7 +386,9 @@ void main() {
       });
 
       testWidgets('shows error child when in error state', (tester) async {
-        final authContext = AuthressContext(authState: AuthStateError(message: 'Authentication failed'));
+        final authContext = AuthressContext(
+          authState: AuthStateError(message: 'Authentication failed'),
+        );
 
         await tester.pumpWidget(
           TestAuthressProvider(
@@ -338,7 +421,10 @@ void main() {
         await tester.pumpWidget(
           TestAuthressProvider(
             authContext: authContext,
-            child: const AuthressPageGuard(authenticatedChild: Text('Admin Panel'), requiredRoles: ['admin']),
+            child: const AuthressPageGuard(
+              authenticatedChild: Text('Admin Panel'),
+              requiredRoles: ['admin'],
+            ),
           ),
         );
 
@@ -363,7 +449,10 @@ void main() {
         await tester.pumpWidget(
           TestAuthressProvider(
             authContext: authContext,
-            child: const AuthressPageGuard(authenticatedChild: Text('Admin Panel'), requiredRoles: ['admin']),
+            child: const AuthressPageGuard(
+              authenticatedChild: Text('Admin Panel'),
+              requiredRoles: ['admin'],
+            ),
           ),
         );
 
@@ -389,7 +478,10 @@ void main() {
         await tester.pumpWidget(
           TestAuthressProvider(
             authContext: authContext,
-            child: const AuthressPageGuard(authenticatedChild: Text('Developer Tools'), requiredGroups: ['developers']),
+            child: const AuthressPageGuard(
+              authenticatedChild: Text('Developer Tools'),
+              requiredGroups: ['developers'],
+            ),
           ),
         );
 
@@ -397,7 +489,9 @@ void main() {
         expect(find.text('Developer Tools'), findsNothing);
       });
 
-      testWidgets('allows access when user has required groups', (tester) async {
+      testWidgets('allows access when user has required groups', (
+        tester,
+      ) async {
         final authContext = AuthressContext(
           authState: AuthStateAuthenticated(
             user: const UserProfile(
@@ -414,7 +508,10 @@ void main() {
         await tester.pumpWidget(
           TestAuthressProvider(
             authContext: authContext,
-            child: const AuthressPageGuard(authenticatedChild: Text('Developer Tools'), requiredGroups: ['developers']),
+            child: const AuthressPageGuard(
+              authenticatedChild: Text('Developer Tools'),
+              requiredGroups: ['developers'],
+            ),
           ),
         );
 
@@ -451,7 +548,9 @@ void main() {
         expect(find.text('Access Denied'), findsOneWidget);
       });
 
-      testWidgets('shows access denied when user fails group requirement', (tester) async {
+      testWidgets('shows access denied when user fails group requirement', (
+        tester,
+      ) async {
         final authContext = AuthressContext(
           authState: AuthStateAuthenticated(
             user: const UserProfile(
@@ -488,7 +587,11 @@ class TestAuthressProvider extends StatelessWidget {
   final AuthressContext authContext;
   final Widget child;
 
-  const TestAuthressProvider({super.key, required this.authContext, required this.child});
+  const TestAuthressProvider({
+    super.key,
+    required this.authContext,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {

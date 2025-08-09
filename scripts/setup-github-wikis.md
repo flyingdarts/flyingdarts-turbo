@@ -77,13 +77,13 @@ Create a main wiki with links to separate documentation repositories.
 1. Go to your GitHub repository
 2. Click on the "Wiki" tab
 3. Click "Create the first page" or "Add page"
-4. This will create a wiki repository at `https://github.com/your-username/flyingdarts-turbo.wiki.git`
+4. This will create a wiki repository at `https://github.com/your-username/flyingdarts.wiki.git`
 
 ### Step 2: Clone the Wiki Repository
 
 ```bash
-git clone https://github.com/your-username/flyingdarts-turbo.wiki.git
-cd flyingdarts-turbo.wiki
+git clone https://github.com/your-username/flyingdarts.wiki.git
+cd flyingdarts.wiki
 ```
 
 ### Step 3: Create Wiki Structure
@@ -91,7 +91,7 @@ cd flyingdarts-turbo.wiki
 Create the following directory structure in your wiki:
 
 ```
-flyingdarts-turbo.wiki/
+flyingdarts.wiki/
 ├── Home.md                    # Main landing page
 ├── Apps/                      # Applications documentation
 │   ├── Backend/

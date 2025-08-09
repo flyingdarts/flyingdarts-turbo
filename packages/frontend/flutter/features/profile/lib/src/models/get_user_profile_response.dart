@@ -15,7 +15,10 @@ class GetUserProfileResponse {
     required this.country,
   });
 
-  factory GetUserProfileResponse.fromJson(Map<String, dynamic> json) => _$GetUserProfileResponseFromJson(json);
+  factory GetUserProfileResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetUserProfileResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GetUserProfileResponseToJson(this)..removeWhere((key, value) => value == null);
+  Map<String, dynamic> toJson() =>
+      _$GetUserProfileResponseToJson(this)
+        ..removeWhere((key, value) => value == null);
 }

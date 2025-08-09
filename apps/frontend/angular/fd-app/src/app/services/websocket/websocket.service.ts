@@ -1,35 +1,28 @@
-import { BehaviorSubject, Observable, Subject } from "rxjs";
-import { environment } from "./../../../environments/environment";
-import { WebSocketActions } from "./websocket.actions.enum";
-import { WebSocketMessage } from "./websocket.message.model";
-import { WebSocketRequest } from "./websocket.request.model";
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { environment } from './../../../environments/environment';
+import { WebSocketActions } from './websocket.actions.enum';
+import { WebSocketMessage } from './websocket.message.model';
+import { WebSocketRequest } from './websocket.request.model';
 
 export class WebSocketService {
   private socket!: WebSocket;
-  private isConnectedSubject: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
+  private isConnectedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  public isConnected$: Observable<boolean> =
-    this.isConnectedSubject.asObservable();
+  public isConnected$: Observable<boolean> = this.isConnectedSubject.asObservable();
 
   private messagesSubject = new Subject<WebSocketMessage<WebSocketRequest>>();
-  public messages$: Observable<WebSocketMessage<WebSocketRequest>> =
-    this.messagesSubject.asObservable();
+  public messages$: Observable<WebSocketMessage<WebSocketRequest>> = this.messagesSubject.asObservable();
 
   // Event listeners for specific actions
-  private actionListeners: Map<
-    string,
-    ((message: WebSocketMessage<WebSocketRequest>) => void)[]
-  > = new Map();
+  private actionListeners: Map<string, ((message: WebSocketMessage<WebSocketRequest>) => void)[]> = new Map();
 
   constructor(getTokenCallback: () => Promise<string>) {
-    getTokenCallback().then((token) => {
-      const idToken = localStorage.getItem("AuthenticationCredentialsStorage")!;
+    getTokenCallback().then(token => {
+      const idToken = localStorage.getItem('AuthenticationCredentialsStorage')!;
       const idTokenParsed = JSON.parse(idToken);
       const idTokenValue = idTokenParsed.idToken;
 
-      var url =
-        environment.webSocketUrl + `?token=${encodeURIComponent(token)}`;
+      var url = environment.webSocketUrl + `?token=${encodeURIComponent(token)}`;
       if (idTokenValue) {
         url = url + `&idToken=${encodeURIComponent(idTokenValue)}`;
       }
@@ -39,7 +32,7 @@ export class WebSocketService {
   }
 
   private connect(): void {
-    this.socket.onopen = (event) => {
+    this.socket.onopen = event => {
       this.isConnectedSubject.next(true);
       const message: WebSocketMessage<WebSocketRequest> = {
         action: WebSocketActions.Connect,
@@ -49,7 +42,7 @@ export class WebSocketService {
       this.triggerActionListeners(message);
     };
 
-    this.socket.onclose = (event) => {
+    this.socket.onclose = event => {
       this.isConnectedSubject.next(false);
       const message: WebSocketMessage<WebSocketRequest> = {
         action: WebSocketActions.Disconnect,
@@ -62,7 +55,7 @@ export class WebSocketService {
       }, 1000);
     };
 
-    this.socket.onerror = (event) => {
+    this.socket.onerror = event => {
       const message: WebSocketMessage<WebSocketRequest> = {
         action: WebSocketActions.Default,
         message: event as any,
@@ -71,7 +64,7 @@ export class WebSocketService {
       this.triggerActionListeners(message);
     };
 
-    this.socket.onmessage = (event) => {
+    this.socket.onmessage = event => {
       let messageData = JSON.parse(event.data);
       const message: WebSocketMessage<WebSocketRequest> = {
         action: messageData.action,
@@ -83,12 +76,10 @@ export class WebSocketService {
     };
   }
 
-  private triggerActionListeners(
-    message: WebSocketMessage<WebSocketRequest>
-  ): void {
+  private triggerActionListeners(message: WebSocketMessage<WebSocketRequest>): void {
     const listeners = this.actionListeners.get(message.action);
     if (listeners) {
-      listeners.forEach((callback) => callback(message));
+      listeners.forEach(callback => callback(message));
     }
   }
 
@@ -97,10 +88,7 @@ export class WebSocketService {
    * @param action The action name to listen for
    * @param callback The callback function to execute when the action is received
    */
-  public on(
-    action: string,
-    callback: (message: WebSocketMessage<WebSocketRequest>) => void
-  ): void {
+  public on(action: string, callback: (message: WebSocketMessage<WebSocketRequest>) => void): void {
     if (!this.actionListeners.has(action)) {
       this.actionListeners.set(action, []);
     }
@@ -112,10 +100,7 @@ export class WebSocketService {
    * @param action The action name to stop listening for
    * @param callback The specific callback function to remove (optional - if not provided, all callbacks for the action are removed)
    */
-  public off(
-    action: string,
-    callback?: (message: WebSocketMessage<WebSocketRequest>) => void
-  ): void {
+  public off(action: string, callback?: (message: WebSocketMessage<WebSocketRequest>) => void): void {
     if (!this.actionListeners.has(action)) {
       return;
     }

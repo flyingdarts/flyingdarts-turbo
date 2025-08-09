@@ -23,11 +23,15 @@ class SpeechToTextService implements SpeechRecognitionService {
   @override
   Future<bool> initialize() async {
     final start = DateTime.now();
-    debugPrint('[PROFILE] SpeechToTextService.initialize() called at: ${start.toIso8601String()}');
+    debugPrint(
+      '[PROFILE] SpeechToTextService.initialize() called at: ${start.toIso8601String()}',
+    );
     try {
       // Don't re-initialize if already initialized
       if (_isInitialized) {
-        debugPrint('[PROFILE] Already initialized, returning isAvailable: ${_speechToText.isAvailable}');
+        debugPrint(
+          '[PROFILE] Already initialized, returning isAvailable: ${_speechToText.isAvailable}',
+        );
         return _speechToText.isAvailable;
       }
 
@@ -62,7 +66,9 @@ class SpeechToTextService implements SpeechRecognitionService {
     required VoidCallback onStatusChanged,
   }) async {
     final start = DateTime.now();
-    debugPrint('[PROFILE] SpeechToTextService.startListening() called at: ${start.toIso8601String()}');
+    debugPrint(
+      '[PROFILE] SpeechToTextService.startListening() called at: ${start.toIso8601String()}',
+    );
     try {
       if (!_isInitialized) {
         final initialized = await initialize();
@@ -81,7 +87,9 @@ class SpeechToTextService implements SpeechRecognitionService {
         listenFor: config.listenFor, // Set maximum listening duration
         pauseFor: config.pauseFor, // Set pause duration
         onResult: (stt.SpeechRecognitionResult result) {
-          debugPrint('[PROFILE] onResult callback at: ${DateTime.now().toIso8601String()}');
+          debugPrint(
+            '[PROFILE] onResult callback at: ${DateTime.now().toIso8601String()}',
+          );
           _handleResult(result, config, onResult);
         },
         listenOptions: SpeechListenOptions(
@@ -90,7 +98,9 @@ class SpeechToTextService implements SpeechRecognitionService {
           partialResults: false,
         ),
       );
-      debugPrint('[PROFILE] _speechToText.listen() returned: ${success.runtimeType} value: $success');
+      debugPrint(
+        '[PROFILE] _speechToText.listen() returned: ${success.runtimeType} value: $success',
+      );
       // Defensive: treat null as false
       final started = success == true;
       if (started) {
@@ -116,7 +126,9 @@ class SpeechToTextService implements SpeechRecognitionService {
   @override
   Future<void> stopListening() async {
     final start = DateTime.now();
-    debugPrint('[PROFILE] SpeechToTextService.stopListening() called at: ${start.toIso8601String()}');
+    debugPrint(
+      '[PROFILE] SpeechToTextService.stopListening() called at: ${start.toIso8601String()}',
+    );
     try {
       if (_isListening) {
         await _speechToText.stop();
@@ -133,7 +145,9 @@ class SpeechToTextService implements SpeechRecognitionService {
   @override
   Future<void> cancel() async {
     final start = DateTime.now();
-    debugPrint('[PROFILE] SpeechToTextService.cancel() called at: ${start.toIso8601String()}');
+    debugPrint(
+      '[PROFILE] SpeechToTextService.cancel() called at: ${start.toIso8601String()}',
+    );
     try {
       if (_isListening) {
         await _speechToText.cancel();
@@ -184,7 +198,9 @@ class SpeechToTextService implements SpeechRecognitionService {
       final isFinal = result.finalResult;
       final text = result.recognizedWords;
 
-      debugPrint('Speech result: $text (confidence: $confidence, final: $isFinal)');
+      debugPrint(
+        'Speech result: $text (confidence: $confidence, final: $isFinal)',
+      );
 
       // Handle confidence properly - speech_to_text may not provide confidence on all platforms
       double adjustedConfidence = confidence;
@@ -192,14 +208,18 @@ class SpeechToTextService implements SpeechRecognitionService {
         // If confidence is 0 but we have text, assume a reasonable confidence
         // This is common on iOS and some Android devices
         adjustedConfidence = isFinal ? 0.8 : 0.6;
-        debugPrint('Adjusted confidence from $confidence to $adjustedConfidence');
+        debugPrint(
+          'Adjusted confidence from $confidence to $adjustedConfidence',
+        );
       }
 
       // For speech_to_text, we want to process:
       // 1. Final results (most reliable)
       // 2. Partial results with good confidence
       // 3. Any result with text (for debugging)
-      if (isFinal || adjustedConfidence >= config.confidenceThreshold || text.isNotEmpty) {
+      if (isFinal ||
+          adjustedConfidence >= config.confidenceThreshold ||
+          text.isNotEmpty) {
         final speechResult = SpeechRecognitionResult.fromSpeechToText(
           text,
           adjustedConfidence,
@@ -213,7 +233,9 @@ class SpeechToTextService implements SpeechRecognitionService {
       // speech_to_text automatically stops after final results or timeout
       // We don't need to manually restart listening
       if (isFinal) {
-        debugPrint('Final result received, speech_to_text will handle stopping');
+        debugPrint(
+          'Final result received, speech_to_text will handle stopping',
+        );
       }
     } catch (e) {
       debugPrint('Failed to handle speech result: $e');

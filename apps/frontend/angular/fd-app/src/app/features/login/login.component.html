@@ -1,8 +1,14 @@
-<div class="card shadow-sm" style="transition: transform 0.2s; cursor: pointer">
+<div
+  class="card shadow-sm"
+  style="transition: transform 0.2s; cursor: pointer"
+>
   <div class="card-body">
     <h5 class="card-title">Login Form</h5>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+    >
       <div class="form-check mb-3">
         <input
           type="checkbox"
@@ -10,7 +16,10 @@
           class="form-check-input"
           formControlName="acceptTerms"
         />
-        <label for="acceptTerms" class="form-check-label">
+        <label
+          for="acceptTerms"
+          class="form-check-label"
+        >
           I accept and surrender
         </label>
       </div>

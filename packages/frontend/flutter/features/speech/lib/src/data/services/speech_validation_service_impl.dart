@@ -82,7 +82,8 @@ class NotEmptyValidationRule extends ValidationRule {
 
 /// Validation rule to ensure confidence meets threshold
 class ConfidenceThresholdValidationRule extends ValidationRule {
-  static const double _defaultThreshold = 0.9; // Lower threshold for better recognition
+  static const double _defaultThreshold =
+      0.9; // Lower threshold for better recognition
 
   ConfidenceThresholdValidationRule()
     : super(
@@ -99,7 +100,8 @@ class ConfidenceThresholdValidationRule extends ValidationRule {
         [
           ValidationError(
             field: 'confidence',
-            message: 'Confidence ${result.confidence} is below threshold $_defaultThreshold',
+            message:
+                'Confidence ${result.confidence} is below threshold $_defaultThreshold',
           ),
         ],
       );

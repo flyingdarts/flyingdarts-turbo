@@ -1,7 +1,7 @@
 ﻿using Amazon.CDK;
+using Amazon.CDK.AWS.CloudFormation;
 using Flyingdarts.CDK.Constructs;
-using Flyingdarts.CDK.Constructs.v2;
-using Environment = Amazon.CDK.Environment;
+using StackEnvironment = Amazon.CDK.Environment;
 
 namespace Flyingdarts.CDK
 {
@@ -11,49 +11,123 @@ namespace Flyingdarts.CDK
         {
             var app = new App();
 
-            new FlyingdartsStack(
+            var domainResources = new DomainStack(
                 app,
-                "Development",
-                new StackProps
+                new DomainStackProps
                 {
-                    StackName = $"FD-Stack-Development",
-                    Env = new Environment
+                    DeploymentEnvironment = DeploymentEnvironment.None, // This stack is imported from existing resources
+                    StackEnvironment = new StackEnvironment
                     {
                         Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
-                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION")
-                    }
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
                 }
             );
 
-            new FlyingdartsStack(
+            // Frontend stack - Development
+            new FrontendStack(
                 app,
-                "Staging",
-                new StackProps
+                new FrontendStackProps
                 {
-                    StackName = $"FD-Stack-Staging",
-                    Env = new Environment
+                    DeploymentEnvironment = DeploymentEnvironment.Development,
+                    StackEnvironment = new StackEnvironment
                     {
                         Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
-                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION")
-                    }
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
+                    HostedZone = domainResources.FlyingdartsHostedZone,
+                    Certificate = domainResources.FlyingdartsCertificate,
                 }
             );
 
-            new FlyingdartsStack(
+            // Frontend stack - Staging
+            new FrontendStack(
                 app,
-                "Production",
-                new StackProps
+                new FrontendStackProps
                 {
-                    StackName = $"FD-Stack-Production",
-                    Env = new Environment
+                    DeploymentEnvironment = DeploymentEnvironment.Staging,
+                    StackEnvironment = new StackEnvironment
                     {
                         Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
-                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION")
-                    }
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
+                    HostedZone = domainResources.FlyingdartsHostedZone,
+                    Certificate = domainResources.FlyingdartsCertificate,
                 }
             );
 
-            new AuthStack(app, new StackProps { StackName = $"Auth-Stack", });
+            // Frontend stack - Production
+            new FrontendStack(
+                app,
+                new FrontendStackProps
+                {
+                    DeploymentEnvironment = DeploymentEnvironment.Production,
+                    StackEnvironment = new StackEnvironment
+                    {
+                        Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
+                    HostedZone = domainResources.FlyingdartsHostedZone,
+                    Certificate = domainResources.FlyingdartsCertificate,
+                }
+            );
+
+            // Backend stack - Development
+            new BackendStack(
+                app,
+                new BackendStackProps
+                {
+                    DeploymentEnvironment = DeploymentEnvironment.Development,
+                    StackEnvironment = new StackEnvironment
+                    {
+                        Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
+                }
+            );
+
+            // Backend stack - Staging
+            new BackendStack(
+                app,
+                new BackendStackProps
+                {
+                    DeploymentEnvironment = DeploymentEnvironment.Staging,
+                    StackEnvironment = new StackEnvironment
+                    {
+                        Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
+                }
+            );
+
+            // Backend stack - Production
+            new BackendStack(
+                app,
+                new BackendStackProps
+                {
+                    DeploymentEnvironment = DeploymentEnvironment.Production,
+                    StackEnvironment = new StackEnvironment
+                    {
+                        Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
+                }
+            );
+
+            // Auth stack
+            new AuthStack(
+                app,
+                new AuthStackProps
+                {
+                    Repository = "flyingdarts",
+                    DeploymentEnvironment = DeploymentEnvironment.None,
+                    StackEnvironment = new StackEnvironment
+                    {
+                        Account = System.Environment.GetEnvironmentVariable("AWS_ACCOUNT"),
+                        Region = System.Environment.GetEnvironmentVariable("AWS_REGION"),
+                    },
+                }
+            );
 
             app.Synth();
         }

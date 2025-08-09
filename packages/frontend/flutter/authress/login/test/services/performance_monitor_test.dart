@@ -20,14 +20,14 @@ void main() {
       test('returns same instance', () {
         final instance1 = PerformanceMonitor.instance;
         final instance2 = PerformanceMonitor.instance;
-        
+
         expect(instance1, same(instance2));
       });
 
       test('maintains state across instance calls', () {
         final instance1 = PerformanceMonitor.instance;
         instance1.setEnabled(false);
-        
+
         final instance2 = PerformanceMonitor.instance;
         expect(instance2, same(instance1));
       });
@@ -38,17 +38,17 @@ void main() {
         monitor.setEnabled(false);
         monitor.startTimer('test');
         final duration = monitor.stopTimer('test');
-        
+
         expect(duration, isNull);
       });
 
       test('enabled monitoring records operations', () {
         monitor.setEnabled(true);
         monitor.startTimer('test');
-        
+
         // Small delay to ensure measurable time
         Future.delayed(const Duration(milliseconds: 1));
-        
+
         final duration = monitor.stopTimer('test');
         expect(duration, isNotNull);
       });
@@ -57,12 +57,12 @@ void main() {
     group('Timer Operations', () {
       test('starts and stops timer correctly', () {
         monitor.startTimer('operation1');
-        
+
         // Small delay
         Future.delayed(const Duration(milliseconds: 10));
-        
+
         final duration = monitor.stopTimer('operation1');
-        
+
         expect(duration, isNotNull);
         expect(duration!.inMicroseconds, greaterThan(0));
       });
@@ -71,11 +71,11 @@ void main() {
         monitor.startTimer('op1');
         monitor.startTimer('op2');
         monitor.startTimer('op3');
-        
+
         final duration1 = monitor.stopTimer('op1');
         final duration2 = monitor.stopTimer('op2');
         final duration3 = monitor.stopTimer('op3');
-        
+
         expect(duration1, isNotNull);
         expect(duration2, isNotNull);
         expect(duration3, isNotNull);
@@ -90,7 +90,7 @@ void main() {
         monitor.startTimer('test');
         final duration1 = monitor.stopTimer('test');
         final duration2 = monitor.stopTimer('test');
-        
+
         expect(duration1, isNotNull);
         expect(duration2, isNull);
       });
@@ -98,10 +98,10 @@ void main() {
       test('handles restarting same operation name', () {
         monitor.startTimer('operation');
         monitor.stopTimer('operation');
-        
+
         monitor.startTimer('operation');
         final duration = monitor.stopTimer('operation');
-        
+
         expect(duration, isNotNull);
       });
     });
@@ -120,7 +120,7 @@ void main() {
           Future.delayed(Duration(milliseconds: i + 1));
           monitor.stopTimer('test_op');
         }
-        
+
         final stats = monitor.getStats('test_op');
         expect(stats, isNotNull);
         expect(stats!.operationName, equals('test_op'));
@@ -133,13 +133,13 @@ void main() {
       test('calculates percentiles correctly', () {
         // Create predictable data
         final durations = [100, 200, 300, 400, 500]; // milliseconds
-        
+
         for (int i = 0; i < durations.length; i++) {
           monitor.startTimer('perf_test');
           // Simulate the duration (this is imprecise for testing)
           monitor.stopTimer('perf_test');
         }
-        
+
         final stats = monitor.getStats('perf_test');
         expect(stats, isNotNull);
         expect(stats!.count, equals(5));
@@ -148,10 +148,10 @@ void main() {
       test('getAllStats returns all recorded operations', () {
         monitor.startTimer('op1');
         monitor.stopTimer('op1');
-        
+
         monitor.startTimer('op2');
         monitor.stopTimer('op2');
-        
+
         final allStats = monitor.getAllStats();
         expect(allStats.keys, contains('op1'));
         expect(allStats.keys, contains('op2'));
@@ -167,13 +167,22 @@ void main() {
 
     group('Custom Metrics', () {
       test('records custom metrics', () {
-        expect(() => monitor.recordMetric('cpu_usage', 75.5, '%'), returnsNormally);
-        expect(() => monitor.recordMetric('memory_usage', 1024, 'MB'), returnsNormally);
+        expect(
+          () => monitor.recordMetric('cpu_usage', 75.5, '%'),
+          returnsNormally,
+        );
+        expect(
+          () => monitor.recordMetric('memory_usage', 1024, 'MB'),
+          returnsNormally,
+        );
       });
 
       test('ignores metrics when disabled', () {
         monitor.setEnabled(false);
-        expect(() => monitor.recordMetric('test', 100, 'units'), returnsNormally);
+        expect(
+          () => monitor.recordMetric('test', 100, 'units'),
+          returnsNormally,
+        );
       });
     });
 
@@ -183,9 +192,9 @@ void main() {
           await Future.delayed(const Duration(milliseconds: 10));
           return 'success';
         });
-        
+
         expect(result, equals('success'));
-        
+
         final stats = monitor.getStats('async_test');
         expect(stats, isNotNull);
         expect(stats!.count, equals(1));
@@ -202,7 +211,7 @@ void main() {
         } catch (e) {
           expect(e.toString(), contains('Test error'));
         }
-        
+
         final stats = monitor.getStats('failing_async');
         expect(stats, isNotNull);
         expect(stats!.count, equals(1));
@@ -213,9 +222,9 @@ void main() {
           // Simulate some work
           return 42;
         });
-        
+
         expect(result, equals(42));
-        
+
         final stats = monitor.getStats('sync_test');
         expect(stats, isNotNull);
         expect(stats!.count, equals(1));
@@ -231,7 +240,7 @@ void main() {
         } catch (e) {
           expect(e.toString(), contains('Sync error'));
         }
-        
+
         final stats = monitor.getStats('failing_sync');
         expect(stats, isNotNull);
         expect(stats!.count, equals(1));
@@ -284,12 +293,12 @@ void main() {
         monitor.startTimer('test1');
         monitor.stopTimer('test1');
         monitor.recordMetric('metric1', 100, 'units');
-        
+
         monitor.clearData();
-        
+
         final stats = monitor.getStats('test1');
         expect(stats, isNull);
-        
+
         final allStats = monitor.getAllStats();
         expect(allStats, isEmpty);
       });
@@ -302,7 +311,7 @@ void main() {
       test('printReport handles data with stats', () {
         monitor.startTimer('test_report');
         monitor.stopTimer('test_report');
-        
+
         expect(() => monitor.printReport(), returnsNormally);
       });
     });
@@ -310,7 +319,7 @@ void main() {
     group('Performance Tracking Mixin', () {
       test('mixin provides convenience methods', () {
         final tracker = TestClassWithMixin();
-        
+
         expect(() => tracker.testTrackPerformance(), returnsNormally);
         expect(() => tracker.testTrackSyncPerformance(), returnsNormally);
         expect(() => tracker.testRecordMetric(), returnsNormally);
@@ -321,7 +330,7 @@ void main() {
       test('handles very short operations', () {
         monitor.startTimer('microsecond_op');
         final duration = monitor.stopTimer('microsecond_op');
-        
+
         expect(duration, isNotNull);
         expect(duration!.inMicroseconds, greaterThanOrEqualTo(0));
       });
@@ -331,7 +340,7 @@ void main() {
           monitor.startTimer('repeated');
           monitor.stopTimer('repeated');
         }
-        
+
         final stats = monitor.getStats('repeated');
         expect(stats, isNotNull);
         expect(stats!.count, equals(3));
@@ -339,12 +348,12 @@ void main() {
 
       test('handles special characters in operation names', () {
         const operationName = 'test-operation_with.special@characters';
-        
+
         monitor.startTimer(operationName);
         final duration = monitor.stopTimer(operationName);
-        
+
         expect(duration, isNotNull);
-        
+
         final stats = monitor.getStats(operationName);
         expect(stats, isNotNull);
         expect(stats!.operationName, equals(operationName));
@@ -353,9 +362,9 @@ void main() {
       test('handles empty operation name', () {
         monitor.startTimer('');
         final duration = monitor.stopTimer('');
-        
+
         expect(duration, isNotNull);
-        
+
         final stats = monitor.getStats('');
         expect(stats, isNotNull);
       });
@@ -370,14 +379,14 @@ class TestClassWithMixin with PerformanceTrackingMixin {
       await Future.delayed(const Duration(milliseconds: 1));
     });
   }
-  
+
   void testTrackSyncPerformance() {
     trackSyncPerformance('mixin_sync', () {
       return 'result';
     });
   }
-  
+
   void testRecordMetric() {
     recordMetric('test_metric', 42.0, 'units');
   }
-} 
+}

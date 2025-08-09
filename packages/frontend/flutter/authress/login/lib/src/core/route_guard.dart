@@ -14,19 +14,28 @@ class AuthressRouteGuard {
 
     // If we're in a loading state, stay on current route
     if (authContext.isLoading) {
-      debugPrint('🔄 AuthressRouteGuard: Loading state, staying on current route');
+      debugPrint(
+        '🔄 AuthressRouteGuard: Loading state, staying on current route',
+      );
       return null;
     }
 
     // If authenticated and trying to access login, redirect to home
     if (authContext.isAuthenticated && isLoginRoute) {
-      debugPrint('✅ AuthressRouteGuard: Authenticated user trying to access login, redirecting to /home');
+      debugPrint(
+        '✅ AuthressRouteGuard: Authenticated user trying to access login, redirecting to /home',
+      );
       return '/home';
     }
 
     // If not authenticated and trying to access protected route
-    if (!authContext.isAuthenticated && !isLoginRoute && !isAuthRoute && !isPublicRoute) {
-      debugPrint('🔒 AuthressRouteGuard: Unauthenticated user trying to access protected route, redirecting to login');
+    if (!authContext.isAuthenticated &&
+        !isLoginRoute &&
+        !isAuthRoute &&
+        !isPublicRoute) {
+      debugPrint(
+        '🔒 AuthressRouteGuard: Unauthenticated user trying to access protected route, redirecting to login',
+      );
       return '/login?redirect=${Uri.encodeComponent(state.matchedLocation)}';
     }
 
@@ -51,7 +60,9 @@ class AuthressRouteGuard {
     if (authContext.isAuthenticated == true) {
       final hasRequiredRoles = authContext.hasAllRoles(requiredRoles);
       if (!hasRequiredRoles) {
-        debugPrint('🚫 AuthressRouteGuard: User lacks required roles: $requiredRoles');
+        debugPrint(
+          '🚫 AuthressRouteGuard: User lacks required roles: $requiredRoles',
+        );
         return redirectTo ?? '/unauthorized';
       }
     }
@@ -76,7 +87,9 @@ class AuthressRouteGuard {
     if (authContext.isAuthenticated == true) {
       final hasRequiredGroups = authContext.hasAllGroups(requiredGroups);
       if (!hasRequiredGroups) {
-        debugPrint('🚫 AuthressRouteGuard: User lacks required groups: $requiredGroups');
+        debugPrint(
+          '🚫 AuthressRouteGuard: User lacks required groups: $requiredGroups',
+        );
         return redirectTo ?? '/unauthorized';
       }
     }

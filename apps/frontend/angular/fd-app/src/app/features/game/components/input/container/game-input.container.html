@@ -1,9 +1,11 @@
-<app-game-input-ui (okHandler)="handleOk()"
-                   (checkHandler)="handleCheck()"
-                   (inputScoreHandler)="handleInputScore($event)"
-                   (clearScoreHandler)="handleClearScore()"
-                   (noScoreHandler)="handleNoScore()"
-                   (quickScoreHandler)="handleQuickScore($event)"
-                   [shouldDisableControls]="shouldDisableControls"
-                   [mode]="themeMode$ | async"
-                   [canCheckOut]="canCheckOut"></app-game-input-ui>
+<app-game-input-ui
+  (okHandler)="handleOk()"
+  (checkHandler)="handleCheck()"
+  (inputScoreHandler)="handleInputScore($event)"
+  (clearScoreHandler)="handleClearScore()"
+  (noScoreHandler)="handleNoScore()"
+  (quickScoreHandler)="handleQuickScore($event)"
+  [shouldDisableControls]="shouldDisableControls"
+  [mode]="themeMode$ | async"
+  [canCheckOut]="canCheckOut"
+></app-game-input-ui>

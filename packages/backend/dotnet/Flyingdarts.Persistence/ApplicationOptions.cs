@@ -6,10 +6,7 @@ public class ApplicationOptions
 {
     public DynamoDBOperationConfig ToOperationConfig()
     {
-        return new DynamoDBOperationConfig
-        {
-            OverrideTableName = Environment.GetEnvironmentVariable("TableName")
-        };
+        return new DynamoDBOperationConfig { OverrideTableName = Environment.GetEnvironmentVariable("TableName") };
     }
 
     public string GetDyteAuthorizationHeaderValue()

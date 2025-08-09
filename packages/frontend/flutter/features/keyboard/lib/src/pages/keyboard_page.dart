@@ -144,7 +144,9 @@ class KeyboardPage extends StatelessWidget {
         buttons.add(
           KeyboardButton(
             input: key.toString(),
-            onPressed: () => [1, 2, 3, 4, 5, 6, 7, 8, 9].contains(key) ? cubit.setDigit(key) : cubit.setShortcut(key),
+            onPressed: () => [1, 2, 3, 4, 5, 6, 7, 8, 9].contains(key)
+                ? cubit.setDigit(key)
+                : cubit.setShortcut(key),
             disabled: [1, 2, 3, 4, 5, 6, 7, 8, 9].contains(key)
                 ? cubit.state.shouldDisableNumpad
                 : cubit.state.shouldDisableShortcuts,

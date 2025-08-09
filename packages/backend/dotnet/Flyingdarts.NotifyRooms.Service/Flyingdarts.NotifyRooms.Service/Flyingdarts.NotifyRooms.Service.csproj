@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -14,16 +13,13 @@
     <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
     <UseSystemTextJson>true</UseSystemTextJson>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AWSSDK.ApiGatewayManagementApi" Version="4.0.0.14" />
     <PackageReference Include="AWSSDK.Core" Version="4.0.0.16" />
     <PackageReference Include="AWSSDK.SimpleSystemsManagement" Version="4.0.2.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0-preview.6.25358.103" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Flyingdarts.Core\Flyingdarts.Core.csproj" />
   </ItemGroup>
-
 </Project>

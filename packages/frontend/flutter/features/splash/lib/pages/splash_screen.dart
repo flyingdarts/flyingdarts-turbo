@@ -29,7 +29,12 @@ class _SplashScreenState extends State<SplashScreen> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       color: MyTheme.primaryColor,
-      child: Center(child: SvgPicture.asset('assets/icons/fd_icon.svg', width: MediaQuery.of(context).size.width / 2)),
+      child: Center(
+        child: SvgPicture.asset(
+          'assets/icons/fd_icon.svg',
+          width: MediaQuery.of(context).size.width / 2,
+        ),
+      ),
     );
   }
 }

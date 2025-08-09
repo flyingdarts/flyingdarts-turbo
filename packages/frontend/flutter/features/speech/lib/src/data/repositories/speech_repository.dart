@@ -89,7 +89,9 @@ class SpeechRepository {
     Function(SpeechRecognitionResult) onValidResult,
     Function(String) onError,
   ) {
-    debugPrint('[PROFILE] Validation started at: ${DateTime.now().toIso8601String()}');
+    debugPrint(
+      '[PROFILE] Validation started at: ${DateTime.now().toIso8601String()}',
+    );
     final validationResult = _validationService.validate(result);
     debugPrint(
       '[PROFILE] Validation ended at: ${DateTime.now().toIso8601String()} (isValid: ${validationResult.isValid}, error: ${validationResult.errorMessage})',

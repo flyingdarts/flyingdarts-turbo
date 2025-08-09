@@ -25,7 +25,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/flyingdarts/flyingdarts-turbo",
+    "url": "https://github.com/flyingdarts/flyingdarts",
     "directory": "packages/tools/config"
   }
 }

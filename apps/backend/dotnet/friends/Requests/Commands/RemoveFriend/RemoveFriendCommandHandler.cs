@@ -1,7 +1,6 @@
 namespace Flyingdarts.Backend.Friends.Api.Requests.Commands.RemoveFriend;
 
-public class RemoveFriendCommandHandler
-    : IRequestHandler<RemoveFriendCommand, APIGatewayProxyResponse>
+public class RemoveFriendCommandHandler : IRequestHandler<RemoveFriendCommand, APIGatewayProxyResponse>
 {
     private readonly IFriendsDynamoDbService _friendsDynamoDbService;
 
@@ -10,60 +9,38 @@ public class RemoveFriendCommandHandler
         _friendsDynamoDbService = friendsDynamoDbService;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(
-        RemoveFriendCommand request,
-        CancellationToken cancellationToken
-    )
+    public async Task<APIGatewayProxyResponse> Handle(RemoveFriendCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(
-                request.UserId,
-                cancellationToken
-            );
+            var user = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(request.UserId, cancellationToken);
 
-            Console.WriteLine(
-                $"[RemoveFriendCommandHandler] User {user.UserId} attempting to remove friend {request.FriendId}"
-            );
+            Console.WriteLine($"[RemoveFriendCommandHandler] User {user.UserId} attempting to remove friend {request.FriendId}");
 
             // Validate request
             if (user.UserId == request.FriendId)
             {
-                Console.WriteLine(
-                    $"[RemoveFriendCommandHandler] Self-removal attempted by user: {user.UserId}"
-                );
+                Console.WriteLine($"[RemoveFriendCommandHandler] Self-removal attempted by user: {user.UserId}");
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
-                    Body = JsonSerializer.Serialize(
-                        new { error = "Cannot remove yourself as a friend" }
-                    ),
-                    Headers = GetCorsHeaders()
+                    Body = JsonSerializer.Serialize(new { error = "Cannot remove yourself as a friend" }),
+                    Headers = GetCorsHeaders(),
                 };
             }
 
             // Find both friendship relationships (bidirectional)
-            var relationship1 = await _friendsDynamoDbService.GetFriendRelationshipAsync(
-                user.UserId,
-                request.FriendId,
-                cancellationToken
-            );
-            var relationship2 = await _friendsDynamoDbService.GetFriendRelationshipAsync(
-                request.FriendId,
-                user.UserId,
-                cancellationToken
-            );
+            var relationship1 = await _friendsDynamoDbService.GetFriendRelationshipAsync(user.UserId, request.FriendId, cancellationToken);
+            var relationship2 = await _friendsDynamoDbService.GetFriendRelationshipAsync(request.FriendId, user.UserId, cancellationToken);
 
             if (relationship1 == null && relationship2 == null)
             {
-                Console.WriteLine(
-                    $"[RemoveFriendCommandHandler] No friendship found between {request.UserId} and {request.FriendId}"
-                );
+                Console.WriteLine($"[RemoveFriendCommandHandler] No friendship found between {request.UserId} and {request.FriendId}");
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 404,
                     Body = JsonSerializer.Serialize(new { error = "Friendship not found" }),
-                    Headers = GetCorsHeaders()
+                    Headers = GetCorsHeaders(),
                 };
             }
 
@@ -72,11 +49,7 @@ public class RemoveFriendCommandHandler
             );
 
             // Delete both relationships
-            await _friendsDynamoDbService.DeleteFriendRelationshipsAsync(
-                relationship1,
-                relationship2,
-                cancellationToken
-            );
+            await _friendsDynamoDbService.DeleteFriendRelationshipsAsync(relationship1, relationship2, cancellationToken);
             Console.WriteLine(
                 $"[RemoveFriendCommandHandler] Successfully removed friendship between {request.UserId} and {request.FriendId}"
             );
@@ -85,7 +58,7 @@ public class RemoveFriendCommandHandler
             {
                 StatusCode = 200,
                 Body = JsonSerializer.Serialize(new { message = "Friend removed successfully" }),
-                Headers = GetCorsHeaders()
+                Headers = GetCorsHeaders(),
             };
         }
         catch (Exception ex)
@@ -94,7 +67,7 @@ public class RemoveFriendCommandHandler
             {
                 StatusCode = 500,
                 Body = JsonSerializer.Serialize(new { error = ex.Message }),
-                Headers = GetCorsHeaders()
+                Headers = GetCorsHeaders(),
             };
         }
     }
@@ -105,7 +78,7 @@ public class RemoveFriendCommandHandler
         {
             { "Access-Control-Allow-Origin", "*" },
             { "Access-Control-Allow-Methods", "OPTIONS,GET,POST,PUT,DELETE" },
-            { "Access-Control-Allow-Headers", "Content-Type,Authorization" }
+            { "Access-Control-Allow-Headers", "Content-Type,Authorization" },
         };
     }
 }

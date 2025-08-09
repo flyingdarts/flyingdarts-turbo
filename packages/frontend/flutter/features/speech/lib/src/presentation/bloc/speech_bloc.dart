@@ -11,7 +11,15 @@ part 'speech_state.dart';
 /// Simple, fast BLoC for speech recognition, inspired by the original implementation.
 @injectable
 class SpeechBloc extends Bloc<SpeechEvent, SpeechState> {
-  SpeechBloc() : super(const SpeechState(isListening: false, lastEntry: "", enabled: true, error: "")) {
+  SpeechBloc()
+    : super(
+        const SpeechState(
+          isListening: false,
+          lastEntry: "",
+          enabled: true,
+          error: "",
+        ),
+      ) {
     _initSpeechToText();
     on<SpeechButtonLongPressed>(_onSpeechButtonLongPressed);
     on<SpeechButtonLongPressEnded>(_onSpeechButtonLongPressEnded);
@@ -27,16 +35,28 @@ class SpeechBloc extends Bloc<SpeechEvent, SpeechState> {
     try {
       final available = await _speechToText.initialize();
       _speechAvailable = available;
-      debugPrint('[SpeechBloc] SpeechToText initialized: available = $available');
+      debugPrint(
+        '[SpeechBloc] SpeechToText initialized: available = $available',
+      );
       if (!available) {
-        emit(state.copyWith(enabled: false, error: "Speech recognition not available"));
+        emit(
+          state.copyWith(
+            enabled: false,
+            error: "Speech recognition not available",
+          ),
+        );
         debugPrint('[SpeechBloc] Speech recognition not available');
       } else {
         emit(state.copyWith(enabled: true, error: ""));
         debugPrint('[SpeechBloc] Speech recognition enabled');
       }
     } catch (e) {
-      emit(state.copyWith(enabled: false, error: "Speech recognition initialization failed"));
+      emit(
+        state.copyWith(
+          enabled: false,
+          error: "Speech recognition initialization failed",
+        ),
+      );
       debugPrint('[SpeechBloc] Error initializing SpeechToText: $e');
     }
   }
@@ -45,21 +65,35 @@ class SpeechBloc extends Bloc<SpeechEvent, SpeechState> {
     SpeechButtonLongPressed event,
     Emitter<SpeechState> emit,
   ) async {
-    debugPrint('[SpeechBloc] Button long pressed - starting speech recognition');
+    debugPrint(
+      '[SpeechBloc] Button long pressed - starting speech recognition',
+    );
     if (_speechAvailable) {
       _speechToText.listen(
         onResult: (stt.SpeechRecognitionResult result) {
-          debugPrint('[SpeechBloc] onResult: ${result.recognizedWords} (final: ${result.finalResult})');
+          debugPrint(
+            '[SpeechBloc] onResult: ${result.recognizedWords} (final: ${result.finalResult})',
+          );
           if (result.finalResult) {
             add(_SpeechResultFoundEvent(result.recognizedWords));
           }
         },
       );
       emit(state.copyWith(isListening: true, enabled: true, error: ""));
-      debugPrint('[SpeechBloc] State updated: isListening = true, enabled = true');
+      debugPrint(
+        '[SpeechBloc] State updated: isListening = true, enabled = true',
+      );
     } else {
-      emit(state.copyWith(isListening: false, enabled: false, error: "Speech recognition not available"));
-      debugPrint('[SpeechBloc] Speech recognition not available on button press');
+      emit(
+        state.copyWith(
+          isListening: false,
+          enabled: false,
+          error: "Speech recognition not available",
+        ),
+      );
+      debugPrint(
+        '[SpeechBloc] Speech recognition not available on button press',
+      );
     }
   }
 
@@ -67,7 +101,9 @@ class SpeechBloc extends Bloc<SpeechEvent, SpeechState> {
     SpeechButtonLongPressEnded event,
     Emitter<SpeechState> emit,
   ) async {
-    debugPrint('[SpeechBloc] Button long press ended - stopping speech recognition');
+    debugPrint(
+      '[SpeechBloc] Button long press ended - stopping speech recognition',
+    );
     await _speechToText.stop();
     emit(state.copyWith(isListening: false));
     debugPrint('[SpeechBloc] State updated: isListening = false');
@@ -77,7 +113,9 @@ class SpeechBloc extends Bloc<SpeechEvent, SpeechState> {
     SpeechButtonLongPressCancelled event,
     Emitter<SpeechState> emit,
   ) async {
-    debugPrint('[SpeechBloc] Button long press cancelled - cancelling speech recognition');
+    debugPrint(
+      '[SpeechBloc] Button long press cancelled - cancelling speech recognition',
+    );
     await _speechToText.cancel();
     emit(state.copyWith(isListening: false));
     debugPrint('[SpeechBloc] State updated: isListening = false (cancelled)');

@@ -1,11 +1,11 @@
-import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { map } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { map } from 'rxjs/operators';
 import {
   loadX01GameSettingsFromStorage,
   loadX01GameSettingsFromStorageFailure,
   loadX01GameSettingsFromStorageSuccess,
-} from "./app.actions";
+} from './app.actions';
 
 @Injectable()
 export class AppEffects {
@@ -16,10 +16,10 @@ export class AppEffects {
       ofType(loadX01GameSettingsFromStorage),
       map(() => {
         try {
-          const settings = localStorage.getItem("X01GameSettings");
+          const settings = localStorage.getItem('X01GameSettings');
           if (!settings) {
             return loadX01GameSettingsFromStorageFailure({
-              error: "No settings found",
+              error: 'No settings found',
             });
           }
           const parsedSettings = JSON.parse(settings);
@@ -28,7 +28,7 @@ export class AppEffects {
           });
         } catch (error) {
           return loadX01GameSettingsFromStorageFailure({
-            error: "Failed to parse settings",
+            error: 'Failed to parse settings',
           });
         }
       })

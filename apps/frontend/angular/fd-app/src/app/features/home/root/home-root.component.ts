@@ -1,12 +1,12 @@
-import { CommonModule } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: "app-home-root",
+  selector: 'app-home-root',
   imports: [CommonModule, RouterModule],
-  styleUrl: "./home-root.component.scss",
-  templateUrl: "./home-root.component.html",
+  styleUrl: './home-root.component.scss',
+  templateUrl: './home-root.component.html',
   standalone: true,
 })
 export class HomeRootComponent implements OnInit {
@@ -15,8 +15,8 @@ export class HomeRootComponent implements OnInit {
   }
 
   private setHeight() {
-    const navbar = document.getElementById("fdNavBar");
-    const homecontainer = document.getElementById("homeContainer");
+    const navbar = document.getElementById('fdNavBar');
+    const homecontainer = document.getElementById('homeContainer');
 
     if (navbar && homecontainer) {
       const navbarHeight = navbar.offsetHeight;
@@ -24,7 +24,7 @@ export class HomeRootComponent implements OnInit {
       // Set the height of the home container using calc
       homecontainer.style.height = `calc(100% - ${navbarHeight}px)`;
     } else {
-      console.error("Navbar or Home Container element not found");
+      console.error('Navbar or Home Container element not found');
     }
   }
 }

@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authContext = context.authress;
-    
+
     // Handle loading state
     if (authContext.isLoading) {
       return const Scaffold(
@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
         ),
       );
     }
-    
+
     // Handle error state
     if (authContext.hasError) {
       return Scaffold(
@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
         ),
       );
     }
-    
+
     // Handle case where user is null
     if (authContext.user == null) {
       return const Scaffold(
@@ -53,9 +53,9 @@ class HomePage extends StatelessWidget {
         ),
       );
     }
-    
+
     final user = authContext.user!;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xff1d2f3b),
       appBar: AppBar(
@@ -126,7 +126,11 @@ class HomePage extends StatelessWidget {
                           height: 32,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.person, size: 16, color: Colors.white);
+                            return const Icon(
+                              Icons.person,
+                              size: 16,
+                              color: Colors.white,
+                            );
                           },
                         ),
                       )
@@ -143,24 +147,24 @@ class HomePage extends StatelessWidget {
           children: [
             // Welcome header
             _buildWelcomeHeader(user),
-            
+
             const SizedBox(height: 32),
-            
+
             // User info card
             _buildUserInfoCard(authContext),
-            
+
             const SizedBox(height: 24),
-            
+
             // Permissions & roles card
             _buildPermissionsCard(authContext),
-            
+
             const SizedBox(height: 24),
-            
+
             // Quick actions
             _buildQuickActions(context),
-            
+
             const SizedBox(height: 24),
-            
+
             // Navigation cards
             _buildNavigationCards(context, authContext),
           ],
@@ -172,7 +176,7 @@ class HomePage extends StatelessWidget {
   Widget _buildWelcomeHeader(UserProfile? user) {
     final greeting = _getGreeting();
     final displayName = user?.name ?? user?.email?.split('@').first ?? 'User';
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -197,7 +201,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildUserInfoCard(AuthressContext authContext) {
     final user = authContext.user!;
-    
+
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -223,15 +227,15 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
             const Divider(),
             const SizedBox(height: 16),
-            
+
             _buildInfoRow('User ID', user.userId),
             if (user.email != null) _buildInfoRow('Email', user.email!),
             if (user.name != null) _buildInfoRow('Name', user.name!),
-            
+
             if (user.lastLoginDate != null)
               _buildInfoRow(
                 'Last Login',
@@ -246,11 +250,11 @@ class HomePage extends StatelessWidget {
   Widget _buildPermissionsCard(AuthressContext authContext) {
     final user = authContext.user!;
     final claims = user.claims ?? {};
-    
+
     // Extract roles and groups
     final roles = <String>[];
     final groups = <String>[];
-    
+
     // Check for roles in various claim formats
     if (claims['roles'] is List) {
       roles.addAll((claims['roles'] as List).cast<String>());
@@ -261,7 +265,7 @@ class HomePage extends StatelessWidget {
     if (claims['user_roles'] is List) {
       roles.addAll((claims['user_roles'] as List).cast<String>());
     }
-    
+
     // Check for groups in various claim formats
     if (claims['groups'] is List) {
       groups.addAll((claims['groups'] as List).cast<String>());
@@ -272,7 +276,7 @@ class HomePage extends StatelessWidget {
     if (claims['user_groups'] is List) {
       groups.addAll((claims['user_groups'] as List).cast<String>());
     }
-    
+
     return Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -298,11 +302,11 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
             const Divider(),
             const SizedBox(height: 16),
-            
+
             if (roles.isNotEmpty) ...[
               const Text(
                 'Roles:',
@@ -315,16 +319,20 @@ class HomePage extends StatelessWidget {
               Wrap(
                 spacing: 8,
                 runSpacing: 4,
-                children: roles.map((role) => Chip(
-                  label: Text(role, style: const TextStyle(fontSize: 12)),
-                  backgroundColor: Colors.blue.shade100,
-                  labelStyle: TextStyle(color: Colors.blue.shade700),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                )).toList(),
+                children: roles
+                    .map(
+                      (role) => Chip(
+                        label: Text(role, style: const TextStyle(fontSize: 12)),
+                        backgroundColor: Colors.blue.shade100,
+                        labelStyle: TextStyle(color: Colors.blue.shade700),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    )
+                    .toList(),
               ),
               const SizedBox(height: 12),
             ],
-            
+
             if (groups.isNotEmpty) ...[
               const Text(
                 'Groups:',
@@ -337,15 +345,22 @@ class HomePage extends StatelessWidget {
               Wrap(
                 spacing: 8,
                 runSpacing: 4,
-                children: groups.map((group) => Chip(
-                  label: Text(group, style: const TextStyle(fontSize: 12)),
-                  backgroundColor: Colors.purple.shade100,
-                  labelStyle: TextStyle(color: Colors.purple.shade700),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                )).toList(),
+                children: groups
+                    .map(
+                      (group) => Chip(
+                        label: Text(
+                          group,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        backgroundColor: Colors.purple.shade100,
+                        labelStyle: TextStyle(color: Colors.purple.shade700),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    )
+                    .toList(),
               ),
             ],
-            
+
             if (roles.isEmpty && groups.isEmpty)
               const Text(
                 'No specific roles or groups assigned',
@@ -386,11 +401,11 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
             const Divider(),
             const SizedBox(height: 16),
-            
+
             Row(
               children: [
                 Expanded(
@@ -416,9 +431,12 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildNavigationCards(BuildContext context, AuthressContext authContext) {
+  Widget _buildNavigationCards(
+    BuildContext context,
+    AuthressContext authContext,
+  ) {
     final navItems = <Map<String, dynamic>>[];
-    
+
     // Always show basic navigation
     navItems.addAll([
       {
@@ -436,7 +454,7 @@ class HomePage extends StatelessWidget {
         'route': '/settings',
       },
     ]);
-    
+
     // Add admin section if user has admin role
     if (authContext.hasRole('admin')) {
       navItems.add({
@@ -447,7 +465,7 @@ class HomePage extends StatelessWidget {
         'route': '/admin',
       });
     }
-    
+
     // Add manager section if user belongs to managers group
     if (authContext.hasGroup('managers')) {
       navItems.add({
@@ -458,46 +476,52 @@ class HomePage extends StatelessWidget {
         'route': '/manager',
       });
     }
-    
+
     return Column(
-      children: navItems.map((item) => Padding(
-        padding: const EdgeInsets.only(bottom: 12),
-        child: Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(16),
-            leading: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: (item['color'] as Color).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                item['icon'] as IconData,
-                color: item['color'] as Color,
-                size: 24,
+      children: navItems
+          .map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Card(
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16),
+                  leading: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: (item['color'] as Color).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      item['icon'] as IconData,
+                      color: item['color'] as Color,
+                      size: 24,
+                    ),
+                  ),
+                  title: Text(
+                    item['title'] as String,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  subtitle: Text(
+                    item['subtitle'] as String,
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  onTap: () => context.push(item['route'] as String),
+                ),
               ),
             ),
-            title: Text(
-              item['title'] as String,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-            ),
-            subtitle: Text(
-              item['subtitle'] as String,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 14,
-              ),
-            ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () => context.push(item['route'] as String),
-          ),
-        ),
-      )).toList(),
+          )
+          .toList(),
     );
   }
 
@@ -569,11 +593,11 @@ class HomePage extends StatelessWidget {
   String _formatDate(DateTime date) {
     final now = DateTime.now();
     final difference = now.difference(date).inDays;
-    
+
     if (difference == 0) return 'Today';
     if (difference == 1) return 'Yesterday';
     if (difference < 7) return '$difference days ago';
-    
+
     return '${date.day}/${date.month}/${date.year}';
   }
 
@@ -603,4 +627,4 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-} 
+}

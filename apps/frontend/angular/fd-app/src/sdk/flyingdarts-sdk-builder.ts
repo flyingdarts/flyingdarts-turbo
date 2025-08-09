@@ -1,13 +1,13 @@
-import { HttpClient } from "@angular/common/http";
-import { AuthressService } from "src/app/services/authress.service";
-import { StateHooksService } from "src/app/services/state-hooks.service";
-import { WebSocketMessageQueueService } from "src/app/services/websocket/websocket-message-queue.service";
-import { WebSocketService } from "src/app/services/websocket/websocket.service";
-import { environment } from "src/environments/environment";
-import { ApiConfig } from "./config/api.config";
-import { FlyingdartsSdk } from "./flyingdarts-sdk";
-import { FlyingdartsRepository } from "./flyingdarts.repository";
-import { LoginClient } from "@mikepattyn/authress-angular";
+import { HttpClient } from '@angular/common/http';
+import { LoginClient } from '@mikepattyn/authress-angular';
+import { AuthressService } from 'src/app/services/authress.service';
+import { StateHooksService } from 'src/app/services/state-hooks.service';
+import { WebSocketMessageQueueService } from 'src/app/services/websocket/websocket-message-queue.service';
+import { WebSocketService } from 'src/app/services/websocket/websocket.service';
+import { environment } from 'src/environments/environment';
+import { ApiConfig } from './config/api.config';
+import { FlyingdartsSdk } from './flyingdarts-sdk';
+import { FlyingdartsRepository } from './flyingdarts.repository';
 
 export class FlyingdartsSdkBuilder {
   private apiConfig!: ApiConfig;
@@ -18,10 +18,7 @@ export class FlyingdartsSdkBuilder {
     this.httpClient = httpClient;
     return this;
   }
-  setupApiConfig(
-    webSocketUrl: string,
-    usersApiUrl: string
-  ): FlyingdartsSdkBuilder {
+  setupApiConfig(webSocketUrl: string, usersApiUrl: string): FlyingdartsSdkBuilder {
     this.apiConfig = {
       webSocketUrl,
       usersApiUrl,
@@ -35,7 +32,7 @@ export class FlyingdartsSdkBuilder {
 
   build(): FlyingdartsSdk {
     if (!this.apiConfig) {
-      throw new Error("Missing configuration");
+      throw new Error('Missing configuration');
     }
 
     // Initialize LoginClient with correct parameters
@@ -52,19 +49,10 @@ export class FlyingdartsSdkBuilder {
 
     // Use the bound method for WebSocketService
     const webSocketService = new WebSocketService(getTokenBound);
-    const webSocketMessageQueueService = new WebSocketMessageQueueService(
-      webSocketService
-    );
+    const webSocketMessageQueueService = new WebSocketMessageQueueService(webSocketService);
 
-    const flyingdartsRepository = new FlyingdartsRepository(
-      webSocketService,
-      this.stateHooksService
-    );
+    const flyingdartsRepository = new FlyingdartsRepository(webSocketService, this.stateHooksService);
 
-    return new FlyingdartsSdk(
-      webSocketService,
-      webSocketMessageQueueService,
-      flyingdartsRepository
-    );
+    return new FlyingdartsSdk(webSocketService, webSocketMessageQueueService, flyingdartsRepository);
   }
 }

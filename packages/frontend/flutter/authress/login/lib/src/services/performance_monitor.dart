@@ -4,8 +4,9 @@ import 'package:flutter/foundation.dart';
 /// Performance monitoring service for tracking authentication operations
 class PerformanceMonitor {
   static PerformanceMonitor? _instance;
-  static PerformanceMonitor get instance => _instance ??= PerformanceMonitor._();
-  
+  static PerformanceMonitor get instance =>
+      _instance ??= PerformanceMonitor._();
+
   PerformanceMonitor._();
 
   final Map<String, Stopwatch> _activeTimers = {};
@@ -24,7 +25,7 @@ class PerformanceMonitor {
 
     final stopwatch = Stopwatch()..start();
     _activeTimers[operationName] = stopwatch;
-    
+
     debugPrint('⏱️ PerformanceMonitor: Started timing $operationName');
   }
 
@@ -43,13 +44,18 @@ class PerformanceMonitor {
 
     // Record the operation
     _completedOperations.putIfAbsent(operationName, () => []).add(duration);
-    _operationCounts[operationName] = (_operationCounts[operationName] ?? 0) + 1;
+    _operationCounts[operationName] =
+        (_operationCounts[operationName] ?? 0) + 1;
 
-    debugPrint('✅ PerformanceMonitor: $operationName completed in ${duration.inMilliseconds}ms');
+    debugPrint(
+      '✅ PerformanceMonitor: $operationName completed in ${duration.inMilliseconds}ms',
+    );
 
     // Log warning for slow operations
     if (duration.inMilliseconds > 5000) {
-      debugPrint('🐌 PerformanceMonitor: WARNING - $operationName took ${duration.inSeconds}s (slow operation)');
+      debugPrint(
+        '🐌 PerformanceMonitor: WARNING - $operationName took ${duration.inSeconds}s (slow operation)',
+      );
     }
 
     return duration;
@@ -69,7 +75,10 @@ class PerformanceMonitor {
     if (durations == null || durations.isEmpty) return null;
 
     final count = durations.length;
-    final totalMs = durations.fold(0, (sum, duration) => sum + duration.inMilliseconds);
+    final totalMs = durations.fold(
+      0,
+      (sum, duration) => sum + duration.inMilliseconds,
+    );
     final avgMs = totalMs / count;
 
     durations.sort((a, b) => a.inMilliseconds.compareTo(b.inMilliseconds));
@@ -109,7 +118,7 @@ class PerformanceMonitor {
 
     debugPrint('\n📊 === AUTHRESS PERFORMANCE REPORT ===');
     final stats = getAllStats();
-    
+
     if (stats.isEmpty) {
       debugPrint('No performance data recorded');
       return;
@@ -150,7 +159,10 @@ class PerformanceMonitor {
   }
 
   /// Track a future operation automatically
-  Future<T> trackOperation<T>(String operationName, Future<T> Function() operation) async {
+  Future<T> trackOperation<T>(
+    String operationName,
+    Future<T> Function() operation,
+  ) async {
     startTimer(operationName);
     try {
       final result = await operation();
@@ -209,7 +221,10 @@ mixin PerformanceTrackingMixin {
   PerformanceMonitor get _monitor => PerformanceMonitor.instance;
 
   /// Track an async operation
-  Future<T> trackPerformance<T>(String operationName, Future<T> Function() operation) {
+  Future<T> trackPerformance<T>(
+    String operationName,
+    Future<T> Function() operation,
+  ) {
     return _monitor.trackOperation(operationName, operation);
   }
 
@@ -222,4 +237,4 @@ mixin PerformanceTrackingMixin {
   void recordMetric(String metricName, double value, [String unit = 'units']) {
     _monitor.recordMetric(metricName, value, unit);
   }
-} 
+}

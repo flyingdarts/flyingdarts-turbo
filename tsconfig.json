@@ -3,8 +3,12 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@flyingdarts/config": ["./packages/tools/config"],
-      "@flyingdarts/config/*": ["./packages/tools/config/*"]
+      "@flyingdarts/config": [
+        "./packages/tools/config"
+      ],
+      "@flyingdarts/config/*": [
+        "./packages/tools/config/*"
+      ]
     }
   },
   "include": [
@@ -27,4 +31,4 @@
       "composite": true
     }
   ]
-} 
+}
