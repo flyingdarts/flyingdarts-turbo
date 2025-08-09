@@ -12,10 +12,12 @@ on:
   push:
     paths:
       - "apps/frontend/angular/**"
+      - ".github/workflows/main_angular_dev.yml"
 
   pull_request:
     paths:
       - "apps/frontend/angular/**"
+      - ".github/workflows/main_angular_dev.yml"
 
 jobs:
   build-angular-dev:
