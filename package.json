@@ -6,6 +6,7 @@
     "apps/backend/rust/**/*",
     "apps/frontend/flutter/*",
     "apps/frontend/angular/*",
+    "apps/frontend/react/*",
     "apps/tools/dotnet/**/*",
     "packages/backend/dotnet/**/*",
     "packages/backend/rust/**/*",
@@ -33,7 +34,8 @@
     "deploy:cdk:stage": "turbo run deploy-stage --filter=./apps/tools/dotnet/cdk",
     "deploy:cdk:prod": "turbo run deploy-prod --filter=./apps/tools/dotnet/cdk",
     "format:html": "prettier --write \"apps/frontend/angular/**/*.html\"",
-    "format:all": "prettier --write \"**/*.{html,ts,scss,json,js,md}\""
+    "format:all": "prettier --write \"**/*.{html,ts,scss,json,js,md}\"",
+    "start:react:marketing": "npm run start --prefix ./apps/frontend/react/marketing"
   },
   "repository": {
     "url": "https://github.com/flyingdarts/flyingdarts",
