@@ -1,0 +1,13 @@
+name: Main Staging Workflow
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - staging
+
+jobs:
+  build-angular:
+    name: Build Angular
+    uses: ./.github/workflows/main_angular_staging.yml
+    secrets: inherit
