@@ -9,6 +9,6 @@
     "clean:generated": "dart run build_runner clean"
   },
   "dependencies": {
-    "authress_login": "*"
+    "flyingdarts_authress_login": "*"
   }
 }
