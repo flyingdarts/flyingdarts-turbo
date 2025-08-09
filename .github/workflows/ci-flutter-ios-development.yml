@@ -8,7 +8,7 @@ on:
     paths:
       - "apps/frontend/flutter/**"
       - "packages/frontend/flutter/**"
-      - ".github/workflows/main_flutter_dev.yml"
+      - ".github/workflows/ci-flutter-ios-development.yml"
       - "pubspec.yaml"
       - "pubspec.lock"
 jobs:
