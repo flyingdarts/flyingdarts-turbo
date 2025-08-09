@@ -1,18 +1,12 @@
 name: Main Angular Workflow (Staging)
-
 on:
   workflow_call:
   push:
+    branches:
+      - staging
     paths:
       - "apps/frontend/angular/**"
       - ".github/workflows/main_angular_staging.yml"
-
-  pull_request:
-    paths:
-      - "apps/frontend/angular/**"
-      - ".github/workflows/main_angular_staging.yml"
-
-
 jobs:
   build-angular-staging:
     uses: ./.github/workflows/build-angular-app.yml
