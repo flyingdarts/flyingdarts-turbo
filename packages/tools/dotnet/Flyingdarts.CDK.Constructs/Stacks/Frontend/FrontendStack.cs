@@ -14,6 +14,7 @@ public class FrontendStack : BaseStack<FrontendStackProps>
     {
         WebApp = new WebApplicationHostingConstruct(
             this,
+            props.GetUniqueResourceId(nameof(WebApp)),
             new WebApplicationHostingConstructProps
             {
                 AppName = "Flyingdarts",

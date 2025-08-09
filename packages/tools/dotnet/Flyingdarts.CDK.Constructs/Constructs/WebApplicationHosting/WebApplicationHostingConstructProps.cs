@@ -11,7 +11,4 @@ public class WebApplicationHostingConstructProps : BaseConstructProps
     public IHostedZone HostedZone { get; set; }
     public ICertificate Certificate { get; set; }
     protected override string ConstructName => $"WebApp-{AppName}";
-
-    public override string GetResourceIdentifier(string resource) =>
-        $"{Constants.Stacks.Frontend}-{AppName}-{resource}-{DeploymentEnvironment.Name}";
 }

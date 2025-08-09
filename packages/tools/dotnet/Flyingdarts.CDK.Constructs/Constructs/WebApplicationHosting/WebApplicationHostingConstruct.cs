@@ -76,7 +76,7 @@ public class WebApplicationHostingConstruct : Construct
                 Comment =
                     $"CloudFront distribution for serving our {Constants.DomainName} website in {props.DeploymentEnvironment.Name} environment",
                 PriceClass = PriceClass.PRICE_CLASS_100,
-                DomainNames = [props.DeploymentEnvironment.GetCnameRecordName()],
+                DomainNames = props.DeploymentEnvironment.DomainNames,
                 Certificate = props.Certificate,
             }
         );

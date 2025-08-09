@@ -19,12 +19,25 @@ public readonly struct DeploymentEnvironment
     public static readonly DeploymentEnvironment Production = new("Production", "www");
     public static readonly DeploymentEnvironment None = new("None", null);
 
+    public string[] DomainNames
+    {
+        get
+        {
+            if (IsProduction)
+            {
+                return [$"{Subdomain}.{Constants.DomainName}", Constants.DomainName];
+            }
+
+            return [$"{Subdomain}.{Constants.DomainName}"];
+        }
+    }
+
     public string GetCnameRecordName()
     {
-        if (!IsProduction && !IsStaging && !IsDevelopment)
+        if (!IsValidDeploymentEnvironment)
         {
             throw new InvalidOperationException(
-                "CnameRecordName is only valid for Production, Staging, or Development environment"
+                "CnameRecordName is only valid for valid deployment environments"
             );
         }
 
@@ -46,6 +59,7 @@ public readonly struct DeploymentEnvironment
     public bool IsProduction => this == Production;
     public bool IsStaging => this == Staging;
     public bool IsDevelopment => this == Development;
+    public bool IsValidDeploymentEnvironment => this != None;
 
     public static bool operator ==(DeploymentEnvironment left, DeploymentEnvironment right)
     {
