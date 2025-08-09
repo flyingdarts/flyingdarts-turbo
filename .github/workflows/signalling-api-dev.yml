@@ -6,21 +6,19 @@ on:
     paths:
       - "apps/backend/dotnet/signalling/**"
       - "packages/backend/dotnet/**"
-      - "tools/dotnet/**"
-
+      - ".github/workflows/signalling-api-dev.yml"
   pull_request:
     paths:
       - "apps/backend/dotnet/signalling/**"
       - "packages/backend/dotnet/**"
-      - "tools/dotnet/**"
 
 jobs:
   build-signalling-api-dev:
     uses: ./.github/workflows/build-dotnet-lambda.yml
     with:
-      project-name: "flyingdarts.backend.signalling.api"
+      project-name: "flyingdarts.signalling.api"
       project-directory: "apps/backend/dotnet/signalling/api"
-      lambda-function-name: "Flyingdarts-Backend-Signalling-Api-Development"
+      lambda-function-name: "Flyingdarts-Signalling-Api-Development"
       dotnet-version: "8.0.x"
       node-version: "22"
 
@@ -28,7 +26,7 @@ jobs:
     needs: build-signalling-api-dev
     uses: ./.github/workflows/deploy-lambda.yml
     with:
-      lambda-function-name: "Flyingdarts-Backend-Signalling-Api-Development"
-      artifact-name: "Flyingdarts-Backend-Signalling-Api-Development-package"
+      lambda-function-name: "Flyingdarts-Signalling-Api-Development"
+      artifact-name: "Flyingdarts-Signalling-Api-Development-package"
       environment: "development"
     secrets: inherit
