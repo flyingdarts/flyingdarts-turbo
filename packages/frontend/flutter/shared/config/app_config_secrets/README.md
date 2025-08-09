@@ -36,8 +36,8 @@ The package is built on top of the App Config Core package, extending its abstra
 ### From Source
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Navigate to the app config secrets package**:

@@ -72,8 +72,8 @@ The scripts are organized into logical categories and provide automated solution
 ### From Repository
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Make scripts executable**:
@@ -496,7 +496,7 @@ export DOTNET_VERSION="8.0"
 export FLUTTER_ROOT="/path/to/flutter"
 
 # Workspace root
-export WORKSPACE_ROOT="/path/to/flyingdarts-turbo"
+export WORKSPACE_ROOT="/path/to/flyingdarts"
 ```
 
 ### Script Configuration
@@ -558,7 +558,7 @@ chmod +x scripts/*/*/*.sh
 #### Script Not Found
 ```bash
 # Ensure you're in the workspace root
-cd /path/to/flyingdarts-turbo
+cd /path/to/flyingdarts
 
 # Run script with relative path
 ./scripts/clean-build-folders.sh

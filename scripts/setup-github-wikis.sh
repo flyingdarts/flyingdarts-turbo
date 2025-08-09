@@ -13,7 +13,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Configuration
-REPO_NAME="flyingdarts-turbo"
+REPO_NAME="flyingdarts"
 WIKI_DIR="${REPO_NAME}.wiki"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
@@ -48,15 +48,15 @@ convert_readme_to_wiki() {
     local wiki_file="$2"
     local title="$3"
     local source_path="$4"
-    
+
     if [[ ! -f "$readme_file" ]]; then
         print_warning "README file not found: $readme_file"
         return 1
     fi
-    
+
     # Create directory if it doesn't exist
     mkdir -p "$(dirname "$wiki_file")"
-    
+
     # Convert README to wiki format
     {
         echo "# $title"
@@ -67,14 +67,14 @@ convert_readme_to_wiki() {
         echo ""
         echo "---"
         echo ""
-        
+
         # Copy README content, skipping the first line if it's a title
         if [[ "$(head -n1 "$readme_file")" =~ ^#\ .* ]]; then
             tail -n +2 "$readme_file"
         else
             cat "$readme_file"
         fi
-        
+
         echo ""
         echo "---"
         echo ""
@@ -82,7 +82,7 @@ convert_readme_to_wiki() {
         echo ""
         echo "[← Back to Wiki Home](Home)"
     } > "$wiki_file"
-    
+
     print_status "Created wiki page: $wiki_file"
 }
 
@@ -91,9 +91,9 @@ create_section_index() {
     local section_path="$1"
     local section_name="$2"
     local items=("${@:3}")
-    
+
     local index_file="$section_path.md"
-    
+
     {
         echo "# $section_name"
         echo ""
@@ -101,32 +101,32 @@ create_section_index() {
         echo ""
         echo "## Pages"
         echo ""
-        
+
         for item in "${items[@]}"; do
             local item_name=$(basename "$item" .md)
             local display_name=$(echo "$item_name" | sed 's/-/ /g' | sed 's/\b\w/\U&/g')
             echo "- [$display_name]($item_name)"
         done
-        
+
         echo ""
         echo "---"
         echo ""
         echo "[← Back to Wiki Home](Home)"
     } > "$index_file"
-    
+
     print_status "Created section index: $index_file"
 }
 
 # Main setup function
 setup_wiki() {
     print_header "Setting up GitHub Wiki for FlyingDarts Turbo"
-    
+
     # Check if we're in the right directory
     if [[ ! -f "$PROJECT_ROOT/README.md" ]]; then
         print_error "Please run this script from the project root directory"
         exit 1
     fi
-    
+
     # Create wiki directory
     if [[ -d "$WIKI_DIR" ]]; then
         print_warning "Wiki directory already exists: $WIKI_DIR"
@@ -138,34 +138,34 @@ setup_wiki() {
         fi
         rm -rf "$WIKI_DIR"
     fi
-    
+
     mkdir -p "$WIKI_DIR"
     cd "$WIKI_DIR"
-    
+
     print_status "Created wiki directory: $WIKI_DIR"
-    
+
     # Convert Apps README files
     print_header "Converting Apps README files"
-    
+
     convert_readme_to_wiki "$PROJECT_ROOT/README.md" "Home.md" "FlyingDarts Turbo" "README.md"
-    
+
     # Backend Apps
     convert_readme_to_wiki "$PROJECT_ROOT/apps/backend/dotnet/api/README.md" "apps.backend.dotnet.api.md" "X01 Game API" "apps/backend/dotnet/api/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/apps/backend/dotnet/auth/README.md" "apps.backend.dotnet.auth.md" "Authentication Service" "apps/backend/dotnet/auth/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/apps/backend/dotnet/friends/README.md" "apps.backend.dotnet.friends.md" "Friends API" "apps/backend/dotnet/friends/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/apps/backend/dotnet/signalling/api/README.md" "apps.backend.dotnet.signalling.api.md" "Signalling Service" "apps/backend/dotnet/signalling/api/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/apps/backend/rust/authorizer/README.md" "apps.backend.rust.authorizer.md" "Rust Authorizer" "apps/backend/rust/authorizer/README.md"
-    
+
     # Frontend Apps
     convert_readme_to_wiki "$PROJECT_ROOT/apps/frontend/angular/fd-app/README.md" "apps.frontend.angular.fd-app.md" "Angular Web App" "apps/frontend/angular/fd-app/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/apps/frontend/flutter/flyingdarts_mobile/README.md" "apps.frontend.flutter.flyingdarts_mobile.md" "Flutter Mobile App" "apps/frontend/flutter/flyingdarts_mobile/README.md"
-    
+
     # Tools
     convert_readme_to_wiki "$PROJECT_ROOT/apps/tools/dotnet/cdk/README.md" "apps.tools.dotnet.cdk.md" "CDK Infrastructure" "apps/tools/dotnet/cdk/README.md"
-    
+
     # Convert Packages README files
     print_header "Converting Packages README files"
-    
+
     # Backend Packages
     convert_readme_to_wiki "$PROJECT_ROOT/packages/backend/dotnet/Flyingdarts.Connection.Services/README.md" "packages.backend.dotnet.Flyingdarts.Connection.Services.md" "Connection Services" "packages/backend/dotnet/Flyingdarts.Connection.Services/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/backend/dotnet/Flyingdarts.Core/README.md" "packages.backend.dotnet.Flyingdarts.Core.md" "Core" "packages/backend/dotnet/Flyingdarts.Core/README.md"
@@ -176,19 +176,19 @@ setup_wiki() {
     convert_readme_to_wiki "$PROJECT_ROOT/packages/backend/dotnet/Flyingdarts.NotifyRooms.Service/Flyingdarts.NotifyRooms.Service/README.md" "packages.backend.dotnet.Flyingdarts.NotifyRooms.Service.Flyingdarts.NotifyRooms.Service.md" "NotifyRooms Service" "packages/backend/dotnet/Flyingdarts.NotifyRooms.Service/Flyingdarts.NotifyRooms.Service/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/backend/dotnet/Flyingdarts.Persistence/README.md" "packages.backend.dotnet.Flyingdarts.Persistence.md" "Persistence" "packages/backend/dotnet/Flyingdarts.Persistence/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/backend/rust/auth/README.md" "packages.backend.rust.auth.md" "Rust Auth" "packages/backend/rust/auth/README.md"
-    
+
     # Frontend Packages
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/api/sdk/README.md" "packages.frontend.flutter.api.sdk.md" "API SDK" "packages/frontend/flutter/api/sdk/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/authress/login/README.md" "packages.frontend.flutter.authress.login.md" "Authress Login" "packages/frontend/flutter/authress/login/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/core/README.md" "packages.frontend.flutter.core.md" "Core" "packages/frontend/flutter/core/README.md"
-    
+
     # Frontend Features
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/features/keyboard/README.md" "packages.frontend.flutter.features.keyboard.md" "Keyboard Feature" "packages/frontend/flutter/features/keyboard/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/features/language/README.md" "packages.frontend.flutter.features.language.md" "Language Feature" "packages/frontend/flutter/features/language/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/features/profile/README.md" "packages.frontend.flutter.features.profile.md" "Profile Feature" "packages/frontend/flutter/features/profile/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/features/speech/README.md" "packages.frontend.flutter.features.speech.md" "Speech Feature" "packages/frontend/flutter/features/speech/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/features/splash/README.md" "packages.frontend.flutter.features.splash.md" "Splash Feature" "packages/frontend/flutter/features/splash/README.md"
-    
+
     # Frontend Shared
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/shared/config/app_config_core/README.md" "packages.frontend.flutter.shared.config.app_config_core.md" "App Config Core" "packages/frontend/flutter/shared/config/app_config_core/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/shared/config/app_config_prefs/README.md" "packages.frontend.flutter.shared.config.app_config_prefs.md" "App Config Prefs" "packages/frontend/flutter/shared/config/app_config_prefs/README.md"
@@ -196,29 +196,29 @@ setup_wiki() {
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/shared/internationalization/README.md" "packages.frontend.flutter.shared.internationalization.md" "Internationalization" "packages/frontend/flutter/shared/internationalization/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/shared/ui/README.md" "packages.frontend.flutter.shared.ui.md" "UI" "packages/frontend/flutter/shared/ui/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/frontend/flutter/shared/websocket/README.md" "packages.frontend.flutter.shared.websocket.md" "WebSocket" "packages/frontend/flutter/shared/websocket/README.md"
-    
+
     # Tool Packages
     convert_readme_to_wiki "$PROJECT_ROOT/packages/tools/config/README.md" "packages.tools.config.md" "Config" "packages/tools/config/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/packages/tools/dotnet/Flyingdarts.CDK.Constructs/README.md" "packages.tools.dotnet.Flyingdarts.CDK.Constructs.md" "CDK Constructs" "packages/tools/dotnet/Flyingdarts.CDK.Constructs/README.md"
-    
+
     # Convert Documentation README files
     print_header "Converting Documentation README files"
-    
+
     convert_readme_to_wiki "$PROJECT_ROOT/docs/README.md" "docs.README.md" "Documentation Overview" "docs/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/docs/agent/README.md" "docs.agent.README.md" "Documentation Agent" "docs/agent/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/docs/apps/README.md" "docs.apps.README.md" "Apps Documentation" "docs/apps/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/docs/packages/README.md" "docs.packages.README.md" "Packages Documentation" "docs/packages/README.md"
-    
+
     # Convert Scripts README files
     print_header "Converting Scripts README files"
-    
+
     convert_readme_to_wiki "$PROJECT_ROOT/scripts/README.md" "scripts.README.md" "Scripts Overview" "scripts/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/scripts/dotnet/README.md" "scripts.dotnet.README.md" ".NET Scripts" "scripts/dotnet/README.md"
     convert_readme_to_wiki "$PROJECT_ROOT/scripts/flutter/workspace/README.md" "scripts.flutter.workspace.README.md" "Flutter Workspace Scripts" "scripts/flutter/workspace/README.md"
-    
+
     # Create section index pages
     print_header "Creating section index pages"
-    
+
     # Apps Backend index
     create_section_index "apps.backend" "Backend Applications" \
         "apps.backend.dotnet.api.md" \
@@ -226,22 +226,22 @@ setup_wiki() {
         "apps.backend.dotnet.friends.md" \
         "apps.backend.dotnet.signalling.api.md" \
         "apps.backend.rust.authorizer.md"
-    
+
     # Apps Frontend index
     create_section_index "apps.frontend" "Frontend Applications" \
         "apps.frontend.angular.fd-app.md" \
         "apps.frontend.flutter.flyingdarts_mobile.md"
-    
+
     # Apps Tools index
     create_section_index "apps.tools" "Tools" \
         "apps.tools.dotnet.cdk.md"
-    
+
     # Apps index
     create_section_index "apps" "Applications" \
         "apps.backend.md" \
         "apps.frontend.md" \
         "apps.tools.md"
-    
+
     # Packages Backend index
     create_section_index "packages.backend" "Backend Packages" \
         "packages.backend.dotnet.Flyingdarts.Connection.Services.md" \
@@ -253,7 +253,7 @@ setup_wiki() {
         "packages.backend.dotnet.Flyingdarts.NotifyRooms.Service.Flyingdarts.NotifyRooms.Service.md" \
         "packages.backend.dotnet.Flyingdarts.Persistence.md" \
         "packages.backend.rust.auth.md"
-    
+
     # Packages Frontend index
     create_section_index "packages.frontend" "Frontend Packages" \
         "packages.frontend.flutter.api.sdk.md" \
@@ -270,34 +270,34 @@ setup_wiki() {
         "packages.frontend.flutter.shared.internationalization.md" \
         "packages.frontend.flutter.shared.ui.md" \
         "packages.frontend.flutter.shared.websocket.md"
-    
+
     # Packages Tools index
     create_section_index "packages.tools" "Tool Packages" \
         "packages.tools.config.md" \
         "packages.tools.dotnet.Flyingdarts.CDK.Constructs.md"
-    
+
     # Packages index
     create_section_index "packages" "Packages" \
         "packages.backend.md" \
         "packages.frontend.md" \
         "packages.tools.md"
-    
+
     # Documentation index
     create_section_index "docs" "Documentation" \
         "docs.README.md" \
         "docs.agent.README.md" \
         "docs.apps.README.md" \
         "docs.packages.README.md"
-    
+
     # Scripts index
     create_section_index "scripts" "Scripts" \
         "scripts.README.md" \
         "scripts.dotnet.README.md" \
         "scripts.flutter.workspace.README.md"
-    
+
     # Create navigation files
     print_header "Creating navigation files"
-    
+
     # Create _Sidebar.md
     cat > "_Sidebar.md" << 'EOF'
 # FlyingDarts Turbo Wiki
@@ -378,7 +378,7 @@ setup_wiki() {
 EOF
 
     print_status "Created navigation files"
-    
+
     # Create README for the wiki repository
     cat > "README.md" << 'EOF'
 # FlyingDarts Turbo Wiki
@@ -402,7 +402,7 @@ This is the GitHub wiki for the FlyingDarts Turbo monorepo. It contains document
 
 To contribute to this wiki:
 
-1. Clone this repository: `git clone https://github.com/your-username/flyingdarts-turbo.wiki.git`
+1. Clone this repository: `git clone https://github.com/your-username/flyingdarts.wiki.git`
 2. Make your changes
 3. Commit and push: `git add . && git commit -m "Update wiki" && git push`
 
@@ -416,12 +416,12 @@ This wiki is automatically generated from README files in the main repository. T
 EOF
 
     print_status "Created wiki README"
-    
+
     # Initialize git repository
     git init
     git add .
     git commit -m "Initial wiki setup from README files"
-    
+
     print_header "Setup Complete!"
     print_status "Wiki files have been created in: $WIKI_DIR"
     print_status ""
@@ -473,7 +473,7 @@ if [[ "$DRY_RUN" == "true" ]]; then
     print_header "DRY RUN - No files will be created"
     print_status "This would create a wiki structure with the following files:"
     echo ""
-    echo "flyingdarts-turbo.wiki/"
+    echo "flyingdarts.wiki/"
     echo "├── Home.md"
     echo "├── apps.backend.md"
     echo "├── apps.frontend.md"
@@ -527,4 +527,4 @@ if [[ "$DRY_RUN" == "true" ]]; then
     print_status "Run without --dry-run to actually create the files"
 else
     setup_wiki
-fi 
+fi

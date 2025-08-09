@@ -55,11 +55,11 @@ echo "📦 Extracting runner files into each action-runner folder..."
 for i in $(seq 1 $num_runners); do
     runner_folder=".runners/action-runner-$i"
     echo "Processing: $runner_folder"
-    
+
     # Clear the folder contents (force and silent)
     rm -rf "$runner_folder"/* 2>/dev/null
     echo "🧹 Cleared existing contents"
-    
+
     # Extract the tar file into the runner folder
     tar -xzf "$tar_file" -C "$runner_folder" >/dev/null 2>&1
     if [ $? -eq 0 ]; then
@@ -77,20 +77,20 @@ for i in $(seq 1 $num_runners); do
     runner_folder=".runners/action-runner-$i"
     echo ""
     echo "--- Configuring action-runner-$i ---"
-    
+
     # Ask for token for this specific runner
     read -p "Enter token for action-runner-$i: " token
-    
+
     # Validate token is not empty
     if [ -z "$token" ]; then
         echo "❌ Error: Token cannot be empty for action-runner-$i"
         exit 1
     fi
-    
+
     # Configure the runner
     echo "Configuring runner..."
     cd "$runner_folder"
-    ./config.sh --url https://github.com/flyingdarts/flyingdarts-turbo --token "$token"
+    ./config.sh --url https://github.com/flyingdarts/flyingdarts --token "$token"
     if [ $? -eq 0 ]; then
         echo "✅ Successfully configured action-runner-$i"
     else

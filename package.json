@@ -36,7 +36,7 @@
     "format:all": "prettier --write \"**/*.{html,ts,scss,json,js,md}\""
   },
   "repository": {
-    "url": "https://github.com/flyingdarts/flyingdarts-turbo",
+    "url": "https://github.com/flyingdarts/flyingdarts",
     "type": "git"
   },
   "devDependencies": {

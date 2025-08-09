@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# flyingdarts-turbo .NET Cleaner Script (POSIX sh compatible)
+# flyingdarts .NET Cleaner Script (POSIX sh compatible)
 # This script will:
 # 1. Find all bin and obj folders in .NET projects across the workspace
 # 2. Remove them to free up disk space and ensure clean builds
@@ -12,7 +12,7 @@ set -e
 ROOT_DIR="."
 PACKAGE_JSON="$ROOT_DIR/package.json"
 
-echo "🧹 .NET Cleaner for flyingdarts-turbo"
+echo "🧹 .NET Cleaner for flyingdarts"
 echo "🔍 Scanning for .NET projects..."
 
 # Extract workspaces from package.json (more precise extraction)
