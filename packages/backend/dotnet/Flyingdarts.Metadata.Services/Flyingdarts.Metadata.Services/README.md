@@ -1,8 +1,8 @@
-# Flying Darts Metadata Services
+# Flyingdarts Metadata Services
 
 ## Overview
 
-The Flying Darts Metadata Services is a .NET 8 library that provides comprehensive metadata generation and aggregation for darts games in the Flying Darts platform. This service is responsible for creating unified, real-time views of game state by combining data from multiple sources including games, players, darts, and users.
+The Flyingdarts Metadata Services is a .NET 8 library that provides comprehensive metadata generation and aggregation for darts games in the Flyingdarts platform. This service is responsible for creating unified, real-time views of game state by combining data from multiple sources including games, players, darts, and users.
 
 The service implements a generic metadata architecture that can be extended to support different game types, with a specific implementation for X01 games. It leverages caching services for performance optimization and provides rich metadata including game progression, player statistics, and real-time game state information.
 
@@ -359,4 +359,4 @@ dotnet test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

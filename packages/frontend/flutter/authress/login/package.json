@@ -1,9 +1,10 @@
 {
-  "name": "authress_login",
-  "version": "0.0.2",
+  "name": "flyingdarts_authress_login",
+  "version": "0.0.2-dev.3",
   "description": "A package for Authress login",
   "private": false,
   "scripts": {
+    "test": "flutter test",
     "restore": "dart pub get",
     "clean": "flutter clean && dart run build_runner clean",
     "clean:generated": "dart run build_runner clean"

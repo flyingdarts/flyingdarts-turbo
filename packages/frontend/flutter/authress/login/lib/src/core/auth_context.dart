@@ -1,6 +1,6 @@
-import 'package:authress_login/src/models/auth_state.dart';
-import 'package:authress_login/src/models/user_profile.dart';
-import 'package:authress_login/src/services/authentication_service.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_state.dart';
+import 'package:flyingdarts_authress_login/src/models/user_profile.dart';
+import 'package:flyingdarts_authress_login/src/services/authentication_service.dart';
 
 /// Improved AuthressContext with cleaner API and better error handling
 class AuthressContext {
@@ -24,11 +24,7 @@ class AuthressContext {
   }) : _authService = authService;
 
   /// Empty context for initial state
-  const AuthressContext.initial()
-    : authState = const AuthStateUnauthenticated(),
-      user = null,
-      accessToken = null,
-      _authService = null;
+  const AuthressContext.initial() : authState = const AuthStateUnauthenticated(), user = null, accessToken = null, _authService = null;
 
   /// Whether the user is authenticated
   bool get isAuthenticated => authState is AuthStateAuthenticated;
@@ -41,9 +37,7 @@ class AuthressContext {
 
   /// Get error message if any
   String? get errorMessage {
-    return authState is AuthStateError
-        ? (authState as AuthStateError).message
-        : null;
+    return authState is AuthStateError ? (authState as AuthStateError).message : null;
   }
 
   /// Start authentication flow
@@ -154,10 +148,7 @@ class AuthressContext {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is AuthressContext &&
-        other.authState == authState &&
-        other.user == user &&
-        other.accessToken == accessToken;
+    return other is AuthressContext && other.authState == authState && other.user == user && other.accessToken == accessToken;
   }
 
   @override

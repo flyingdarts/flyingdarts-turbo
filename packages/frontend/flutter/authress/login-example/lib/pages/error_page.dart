@@ -1,4 +1,4 @@
-import 'package:authress_login/authress_login.dart';
+import 'package:flyingdarts_authress_login/flyingdarts_authress_login.dart';
 import 'package:flutter/material.dart';
 
 /// Error page shown when authentication fails

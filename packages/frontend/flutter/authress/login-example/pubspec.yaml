@@ -46,8 +46,7 @@ dependencies:
   flutter_svg: ^2.0.10
 
   # Local auth package
-  authress_login:
-    path: ../
+  flyingdarts_authress_login:
 
 dev_dependencies:
   flutter_test:

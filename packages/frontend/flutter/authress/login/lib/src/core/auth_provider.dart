@@ -1,5 +1,5 @@
-import 'package:authress_login/src/core/auth_context.dart';
-import 'package:authress_login/src/models/deep_link_config.dart';
+import 'package:flyingdarts_authress_login/src/core/auth_context.dart';
+import 'package:flyingdarts_authress_login/src/models/deep_link_config.dart';
 import 'package:flutter/material.dart';
 
 import '../models/auth_config.dart';
@@ -43,8 +43,7 @@ class AuthressProvider extends StatefulWidget {
 
   /// Get the current AuthressContext from the widget tree
   static AuthressContext of(BuildContext context) {
-    final inherited = context
-        .dependOnInheritedWidgetOfExactType<_InheritedAuthress>();
+    final inherited = context.dependOnInheritedWidgetOfExactType<_InheritedAuthress>();
     assert(
       inherited != null,
       'ImprovedAuthressProvider not found in widget tree',
@@ -54,8 +53,7 @@ class AuthressProvider extends StatefulWidget {
 
   /// Get the AuthressContext without listening to changes
   static AuthressContext read(BuildContext context) {
-    final inherited = context
-        .getInheritedWidgetOfExactType<_InheritedAuthress>();
+    final inherited = context.getInheritedWidgetOfExactType<_InheritedAuthress>();
     assert(
       inherited != null,
       'ImprovedAuthressProvider not found in widget tree',
@@ -65,8 +63,7 @@ class AuthressProvider extends StatefulWidget {
 
   /// Check if ImprovedAuthressProvider exists in the widget tree
   static AuthressContext? maybeOf(BuildContext context) {
-    final inherited = context
-        .dependOnInheritedWidgetOfExactType<_InheritedAuthress>();
+    final inherited = context.dependOnInheritedWidgetOfExactType<_InheritedAuthress>();
     return inherited?.context;
   }
 

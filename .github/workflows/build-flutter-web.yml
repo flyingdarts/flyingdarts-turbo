@@ -19,10 +19,6 @@ on:
         description: "Flavor of the app to build"
         required: true
         type: string
-      platform:
-        description: "Platform of the app to build"
-        required: true
-        type: string
       channel:
         description: "Channel of the app to build"
         required: true
@@ -92,5 +88,14 @@ jobs:
 
       # Build the application
       - name: Build
-        run: turbo run build
+        run: npm run build
         working-directory: ./pruned/full/${{ inputs.project-directory }}
+
+      # Upload unsigned ipa artifact
+      - name: Upload unsigned ipa artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-${{ inputs.project-name }}-${{ inputs.flavor }}
+          path: pruned/full/${{ inputs.project-directory }}/build/web/*.zip
+          if-no-files-found: error
+          retention-days: 1

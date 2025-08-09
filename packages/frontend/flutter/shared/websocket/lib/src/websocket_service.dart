@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:authress_login/authress_login.dart';
+
+import 'package:flyingdarts_authress_login/flyingdarts_authress_login.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:web_socket_channel/io.dart';
 
-import 'websocket_actions.dart';
 import 'models/websocket_message.dart';
+import 'websocket_actions.dart';
 
 class WebSocketService {
   IOWebSocketChannel? _socket;
@@ -15,13 +16,11 @@ class WebSocketService {
     false,
   );
   Stream<bool> get connected$ => _connectedSubject.stream;
-  final StreamController<WebSocketMessage<dynamic>> _messages =
-      StreamController<WebSocketMessage>.broadcast();
+  final StreamController<WebSocketMessage<dynamic>> _messages = StreamController<WebSocketMessage>.broadcast();
   Stream<WebSocketMessage> get messages => _messages.stream;
   late String _websocketUri;
 
-  final AuthressLoginClient _authressLoginClient =
-      GetIt.I<AuthressLoginClient>();
+  final AuthressLoginClient _authressLoginClient = GetIt.I<AuthressLoginClient>();
 
   WebSocketService(String websocketUri) {
     _websocketUri = websocketUri;
@@ -33,7 +32,7 @@ class WebSocketService {
       return;
     }
     _socket = IOWebSocketChannel.connect(
-      '${_websocketUri}?token=${(await _authressLoginClient.ensureToken())}',
+      '$_websocketUri?token=${(await _authressLoginClient.ensureToken())}',
     );
     _connectedSubject.add(true);
     _connect();

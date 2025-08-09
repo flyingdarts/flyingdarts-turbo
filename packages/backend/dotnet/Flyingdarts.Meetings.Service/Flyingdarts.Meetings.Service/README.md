@@ -1,8 +1,8 @@
-# Flying Darts Meetings Service
+# Flyingdarts Meetings Service
 
 ## Overview
 
-The Flying Darts Meetings Service is a .NET 8 library that provides comprehensive video conferencing functionality for the Flying Darts gaming platform. This service integrates with the Dyte API to manage video meetings, enabling players to create, join, and participate in real-time video calls during their darts games.
+The Flyingdarts Meetings Service is a .NET 8 library that provides comprehensive video conferencing functionality for the Flyingdarts gaming platform. This service integrates with the Dyte API to manage video meetings, enabling players to create, join, and participate in real-time video calls during their darts games.
 
 The service is built using modern .NET patterns with dependency injection, providing a clean abstraction layer over the Dyte API. It includes auto-generated client code using Microsoft Kiota for type-safe API interactions and supports both meeting management and participant handling.
 
@@ -343,4 +343,4 @@ This is a standalone service library with no internal dependencies.
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

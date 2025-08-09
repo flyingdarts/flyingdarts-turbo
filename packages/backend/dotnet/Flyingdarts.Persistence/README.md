@@ -1,8 +1,8 @@
-# Flying Darts Persistence
+# Flyingdarts Persistence
 
 ## Overview
 
-The Flying Darts Persistence is a .NET 8 NuGet package that provides comprehensive data persistence models and services for the Flying Darts gaming platform. This package contains all the core domain models, DynamoDB integration patterns, and data access abstractions needed for the darts gaming application.
+The Flyingdarts Persistence is a .NET 8 NuGet package that provides comprehensive data persistence models and services for the Flyingdarts gaming platform. This package contains all the core domain models, DynamoDB integration patterns, and data access abstractions needed for the darts gaming application.
 
 The package implements a robust data layer with AWS DynamoDB integration, featuring optimized table designs, caching services, queue management, and comprehensive domain models for games, players, darts, users, and social features. It provides a clean abstraction layer that enables efficient data operations while maintaining type safety and performance.
 
@@ -473,4 +473,4 @@ This is a standalone package with no internal dependencies.
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

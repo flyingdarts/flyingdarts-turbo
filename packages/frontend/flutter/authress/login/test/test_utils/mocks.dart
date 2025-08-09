@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import 'package:authress_login/src/models/auth_config.dart';
-import 'package:authress_login/src/models/auth_state.dart';
-import 'package:authress_login/src/models/user_profile.dart';
-import 'package:authress_login/src/services/authentication_service.dart';
-import 'package:authress_login/src/services/crypto_service.dart';
-import 'package:authress_login/src/services/deep_link_service.dart';
-import 'package:authress_login/src/services/http_service.dart';
-import 'package:authress_login/src/services/token_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_config.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_state.dart';
+import 'package:flyingdarts_authress_login/src/models/user_profile.dart';
+import 'package:flyingdarts_authress_login/src/services/authentication_service.dart';
+import 'package:flyingdarts_authress_login/src/services/crypto_service.dart';
+import 'package:flyingdarts_authress_login/src/services/deep_link_service.dart';
+import 'package:flyingdarts_authress_login/src/services/http_service.dart';
+import 'package:flyingdarts_authress_login/src/services/token_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 
@@ -69,8 +69,7 @@ class TestData {
 
   // Mock HTTP responses
   static const authUrlResponse = {
-    'authenticationUrl':
-        'https://test.authress.io/auth?client_id=test-app-123&redirect_uri=flyingdarts://auth',
+    'authenticationUrl': 'https://test.authress.io/auth?client_id=test-app-123&redirect_uri=flyingdarts://auth',
   };
 
   static const tokenResponse = {

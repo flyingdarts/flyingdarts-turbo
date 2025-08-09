@@ -1,8 +1,8 @@
-# Flying Darts Internationalization
+# Flyingdarts Internationalization
 
 ## Overview
 
-The Flying Darts Internationalization is a Flutter package that provides comprehensive internationalization (i18n) and localization (l10n) support for the Flying Darts gaming platform. This package enables Flutter applications to display text, dates, numbers, and other locale-specific content in multiple languages with automatic code generation and type-safe access to localized strings.
+The Flyingdarts Internationalization is a Flutter package that provides comprehensive internationalization (i18n) and localization (l10n) support for the Flyingdarts gaming platform. This package enables Flutter applications to display text, dates, numbers, and other locale-specific content in multiple languages with automatic code generation and type-safe access to localized strings.
 
 The package is built using Flutter's official internationalization framework with ARB (Application Resource Bundle) files for translation management. It provides a robust foundation for implementing multi-language support in Flutter apps with automatic code generation, type safety, and comprehensive locale support. The package currently supports English (en) and Dutch (nl) languages with extensible architecture for adding more languages.
 
@@ -24,7 +24,7 @@ The package is built using Flutter's official internationalization framework wit
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Flutter Localizations**: Access to flutter_localizations package
 - **Intl Package**: ^0.20.2 for internationalization utilities
 - **Build Tools**: Flutter's built-in localization generation tools
@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flying Darts',
+      title: 'Flyingdarts',
       
       // Localization configuration
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -415,7 +415,7 @@ Add supported locales to `android/app/src/main/res/values/strings.xml`:
 
 ```xml
 <resources>
-  <string name="app_name">Flying Darts</string>
+  <string name="app_name">Flyingdarts</string>
 </resources>
 ```
 
@@ -589,4 +589,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

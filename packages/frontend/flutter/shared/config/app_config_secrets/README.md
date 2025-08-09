@@ -1,8 +1,8 @@
-# Flying Darts App Config Secrets
+# Flyingdarts App Config Secrets
 
 ## Overview
 
-The Flying Darts App Config Secrets is a Flutter package that provides a secure storage implementation of the configuration management system for the Flying Darts gaming platform. This package enables Flutter applications to securely store and retrieve sensitive configuration data using Flutter's Secure Storage with encryption, type safety, and fallback support.
+The Flyingdarts App Config Secrets is a Flutter package that provides a secure storage implementation of the configuration management system for the Flyingdarts gaming platform. This package enables Flutter applications to securely store and retrieve sensitive configuration data using Flutter's Secure Storage with encryption, type safety, and fallback support.
 
 The package is built on top of the App Config Core package, extending its abstract configuration classes with a concrete Flutter Secure Storage implementation. It provides a robust foundation for implementing secure configuration storage in Flutter apps with automatic JSON serialization, encryption, caching, and fallback value support. The package is specifically designed for storing sensitive data such as authentication tokens, API keys, and other security-critical configuration.
 
@@ -25,7 +25,7 @@ The package is built on top of the App Config Core package, extending its abstra
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **App Config Core**: Access to the app_config_core package
 - **Flutter Secure Storage**: ^10.0.0-beta.4 for encrypted storage
 - **JSON Annotation**: ^4.9.0 for code generation
@@ -631,4 +631,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

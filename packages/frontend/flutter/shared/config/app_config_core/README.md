@@ -1,8 +1,8 @@
-# Flying Darts App Config Core
+# Flyingdarts App Config Core
 
 ## Overview
 
-The Flying Darts App Config Core is a Flutter package that provides a comprehensive configuration management system for the Flying Darts gaming platform. This package enables Flutter applications to handle readable and writeable configurations with type safety, caching, and persistence capabilities.
+The Flyingdarts App Config Core is a Flutter package that provides a comprehensive configuration management system for the Flyingdarts gaming platform. This package enables Flutter applications to handle readable and writeable configurations with type safety, caching, and persistence capabilities.
 
 The package is built using modern Flutter patterns with abstract classes, generics, and JSON serialization. It provides a robust foundation for implementing configuration management in Flutter apps with support for various data types, automatic caching, and flexible storage backends.
 
@@ -22,7 +22,7 @@ The package is built using modern Flutter patterns with abstract classes, generi
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Build Tools**: build_runner for code generation
 
 ## Installation
@@ -493,4 +493,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.
