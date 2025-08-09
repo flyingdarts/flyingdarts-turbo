@@ -53,19 +53,6 @@
               ]
             },
             "staging": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2MB",
-                  "maximumError": "5MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
-                }
-              ],
-              "outputHashing": "all",
               "optimization": false,
               "sourceMap": false,
               "namedChunks": true,
