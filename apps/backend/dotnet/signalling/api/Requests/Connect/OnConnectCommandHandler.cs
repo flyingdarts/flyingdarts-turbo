@@ -26,9 +26,7 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         CancellationToken cancellationToken
     )
     {
-        Console.WriteLine(
-            $"[OnConnect] Starting connection process for AuthProviderUserId: {request.AuthProviderUserId}, ConnectionId: {request.ConnectionId}"
-        );
+        Console.WriteLine($"[OnConnect] Processing request", JsonSerializer.Serialize(request));
 
         try
         {
