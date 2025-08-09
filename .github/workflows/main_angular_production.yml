@@ -1,0 +1,35 @@
+name: Main Angular Workflow (Production)
+
+on:
+  workflow_call:
+  push:
+    paths:
+      - "apps/frontend/angular/**"
+      - ".github/workflows/main_angular_production.yml"
+
+  pull_request:
+    paths:
+      - "apps/frontend/angular/**"
+      - ".github/workflows/main_angular_production.yml"
+
+
+jobs:
+  build-angular-production:
+    uses: ./.github/workflows/build-angular-app.yml
+    with:
+      project-name: "fd-app"
+      project-directory: "apps/frontend/angular/fd-app"
+      configuration: "production"
+      environment: "production"
+      node-version: "22"
+
+  deploy-angular-production:
+    needs: build-angular-production
+    uses: ./.github/workflows/deploy-angular-app.yml
+    with:
+      project-name: "fd-app"
+      environment: "production"
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEPLOYMENT_ROLE_ARN: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
+      AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_PROD }}

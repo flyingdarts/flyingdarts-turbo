@@ -1,0 +1,13 @@
+name: Main Production Workflow
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - production
+
+jobs:
+  build-angular:
+    name: Build Angular
+    uses: ./.github/workflows/main_angular_production.yml
+    secrets: inherit
