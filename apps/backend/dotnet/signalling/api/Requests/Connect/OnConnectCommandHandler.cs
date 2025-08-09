@@ -135,9 +135,11 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
                 throw new Exception("Token is null or empty");
             }
 
+            var normalizedToken = NormalizeAuthressToken(token);
+            Console.WriteLine($"[OnConnect] Normalized token: {normalizedToken}");
             // Parse the JWT token to extract user information
             var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(NormalizeAuthressToken(token));
+            var jwtToken = handler.ReadJwtToken(normalizedToken);
 
             var userProfile = new UserProfile();
 
