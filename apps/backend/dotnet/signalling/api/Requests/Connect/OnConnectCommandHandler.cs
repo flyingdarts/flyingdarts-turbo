@@ -129,6 +129,14 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
 
         try
         {
+            Console.WriteLine($"[OnConnect] Token: {token}");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                Console.WriteLine("[OnConnect] Token is null or empty");
+                throw new Exception("Token is null or empty");
+            }
+
             // Parse the JWT token to extract user information
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
