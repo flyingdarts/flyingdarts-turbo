@@ -25,7 +25,7 @@ The package is built using Flutter's WebSocket capabilities with RxDart for reac
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Authress Login**: Access to the authress_login package
 - **RxDart**: ^0.28.0 for reactive programming
 - **Web Socket Channel**: ^3.0.3 for WebSocket communication

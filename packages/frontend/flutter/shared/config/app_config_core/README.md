@@ -22,7 +22,7 @@ The package is built using modern Flutter patterns with abstract classes, generi
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Build Tools**: build_runner for code generation
 
 ## Installation

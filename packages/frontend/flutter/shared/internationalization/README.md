@@ -24,7 +24,7 @@ The package is built using Flutter's official internationalization framework wit
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Flutter Localizations**: Access to flutter_localizations package
 - **Intl Package**: ^0.20.2 for internationalization utilities
 - **Build Tools**: Flutter's built-in localization generation tools

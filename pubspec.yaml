@@ -7,8 +7,8 @@ publish_to: none
 # It doesn't contain any dependencies itself, but defines the workspace structure
 environment:
   sdk: ^3.8.1
-  flutter: ^3.26.0 
-  
+  flutter: ">=3.26.0"
+
 # Define the workspace packages
 workspace:
   - apps/frontend/flutter/flyingdarts_mobile

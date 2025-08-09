@@ -21,7 +21,7 @@ The package is built using modern Flutter patterns with Go Router integration an
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Go Router**: ^16.0.0 for navigation
 - **Dependencies**: Access to shared packages (ui)
 

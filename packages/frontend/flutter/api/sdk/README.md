@@ -22,7 +22,7 @@ The SDK is built using modern Dart patterns with dependency injection, JSON seri
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Backend Services**: Access to Flying Darts backend APIs
 - **Authentication**: Valid authorization tokens for API access
 

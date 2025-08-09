@@ -25,7 +25,7 @@ The package is built on top of the App Config Core package, extending its abstra
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **App Config Core**: Access to the app_config_core package
 - **Flutter Secure Storage**: ^10.0.0-beta.4 for encrypted storage
 - **JSON Annotation**: ^4.9.0 for code generation

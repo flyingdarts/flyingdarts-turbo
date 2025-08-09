@@ -22,7 +22,7 @@ The package is built using modern Flutter patterns with dependency injection, se
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: >=3.26.0 or higher
 - **Authress Account**: Active Authress account with configured application
 - **Go Router**: ^16.0.0 for routing integration
 

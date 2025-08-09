@@ -22,7 +22,7 @@ The package is built using modern Flutter patterns with BLoC state management, d
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Authentication**: Valid authentication tokens from Authress
 - **Dependencies**: Access to shared packages (api_sdk, authress_login, ui, internationalization, websocket, app_config_core, app_config_secrets)
 
