@@ -1,8 +1,8 @@
-# Flying Darts Scripts Collection
+# Flyingdarts Scripts Collection
 
 ## Overview
 
-The Flying Darts Scripts Collection is a comprehensive set of utility scripts designed to manage, maintain, and automate various aspects of the Flying Darts monorepo development workflow. This collection provides tools for workspace management, build system maintenance, package management, and development automation across multiple technology stacks including .NET, Flutter, and general workspace utilities.
+The Flyingdarts Scripts Collection is a comprehensive set of utility scripts designed to manage, maintain, and automate various aspects of the Flyingdarts monorepo development workflow. This collection provides tools for workspace management, build system maintenance, package management, and development automation across multiple technology stacks including .NET, Flutter, and general workspace utilities.
 
 The scripts are organized into logical categories and provide automated solutions for common development tasks such as cleaning build artifacts, managing dependencies, fixing workspace configurations, and maintaining code quality. Each script is designed to be cross-platform compatible and includes comprehensive error handling, user feedback, and safety measures.
 
@@ -675,7 +675,7 @@ main "$@"
 
 ## License
 
-This scripts collection is part of the Flying Darts platform and is subject to the project's licensing terms.
+This scripts collection is part of the Flyingdarts platform and is subject to the project's licensing terms.
 
 ## Support
 

@@ -300,7 +300,7 @@
 
 ---
 
-*Generated on {{generatedDate}} by Flying Darts Documentation Agent*
+*Generated on {{generatedDate}} by Flyingdarts Documentation Agent*
 
 **Version**: {{version}}  
 **Last Updated**: {{lastUpdated}} 

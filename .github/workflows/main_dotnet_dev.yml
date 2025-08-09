@@ -1,15 +1,20 @@
 name: Main .NET Workflow (Development)
-
 on:
   workflow_call:
-
+  push:
+    branches:
+      - development
+    paths:
+      - "apps/backend/dotnet/**"
+      - ".github/workflows/main_dotnet_dev.yml"
+      - "flyingdarts.sln"
 jobs:
   build-signalling-api-dev:
     uses: ./.github/workflows/build-dotnet-lambda.yml
     with:
       project-name: "flyingdarts.backend.signalling.api"
       project-directory: "apps/backend/dotnet/signalling/api"
-      lambda-function-name: "Flyingdarts-Backend-Signalling-Api-Development"
+      lambda-function-name: "Flyingdarts-Signalling-Api-Development"
       dotnet-version: "8.0.x"
       node-version: "22"
 
@@ -17,17 +22,17 @@ jobs:
     needs: build-signalling-api-dev
     uses: ./.github/workflows/deploy-lambda.yml
     with:
-      lambda-function-name: "Flyingdarts-Backend-Signalling-Api-Development"
-      artifact-name: "Flyingdarts-Backend-Signalling-Api-Development-package"
+      lambda-function-name: "Flyingdarts-Signalling-Api-Development"
+      artifact-name: "Flyingdarts-Signalling-Api-Development-package"
       environment: "development"
     secrets: inherit
 
   build-x01-api-dev:
     uses: ./.github/workflows/build-dotnet-lambda.yml
     with:
-      project-name: "flyingdarts.backend.games.x01.api"
+      project-name: "flyingdarts.backend.api"
       project-directory: "apps/backend/dotnet/api"
-      lambda-function-name: "Flyingdarts-Backend-Games-X01-Api-Development"
+      lambda-function-name: "Flyingdarts-Backend-Api-Development"
       dotnet-version: "8.0.x"
       node-version: "22"
 
@@ -35,8 +40,8 @@ jobs:
     needs: build-x01-api-dev
     uses: ./.github/workflows/deploy-lambda.yml
     with:
-      lambda-function-name: "Flyingdarts-Backend-Games-X01-Api-Development"
-      artifact-name: "Flyingdarts-Backend-Games-X01-Api-Development-package"
+      lambda-function-name: "Flyingdarts-Backend-Api-Development"
+      artifact-name: "Flyingdarts-Backend-Api-Development-package"
       environment: "development"
     secrets: inherit
 
@@ -45,7 +50,7 @@ jobs:
     with:
       project-name: "flyingdarts.backend.friends.api"
       project-directory: "apps/backend/dotnet/friends"
-      lambda-function-name: "Flyingdarts-Backend-Friends-Api-Development"
+      lambda-function-name: "Flyingdarts-Friends-Api-Development"
       dotnet-version: "8.0.x"
       node-version: "22"
 
@@ -53,7 +58,7 @@ jobs:
     needs: build-friends-api-dev
     uses: ./.github/workflows/deploy-lambda.yml
     with:
-      lambda-function-name: "Flyingdarts-Backend-Friends-Api-Development"
-      artifact-name: "Flyingdarts-Backend-Friends-Api-Development-package"
+      lambda-function-name: "Flyingdarts-Friends-Api-Development"
+      artifact-name: "Flyingdarts-Friends-Api-Development-package"
       environment: "development"
     secrets: inherit

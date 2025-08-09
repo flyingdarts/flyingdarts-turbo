@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Flying Darts Documentation Agent - Example Implementation
- * 
+ * Flyingdarts Documentation Agent - Example Implementation
+ *
  * This is a sample implementation demonstrating how the documentation agent
  * would work in practice. It shows the core functionality for:
  * - Project discovery
@@ -40,23 +40,23 @@ class DocumentationAgent {
      * Main entry point for documentation generation
      */
     async generateDocumentation() {
-        console.log('🚀 Starting Flying Darts Documentation Agent...');
-        
+        console.log('🚀 Starting Flyingdarts Documentation Agent...');
+
         try {
             // Phase 1: Discovery
             await this.discoverProjects();
-            
+
             // Phase 2: Analysis
             await this.analyzeProjects();
-            
+
             // Phase 3: Documentation Generation
             await this.generateDocumentation();
-            
+
             // Phase 4: Validation
             await this.validateDocumentation();
-            
+
             console.log('✅ Documentation generation completed successfully!');
-            
+
         } catch (error) {
             console.error('❌ Documentation generation failed:', error.message);
             process.exit(1);
@@ -68,18 +68,18 @@ class DocumentationAgent {
      */
     async discoverProjects() {
         console.log('🔍 Discovering projects...');
-        
+
         const monorepoRoot = this.config.monorepo.root;
-        
+
         // Discover applications
         await this.scanDirectory(path.join(monorepoRoot, this.config.monorepo.appsPath), 'application');
-        
+
         // Discover packages
         await this.scanDirectory(path.join(monorepoRoot, this.config.monorepo.packagesPath), 'library');
-        
+
         // Discover tools
         await this.scanDirectory(path.join(monorepoRoot, this.config.monorepo.scriptsPath), 'tool');
-        
+
         console.log(`📁 Discovered ${this.projects.length} projects`);
     }
 
@@ -88,14 +88,14 @@ class DocumentationAgent {
      */
     async scanDirectory(dirPath, projectType) {
         if (!fs.existsSync(dirPath)) return;
-        
+
         const entries = fs.readdirSync(dirPath, { withFileTypes: true });
-        
+
         for (const entry of entries) {
             if (entry.isDirectory()) {
                 const projectPath = path.join(dirPath, entry.name);
                 const project = await this.analyzeProject(projectPath, entry.name, projectType);
-                
+
                 if (project) {
                     this.projects.push(project);
                 }
@@ -108,14 +108,14 @@ class DocumentationAgent {
      */
     async analyzeProject(projectPath, projectName, projectType) {
         const configFiles = this.findConfigFiles(projectPath);
-        
+
         if (configFiles.length === 0) {
             return null; // Not a valid project
         }
-        
+
         const language = this.detectLanguage(configFiles);
         const metadata = await this.extractProjectMetadata(projectPath, configFiles, language);
-        
+
         return {
             name: projectName,
             path: projectPath,
@@ -133,7 +133,7 @@ class DocumentationAgent {
      */
     findConfigFiles(projectPath) {
         const configFiles = [];
-        
+
         for (const [language, config] of Object.entries(this.config.languages)) {
             for (const configFile of config.configFiles) {
                 const configPath = path.join(projectPath, configFile);
@@ -146,7 +146,7 @@ class DocumentationAgent {
                 }
             }
         }
-        
+
         return configFiles;
     }
 
@@ -155,7 +155,7 @@ class DocumentationAgent {
      */
     detectLanguage(configFiles) {
         if (configFiles.length === 0) return 'unknown';
-        
+
         // Return the first detected language
         return configFiles[0].language;
     }
@@ -171,11 +171,11 @@ class DocumentationAgent {
             dependencies: [],
             features: []
         };
-        
+
         for (const configFile of configFiles) {
             try {
                 const content = fs.readFileSync(configFile.path, 'utf8');
-                
+
                 switch (configFile.language) {
                     case 'rust':
                         metadata.description = this.extractRustDescription(content);
@@ -198,7 +198,7 @@ class DocumentationAgent {
                 console.warn(`Failed to parse ${configFile.path}:`, error.message);
             }
         }
-        
+
         return metadata;
     }
 
@@ -207,16 +207,16 @@ class DocumentationAgent {
      */
     async analyzeProjects() {
         console.log('🔬 Analyzing projects...');
-        
+
         for (const project of this.projects) {
             console.log(`  📂 Analyzing ${project.name}...`);
-            
+
             // Extract classes from source files
             project.classes = await this.extractClasses(project);
-            
+
             // Extract dependencies
             project.dependencies = await this.extractDependencies(project);
-            
+
             // Build cross-references
             await this.buildCrossReferences(project);
         }
@@ -228,20 +228,20 @@ class DocumentationAgent {
     async extractClasses(project) {
         const classes = [];
         const languageConfig = this.config.languages[project.language];
-        
+
         if (!languageConfig) {
             console.warn(`No language config found for ${project.language}`);
             return classes;
         }
-        
+
         // Find all source files
         const sourceFiles = this.findSourceFiles(project.path, languageConfig.extensions);
-        
+
         for (const sourceFile of sourceFiles) {
             const fileClasses = await this.parseSourceFile(sourceFile, project.language);
             classes.push(...fileClasses);
         }
-        
+
         return classes;
     }
 
@@ -250,13 +250,13 @@ class DocumentationAgent {
      */
     findSourceFiles(projectPath, extensions) {
         const sourceFiles = [];
-        
+
         const scanDirectory = (dir) => {
             const entries = fs.readdirSync(dir, { withFileTypes: true });
-            
+
             for (const entry of entries) {
                 const fullPath = path.join(dir, entry.name);
-                
+
                 if (entry.isDirectory()) {
                     // Skip common directories that shouldn't contain source code
                     if (!['node_modules', 'bin', 'obj', 'target', '.git'].includes(entry.name)) {
@@ -270,7 +270,7 @@ class DocumentationAgent {
                 }
             }
         };
-        
+
         scanDirectory(projectPath);
         return sourceFiles;
     }
@@ -280,10 +280,10 @@ class DocumentationAgent {
      */
     async parseSourceFile(filePath, language) {
         const classes = [];
-        
+
         try {
             const content = fs.readFileSync(filePath, 'utf8');
-            
+
             switch (language) {
                 case 'rust':
                     classes.push(...this.parseRustFile(content, filePath));
@@ -301,7 +301,7 @@ class DocumentationAgent {
         } catch (error) {
             console.warn(`Failed to parse ${filePath}:`, error.message);
         }
-        
+
         return classes;
     }
 
@@ -310,18 +310,18 @@ class DocumentationAgent {
      */
     parseRustFile(content, filePath) {
         const classes = [];
-        
+
         // Simple regex-based parsing for demonstration
         const structRegex = /pub\s+struct\s+(\w+)\s*\{([^}]+)\}/g;
         const implRegex = /impl\s+(\w+)\s*\{([^}]+)\}/g;
-        
+
         let match;
-        
+
         // Extract structs
         while ((match = structRegex.exec(content)) !== null) {
             const className = match[1];
             const fields = this.extractRustFields(match[2]);
-            
+
             classes.push({
                 name: className,
                 type: 'struct',
@@ -331,12 +331,12 @@ class DocumentationAgent {
                 documentation: this.extractDocumentation(content, match.index)
             });
         }
-        
+
         // Extract implementations
         while ((match = implRegex.exec(content)) !== null) {
             const className = match[1];
             const methods = this.extractRustMethods(match[2]);
-            
+
             // Find existing class or create new one
             let classObj = classes.find(c => c.name === className);
             if (!classObj) {
@@ -349,10 +349,10 @@ class DocumentationAgent {
                 };
                 classes.push(classObj);
             }
-            
+
             classObj.methods.push(...methods);
         }
-        
+
         return classes;
     }
 
@@ -362,7 +362,7 @@ class DocumentationAgent {
     extractRustFields(fieldsContent) {
         const fields = [];
         const fieldRegex = /pub\s+(\w+):\s+([^,\n]+)/g;
-        
+
         let match;
         while ((match = fieldRegex.exec(fieldsContent)) !== null) {
             fields.push({
@@ -371,7 +371,7 @@ class DocumentationAgent {
                 access: 'public'
             });
         }
-        
+
         return fields;
     }
 
@@ -381,13 +381,13 @@ class DocumentationAgent {
     extractRustMethods(methodsContent) {
         const methods = [];
         const methodRegex = /pub\s+fn\s+(\w+)\s*\(([^)]*)\)\s*(?:->\s*([^{]+))?/g;
-        
+
         let match;
         while ((match = methodRegex.exec(methodsContent)) !== null) {
             const methodName = match[1];
             const parameters = this.parseRustParameters(match[2]);
             const returnType = match[3] ? match[3].trim() : '()';
-            
+
             methods.push({
                 name: methodName,
                 parameters: parameters,
@@ -395,7 +395,7 @@ class DocumentationAgent {
                 access: 'public'
             });
         }
-        
+
         return methods;
     }
 
@@ -404,7 +404,7 @@ class DocumentationAgent {
      */
     parseRustParameters(paramsString) {
         if (!paramsString.trim()) return [];
-        
+
         return paramsString.split(',').map(param => {
             const parts = param.trim().split(':');
             return {
@@ -420,13 +420,13 @@ class DocumentationAgent {
     extractDocumentation(content, position) {
         const lines = content.split('\n');
         const lineNumber = content.substring(0, position).split('\n').length - 1;
-        
+
         const documentation = [];
-        
+
         // Look for documentation comments before the position
         for (let i = lineNumber - 1; i >= 0; i--) {
             const line = lines[i].trim();
-            
+
             if (line.startsWith('///') || line.startsWith('//!')) {
                 documentation.unshift(line.substring(3).trim());
             } else if (line.startsWith('//') || line.startsWith('/*')) {
@@ -437,7 +437,7 @@ class DocumentationAgent {
                 break; // Stop at code
             }
         }
-        
+
         return documentation.join('\n');
     }
 
@@ -446,15 +446,15 @@ class DocumentationAgent {
      */
     parseCSharpFile(content, filePath) {
         const classes = [];
-        
+
         // Simple regex-based parsing for demonstration
         const classRegex = /public\s+class\s+(\w+)(?:\s*:\s*([^{]+))?\s*\{/g;
-        
+
         let match;
         while ((match = classRegex.exec(content)) !== null) {
             const className = match[1];
             const inheritance = match[2] ? match[2].trim() : '';
-            
+
             classes.push({
                 name: className,
                 type: 'class',
@@ -465,7 +465,7 @@ class DocumentationAgent {
                 documentation: this.extractDocumentation(content, match.index)
             });
         }
-        
+
         return classes;
     }
 
@@ -474,15 +474,15 @@ class DocumentationAgent {
      */
     parseDartFile(content, filePath) {
         const classes = [];
-        
+
         // Simple regex-based parsing for demonstration
         const classRegex = /class\s+(\w+)(?:\s+extends\s+([^{]+))?\s*\{/g;
-        
+
         let match;
         while ((match = classRegex.exec(content)) !== null) {
             const className = match[1];
             const inheritance = match[2] ? match[2].trim() : '';
-            
+
             classes.push({
                 name: className,
                 type: 'class',
@@ -493,7 +493,7 @@ class DocumentationAgent {
                 documentation: this.extractDocumentation(content, match.index)
             });
         }
-        
+
         return classes;
     }
 
@@ -502,15 +502,15 @@ class DocumentationAgent {
      */
     parseTypeScriptFile(content, filePath) {
         const classes = [];
-        
+
         // Simple regex-based parsing for demonstration
         const classRegex = /(?:export\s+)?class\s+(\w+)(?:\s+extends\s+([^{]+))?\s*\{/g;
-        
+
         let match;
         while ((match = classRegex.exec(content)) !== null) {
             const className = match[1];
             const inheritance = match[2] ? match[2].trim() : '';
-            
+
             classes.push({
                 name: className,
                 type: 'class',
@@ -521,7 +521,7 @@ class DocumentationAgent {
                 documentation: this.extractDocumentation(content, match.index)
             });
         }
-        
+
         return classes;
     }
 
@@ -530,20 +530,20 @@ class DocumentationAgent {
      */
     async extractDependencies(project) {
         const dependencies = [];
-        
+
         // Extract from metadata
         if (project.metadata.dependencies) {
             dependencies.push(...project.metadata.dependencies);
         }
-        
+
         // Extract from source files (imports/using statements)
         const sourceFiles = this.findSourceFiles(project.path, this.config.languages[project.language].extensions);
-        
+
         for (const sourceFile of sourceFiles) {
             const fileDeps = this.extractFileDependencies(sourceFile, project.language);
             dependencies.push(...fileDeps);
         }
-        
+
         return dependencies;
     }
 
@@ -552,10 +552,10 @@ class DocumentationAgent {
      */
     extractFileDependencies(filePath, language) {
         const dependencies = [];
-        
+
         try {
             const content = fs.readFileSync(filePath, 'utf8');
-            
+
             switch (language) {
                 case 'rust':
                     // Extract use statements
@@ -569,7 +569,7 @@ class DocumentationAgent {
                         });
                     }
                     break;
-                    
+
                 case 'csharp':
                     // Extract using statements
                     const usingRegex = /using\s+([^;]+);/g;
@@ -581,7 +581,7 @@ class DocumentationAgent {
                         });
                     }
                     break;
-                    
+
                 case 'dart':
                     // Extract import statements
                     const importRegex = /import\s+['"]([^'"]+)['"]/g;
@@ -593,7 +593,7 @@ class DocumentationAgent {
                         });
                     }
                     break;
-                    
+
                 case 'typescript':
                     // Extract import statements
                     const tsImportRegex = /import\s+(?:.*\s+from\s+)?['"]([^'"]+)['"]/g;
@@ -609,7 +609,7 @@ class DocumentationAgent {
         } catch (error) {
             console.warn(`Failed to extract dependencies from ${filePath}:`, error.message);
         }
-        
+
         return dependencies;
     }
 
@@ -627,20 +627,20 @@ class DocumentationAgent {
      */
     async generateDocumentation() {
         console.log('📝 Generating documentation...');
-        
+
         for (const project of this.projects) {
             console.log(`  📄 Generating docs for ${project.name}...`);
-            
+
             // Generate README.md
             await this.generateReadme(project);
-            
+
             // Generate API documentation
             await this.generateApiDocs(project);
-            
+
             // Generate class documentation
             await this.generateClassDocs(project);
         }
-        
+
         // Generate main index
         await this.generateMainIndex();
     }
@@ -651,10 +651,10 @@ class DocumentationAgent {
     async generateReadme(project) {
         const template = this.loadTemplate('readme');
         const data = this.prepareReadmeData(project);
-        
+
         const readmeContent = this.renderTemplate(template, data);
         const readmePath = path.join(project.path, 'README.md');
-        
+
         fs.writeFileSync(readmePath, readmeContent);
         console.log(`    ✅ Generated README.md for ${project.name}`);
     }
@@ -665,14 +665,14 @@ class DocumentationAgent {
     async generateApiDocs(project) {
         const template = this.loadTemplate('api');
         const data = this.prepareApiData(project);
-        
+
         const apiContent = this.renderTemplate(template, data);
         const apiPath = path.join(project.path, 'docs', 'api', 'index.md');
-        
+
         // Ensure directory exists
         fs.mkdirSync(path.dirname(apiPath), { recursive: true });
         fs.writeFileSync(apiPath, apiContent);
-        
+
         console.log(`    ✅ Generated API docs for ${project.name}`);
     }
 
@@ -681,18 +681,18 @@ class DocumentationAgent {
      */
     async generateClassDocs(project) {
         const template = this.loadTemplate('class');
-        
+
         for (const classObj of project.classes) {
             const data = this.prepareClassData(classObj, project);
             const classContent = this.renderTemplate(template, data);
-            
+
             const classPath = path.join(project.path, 'docs', 'api', 'classes', `${classObj.name}.md`);
-            
+
             // Ensure directory exists
             fs.mkdirSync(path.dirname(classPath), { recursive: true });
             fs.writeFileSync(classPath, classContent);
         }
-        
+
         console.log(`    ✅ Generated class docs for ${project.name} (${project.classes.length} classes)`);
     }
 
@@ -702,14 +702,14 @@ class DocumentationAgent {
     async generateMainIndex() {
         const template = this.loadTemplate('index');
         const data = this.prepareIndexData();
-        
+
         const indexContent = this.renderTemplate(template, data);
         const indexPath = path.join(this.config.monorepo.root, 'docs', 'index.md');
-        
+
         // Ensure directory exists
         fs.mkdirSync(path.dirname(indexPath), { recursive: true });
         fs.writeFileSync(indexPath, indexContent);
-        
+
         console.log('    ✅ Generated main documentation index');
     }
 
@@ -718,7 +718,7 @@ class DocumentationAgent {
      */
     loadTemplate(templateName) {
         const templatePath = path.join(this.config.monorepo.root, this.config.templates[templateName]);
-        
+
         try {
             return fs.readFileSync(templatePath, 'utf8');
         } catch (error) {
@@ -805,7 +805,7 @@ class DocumentationAgent {
         const frontendApps = this.projects.filter(p => p.type === 'application' && p.path.includes('frontend'));
         const backendLibs = this.projects.filter(p => p.type === 'library' && p.path.includes('backend'));
         const frontendLibs = this.projects.filter(p => p.type === 'library' && p.path.includes('frontend'));
-        
+
         return {
             backendApps: backendApps.map(p => ({
                 name: p.name,
@@ -882,12 +882,12 @@ class DocumentationAgent {
     calculateCoverage() {
         let totalClasses = 0;
         let documentedClasses = 0;
-        
+
         for (const project of this.projects) {
             totalClasses += project.classes.length;
             documentedClasses += project.classes.filter(c => c.documentation).length;
         }
-        
+
         return totalClasses > 0 ? Math.round((documentedClasses / totalClasses) * 100) : 100;
     }
 
@@ -897,9 +897,9 @@ class DocumentationAgent {
     renderTemplate(template, data) {
         // Simple template rendering for demonstration
         // In a real implementation, you'd use a proper templating engine like Handlebars
-        
+
         let result = template;
-        
+
         // Replace simple variables
         for (const [key, value] of Object.entries(data)) {
             const placeholder = `{{${key}}}`;
@@ -907,17 +907,17 @@ class DocumentationAgent {
                 result = result.replace(new RegExp(placeholder, 'g'), value);
             }
         }
-        
+
         // Handle conditional blocks
         result = result.replace(/\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, condition, content) => {
             return data[condition] ? content : '';
         });
-        
+
         // Handle loops
         result = result.replace(/\{\{#each\s+(\w+)\}\}([\s\S]*?)\{\{\/each\}\}/g, (match, arrayName, content) => {
             const array = data[arrayName];
             if (!Array.isArray(array)) return '';
-            
+
             return array.map(item => {
                 let itemContent = content;
                 for (const [key, value] of Object.entries(item)) {
@@ -929,7 +929,7 @@ class DocumentationAgent {
                 return itemContent;
             }).join('');
         });
-        
+
         return result;
     }
 
@@ -938,10 +938,10 @@ class DocumentationAgent {
      */
     async validateDocumentation() {
         console.log('🔍 Validating documentation...');
-        
+
         let errors = 0;
         let warnings = 0;
-        
+
         for (const project of this.projects) {
             // Check README exists
             const readmePath = path.join(project.path, 'README.md');
@@ -949,24 +949,24 @@ class DocumentationAgent {
                 console.error(`  ❌ Missing README.md for ${project.name}`);
                 errors++;
             }
-            
+
             // Check API docs exist
             const apiPath = path.join(project.path, 'docs', 'api', 'index.md');
             if (!fs.existsSync(apiPath)) {
                 console.warn(`  ⚠️  Missing API docs for ${project.name}`);
                 warnings++;
             }
-            
+
             // Check class documentation coverage
             const documentedClasses = project.classes.filter(c => c.documentation).length;
             const coverage = project.classes.length > 0 ? (documentedClasses / project.classes.length) * 100 : 100;
-            
+
             if (coverage < this.config.quality.coverageThreshold * 100) {
                 console.warn(`  ⚠️  Low documentation coverage for ${project.name}: ${coverage.toFixed(1)}%`);
                 warnings++;
             }
         }
-        
+
         if (errors > 0) {
             console.error(`❌ Validation failed with ${errors} errors and ${warnings} warnings`);
         } else if (warnings > 0) {
@@ -1076,4 +1076,4 @@ if (require.main === module) {
     agent.generateDocumentation().catch(console.error);
 }
 
-module.exports = DocumentationAgent; 
+module.exports = DocumentationAgent;

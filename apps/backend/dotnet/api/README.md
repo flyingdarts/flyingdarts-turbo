@@ -1,8 +1,8 @@
-# Flying Darts X01 Games API
+# Flyingdarts X01 Games API
 
 ## Overview
 
-The Flying Darts X01 Games API is a .NET 8 AWS Lambda function that provides real-time WebSocket-based game management for X01 darts games. This service handles game creation, player joining, and score tracking through WebSocket connections, enabling multiplayer darts gameplay in the Flying Darts Turbo platform.
+The Flyingdarts X01 Games API is a .NET 8 AWS Lambda function that provides real-time WebSocket-based game management for X01 darts games. This service handles game creation, player joining, and score tracking through WebSocket connections, enabling multiplayer darts gameplay in the Flyingdarts Turbo platform.
 
 This API is responsible for:
 - Managing X01 game sessions through WebSocket connections
@@ -382,4 +382,4 @@ The API supports standard X01 darts game rules:
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.

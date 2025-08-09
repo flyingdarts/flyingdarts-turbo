@@ -1,8 +1,8 @@
-# Flying Darts Friends API
+# Flyingdarts Friends API
 
 ## Overview
 
-The Flying Darts Friends API is a .NET 8 AWS Lambda function that provides comprehensive friend management functionality for the Flying Darts gaming platform. This service handles friend requests, user relationships, and social features that enable players to connect, invite friends to games, and manage their social network within the platform.
+The Flyingdarts Friends API is a .NET 8 AWS Lambda function that provides comprehensive friend management functionality for the Flyingdarts gaming platform. This service handles friend requests, user relationships, and social features that enable players to connect, invite friends to games, and manage their social network within the platform.
 
 The API is built using a clean architecture approach with CQRS (Command Query Responsibility Segregation) pattern, leveraging AWS DynamoDB for data persistence and AWS Lambda for serverless execution.
 
@@ -262,4 +262,4 @@ dotnet test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.
