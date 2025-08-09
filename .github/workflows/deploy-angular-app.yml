@@ -12,14 +12,14 @@ on:
         required: true
         type: string
     secrets:
-      AWS_ACCESS_KEY_ID:
-        description: "AWS Access Key ID"
-        required: true
-      AWS_SECRET_ACCESS_KEY:
-        description: "AWS Secret Access Key"
-        required: true
       AWS_REGION:
         description: "AWS Region"
+        required: true
+      AWS_DEPLOYMENT_ROLE_ARN:
+        description: "AWS Deployment Role ARN used for deploying to S3"
+        required: true
+      AWS_CLOUDFRONT_DISTRIBUTION_ID:
+        description: "AWS CloudFront Distribution for invalidating the cache"
         required: true
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Download Lambda package from specific workflow run
+      - name: Download Angular package from specific workflow run
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.project-name }}-${{ inputs.environment }}
@@ -44,7 +44,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to S3
-        run: aws s3 sync ./dist/${{ inputs.project-name }} s3://flyingdarts-v2-bucket-${{ inputs.environment }} --delete
+        run: aws s3 sync ./dist/${{ inputs.project-name }} s3://webappflyingdartsbucket${{ inputs.environment }} --delete
 
       - name: Purge CloudFront cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_DEVELOPMENT }} --paths "/*"

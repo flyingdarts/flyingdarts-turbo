@@ -1,5 +1,5 @@
 using Amazon.DynamoDBv2.DataModel;
-using Flyingdarts.Backend.Games.X01.Api.Requests.Create;
+using Flyingdarts.Backend.Api.Requests.Create;
 using Flyingdarts.Connection.Services;
 using Flyingdarts.DynamoDb.Service;
 using Flyingdarts.Meetings.Service.Factories;
@@ -10,7 +10,7 @@ using Flyingdarts.Metadata.Services.Services.X01;
 using Flyingdarts.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Flyingdarts.Backend.Games.X01.Api;
+namespace Flyingdarts.Backend.Api;
 
 /// <summary>
 /// Factory class for creating the service provider.

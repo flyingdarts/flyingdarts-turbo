@@ -1,8 +1,8 @@
 ﻿using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Backend.Games.X01.Api.Models;
+using Flyingdarts.Backend.Api.Models;
 using MediatR;
 
-namespace Flyingdarts.Backend.Games.X01.Api.Requests.Score;
+namespace Flyingdarts.Backend.Api.Requests.Score;
 
 /// <summary>
 /// Command for creating a score entry in an X01 game.

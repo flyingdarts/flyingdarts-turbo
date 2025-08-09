@@ -1,4 +1,4 @@
-namespace Flyingdarts.CDK.Constructs.v2;
+namespace Flyingdarts.CDK.Constructs;
 
 public class ApiGatewayConstruct : Construct
 {
@@ -8,52 +8,53 @@ public class ApiGatewayConstruct : Construct
 
     public WebSocketApi WebSocketApi { get; }
     public WebSocketStage WebSocketStage { get; }
+    public string WebSocketApiUrl => WebSocketStage.Url;
+    public string FriendsApiUrl => FriendsApi.Url;
 
-    public ApiGatewayConstruct(
-        Construct scope,
-        string id,
-        string environment,
-        LambdaConstruct lambdaConstruct,
-        AuthorizersConstruct authorizersConstruct
-    )
+    public ApiGatewayConstruct(Construct scope, string id, ApiGatewayConstructProps props)
         : base(scope, id)
     {
         #region Friends
         FriendsApi = new RestApi(
             this,
-            $"Flyingdarts-Backend-Friends-Api-{environment}",
+            props.GetResourceIdentifier(nameof(FriendsApi)),
             new RestApiProps
             {
-                RestApiName = $"Flyingdarts.Backend.Friends.Api.{environment}",
+                RestApiName = $"Flyingdarts.Backend.Friends.Api.{props.DeploymentEnvironment.Name}",
                 ApiKeySourceType = ApiKeySourceType.HEADER,
                 DefaultCorsPreflightOptions = new CorsOptions
                 {
                     AllowOrigins = Cors.ALL_ORIGINS,
                     AllowMethods = Cors.ALL_METHODS,
-                    AllowHeaders = new[] { "Content-Type", "Authorization" },
+                    AllowHeaders = ["Content-Type", "Authorization"],
                 },
             }
         );
 
         FriendsDeployment = new Deployment(
             this,
-            $"Flyingdarts-Backend-Friends-Api-Deployment-{environment}",
-            new DeploymentProps { Api = FriendsApi, Description = $"A restfull {environment} Friends api for flyingdarts" }
+            props.GetResourceIdentifier(nameof(FriendsDeployment)),
+            new DeploymentProps
+            {
+                Api = FriendsApi,
+                Description = $"A restfull Friends api for flyingdarts",
+            }
         );
 
         FriendsStage = new Stage(
             this,
-            $"Flyingdarts-Backend-Friends-Api-Stage-{environment}",
+            props.GetResourceIdentifier(nameof(FriendsStage)),
             new StageProps
             {
                 Deployment = FriendsDeployment,
-                Description = $"deployment for the restull {environment} Friends api",
-                StageName = environment,
+                Description =
+                    $"Deployment for the restful {props.DeploymentEnvironment.Name} Friends api",
+                StageName = props.DeploymentEnvironment.Name,
             }
         );
 
         FriendsApi.AddUsagePlan(
-            $"Flyingdarts-Backend-Friends-Api-UsagePlan-{environment}",
+            props.GetResourceIdentifier($"{nameof(FriendsApi)}-{nameof(UsagePlan)}"),
             new UsagePlanProps
             {
                 ApiStages = new[]
@@ -70,70 +71,76 @@ public class ApiGatewayConstruct : Construct
                 DefaultMethodOptions = new MethodOptions
                 {
                     AuthorizationType = AuthorizationType.CUSTOM,
-                    Authorizer = authorizersConstruct.UsersAuthorizer,
+                    Authorizer = props.AuthorizersConstruct.RestApiAuthorizer,
                 },
             }
         );
         // GET /friends - Get user's friends list
-        friends.AddMethod("GET", new LambdaIntegration(lambdaConstruct.FriendsApi));
+        friends.AddMethod("GET", new LambdaIntegration(props.LambdaConstruct.Friends));
 
         // GET /user - Get user dto
         var user = friends.AddResource("user");
-        user.AddMethod("GET", new LambdaIntegration(lambdaConstruct.FriendsApi));
+        user.AddMethod("GET", new LambdaIntegration(props.LambdaConstruct.Friends));
 
         // POST /friends/search - Search for users to add as friends
         var friendsSearch = friends.AddResource("search");
-        friendsSearch.AddMethod("POST", new LambdaIntegration(lambdaConstruct.FriendsApi));
+        friendsSearch.AddMethod("POST", new LambdaIntegration(props.LambdaConstruct.Friends));
 
         // POST /friends/request - Send friend request
         var friendsRequest = friends.AddResource("request");
-        friendsRequest.AddMethod("POST", new LambdaIntegration(lambdaConstruct.FriendsApi));
+        friendsRequest.AddMethod("POST", new LambdaIntegration(props.LambdaConstruct.Friends));
 
         // PUT /friends/request/{requestId} - Accept/decline friend request
         var friendsRequestWithId = friendsRequest.AddResource("{requestId}");
-        friendsRequestWithId.AddMethod("PUT", new LambdaIntegration(lambdaConstruct.FriendsApi));
+        friendsRequestWithId.AddMethod("PUT", new LambdaIntegration(props.LambdaConstruct.Friends));
 
         // DELETE /friends/{friendId} - Remove friend
         var friendsWithId = friends.AddResource("{friendId}");
-        friendsWithId.AddMethod("DELETE", new LambdaIntegration(lambdaConstruct.FriendsApi));
+        friendsWithId.AddMethod("DELETE", new LambdaIntegration(props.LambdaConstruct.Friends));
 
         // GET /friends/requests - Get pending friend requests
         var friendsRequests = friends.AddResource("requests");
-        friendsRequests.AddMethod("GET", new LambdaIntegration(lambdaConstruct.FriendsApi));
+        friendsRequests.AddMethod("GET", new LambdaIntegration(props.LambdaConstruct.Friends));
 
         // POST /friends/invite - Invite friend to game
         var friendsInvite = friends.AddResource("invite");
-        friendsInvite.AddMethod("POST", new LambdaIntegration(lambdaConstruct.FriendsApi));
+        friendsInvite.AddMethod("POST", new LambdaIntegration(props.LambdaConstruct.Friends));
         #endregion
 
         #region WebSocketApi
 
         WebSocketApi = new WebSocketApi(
             this,
-            $"Flyingdarts-Backend-Api-{environment}",
+            props.GetResourceIdentifier(nameof(WebSocketApi)),
             new WebSocketApiProps
             {
-                ApiName = $"Flyingdarts.Backend.Api.{environment}",
+                ApiName = $"Flyingdarts.Backend.Api.{props.DeploymentEnvironment.Name}",
                 ConnectRouteOptions = new WebSocketRouteOptions
                 {
                     Integration = new WebSocketLambdaIntegration(
-                        $"Flyingdarts-Backend-Api-OnConnect-Integration-{environment}",
-                        lambdaConstruct.SignallingApi
+                        props.GetResourceIdentifier(
+                            $"ConnectRouteOptions-{nameof(WebSocketLambdaIntegration)}"
+                        ),
+                        props.LambdaConstruct.Signalling
                     ),
-                    Authorizer = authorizersConstruct.WebSocketApiConnectAuthorizer,
+                    Authorizer = props.AuthorizersConstruct.WebSocketApiConnectAuthorizer,
                 },
                 DefaultRouteOptions = new WebSocketRouteOptions
                 {
                     Integration = new WebSocketLambdaIntegration(
-                        $"Flyingdarts-Backend-Api-OnDefault-Integration-{environment}",
-                        lambdaConstruct.SignallingApi
+                        props.GetResourceIdentifier(
+                            $"DefaultRouteOptions-{nameof(WebSocketLambdaIntegration)}"
+                        ),
+                        props.LambdaConstruct.Signalling
                     ),
                 },
                 DisconnectRouteOptions = new WebSocketRouteOptions
                 {
                     Integration = new WebSocketLambdaIntegration(
-                        $"Flyingdarts-Backend-Api-OnDisconnect-Integration-{environment}",
-                        lambdaConstruct.SignallingApi
+                        props.GetResourceIdentifier(
+                            $"DisconnectRouteOptions-{nameof(WebSocketLambdaIntegration)}"
+                        ),
+                        props.LambdaConstruct.Signalling
                     ),
                 },
             }
@@ -141,31 +148,30 @@ public class ApiGatewayConstruct : Construct
 
         WebSocketStage = new WebSocketStage(
             this,
-            $"Flyingdarts-Backend-Api-Stage-{environment}",
+            props.GetResourceIdentifier(nameof(WebSocketStage)),
             new WebSocketStageProps
             {
                 WebSocketApi = WebSocketApi,
-                StageName = environment,
+                StageName = props.DeploymentEnvironment.Name,
                 AutoDeploy = true,
             }
         );
 
         // for authentication
-        lambdaConstruct.AuthLambda.AddEnvironment(
+        props.LambdaConstruct.Authorizer.AddEnvironment(
             "ConnectMethodArn",
             $"arn:aws:execute-api:{System.Environment.GetEnvironmentVariable("AWS_REGION")!}:{System.Environment.GetEnvironmentVariable("AWS_ACCOUNT")!}:{WebSocketApi.ApiId}/Development/$connect"
         );
 
-        // For chat functionality
-        lambdaConstruct.SignallingApi.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
+        props.LambdaConstruct.Signalling.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
 
-        // Grant SignallingApi permission to invoke WebSocket API
-        lambdaConstruct.SignallingApi.AddToRolePolicy(
+        // Allow signalling api to send messages to clients
+        props.LambdaConstruct.Signalling.AddToRolePolicy(
             new PolicyStatement(
                 new PolicyStatementProps
                 {
-                    Actions = new[] { "execute-api:ManageConnections" },
-                    Resources = new[] { $"arn:aws:execute-api:*:*:{WebSocketApi.ApiId}/*" },
+                    Actions = ["execute-api:ManageConnections"],
+                    Resources = [$"arn:aws:execute-api:*:*:{WebSocketApi.ApiId}/*"],
                 }
             )
         );
@@ -175,7 +181,12 @@ public class ApiGatewayConstruct : Construct
             "games/x01/create",
             new WebSocketRouteOptions
             {
-                Integration = new WebSocketLambdaIntegration($"Games-Create-Integration-{environment}", lambdaConstruct.GamesX01Api),
+                Integration = new WebSocketLambdaIntegration(
+                    props.GetResourceIdentifier(
+                        $"Games-X01-Create-{nameof(WebSocketLambdaIntegration)}"
+                    ),
+                    props.LambdaConstruct.Backend
+                ),
                 ReturnResponse = true,
             }
         );
@@ -185,7 +196,12 @@ public class ApiGatewayConstruct : Construct
             "games/x01/join",
             new WebSocketRouteOptions
             {
-                Integration = new WebSocketLambdaIntegration($"Games-Join-Integration-{environment}", lambdaConstruct.GamesX01Api),
+                Integration = new WebSocketLambdaIntegration(
+                    props.GetResourceIdentifier(
+                        $"Games-X01-Join-{nameof(WebSocketLambdaIntegration)}"
+                    ),
+                    props.LambdaConstruct.Backend
+                ),
                 ReturnResponse = true,
             }
         );
@@ -195,35 +211,40 @@ public class ApiGatewayConstruct : Construct
             "games/x01/score",
             new WebSocketRouteOptions
             {
-                Integration = new WebSocketLambdaIntegration($"Games-Score-Integration-{environment}", lambdaConstruct.GamesX01Api),
+                Integration = new WebSocketLambdaIntegration(
+                    props.GetResourceIdentifier(
+                        $"Games-X01-Score-{nameof(WebSocketLambdaIntegration)}"
+                    ),
+                    props.LambdaConstruct.Backend
+                ),
                 ReturnResponse = true,
             }
         );
 
-        lambdaConstruct.GamesX01Api.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
+        props.LambdaConstruct.Backend.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
 
         // Grant GamesX01Api permission to invoke WebSocket API
-        lambdaConstruct.GamesX01Api.AddToRolePolicy(
+        props.LambdaConstruct.Backend.AddToRolePolicy(
             new PolicyStatement(
                 new PolicyStatementProps
                 {
-                    Actions = new[] { "execute-api:ManageConnections" },
-                    Resources = new[] { $"arn:aws:execute-api:*:*:{WebSocketApi.ApiId}/*" },
+                    Actions = ["execute-api:ManageConnections"],
+                    Resources = [$"arn:aws:execute-api:*:*:{WebSocketApi.ApiId}/*"],
                 }
             )
         );
 
         #endregion
 
-        lambdaConstruct.FriendsApi.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
+        props.LambdaConstruct.Friends.AddEnvironment("WebSocketApiUrl", WebSocketStage.Url);
 
         // Grant FriendsApi permission to invoke WebSocket API
-        lambdaConstruct.FriendsApi.AddToRolePolicy(
+        props.LambdaConstruct.Friends.AddToRolePolicy(
             new PolicyStatement(
                 new PolicyStatementProps
                 {
-                    Actions = new[] { "execute-api:ManageConnections" },
-                    Resources = new[] { $"arn:aws:execute-api:*:*:{WebSocketApi.ApiId}/*" },
+                    Actions = ["execute-api:ManageConnections"],
+                    Resources = [$"arn:aws:execute-api:*:*:{WebSocketApi.ApiId}/*"],
                 }
             )
         );

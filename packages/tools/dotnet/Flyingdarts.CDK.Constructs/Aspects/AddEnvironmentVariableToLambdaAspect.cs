@@ -1,7 +1,4 @@
-using Amazon.JSII.Runtime.Deputy;
-using Constructs;
-
-namespace Flyingdarts.CDK.Constructs.v2.Aspects;
+namespace Flyingdarts.CDK.Constructs;
 
 public class AddEnvironmentVariableToLambdaAspect : DeputyBase, IAspect
 {

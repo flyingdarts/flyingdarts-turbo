@@ -1,6 +1,13 @@
 {
-  "printWidth": 140,
+  "printWidth": 100,
   "tabWidth": 4,
   "useTabs": false,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "exclude": [
+    "**/obj/**",
+    "**/bin/**",
+    "**/node_modules/**",
+    "**/packages/**/obj/**",
+    "**/packages/**/bin/**"
+  ]
 }
