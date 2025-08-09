@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "api_sdk": "*",
-    "authress_login": "*",
+    "flyingdarts_authress_login": "*",
     "ui": "*",
     "internationalization": "*",
     "websocket": "*",
