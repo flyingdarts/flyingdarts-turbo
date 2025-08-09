@@ -17,7 +17,7 @@ jobs:
   build-auth-dev:
     uses: ./.github/workflows/build-dotnet-lambda.yml
     with:
-      project-name: "flyingdarts.backend.auth"
+      project-name: "flyingdarts.backend.authorizer"
       project-directory: "apps/backend/dotnet/auth"
       lambda-function-name: "Flyingdarts-Backend-Authorizer-Development"
       dotnet-version: "8.0.x"
@@ -26,7 +26,7 @@ jobs:
     needs: build-auth-dev
     uses: ./.github/workflows/deploy-lambda.yml
     with:
-      lambda-function-name: "Flyingdarts-Backend-Auth-Development"
-      artifact-name: "Flyingdarts-Backend-Auth-Development-package"
+      lambda-function-name: "Flyingdarts-Backend-Authorizer-Development"
+      artifact-name: "Flyingdarts-Backend-Authorizer-Development-package"
       environment: "development"
     secrets: inherit
