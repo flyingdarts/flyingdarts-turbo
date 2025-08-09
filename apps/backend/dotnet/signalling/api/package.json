@@ -1,7 +1,7 @@
 {
-  "name": "flyingdarts.backend.signalling.api",
+  "name": "flyingdarts.signalling.api",
   "version": "1.0.0",
-  "description": "Flyingdarts Backend Signalling API",
+  "description": "Flyingdarts Signalling API Lambda Function",
   "private": true,
   "scripts": {
     "restore": "dotnet restore",
