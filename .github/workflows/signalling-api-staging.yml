@@ -10,7 +10,7 @@ on:
       - "packages/backend/dotnet/**"
       - ".github/workflows/signalling-api-staging.yml"
 jobs:
-  build-signalling-api-dev:
+  build-signalling-api-staging:
     uses: ./.github/workflows/build-dotnet-lambda.yml
     with:
       project-name: "flyingdarts.signalling.api"
@@ -19,8 +19,8 @@ jobs:
       dotnet-version: "8.0.x"
       node-version: "22"
 
-  deploy-signalling-api-dev:
-    needs: build-signalling-api-dev
+  deploy-signalling-api-staging:
+    needs: build-signalling-api-staging
     uses: ./.github/workflows/deploy-lambda.yml
     with:
       lambda-function-name: "Flyingdarts-Signalling-Api-Staging"
