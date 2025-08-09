@@ -10,6 +10,23 @@ on:
       - ".github/workflows/main_dotnet_dev.yml"
       - "flyingdarts.sln"
 jobs:
+  build-authorizer-dev:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.backend.authorizer"
+      project-directory: "apps/backend/dotnet/authorizer"
+      lambda-function-name: "Flyingdarts-Backend-Authorizer-Development"
+      dotnet-version: "8.0.x"
+
+  deploy-authorizer-dev:
+    needs: build-authorizer-dev
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Backend-Authorizer-Development"
+      artifact-name: "Flyingdarts-Backend-Authorizer-Development-package"
+      environment: "development"
+    secrets: inherit
+
   build-signalling-api-dev:
     uses: ./.github/workflows/build-dotnet-lambda.yml
     with:
