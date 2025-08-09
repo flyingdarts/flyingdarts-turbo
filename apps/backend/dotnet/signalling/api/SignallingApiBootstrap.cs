@@ -21,7 +21,9 @@ public class SignallingApiBootstrap : ApiGatewayLambdaBootstrap<IRequest<APIGate
         _mediator = mediator;
     }
 
-    protected override IRequest<APIGatewayProxyResponse> ConvertRequest(APIGatewayProxyRequest request)
+    protected override IRequest<APIGatewayProxyResponse> ConvertRequest(
+        APIGatewayProxyRequest request
+    )
     {
         if (request.RequestContext?.RouteKey == null)
         {
@@ -35,17 +37,25 @@ public class SignallingApiBootstrap : ApiGatewayLambdaBootstrap<IRequest<APIGate
         {
             SignallingApiWebSocketMethods.Connect => ConvertConnectRequest(request, serializer),
             SignallingApiWebSocketMethods.Default => ConvertDefaultRequest(request, serializer),
-            SignallingApiWebSocketMethods.Disconnect => ConvertDisconnectRequest(request, serializer),
+            SignallingApiWebSocketMethods.Disconnect => ConvertDisconnectRequest(
+                request,
+                serializer
+            ),
             _ => throw new ArgumentException($"Unknown route key: {requestContext.RouteKey}"),
         };
     }
 
-    private IRequest<APIGatewayProxyResponse> ConvertConnectRequest(APIGatewayProxyRequest request, DefaultLambdaJsonSerializer serializer)
+    private IRequest<APIGatewayProxyResponse> ConvertConnectRequest(
+        APIGatewayProxyRequest request,
+        DefaultLambdaJsonSerializer serializer
+    )
     {
         return new OnConnectCommand
         {
             ConnectionId = request.RequestContext!.ConnectionId ?? string.Empty,
-            AuthProviderUserId = request.RequestContext!.Authorizer?.GetValueOrDefault("UserId")?.ToString() ?? string.Empty,
+            AuthProviderUserId =
+                request.RequestContext!.Authorizer?.GetValueOrDefault("UserId")?.ToString()
+                ?? string.Empty,
             AuthressToken = NormalizeAuthressToken(request.QueryStringParameters["idToken"]),
         };
     }
@@ -64,7 +74,10 @@ public class SignallingApiBootstrap : ApiGatewayLambdaBootstrap<IRequest<APIGate
         return authressToken;
     }
 
-    private IRequest<APIGatewayProxyResponse> ConvertDefaultRequest(APIGatewayProxyRequest request, DefaultLambdaJsonSerializer serializer)
+    private IRequest<APIGatewayProxyResponse> ConvertDefaultRequest(
+        APIGatewayProxyRequest request,
+        DefaultLambdaJsonSerializer serializer
+    )
     {
         var defaultCommand = request.To<OnDefaultCommand>(serializer);
         if (defaultCommand?.Message == null)
@@ -78,9 +91,10 @@ public class SignallingApiBootstrap : ApiGatewayLambdaBootstrap<IRequest<APIGate
         var webSocketApiUrl = Environment.GetEnvironmentVariable("WebSocketApiUrl");
         if (!string.IsNullOrEmpty(webSocketApiUrl))
         {
-            defaultCommand.Message.ApiGatewayManagementApiClient = new AmazonApiGatewayManagementApiClient(
-                new AmazonApiGatewayManagementApiConfig { ServiceURL = webSocketApiUrl }
-            );
+            defaultCommand.Message.ApiGatewayManagementApiClient =
+                new AmazonApiGatewayManagementApiClient(
+                    new AmazonApiGatewayManagementApiConfig { ServiceURL = webSocketApiUrl }
+                );
         }
 
         return defaultCommand.Message;
@@ -91,6 +105,9 @@ public class SignallingApiBootstrap : ApiGatewayLambdaBootstrap<IRequest<APIGate
         DefaultLambdaJsonSerializer serializer
     )
     {
-        return new OnDisconnectCommand { ConnectionId = request.RequestContext!.ConnectionId ?? string.Empty };
+        return new OnDisconnectCommand
+        {
+            ConnectionId = request.RequestContext!.ConnectionId ?? string.Empty,
+        };
     }
 }
