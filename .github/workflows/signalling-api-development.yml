@@ -8,7 +8,7 @@ on:
     paths:
       - "apps/backend/dotnet/signalling/**"
       - "packages/backend/dotnet/**"
-      - ".github/workflows/signalling-api-dev.yml"
+      - ".github/workflows/signalling-api-development.yml"
 jobs:
   build-signalling-api-dev:
     uses: ./.github/workflows/build-dotnet-lambda.yml

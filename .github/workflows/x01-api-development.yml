@@ -3,23 +3,15 @@ name: X01 API Lambda (Development)
 on:
   workflow_call:
   push:
+    branches:
+      - development
     paths:
       - "apps/backend/dotnet/api/**"
       - "packages/backend/dotnet/**"
-
-  pull_request:
-    paths:
-      - "apps/backend/dotnet/api/**"
-      - "packages/backend/dotnet/**"
+      - ".github/workflows/x01-api-development.yml"
 
 jobs:
-  check-changes:
-    uses: ./.github/workflows/beachball-checkchange.yml
-    with:
-      project-name: "flyingdarts.backend.api"
-      node-version: "22"
-
-  build-x01-api-dev:
+  build-x01-api-development:
     uses: ./.github/workflows/build-dotnet-lambda.yml
     with:
       project-name: "flyingdarts.backend.api"
@@ -28,8 +20,8 @@ jobs:
       dotnet-version: "8.0.x"
       node-version: "22"
 
-  deploy-x01-api-dev:
-    needs: build-x01-api-dev
+  deploy-x01-api-development:
+    needs: build-x01-api-development
     uses: ./.github/workflows/deploy-lambda.yml
     with:
       lambda-function-name: "Flyingdarts-Backend-Api-Development"
