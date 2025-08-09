@@ -1,8 +1,8 @@
-# Flying Darts Notify Rooms Service
+# Flyingdarts Notify Rooms Service
 
 ## Overview
 
-The Flying Darts Notify Rooms Service is a .NET 8 library that provides real-time notification capabilities for the Flying Darts gaming platform. This service enables broadcasting messages to multiple WebSocket connections through AWS API Gateway, facilitating real-time communication between players in darts games.
+The Flyingdarts Notify Rooms Service is a .NET 8 library that provides real-time notification capabilities for the Flyingdarts gaming platform. This service enables broadcasting messages to multiple WebSocket connections through AWS API Gateway, facilitating real-time communication between players in darts games.
 
 The service is designed to handle concurrent message delivery to multiple connections with robust error handling, timeout management, and connection state monitoring. It integrates seamlessly with AWS API Gateway WebSocket APIs and provides a clean abstraction for sending notifications to game rooms and player groups.
 
@@ -342,4 +342,4 @@ dotnet test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

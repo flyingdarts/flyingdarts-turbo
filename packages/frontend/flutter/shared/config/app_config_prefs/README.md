@@ -1,8 +1,8 @@
-# Flying Darts App Config Prefs
+# Flyingdarts App Config Prefs
 
 ## Overview
 
-The Flying Darts App Config Prefs is a Flutter package that provides a SharedPreferences-based implementation of the configuration management system for the Flying Darts gaming platform. This package enables Flutter applications to persist and retrieve configuration data using Flutter's SharedPreferences storage with type safety and fallback support.
+The Flyingdarts App Config Prefs is a Flutter package that provides a SharedPreferences-based implementation of the configuration management system for the Flyingdarts gaming platform. This package enables Flutter applications to persist and retrieve configuration data using Flutter's SharedPreferences storage with type safety and fallback support.
 
 The package is built on top of the App Config Core package, extending its abstract configuration classes with a concrete SharedPreferences implementation. It provides a robust foundation for implementing persistent configuration storage in Flutter apps with automatic JSON serialization, caching, and fallback value support.
 
@@ -502,4 +502,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

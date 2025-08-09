@@ -1,8 +1,8 @@
-# Flying Darts Authress Login
+# Flyingdarts Authress Login
 
 ## Overview
 
-The Flying Darts Authress Login is a Flutter package that provides comprehensive authentication integration with the [Authress](https://authress.io) authentication service. This package offers a provider-based approach with Go Router integration for seamless authentication flows in Flutter applications.
+The Flyingdarts Authress Login is a Flutter package that provides comprehensive authentication integration with the [Authress](https://authress.io) authentication service. This package offers a provider-based approach with Go Router integration for seamless authentication flows in Flutter applications.
 
 The package is built using modern Flutter patterns with dependency injection, secure token management, and comprehensive error handling. It provides a robust foundation for implementing authentication in Flutter apps with support for multiple platforms including iOS, Android, and Web.
 
@@ -592,4 +592,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms. 
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms. 

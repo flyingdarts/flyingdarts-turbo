@@ -1,8 +1,8 @@
-# Flying Darts Language Feature
+# Flyingdarts Language Feature
 
 ## Overview
 
-The Flying Darts Language Feature is a Flutter package that provides comprehensive language and localization management for the Flying Darts gaming platform. This package enables Flutter applications to handle multiple languages, speech-to-text functionality, and user language preferences through a clean, state-managed architecture.
+The Flyingdarts Language Feature is a Flutter package that provides comprehensive language and localization management for the Flyingdarts gaming platform. This package enables Flutter applications to handle multiple languages, speech-to-text functionality, and user language preferences through a clean, state-managed architecture.
 
 The package is built using modern Flutter patterns with BLoC state management, dependency injection, and speech recognition capabilities. It provides a robust foundation for implementing multi-language support in Flutter apps with automatic language detection and user preference persistence.
 
@@ -448,4 +448,4 @@ Widget defaultLanguageDialog(BuildContext context) {
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.
