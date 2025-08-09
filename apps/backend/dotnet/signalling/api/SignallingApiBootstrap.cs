@@ -56,22 +56,8 @@ public class SignallingApiBootstrap : ApiGatewayLambdaBootstrap<IRequest<APIGate
             AuthProviderUserId =
                 request.RequestContext!.Authorizer?.GetValueOrDefault("UserId")?.ToString()
                 ?? string.Empty,
-            AuthressToken = NormalizeAuthressToken(request.QueryStringParameters["idToken"]),
+            AuthressToken = request.QueryStringParameters["idToken"],
         };
-    }
-
-    public string NormalizeAuthressToken(string authressToken)
-    {
-        if (string.IsNullOrEmpty(authressToken))
-        {
-            return string.Empty;
-        }
-        if (authressToken.StartsWith("user="))
-        {
-            return authressToken.Substring(5);
-        }
-
-        return authressToken;
     }
 
     private IRequest<APIGatewayProxyResponse> ConvertDefaultRequest(

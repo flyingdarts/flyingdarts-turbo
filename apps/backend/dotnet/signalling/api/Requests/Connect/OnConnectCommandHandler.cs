@@ -137,7 +137,7 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
 
             // Parse the JWT token to extract user information
             var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
+            var jwtToken = handler.ReadJwtToken(NormalizeAuthressToken(token));
 
             var userProfile = new UserProfile();
 
@@ -187,6 +187,20 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
             Console.WriteLine($"[OnConnect] Error creating user profile from token: {ex.Message}");
             throw;
         }
+    }
+
+    private static string NormalizeAuthressToken(string authressToken)
+    {
+        if (string.IsNullOrEmpty(authressToken))
+        {
+            return string.Empty;
+        }
+        if (authressToken.StartsWith("user="))
+        {
+            return authressToken.Substring(5);
+        }
+
+        return authressToken;
     }
 
     private async Task<Guid> EnsureUserHasMeetingRoom(
