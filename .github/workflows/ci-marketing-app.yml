@@ -1,4 +1,4 @@
-name: Main Marketing Workflow (Production-Only)
+name: Main Marketing Workflow
 
 on:
   workflow_call:
