@@ -5,6 +5,7 @@
 The Flyingdarts X01 Games API is a .NET 8 AWS Lambda function that provides real-time WebSocket-based game management for X01 darts games. This service handles game creation, player joining, and score tracking through WebSocket connections, enabling multiplayer darts gameplay in the Flyingdarts Turbo platform.
 
 This API is responsible for:
+
 - Managing X01 game sessions through WebSocket connections
 - Handling real-time game state updates and player interactions
 - Processing game creation, joining, and scoring requests
@@ -31,21 +32,25 @@ This API is responsible for:
 ## Installation
 
 1. Clone the monorepo and navigate to the API:
+
 ```bash
 cd apps/backend/dotnet/api
 ```
 
 2. Restore dependencies:
+
 ```bash
 dotnet restore
 ```
 
 3. Build the project:
+
 ```bash
 dotnet build
 ```
 
 4. Run tests:
+
 ```bash
 dotnet test
 ```
@@ -63,11 +68,13 @@ dotnet run
 ### AWS Lambda Deployment
 
 1. Build for AWS Lambda:
+
 ```bash
 dotnet lambda package
 ```
 
 2. Deploy using AWS CLI or CDK:
+
 ```bash
 aws lambda update-function-code --function-name flyingdarts-x01-api --zip-file lambda.zip
 ```
@@ -77,16 +84,19 @@ aws lambda update-function-code --function-name flyingdarts-x01-api --zip-file l
 The API exposes the following WebSocket endpoints:
 
 #### Create Game
+
 - **Route**: `games/x01/create`
 - **Method**: WebSocket message
 - **Description**: Creates a new X01 game session
 
 #### Join Game
+
 - **Route**: `games/x01/join`
 - **Method**: WebSocket message
 - **Description**: Allows a player to join an existing game
 
 #### Score Update
+
 - **Route**: `games/x01/score`
 - **Method**: WebSocket message
 - **Description**: Records a player's score in the current game
@@ -100,6 +110,7 @@ The API exposes the following WebSocket endpoints:
 The main bootstrap class that handles AWS Lambda initialization and request routing.
 
 **Properties:**
+
 - `IMediator _mediator`: MediatR mediator for handling commands and queries
 
 **Methods:**
@@ -109,12 +120,15 @@ The main bootstrap class that handles AWS Lambda initialization and request rout
 Converts incoming API Gateway requests to appropriate MediatR commands.
 
 **Parameters:**
+
 - `request` (APIGatewayProxyRequest): The incoming API Gateway request
 
 **Returns:**
+
 - `IRequest<APIGatewayProxyResponse>`: MediatR request object
 
 **Throws:**
+
 - `ArgumentException`: When request context is invalid or route key is unknown
 
 ##### `ConvertCreateRequest(APIGatewayProxyRequest request, DefaultLambdaJsonSerializer serializer): IRequest<APIGatewayProxyResponse>`
@@ -122,10 +136,12 @@ Converts incoming API Gateway requests to appropriate MediatR commands.
 Converts create game requests to CreateX01GameCommand.
 
 **Parameters:**
+
 - `request` (APIGatewayProxyRequest): The incoming request
 - `serializer` (DefaultLambdaJsonSerializer): JSON serializer instance
 
 **Returns:**
+
 - `IRequest<APIGatewayProxyResponse>`: CreateX01GameCommand instance
 
 ##### `ConvertJoinRequest(APIGatewayProxyRequest request, DefaultLambdaJsonSerializer serializer): IRequest<APIGatewayProxyResponse>`
@@ -133,10 +149,12 @@ Converts create game requests to CreateX01GameCommand.
 Converts join game requests to JoinX01GameCommand.
 
 **Parameters:**
+
 - `request` (APIGatewayProxyRequest): The incoming request
 - `serializer` (DefaultLambdaJsonSerializer): JSON serializer instance
 
 **Returns:**
+
 - `IRequest<APIGatewayProxyResponse>`: JoinX01GameCommand instance
 
 ##### `ConvertScoreRequest(APIGatewayProxyRequest request, DefaultLambdaJsonSerializer serializer): IRequest<APIGatewayProxyResponse>`
@@ -144,10 +162,12 @@ Converts join game requests to JoinX01GameCommand.
 Converts score update requests to CreateX01ScoreCommand.
 
 **Parameters:**
+
 - `request` (APIGatewayProxyRequest): The incoming request
 - `serializer` (DefaultLambdaJsonSerializer): JSON serializer instance
 
 **Returns:**
+
 - `IRequest<APIGatewayProxyResponse>`: CreateX01ScoreCommand instance
 
 #### `X01ApiWebSocketMethods`
@@ -155,6 +175,7 @@ Converts score update requests to CreateX01ScoreCommand.
 Static class containing WebSocket route constants.
 
 **Constants:**
+
 - `Create` (string): Route for creating new games (`games/x01/create`)
 - `Join` (string): Route for joining existing games (`games/x01/join`)
 - `Score` (string): Route for updating scores (`games/x01/score`)
@@ -164,6 +185,7 @@ Static class containing WebSocket route constants.
 Interface for objects that can establish WebSocket connections.
 
 **Properties:**
+
 - `string ConnectionId` (get; set;): Unique identifier for the WebSocket connection
 
 #### `Connectable`
@@ -171,6 +193,7 @@ Interface for objects that can establish WebSocket connections.
 Base class implementing IConnectable interface.
 
 **Properties:**
+
 - `string ConnectionId` (get; set;): Unique identifier for the WebSocket connection
 
 **Methods:**
@@ -180,6 +203,7 @@ Base class implementing IConnectable interface.
 Checks if the object has a valid connection ID.
 
 **Returns:**
+
 - `bool`: True if ConnectionId is not null or empty
 
 ### Request Models
@@ -189,6 +213,7 @@ Checks if the object has a valid connection ID.
 Command for creating a new X01 game.
 
 **Properties:**
+
 - `string ConnectionId` (get; set;): WebSocket connection identifier
 - `string PlayerId` (get; set;): Player creating the game
 - Additional game creation parameters
@@ -198,6 +223,7 @@ Command for creating a new X01 game.
 Command for joining an existing X01 game.
 
 **Properties:**
+
 - `string ConnectionId` (get; set;): WebSocket connection identifier
 - `string PlayerId` (get; set;): Player joining the game
 - `string GameId` (get; set;): ID of the game to join
@@ -207,6 +233,7 @@ Command for joining an existing X01 game.
 Command for recording a score in an X01 game.
 
 **Properties:**
+
 - `string ConnectionId` (get; set;): WebSocket connection identifier
 - `string PlayerId` (get; set;): Player recording the score
 - `string GameId` (get; set;): ID of the game
@@ -224,6 +251,7 @@ Command for recording a score in an X01 game.
 ### Dependencies
 
 **Internal Dependencies:**
+
 - `Flyingdarts.Lambda.Core`: Core Lambda infrastructure
 - `Flyingdarts.Connection.Services`: WebSocket connection management
 - `Flyingdarts.Core`: Core business logic and extensions
@@ -234,6 +262,7 @@ Command for recording a score in an X01 game.
 - `Flyingdarts.Persistence`: Data persistence layer
 
 **External Dependencies:**
+
 - `Amazon.Lambda.APIGatewayEvents`: API Gateway event types
 - `Amazon.Lambda.RuntimeSupport`: Lambda runtime support
 - `Amazon.Lambda.Serialization.SystemTextJson`: JSON serialization
@@ -259,7 +288,7 @@ api/
 │   ├── Create/                   # Game creation requests
 │   ├── Join/                     # Game joining requests
 │   └── Score/                    # Score update requests
-├── Flyingdarts.Backend.Games.X01.Api.csproj  # Project file
+├── Flyingdarts.Backend.Api.csproj  # Project file
 └── README.md                     # This documentation
 ```
 
@@ -300,6 +329,7 @@ dotnet lambda package
 ### Code Quality
 
 The project uses:
+
 - **StyleCop**: Code style enforcement
 - **FluentValidation**: Request validation
 - **MediatR**: Clean architecture patterns
