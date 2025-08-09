@@ -8,7 +8,9 @@ on:
     paths:
       - "apps/frontend/flutter/**"
       - "packages/frontend/flutter/**"
-
+      - ".github/workflows/main_flutter_dev.yml"
+      - "pubspec.yaml"
+      - "pubspec.lock"
 jobs:
   build-flutter-dev:
     uses: ./.github/workflows/build-flutter.yml

@@ -10,6 +10,7 @@ on:
       - "packages/backend/rust/**"
       - "Cargo.toml"
       - "Cargo.lock"
+      - ".github/workflows/main_rust_dev.yml"
 
 
 env:
