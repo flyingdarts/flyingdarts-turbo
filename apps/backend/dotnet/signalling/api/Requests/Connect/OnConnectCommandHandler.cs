@@ -197,11 +197,14 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         {
             return string.Empty;
         }
+        Console.WriteLine($"[OnConnect] Normalizing token: {authressToken}");
         if (authressToken.StartsWith("user="))
         {
-            return authressToken.Substring(5);
+            var token = authressToken.Replace("user=", "");
+            Console.WriteLine($"[OnConnect] Normalized token: {token}");
+            return token;
         }
-
+        Console.WriteLine($"[OnConnect] Token is not prefixed with 'user='");
         return authressToken;
     }
 
