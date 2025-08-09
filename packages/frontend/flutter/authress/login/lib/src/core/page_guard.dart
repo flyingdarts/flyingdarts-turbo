@@ -1,4 +1,4 @@
-import 'package:authress_login/authress_login.dart';
+import 'package:flyingdarts_authress_login/flyingdarts_authress_login.dart';
 import 'package:flutter/material.dart';
 
 /// Widget that shows different content based on authentication state
@@ -68,8 +68,7 @@ class AuthressPageGuard extends StatelessWidget {
 
     // Check authentication
     if (!authContext.isAuthenticated) {
-      return unauthenticatedChild ??
-          const Center(child: Text('Please log in to access this content'));
+      return unauthenticatedChild ?? const Center(child: Text('Please log in to access this content'));
     }
 
     // Check role requirements

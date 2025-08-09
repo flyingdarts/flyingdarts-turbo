@@ -1,0 +1,28 @@
+name: Main Marketing Workflow (Production-Only)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - production
+    paths:
+      - "apps/frontend/react/marketing/**"
+      - ".github/workflows/ci-marketing-app.yml"
+jobs:
+  build-marketing-app:
+    uses: ./.github/workflows/build-react-app.yml
+    with:
+      project-name: "flyingdarts-marketing"
+      project-directory: "apps/frontend/react/marketing"
+      node-version: "22"
+
+  deploy-marketing-app:
+    needs: build-marketing-app
+    uses: ./.github/workflows/deploy-react-app.yml
+    with:
+      project-name: "flyingdarts-marketing"
+      app-name: "marketing"
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEPLOYMENT_ROLE_ARN: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
+      AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_MARKETING }}

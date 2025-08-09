@@ -1,8 +1,8 @@
-# Flying Darts WebSocket
+# Flyingdarts WebSocket
 
 ## Overview
 
-The Flying Darts WebSocket is a Flutter package that provides comprehensive WebSocket communication capabilities for the Flying Darts gaming platform. This package enables Flutter applications to establish real-time bidirectional communication with backend services using WebSocket connections with authentication, automatic reconnection, and structured message handling.
+The Flyingdarts WebSocket is a Flutter package that provides comprehensive WebSocket communication capabilities for the Flyingdarts gaming platform. This package enables Flutter applications to establish real-time bidirectional communication with backend services using WebSocket connections with authentication, automatic reconnection, and structured message handling.
 
 The package is built using Flutter's WebSocket capabilities with RxDart for reactive programming, dependency injection with GetIt, and authentication integration with Authress. It provides a robust foundation for implementing real-time features in Flutter apps such as live game updates, chat functionality, notifications, and multiplayer game synchronization. The package includes comprehensive error handling, automatic reconnection logic, and structured message types for different game actions.
 
@@ -25,7 +25,7 @@ The package is built using Flutter's WebSocket capabilities with RxDart for reac
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Authress Login**: Access to the authress_login package
 - **RxDart**: ^0.28.0 for reactive programming
 - **Web Socket Channel**: ^3.0.3 for WebSocket communication
@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flying Darts',
+      title: 'Flyingdarts',
       home: WebSocketExample(),
     );
   }
@@ -755,4 +755,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

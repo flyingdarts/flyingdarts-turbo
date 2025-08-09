@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:authress_login/src/core/auth_client.dart';
-import 'package:authress_login/src/models/auth_config.dart';
-import 'package:authress_login/src/models/auth_state.dart';
-import 'package:authress_login/src/models/user_profile.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flyingdarts_authress_login/src/core/auth_client.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_config.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_state.dart';
+import 'package:flyingdarts_authress_login/src/models/user_profile.dart';
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
 import 'package:shared_preferences/shared_preferences.dart';

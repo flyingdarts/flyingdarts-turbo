@@ -1,14 +1,14 @@
-# Flying Darts Splash Feature
+# Flyingdarts Splash Feature
 
 ## Overview
 
-The Flying Darts Splash Feature is a Flutter package that provides a splash screen implementation for the Flying Darts gaming platform. This package enables Flutter applications to display a branded splash screen during app initialization with automatic navigation to the main application.
+The Flyingdarts Splash Feature is a Flutter package that provides a splash screen implementation for the Flyingdarts gaming platform. This package enables Flutter applications to display a branded splash screen during app initialization with automatic navigation to the main application.
 
 The package is built using modern Flutter patterns with Go Router integration and SVG asset support. It provides a clean, professional splash screen experience that enhances the user's first impression of the application while maintaining consistent branding across the platform.
 
 ## Features
 
-- **Branded Splash Screen**: Professional splash screen with Flying Darts branding
+- **Branded Splash Screen**: Professional splash screen with Flyingdarts branding
 - **Automatic Navigation**: Seamless transition to main application after splash
 - **SVG Asset Support**: High-quality vector graphics for crisp display
 - **Go Router Integration**: Clean routing with automatic navigation
@@ -21,7 +21,7 @@ The package is built using modern Flutter patterns with Go Router integration an
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Go Router**: ^16.0.0 for navigation
 - **Dependencies**: Access to shared packages (ui)
 
@@ -85,7 +85,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flying Darts',
+      title: 'Flyingdarts',
       routerConfig: _router,
     );
   }
@@ -264,13 +264,13 @@ Timer(const Duration(seconds: 1), () {
 #### UI Layout
 The splash screen displays:
 - Full-screen container with primary theme color
-- Centered SVG logo (Flying Darts icon)
+- Centered SVG logo (Flyingdarts icon)
 - Responsive design that adapts to screen size
 
 ## Configuration
 
 ### Asset Configuration
-Ensure the Flying Darts logo is available in your assets:
+Ensure the Flyingdarts logo is available in your assets:
 
 ```yaml
 # pubspec.yaml
@@ -424,4 +424,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

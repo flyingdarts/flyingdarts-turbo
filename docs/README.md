@@ -1,10 +1,10 @@
-# Flying Darts Turbo Documentation
+# Flyingdarts Turbo Documentation
 
-Welcome to the comprehensive documentation for the Flying Darts Turbo monorepo. This documentation provides detailed information about all applications, packages, and tools in the Flying Darts platform.
+Welcome to the comprehensive documentation for the Flyingdarts Turbo monorepo. This documentation provides detailed information about all applications, packages, and tools in the Flyingdarts platform.
 
 ## 🎯 Overview
 
-Flying Darts Turbo is a comprehensive darts gaming platform built as a monorepo containing multiple applications, services, and packages. The platform provides real-time multiplayer darts gaming with social features, voice communication, and cross-platform support.
+Flyingdarts Turbo is a comprehensive darts gaming platform built as a monorepo containing multiple applications, services, and packages. The platform provides real-time multiplayer darts gaming with social features, voice communication, and cross-platform support.
 
 ## 📁 Documentation Structure
 
@@ -23,7 +23,9 @@ docs/
 │   │       └── authorizer/    # Custom authorization
 │   ├── frontend/               # Frontend applications
 │   │   ├── angular/           # Angular web app
-│   │   │   └── fd-app/        # Flying Darts Angular App
+│   │   │   └── fd-app/        # Flyingdarts Angular App
+│   │   ├── react/             # React web app(s)
+│   │   │   └── marketing/     # Marketing website (React + Vite)
 │   │   └── flutter/           # Flutter mobile app
 │   │       └── flyingdarts_mobile/ # Mobile application
 │   └── tools/                  # Development tools
@@ -87,14 +89,17 @@ docs/
 
    # Start frontend applications
    cd apps/frontend/angular/fd-app && npm start
+
+cd apps/frontend/react/marketing && npm run dev
    cd apps/frontend/flutter/flyingdarts_mobile && flutter run
+
    ```
 
 ## 🏗️ Architecture Overview
 
 ### System Architecture
 
-The Flying Darts Turbo platform follows a microservices architecture with the following components:
+The Flyingdarts Turbo platform follows a microservices architecture with the following components:
 
 #### Backend Services
 
@@ -107,6 +112,7 @@ The Flying Darts Turbo platform follows a microservices architecture with the fo
 #### Frontend Applications
 
 - **Angular Web App**: Web-based darts application
+- **React Marketing Website**: Marketing website built with React + Vite
 - **Flutter Mobile App**: Cross-platform mobile application
 
 #### Infrastructure
@@ -130,6 +136,8 @@ The Flying Darts Turbo platform follows a microservices architecture with the fo
 #### Frontend Technologies
 
 - **Angular 18**: Web application framework
+- **React 18**: UI library for marketing website
+- **Vite**: Frontend build tool for React app
 - **Flutter**: Cross-platform mobile framework
 - **TypeScript**: Type-safe JavaScript
 - **Dart**: Flutter programming language
@@ -156,6 +164,7 @@ The Flying Darts Turbo platform follows a microservices architecture with the fo
 #### Frontend Applications
 
 - **[Angular Web App](apps/frontend/angular/fd-app/README.md)**: Web-based darts application with real-time features
+- **[React Marketing Website](apps/frontend/react/marketing/README.md)**: Marketing site for Flyingdarts
 - **[Flutter Mobile App](apps/frontend/flutter/flyingdarts_mobile/README.md)**: Cross-platform mobile application
 
 #### Development Tools
@@ -393,11 +402,11 @@ This project is licensed under the [MIT License](LICENSE). See the LICENSE file 
 
 ## 🙏 Acknowledgments
 
-- **Contributors**: All contributors to the Flying Darts Turbo platform
+- **Contributors**: All contributors to the Flyingdarts Turbo platform
 - **Open Source**: Open source libraries and tools used
 - **Community**: The darts gaming community
 - **Users**: Platform users and their feedback
 
 ---
 
-*This documentation is maintained by the Flying Darts Documentation Agent. For questions or contributions, please see the [Contributing Guide](CONTRIBUTING.md).*
+*This documentation is maintained by the Flyingdarts Documentation Agent. For questions or contributions, please see the [Contributing Guide](CONTRIBUTING.md).*

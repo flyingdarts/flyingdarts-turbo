@@ -1,4 +1,4 @@
-import 'package:authress_login/authress_login.dart';
+import 'package:flyingdarts_authress_login/flyingdarts_authress_login.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -29,10 +29,7 @@ class AuthressRouteGuard {
     }
 
     // If not authenticated and trying to access protected route
-    if (!authContext.isAuthenticated &&
-        !isLoginRoute &&
-        !isAuthRoute &&
-        !isPublicRoute) {
+    if (!authContext.isAuthenticated && !isLoginRoute && !isAuthRoute && !isPublicRoute) {
       debugPrint(
         '🔒 AuthressRouteGuard: Unauthenticated user trying to access protected route, redirecting to login',
       );

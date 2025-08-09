@@ -1,11 +1,11 @@
-import 'package:authress_login/src/core/auth_context.dart';
-import 'package:authress_login/src/core/auth_provider.dart';
-import 'package:authress_login/src/models/auth_config.dart';
-import 'package:authress_login/src/models/auth_state.dart';
-import 'package:authress_login/src/models/deep_link_config.dart';
-import 'package:authress_login/src/models/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flyingdarts_authress_login/src/core/auth_context.dart';
+import 'package:flyingdarts_authress_login/src/core/auth_provider.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_config.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_state.dart';
+import 'package:flyingdarts_authress_login/src/models/deep_link_config.dart';
+import 'package:flyingdarts_authress_login/src/models/user_profile.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../test_utils/mocks.dart';
