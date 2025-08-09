@@ -1,6 +1,6 @@
 # .NET Solution Management
 
-This document explains how to manage the `flyingdarts-turbo.sln` file in this monorepo.
+This document explains how to manage the `flyingdarts.sln` file in this monorepo.
 
 ## Overview
 
@@ -11,7 +11,7 @@ The solution file is automatically generated based on the workspace structure de
 The project follows this directory structure as defined in `fd-v2.yml`:
 
 ```
-flyingdarts-turbo/
+flyingdarts/
 ├── apps/
 │   ├── backend/
 │   │   └── dotnet/          # .NET backend applications
@@ -65,7 +65,7 @@ The `scripts/dotnet/restore-sln.sh` script automatically:
 
 1. **Scans Workspaces**: Reads the workspace configuration from `package.json`
 2. **Finds Projects**: Locates all `.csproj` files within the workspace directories
-3. **Creates Solution**: Generates a new `flyingdarts-turbo.sln` file
+3. **Creates Solution**: Generates a new `flyingdarts.sln` file
 4. **Adds Projects**: Automatically adds all found projects to the solution
 
 ### Reorganizing Projects
@@ -79,7 +79,7 @@ To reorganize your .NET projects:
    - Tooling applications → `apps/tools/dotnet/`
    - Shared packages → `packages/backend/dotnet/` or `packages/frontend/`
 
-2. **Delete Existing Solution**: Remove the current `flyingdarts-turbo.sln` file
+2. **Delete Existing Solution**: Remove the current `flyingdarts.sln` file
 
 3. **Regenerate**: Run the restore script from the root directory:
    ```bash
@@ -93,7 +93,7 @@ To reorganize your .NET projects:
 mv MyOldProject/ apps/backend/dotnet/my-new-project/
 
 # 2. Delete the existing solution
-rm flyingdarts-turbo.sln
+rm flyingdarts.sln
 
 # 3. Regenerate the solution
 sh ./scripts/dotnet/restore-sln.sh

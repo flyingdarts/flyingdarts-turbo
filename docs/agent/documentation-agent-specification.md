@@ -28,7 +28,7 @@ The agent must support documentation generation for:
 ### Monorepo Layout
 
 ```
-flyingdarts-turbo/
+flyingdarts/
 ├── apps/
 │   ├── backend/
 │   │   ├── dotnet/          # .NET backend applications

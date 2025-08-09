@@ -29,8 +29,8 @@ The service is designed to handle concurrent message delivery to multiple connec
 
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Navigate to the notify rooms service**:

@@ -31,8 +31,8 @@ The SDK is built using modern Dart patterns with dependency injection, JSON seri
 ### From Source
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Navigate to the API SDK**:

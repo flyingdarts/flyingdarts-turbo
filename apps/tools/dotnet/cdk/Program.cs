@@ -119,7 +119,7 @@ namespace Flyingdarts.CDK
                 app,
                 new AuthStackProps
                 {
-                    Repository = "flyingdarts-turbo",
+                    Repository = "flyingdarts",
                     DeploymentEnvironment = DeploymentEnvironment.None,
                     StackEnvironment = new StackEnvironment
                     {

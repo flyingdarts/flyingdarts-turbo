@@ -31,8 +31,8 @@ The package is built using modern Flutter patterns with dependency injection, se
 ### From Source
 1. **Clone the repository** (if not already done):
    ```bash
-   git clone <repository-url>
-   cd flyingdarts-turbo
+   git clone https://github.com/flyingdarts/flyingdarts.git
+   cd flyingdarts
    ```
 
 2. **Navigate to the authress login package**:
