@@ -1,8 +1,8 @@
 using Amazon.Lambda.APIGatewayEvents;
-using Flyingdarts.Backend.Games.X01.Api.Models;
+using Flyingdarts.Backend.Api.Models;
 using MediatR;
 
-namespace Flyingdarts.Backend.Games.X01.Api.Requests.Create;
+namespace Flyingdarts.Backend.Api.Requests.Create;
 
 /// <summary>
 /// Command for creating a new X01 game.

@@ -1,4 +1,4 @@
-﻿namespace Flyingdarts.Backend.Games.X01.Api.Models;
+﻿namespace Flyingdarts.Backend.Api.Models;
 
 /// <summary>
 /// Abstract base class for objects that can be connected via WebSocket connections.

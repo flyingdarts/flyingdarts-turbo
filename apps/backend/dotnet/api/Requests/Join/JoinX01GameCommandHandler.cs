@@ -12,7 +12,7 @@ using Flyingdarts.Metadata.Services.Services.X01;
 using Flyingdarts.Persistence;
 using MediatR;
 
-namespace Flyingdarts.Backend.Games.X01.Api.Requests.Join;
+namespace Flyingdarts.Backend.Api.Requests.Join;
 
 public record JoinX01GameCommandHandler( //
     IAmazonApiGatewayManagementApi ApiGatewayClient,
