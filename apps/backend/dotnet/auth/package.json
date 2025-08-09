@@ -1,5 +1,5 @@
 {
-  "name": "flyingdarts.backend.auth",
+  "name": "flyingdarts.backend.authorizer",
   "version": "0.0.1",
   "private": true,
   "scripts": {

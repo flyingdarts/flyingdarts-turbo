@@ -1,4 +1,4 @@
-name: Auth Lambda (Development)
+name: Authorizer Lambda (Development)
 
 on:
   workflow_call:
@@ -6,6 +6,7 @@ on:
     paths:
       - "apps/backend/dotnet/auth/**"
       - "packages/backend/dotnet/**"
+      - ".github/workflows/authorizer-development.yml"
 
   pull_request:
     paths:
@@ -18,7 +19,7 @@ jobs:
     with:
       project-name: "flyingdarts.backend.auth"
       project-directory: "apps/backend/dotnet/auth"
-      lambda-function-name: "Flyingdarts-Backend-Auth-Development"
+      lambda-function-name: "Flyingdarts-Backend-Authorizer-Development"
       dotnet-version: "8.0.x"
 
   deploy-auth-dev:
