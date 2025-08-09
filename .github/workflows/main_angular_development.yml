@@ -3,16 +3,11 @@ name: Main Angular Workflow (Development)
 on:
   workflow_call:
   push:
+    branches:
+      - development
     paths:
       - "apps/frontend/angular/**"
       - ".github/workflows/main_angular_development.yml"
-
-  pull_request:
-    paths:
-      - "apps/frontend/angular/**"
-      - ".github/workflows/main_angular_development.yml"
-
-
 jobs:
   build-angular-development:
     uses: ./.github/workflows/build-angular-app.yml
