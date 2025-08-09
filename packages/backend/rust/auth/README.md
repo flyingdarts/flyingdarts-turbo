@@ -1,8 +1,8 @@
-# Flying Darts Auth Package
+# Flyingdarts Auth Package
 
 ## Overview
 
-The Flying Darts Auth Package is a Rust library that provides authentication and authorization services for the Flying Darts Turbo platform. It offers a flexible authentication system with support for Authress integration, JWT token validation, and customizable authorization logic.
+The Flyingdarts Auth Package is a Rust library that provides authentication and authorization services for the Flyingdarts Turbo platform. It offers a flexible authentication system with support for Authress integration, JWT token validation, and customizable authorization logic.
 
 This package is responsible for:
 - Providing a unified authentication service interface
@@ -431,4 +431,4 @@ Check Authress logs for detailed authentication information.
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details. 
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details. 

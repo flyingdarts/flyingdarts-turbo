@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Flyingdarts.Backend.Signalling.Api service is a .NET 8 AWS Lambda function that provides real-time WebSocket-based signalling for the Flying Darts Turbo platform. This service handles WebSocket connections, manages real-time communication between clients, and coordinates peer-to-peer connections for features like voice chat and game synchronization.
+The Flyingdarts.Backend.Signalling.Api service is a .NET 8 AWS Lambda function that provides real-time WebSocket-based signalling for the Flyingdarts Turbo platform. This service handles WebSocket connections, manages real-time communication between clients, and coordinates peer-to-peer connections for features like voice chat and game synchronization.
 
 This service is responsible for:
 - Managing WebSocket connections for real-time communication
@@ -492,4 +492,4 @@ Check CloudWatch logs for detailed execution information.
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.

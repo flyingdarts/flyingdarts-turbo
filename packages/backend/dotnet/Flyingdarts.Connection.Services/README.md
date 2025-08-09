@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Flyingdarts.Connection.Services package provides WebSocket connection management functionality for the Flying Darts Turbo platform. This package handles the association between player identities and their WebSocket connection IDs, enabling real-time communication between players and the game server.
+The Flyingdarts.Connection.Services package provides WebSocket connection management functionality for the Flyingdarts Turbo platform. This package handles the association between player identities and their WebSocket connection IDs, enabling real-time communication between players and the game server.
 
 The package is designed to:
 - Manage WebSocket connection mappings for players
@@ -286,4 +286,4 @@ When contributing to this package:
 
 ## License
 
-This package is part of the Flying Darts Turbo monorepo and follows the same licensing terms.
+This package is part of the Flyingdarts Turbo monorepo and follows the same licensing terms.

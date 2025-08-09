@@ -1,8 +1,8 @@
-# Flying Darts Angular Web App
+# Flyingdarts Angular Web App
 
 ## Overview
 
-The Flying Darts Angular Web App is a modern web application built with Angular 18 that provides a comprehensive darts gaming platform accessible through web browsers. The application offers real-time multiplayer darts games, user management, and social features with a responsive design optimized for desktop and mobile devices.
+The Flyingdarts Angular Web App is a modern web application built with Angular 18 that provides a comprehensive darts gaming platform accessible through web browsers. The application offers real-time multiplayer darts games, user management, and social features with a responsive design optimized for desktop and mobile devices.
 
 This application is responsible for:
 - Providing a web-based interface for darts gameplay
@@ -388,4 +388,4 @@ Use Angular DevTools for debugging:
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.

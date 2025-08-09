@@ -1,13 +1,14 @@
 {
-  "name": "flyingdarts.backend.games.x01.api",
+  "name": "flyingdarts.backend.api",
   "version": "0.0.7",
   "private": true,
   "scripts": {
     "restore": "dotnet restore",
     "build": "dotnet build -c Debug",
     "build:prod": "dotnet build -c Release ",
-    "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Api-Development  -frun dotnet8 -f net8.0 --region eu-west-1",
-    "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Games-X01-Api-Production  -frun dotnet8 -f net8.0 --region eu-west-1"
+    "deploy:development": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Api-Development  -frun dotnet8 -f net8.0 --region eu-west-1",
+    "deploy:staging": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Api-Staging  -frun dotnet8 -f net8.0 --region eu-west-1",
+    "deploy:production": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Api-Production  -frun dotnet8 -f net8.0 --region eu-west-1"
   },
   "dependencies": {
     "flyingdarts.connection.services": "*",
