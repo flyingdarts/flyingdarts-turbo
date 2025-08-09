@@ -1,0 +1,29 @@
+name: Friends API Lambda (Production)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - production
+    paths:
+      - "apps/backend/dotnet/friends/**"
+      - "packages/backend/dotnet/**"
+      - ".github/workflows/friends-api-production.yml"
+jobs:
+  build-friends-api-production:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.friends.api"
+      project-directory: "apps/backend/dotnet/friends"
+      lambda-function-name: "Flyingdarts-Friends-Api-Production"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-friends-api-production:
+    needs: build-friends-api-production
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Friends-Api-Production"
+      artifact-name: "Flyingdarts-Friends-Api-Production-package"
+      environment: "production"
+    secrets: inherit
