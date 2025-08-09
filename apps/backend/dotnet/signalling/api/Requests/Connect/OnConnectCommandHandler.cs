@@ -193,19 +193,27 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
 
     private static string NormalizeAuthressToken(string authressToken)
     {
-        if (string.IsNullOrEmpty(authressToken))
+        if (string.IsNullOrWhiteSpace(authressToken))
         {
             return string.Empty;
         }
-        Console.WriteLine($"[OnConnect] Normalizing token: {authressToken}");
-        if (authressToken.StartsWith("user="))
+
+        // Normalize leading/trailing whitespace first
+        var trimmedToken = authressToken.Trim();
+        Console.WriteLine($"[OnConnect] Normalizing token: {trimmedToken}");
+
+        const string userPrefix = "user=";
+
+        // Case 1: Token starts with "user=" (case-insensitive)
+        if (trimmedToken.StartsWith(userPrefix, StringComparison.OrdinalIgnoreCase))
         {
-            var token = authressToken.Replace("user=", "");
-            Console.WriteLine($"[OnConnect] Normalized token: {token}");
-            return token;
+            var tokenValue = trimmedToken.Substring(userPrefix.Length).Trim();
+            Console.WriteLine($"[OnConnect] Normalized token: {tokenValue}");
+            return tokenValue;
         }
+
         Console.WriteLine($"[OnConnect] Token is not prefixed with 'user='");
-        return authressToken;
+        return trimmedToken;
     }
 
     private async Task<Guid> EnsureUserHasMeetingRoom(
