@@ -50,7 +50,7 @@ public class LambdaConstruct
                     { "TableName", props.DynamoDbConstruct.Application.TableName },
                     {
                         "DyteAuthorizationHeaderValue",
-                        System.Environment.GetEnvironmentVariable("DyteAuthorizationHeaderValue")!
+                        $"Basic {System.Environment.GetEnvironmentVariable("DyteAuthorizationHeaderValue")!}"
                     },
                 },
                 InitialPolicy =

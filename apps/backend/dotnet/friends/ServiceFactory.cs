@@ -21,9 +21,11 @@ public static class ServiceFactory
             );
         }
 
-        var configuration = new ConfigurationBuilder()
-            .AddSystemsManager($"/{environmentName}/Application")
-            .Build();
+        var systemManagerPath = $"/{environmentName}/Application";
+
+        Console.WriteLine($"SystemManagerPath: {systemManagerPath}");
+
+        var configuration = new ConfigurationBuilder().AddSystemsManager(systemManagerPath).Build();
 
         var services = new ServiceCollection();
 
