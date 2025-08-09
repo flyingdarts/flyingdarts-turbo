@@ -1,0 +1,34 @@
+name: Authorizer Lambda (Production)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - production
+    paths:
+      - "apps/backend/dotnet/auth/**"
+      - "packages/backend/dotnet/**"
+      - ".github/workflows/authorizer-production.yml"
+
+  pull_request:
+    paths:
+      - "apps/backend/dotnet/auth/**"
+      - "packages/backend/dotnet/**"
+
+jobs:
+  build-authorizer-production:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.backend.authorizer"
+      project-directory: "apps/backend/dotnet/auth"
+      lambda-function-name: "Flyingdarts-Authorizer-Production"
+      dotnet-version: "8.0.x"
+
+  deploy-authorizer-production:
+    needs: build-authorizer-production
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Authorizer-Production"
+      artifact-name: "Flyingdarts-Authorizer-Production-package"
+      environment: "production"
+    secrets: inherit

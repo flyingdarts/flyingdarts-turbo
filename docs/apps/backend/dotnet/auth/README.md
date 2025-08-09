@@ -2,13 +2,13 @@
 
 ## Overview
 
-The Flyingdarts.Backend.Auth service is a .NET 8 AWS Lambda function that provides custom authorization for the Flying Darts Turbo platform. This service acts as an API Gateway custom authorizer, validating JWT tokens and determining user permissions for accessing protected resources.
+The Flyingdarts.Backend.Auth service is a .NET 8 AWS Lambda function that provides custom authorization for the Flyingdarts Turbo platform. This service acts as an API Gateway custom authorizer, validating JWT tokens and determining user permissions for accessing protected resources.
 
 This service is responsible for:
 - Validating JWT tokens from Authress authentication service
 - Implementing custom authorization logic for API Gateway
 - Managing user permissions and access control
-- Providing secure authentication for all Flying Darts services
+- Providing secure authentication for all Flyingdarts services
 - Integrating with Authress SDK for token validation
 
 ## Features
@@ -436,4 +436,4 @@ Check CloudWatch logs for detailed execution information.
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.

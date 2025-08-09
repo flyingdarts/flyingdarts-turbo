@@ -1,0 +1,34 @@
+name: Authorizer Lambda (Staging)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - staging
+    paths:
+      - "apps/backend/dotnet/auth/**"
+      - "packages/backend/dotnet/**"
+      - ".github/workflows/authorizer-staging.yml"
+
+  pull_request:
+    paths:
+      - "apps/backend/dotnet/auth/**"
+      - "packages/backend/dotnet/**"
+
+jobs:
+  build-authorizer-staging:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.backend.authorizer"
+      project-directory: "apps/backend/dotnet/auth"
+      lambda-function-name: "Flyingdarts-Authorizer-Staging"
+      dotnet-version: "8.0.x"
+
+  deploy-authorizer-staging:
+    needs: build-authorizer-staging
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Authorizer-Staging"
+      artifact-name: "Flyingdarts-Authorizer-Staging-package"
+      environment: "staging"
+    secrets: inherit

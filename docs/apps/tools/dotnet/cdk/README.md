@@ -1,8 +1,8 @@
-# Flying Darts CDK Infrastructure
+# Flyingdarts CDK Infrastructure
 
 ## Overview
 
-The Flying Darts CDK Infrastructure is a .NET 8 application that provides Infrastructure as Code (IaC) for the Flying Darts Turbo platform using AWS CDK. This tool manages the complete cloud infrastructure deployment, including Lambda functions, API Gateway, DynamoDB tables, and supporting AWS services.
+The Flyingdarts CDK Infrastructure is a .NET 8 application that provides Infrastructure as Code (IaC) for the Flyingdarts Turbo platform using AWS CDK. This tool manages the complete cloud infrastructure deployment, including Lambda functions, API Gateway, DynamoDB tables, and supporting AWS services.
 
 This tool is responsible for:
 - Defining and managing AWS infrastructure as code
@@ -316,7 +316,7 @@ var prodConfig = new EnvironmentConfig
 
 ### Internal Dependencies
 
-- **Flyingdarts.CDK.Constructs**: Custom CDK constructs for Flying Darts
+- **Flyingdarts.CDK.Constructs**: Custom CDK constructs for Flyingdarts
 
 ## Development
 
@@ -609,4 +609,4 @@ cdk synth --profile dev
 
 ## License
 
-Part of the Flying Darts Turbo monorepo. See root LICENSE file for details.
+Part of the Flyingdarts Turbo monorepo. See root LICENSE file for details.

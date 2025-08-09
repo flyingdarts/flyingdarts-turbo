@@ -1,0 +1,30 @@
+name: X01 API Lambda (Production)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - production
+    paths:
+      - "apps/backend/dotnet/api/**"
+      - "packages/backend/dotnet/**"
+      - ".github/workflows/x01-api-production.yml"
+
+jobs:
+  build-x01-api-production:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.backend.api"
+      project-directory: "apps/backend/dotnet/api"
+      lambda-function-name: "Flyingdarts-Backend-Api-Production"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-x01-api-production:
+    needs: build-x01-api-production
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Backend-Api-Production"
+      artifact-name: "Flyingdarts-Backend-Api-Production-package"
+      environment: "production"
+    secrets: inherit

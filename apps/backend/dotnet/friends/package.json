@@ -1,12 +1,13 @@
 {
-  "name": "flyingdarts.backend.friends.api",
+  "name": "flyingdarts.friends.api",
   "version": "0.0.3",
   "private": false,
   "scripts": {
     "build:dev": "dotnet build -c Debug ",
     "build:prod": "dotnet build -c Release ",
-    "deploy:dev": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Friends-Api-Development  -frun dotnet8 -f net8.0 --region eu-west-1",
-    "deploy:prod": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Friends-Api-Production  -frun dotnet8 -f net8.0 --region eu-west-1"
+    "deploy:development": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Friends-Api-Development  -frun dotnet8 -f net8.0 --region eu-west-1",
+    "deploy:staging": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Friends-Api-Staging  -frun dotnet8 -f net8.0 --region eu-west-1",
+    "deploy:production": "dotnet lambda deploy-function --function-name Flyingdarts-Backend-Friends-Api-Production  -frun dotnet8 -f net8.0 --region eu-west-1"
   },
   "dependencies": {
     "flyingdarts.core": "*",

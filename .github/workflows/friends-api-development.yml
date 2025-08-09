@@ -1,0 +1,29 @@
+name: Friends API Lambda (Development)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - development
+    paths:
+      - "apps/backend/dotnet/friends/**"
+      - "packages/backend/dotnet/**"
+      - ".github/workflows/friends-api-development.yml"
+jobs:
+  build-friends-api-development:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.friends.api"
+      project-directory: "apps/backend/dotnet/friends"
+      lambda-function-name: "Flyingdarts-Friends-Api-Development"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-friends-api-development:
+    needs: build-friends-api-development
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Friends-Api-Development"
+      artifact-name: "Flyingdarts-Friends-Api-Development-package"
+      environment: "development"
+    secrets: inherit

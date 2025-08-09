@@ -1,0 +1,29 @@
+name: Signalling API Lambda (Staging)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - staging
+    paths:
+      - "apps/backend/dotnet/signalling/**"
+      - "packages/backend/dotnet/**"
+      - ".github/workflows/signalling-api-staging.yml"
+jobs:
+  build-signalling-api-dev:
+    uses: ./.github/workflows/build-dotnet-lambda.yml
+    with:
+      project-name: "flyingdarts.signalling.api"
+      project-directory: "apps/backend/dotnet/signalling/api"
+      lambda-function-name: "Flyingdarts-Signalling-Api-Staging"
+      dotnet-version: "8.0.x"
+      node-version: "22"
+
+  deploy-signalling-api-dev:
+    needs: build-signalling-api-dev
+    uses: ./.github/workflows/deploy-lambda.yml
+    with:
+      lambda-function-name: "Flyingdarts-Signalling-Api-Staging"
+      artifact-name: "Flyingdarts-Signalling-Api-Staging-package"
+      environment: "staging"
+    secrets: inherit

@@ -19,7 +19,7 @@ The package is designed to:
 - **Lambda Constructs**: Serverless function deployment and configuration
 - **DynamoDB Constructs**: Database table creation and management
 - **Authorization Constructs**: GitHub OAuth and custom authorizers
-- **Stack Management**: Complete Flying Darts infrastructure stack
+- **Stack Management**: Complete Flyingdarts infrastructure stack
 - **Aspects Integration**: Custom CDK aspects for cross-cutting concerns
 - **Configuration Management**: Environment-specific configurations
 - **Security Best Practices**: Built-in security configurations and IAM policies
@@ -211,7 +211,7 @@ public class FlyingdartsInfrastructureStack : Stack
 
 #### FlyingdartsStack
 
-The main stack that orchestrates all Flying Darts infrastructure components.
+The main stack that orchestrates all Flyingdarts infrastructure components.
 
 **Properties:**
 - `ApiGateway` (ApiGatewayConstruct): The API Gateway construct
@@ -423,4 +423,4 @@ When contributing to this package:
 
 ## License
 
-This package is part of the Flying Darts Turbo monorepo and follows the same licensing terms.
+This package is part of the Flyingdarts Turbo monorepo and follows the same licensing terms.
