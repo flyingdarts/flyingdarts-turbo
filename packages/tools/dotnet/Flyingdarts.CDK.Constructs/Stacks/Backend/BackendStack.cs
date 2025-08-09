@@ -101,6 +101,14 @@ public class BackendStack : BaseStack<BackendStackProps>
             );
         AmazonAspect
             .Of(this)
+            .Add(
+                new AddEnvironmentVariableToLambdaAspect(
+                    "EnvironmentName",
+                    props.DeploymentEnvironment.Name
+                )
+            );
+        AmazonAspect
+            .Of(this)
             .Add(new AddEnvironmentVariableToLambdaAspect("LAMBDA_NET_SERIALIZER_DEBUG", "true"));
     }
 }
