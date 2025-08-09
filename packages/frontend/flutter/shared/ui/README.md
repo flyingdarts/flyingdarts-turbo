@@ -1,15 +1,15 @@
-# Flying Darts UI
+# Flyingdarts UI
 
 ## Overview
 
-The Flying Darts UI is a Flutter package that provides a comprehensive set of shared UI components, themes, and utilities for the Flying Darts gaming platform. This package enables Flutter applications to maintain consistent design patterns, branding, and user experience across the entire platform with reusable components, standardized themes, and development tools.
+The Flyingdarts UI is a Flutter package that provides a comprehensive set of shared UI components, themes, and utilities for the Flyingdarts gaming platform. This package enables Flutter applications to maintain consistent design patterns, branding, and user experience across the entire platform with reusable components, standardized themes, and development tools.
 
 The package is built using Flutter's Material Design framework with custom theming, Lottie animations, and Widgetbook for component documentation and testing. It provides a robust foundation for implementing consistent UI patterns in Flutter apps with pre-built components, standardized error handling, navigation utilities, and comprehensive theming support. The package includes components for authentication, error dialogs, navigation, animations, and development tooling.
 
 ## Features
 
 - **Shared UI Components**: Reusable widgets for common UI patterns
-- **Custom Theme System**: Comprehensive Material Design theme with Flying Darts branding
+- **Custom Theme System**: Comprehensive Material Design theme with Flyingdarts branding
 - **Lottie Animation Support**: Integrated Lottie animations with error handling
 - **Error Dialog System**: Standardized error handling and display components
 - **Navigation Components**: Custom back button and navigation utilities
@@ -25,7 +25,7 @@ The package is built using Flutter's Material Design framework with custom themi
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Lottie**: ^3.1.2 for animation support
 - **Widgetbook**: ^3.14.3 for component documentation
 - **Build Tools**: build_runner for code generation
@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flying Darts',
+      title: 'Flyingdarts',
       theme: myTheme, // Use the shared theme
       home: MyHomePage(),
     );
@@ -96,7 +96,7 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Welcome to Flying Darts'),
+            Text('Welcome to Flyingdarts'),
             LoginWithFacebookButton(
               onPressed: () {
                 // Handle Facebook login
@@ -258,7 +258,7 @@ class AuthenticationExample extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Login to Flying Darts'),
+            Text('Login to Flyingdarts'),
             SizedBox(height: 20),
             LoginWithFacebookButton(
               onPressed: () async {
@@ -372,7 +372,7 @@ class ErrorHandlingExample extends StatelessWidget {
 ### Core Components
 
 #### FlyingdartsScaffold
-A custom scaffold widget with Flying Darts theming and navigation support.
+A custom scaffold widget with Flyingdarts theming and navigation support.
 
 ```dart
 class FlyingdartsScaffold extends StatelessWidget {
@@ -462,7 +462,7 @@ class BackButton extends StatelessWidget {
 ### Theme System
 
 #### MyTheme
-A mixin providing Flying Darts color palette and theme constants.
+A mixin providing Flyingdarts color palette and theme constants.
 
 ```dart
 mixin MyTheme {
@@ -472,7 +472,7 @@ mixin MyTheme {
 ```
 
 #### myTheme
-A complete Material Design theme with Flying Darts branding.
+A complete Material Design theme with Flyingdarts branding.
 
 ```dart
 var myTheme = ThemeData(
@@ -515,7 +515,7 @@ Widget createDefaultCardWidget(Widget child);
 ## Configuration
 
 ### Theme Configuration
-The package provides a complete theme system with Flying Darts branding:
+The package provides a complete theme system with Flyingdarts branding:
 
 ```dart
 import 'package:ui/ui.dart';
@@ -542,7 +542,7 @@ import 'package:widgetbook/widgetbook.dart';
 import 'package:ui/ui.dart';
 
 @WidgetbookApp.material(
-  name: 'Flying Darts UI',
+  name: 'Flyingdarts UI',
   builder: MaterialApp.new,
 )
 class FlyingDartsWidgetbook extends StatelessWidget {
@@ -736,4 +736,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

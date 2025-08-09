@@ -1,15 +1,15 @@
-# Flying Darts Profile Feature
+# Flyingdarts Profile Feature
 
 ## Overview
 
-The Flying Darts Profile Feature is a Flutter package that provides comprehensive user profile management for the Flying Darts gaming platform. This package enables Flutter applications to display, manage, and interact with user profile information through a clean, state-managed architecture.
+The Flyingdarts Profile Feature is a Flutter package that provides comprehensive user profile management for the Flyingdarts gaming platform. This package enables Flutter applications to display, manage, and interact with user profile information through a clean, state-managed architecture.
 
 The package is built using modern Flutter patterns with BLoC state management, dependency injection, and API integration. It provides a robust foundation for implementing user profile functionality in Flutter apps with secure authentication token management and real-time profile data synchronization.
 
 ## Features
 
 - **User Profile Management**: Comprehensive user profile display and management
-- **API Integration**: Seamless integration with Flying Darts backend APIs
+- **API Integration**: Seamless integration with Flyingdarts backend APIs
 - **BLoC State Management**: Clean architecture with Cubit for state management
 - **Dependency Injection**: Injectable integration for service management
 - **Authentication Integration**: Secure token-based API communication
@@ -22,7 +22,7 @@ The package is built using modern Flutter patterns with BLoC state management, d
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
+- **Flutter SDK**: ">=3.26.0"
 - **Authentication**: Valid authentication tokens from Authress
 - **Dependencies**: Access to shared packages (api_sdk, authress_login, ui, internationalization, websocket, app_config_core, app_config_secrets)
 
@@ -486,4 +486,4 @@ Widget defaultProfileDialog(BuildContext context) {
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

@@ -1,10 +1,10 @@
-# Flying Darts Flutter API SDK
+# Flyingdarts Flutter API SDK
 
 ## Overview
 
-The Flying Darts Flutter API SDK is a Dart package that provides a comprehensive client-side API interface for the Flying Darts gaming platform. This SDK enables Flutter applications to interact with the backend services through a clean, type-safe, and well-structured API layer.
+The Flyingdarts Flutter API SDK is a Dart package that provides a comprehensive client-side API interface for the Flyingdarts gaming platform. This SDK enables Flutter applications to interact with the backend services through a clean, type-safe, and well-structured API layer.
 
-The SDK is built using modern Dart patterns with dependency injection, JSON serialization, and comprehensive error handling. It provides a robust foundation for making HTTP requests to the Flying Darts backend services, handling responses, and managing authentication tokens.
+The SDK is built using modern Dart patterns with dependency injection, JSON serialization, and comprehensive error handling. It provides a robust foundation for making HTTP requests to the Flyingdarts backend services, handling responses, and managing authentication tokens.
 
 ## Features
 
@@ -22,8 +22,8 @@ The SDK is built using modern Dart patterns with dependency injection, JSON seri
 ## Prerequisites
 
 - **Dart SDK**: ^3.8.1 or higher
-- **Flutter SDK**: ^3.26.0 or higher
-- **Backend Services**: Access to Flying Darts backend APIs
+- **Flutter SDK**: ">=3.26.0"
+- **Backend Services**: Access to Flyingdarts backend APIs
 - **Authentication**: Valid authorization tokens for API access
 
 ## Installation
@@ -442,4 +442,4 @@ flutter test
 
 ## License
 
-This project is part of the Flying Darts platform and is subject to the project's licensing terms.
+This project is part of the Flyingdarts platform and is subject to the project's licensing terms.

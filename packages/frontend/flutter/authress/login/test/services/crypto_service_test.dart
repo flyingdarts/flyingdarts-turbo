@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:authress_login/src/services/crypto_service.dart';
+import 'package:flyingdarts_authress_login/src/services/crypto_service.dart';
 
 void main() {
   group('CryptoService', () {

@@ -1,4 +1,4 @@
-import 'package:authress_login/authress_login.dart';
+import 'package:flyingdarts_authress_login/flyingdarts_authress_login.dart';
 import 'package:flutter/material.dart';
 
 import 'core/router/app_router.dart';
@@ -96,8 +96,7 @@ class ExampleProtectedPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('User ID: ${authContext.user?.userId}'),
-                  if (authContext.user?.email != null)
-                    Text('Email: ${authContext.user!.email}'),
+                  if (authContext.user?.email != null) Text('Email: ${authContext.user!.email}'),
                 ],
               ),
             ),

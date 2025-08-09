@@ -1,101 +1,89 @@
-# Flyingdarts Turbo Monorepo
+# Flyingdarts monorepo
 
-## Recommended VS Code Extensions
+## Introduction
 
-To ensure a smooth and productive development experience, we recommend the following VS Code extensions. When you open this repository, VS Code will prompt you to install these if you don't have them already.
+Flyingdarts is the result of 4–5 years of dedicated work. Over this time, it has matured into a solid and trustworthy platform, grounded in my experience as a full‑stack developer.
 
-### Rust
-- **[rust-lang.rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)** — Advanced Rust language support (syntax, completion, go-to-definition, refactoring, and more).
-- **[serayuzgur.crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)** — Crate version management and dependency insights for Cargo.toml.
-- **[vadimcn.vscode-lldb](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb)** — Powerful Rust/C debugging support.
-- **[tamasfe.even-better-toml](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml)** — Syntax highlighting and validation for TOML files (Cargo.toml, rustfmt.toml, etc.).
+The platform is open source and built for the community. Anyone can suggest features and help implement them. Flyingdarts is community‑driven.
 
-### Dart & Flutter
-- **[Dart](https://marketplace.visualstudio.com/items?itemName=Dart-Code.dart-code)** — Dart language support.
-- **[Flutter](https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter)** — Flutter development tools and UI support.
+## Project Overview
 
-### Angular
-- **[Angular Language Service](https://marketplace.visualstudio.com/items?itemName=Angular.ng-template)** — Angular template and TypeScript support.
+### Frontend
 
-### General / Monorepo
-- **[EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)** — Consistent coding styles across editors and IDEs.
-- **[ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)** — Linting for JavaScript/TypeScript projects.
+- **Angular app** (`apps/frontend/angular/fd-app`): The main platform where players play darts against each other with real‑time gameplay and integrated video conferencing.
+- **Flutter app** (`apps/frontend/flutter/flyingdarts_mobile`): A companion app that lets players input their scores using native speech‑to‑text on Android and iOS while they are in an active game.
 
----
+### Backend
 
-For more details, see `.vscode/extensions.json` in the repository.
+- Built as small, independently deployable microservices on AWS for horizontal scalability. Primarily implemented in C#; a Rust‑based authorizer is under active development.
+- WebSocket microservices (fronted by Amazon API Gateway WebSocket):
+  - `Signalling` (Lambda): Reusable connection orchestration and signalling logic.
+  - `Backend Api` (Lambda): Application‑specific WebSocket routes and business logic.
+  - These are separate microservices that can scale and deploy independently. The API Gateway and Lambda integrations are provisioned via the CDK constructs.
+- REST microservice (fronted by Amazon API Gateway REST):
+  - `Friends API` (Lambda): Social features (friend relationships) for the platform.
+- Authorization: Both the WebSocket and Friends REST microservices are protected by a C# Lambda authorizer (`apps/backend/dotnet/auth`).
 
-## Rust Development Tools
+### Authentication
 
-This project uses several Rust development tools to ensure code quality and consistency across all developers and environments.
+- Service provider: Authress handles identity and authentication for the platform.
+- Flutter integration: A dedicated package simplifies integrating Authress into the Flutter widget tree — see `packages/frontend/flutter/authress/login`.
 
-### rust-toolchain.toml
+### Infrastructure as Code
 
-This file specifies the Rust toolchain version and required components for the project. It ensures all developers and CI environments use the same Rust version and tools, leading to consistent builds and a smooth onboarding experience.
+- All backend and frontend hosting for development, staging, and production is defined with AWS CDK stacks, leveraging custom constructs from `packages/tools/dotnet/Flyingdarts.CDK.Constructs`.
+- Supporting stacks include:
+  - An OIDC authentication stack enabling the GitHub pipeline to assume an AWS role and deploy to AWS Lambda and Amazon S3.
+  - A domain/certificate stack that references the Flyingdarts Route 53 HostedZone and ACM certificate(s) used by the frontends and APIs.
 
-#### Contents
-- **channel**: Sets the Rust version (e.g., `stable`).
-- **components**: Ensures tools like `rustfmt`, `clippy`, `rust-analyzer`, and `rust-src` are installed.
-- **targets**: Pre-installs support for building on Linux and macOS.
+## TODOs
 
-#### Why use it?
-- Guarantees everyone uses the same Rust version and tools
-- Simplifies onboarding and CI setup
-- Ensures IDE features work out of the box
+- Figure out proper usage of Beachball for versioning/releasing and integrate it into the CI/CD pipeline.
+- Set up consistent linting across projects/frameworks/languages (e.g., Angular/TypeScript, Flutter/Dart, .NET/C#, Rust).
+- Set up CI to run tests across all projects/frameworks/languages (Angular/TypeScript, Flutter/Dart, .NET/C#, Rust).
+- Publish the Flutter app to the app stores (requires developer accounts and release process setup).
 
-#### Usage
-When you enter the project directory, `rustup` will automatically use the specified toolchain. To install all components and targets:
+## Contributing
 
-```sh
-rustup show
-rustup component add rustfmt clippy rust-analyzer rust-src
-rustup target add x86_64-unknown-linux-gnu x86_64-apple-darwin
-```
+Stoked you're here! This is a friendly, low‑pressure space:
 
-### .clippy.toml
+- Be kind and constructive.
+- Prefer small, focused PRs.
+- If you’re unsure, please hop into our [Discord](https://discord.gg/BqQxwfdDhC) and start a chat/thread about the feature or issue you want to solve.
+- Not sure where to start? Check issues labeled “good first issue”.
 
-This file configures [Clippy](https://github.com/rust-lang/rust-clippy), Rust's linter, to enforce code quality and style standards across the project.
+### Quick start
 
-#### Key Settings
-- **Performance**: Warns on unsafe code, missing docs, and missing trait implementations.
-- **Complexity**: Sets thresholds for cyclomatic and cognitive complexity.
-- **Style**: Enforces naming, documentation, and argument count rules.
-- **Correctness**: Disallows certain methods and types for safety.
-- **Suspicious**: Warns about potentially dangerous type casts.
+1. Fork and clone your fork.
+2. Create a branch: `git checkout -b my-feature`.
+3. Install deps and run the app(s) you’re touching; see the app READMEs:
+   - Angular: `apps/frontend/angular/fd-app/README.md`
+   - Flutter: `apps/frontend/flutter/flyingdarts_mobile/README.md`
+   - Backend (C#): see service READMEs under `apps/backend/dotnet/`
+4. Run tests/linters before pushing.
 
-#### Why use it?
-- Maintains high code quality
-- Enforces consistent documentation and style
-- Prevents common mistakes and unsafe code
+### PR checklist
 
-#### Usage
-Clippy runs automatically on save in VS Code (with rust-analyzer) or manually:
+- Clear title and description (what + why).
+- Screenshots for UI changes.
+- Tests or reasoning for behavior changes.
+- No linter errors; CI is green.
+- Docs/README updated if needed.
 
-```sh
-cargo clippy --all-targets --all-features -- -D warnings
-```
+### Communication
 
-### rustfmt.toml
+- Join the community chat on our [Discord server](https://discord.gg/BqQxwfdDhC).
+- For bigger ideas, start a thread on Discord first; we can turn it into a scoped issue together.
 
-This file configures [rustfmt](https://github.com/rust-lang/rustfmt), Rust's official code formatter, to enforce a consistent code style across the project.
+### Style
 
-#### Key Settings
-- **Line width**: 100 characters
-- **Indentation**: 4 spaces
-- **Braces and blocks**: Consistent placement and style
-- **Imports**: Sorted and grouped
-- **Trailing commas**: Used in multiline lists for cleaner diffs
+- Match the existing code style and formatter/linter configs.
+- Keep functions small and names clear.
 
-#### Why use it?
-- Ensures code looks the same for everyone
-- Improves readability and maintainability
-- Reduces noise in code reviews
+### Code of Conduct
 
-#### Usage
-Format your codebase automatically with:
+We follow the [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/). Be excellent to each other.
 
-```sh
-cargo fmt
-```
+### License
 
-This will apply the rules in `rustfmt.toml` to all Rust files in the project.
+By contributing, you agree your changes are licensed under this repository’s license.

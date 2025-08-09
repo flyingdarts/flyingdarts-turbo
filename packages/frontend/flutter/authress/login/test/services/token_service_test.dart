@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:authress_login/src/services/token_service.dart';
-import 'package:authress_login/src/models/auth_state.dart';
+import 'package:flyingdarts_authress_login/src/services/token_service.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_state.dart';
 import '../test_utils/mocks.dart';
 
 void main() {
@@ -120,9 +120,7 @@ void main() {
           'authress_user_profile': json.encode(
             TestData.validUserProfile.toJson(),
           ),
-          'authress_token_expiry': DateTime.now()
-              .add(const Duration(hours: 1))
-              .toIso8601String(),
+          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
         });
 
         final authState = await tokenService.loadStoredTokens();
@@ -134,9 +132,7 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
-          'authress_token_expiry': DateTime.now()
-              .add(const Duration(hours: 1))
-              .toIso8601String(),
+          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
         });
 
         final authState = await tokenService.loadStoredTokens();
@@ -163,9 +159,7 @@ void main() {
           'authress_access_token': TestData.validAccessToken,
           'authress_refresh_token': TestData.validRefreshToken,
           'authress_user_profile': 'invalid-json',
-          'authress_token_expiry': DateTime.now()
-              .add(const Duration(hours: 1))
-              .toIso8601String(),
+          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
         });
 
         final authState = await tokenService.loadStoredTokens();
@@ -197,9 +191,7 @@ void main() {
           'authress_user_profile': json.encode(
             TestData.validUserProfile.toJson(),
           ),
-          'authress_token_expiry': DateTime.now()
-              .add(const Duration(hours: 1))
-              .toIso8601String(),
+          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
         });
 
         await tokenService.clearTokens();
@@ -237,9 +229,7 @@ void main() {
           'authress_user_profile': json.encode(
             TestData.validUserProfile.toJson(),
           ),
-          'authress_token_expiry': DateTime.now()
-              .add(const Duration(hours: 1))
-              .toIso8601String(),
+          'authress_token_expiry': DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
         });
 
         final hasValid = await tokenService.hasValidTokens();
@@ -254,9 +244,7 @@ void main() {
           'authress_user_profile': json.encode(
             TestData.validUserProfile.toJson(),
           ),
-          'authress_token_expiry': DateTime.now()
-              .subtract(const Duration(hours: 1))
-              .toIso8601String(),
+          'authress_token_expiry': DateTime.now().subtract(const Duration(hours: 1)).toIso8601String(),
         });
 
         final hasValid = await tokenService.hasValidTokens();
@@ -289,8 +277,7 @@ void main() {
 
       test('handles JWT with padding requirements', () {
         // JWT payload that needs padding
-        const jwtNeedsPadding =
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0In0.signature';
+        const jwtNeedsPadding = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0In0.signature';
 
         final payload = tokenService.parseJwtPayload(jwtNeedsPadding);
 

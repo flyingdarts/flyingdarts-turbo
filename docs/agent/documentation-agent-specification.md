@@ -2,7 +2,7 @@
 
 ## Overview
 
-This specification defines a background agent responsible for automatically generating and maintaining comprehensive documentation for all projects within the Flying Darts Turbo monorepo. The agent will create README.md files for each project and generate detailed class documentation including properties and methods.
+This specification defines a background agent responsible for automatically generating and maintaining comprehensive documentation for all projects within the Flyingdarts Turbo monorepo. The agent will create README.md files for each project and generate detailed class documentation including properties and methods.
 
 ## Agent Architecture
 
@@ -505,4 +505,4 @@ docs-agent/
 └── tests/                    # Test files
 ```
 
-This specification provides a comprehensive framework for implementing a background documentation agent that will maintain high-quality, consistent documentation across the entire Flying Darts Turbo monorepo. 
+This specification provides a comprehensive framework for implementing a background documentation agent that will maintain high-quality, consistent documentation across the entire Flyingdarts Turbo monorepo. 

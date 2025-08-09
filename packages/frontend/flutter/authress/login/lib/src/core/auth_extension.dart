@@ -1,7 +1,7 @@
-import 'package:authress_login/src/core/auth_context.dart';
-import 'package:authress_login/src/core/auth_provider.dart';
-import 'package:authress_login/src/models/auth_state.dart';
-import 'package:authress_login/src/models/user_profile.dart';
+import 'package:flyingdarts_authress_login/src/core/auth_context.dart';
+import 'package:flyingdarts_authress_login/src/core/auth_provider.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_state.dart';
+import 'package:flyingdarts_authress_login/src/models/user_profile.dart';
 import 'package:flutter/material.dart';
 
 /// Extension methods for easier access to authentication

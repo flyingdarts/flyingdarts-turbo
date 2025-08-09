@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
-import 'package:authress_login/src/models/deep_link_config.dart';
+import 'package:flyingdarts_authress_login/src/models/deep_link_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -63,14 +63,10 @@ class AuthenticationService extends ChangeNotifier {
   bool get isAuthenticated => _state is AuthStateAuthenticated;
 
   /// Get the current access token if available
-  String? get accessToken => _state is AuthStateAuthenticated
-      ? (_state as AuthStateAuthenticated).accessToken
-      : null;
+  String? get accessToken => _state is AuthStateAuthenticated ? (_state as AuthStateAuthenticated).accessToken : null;
 
   /// Get the current user profile if available
-  UserProfile? get userProfile => _state is AuthStateAuthenticated
-      ? (_state as AuthStateAuthenticated).user
-      : null;
+  UserProfile? get userProfile => _state is AuthStateAuthenticated ? (_state as AuthStateAuthenticated).user : null;
 
   /// Initialize the service and check for existing sessions
   Future<void> initialize() async {
@@ -216,8 +212,7 @@ class AuthenticationService extends ChangeNotifier {
       'codeChallenge': pkceCodes.codeChallenge,
       'applicationId': _config.applicationId,
       if (connectionId != null) 'connectionId': connectionId,
-      if (tenantLookupIdentifier != null)
-        'tenantLookupIdentifier': tenantLookupIdentifier,
+      if (tenantLookupIdentifier != null) 'tenantLookupIdentifier': tenantLookupIdentifier,
       if (additionalParams != null) ...additionalParams,
     };
 
@@ -367,9 +362,7 @@ class AuthenticationService extends ChangeNotifier {
 
       // Get the updated state
       final updatedState = _state;
-      return updatedState is AuthStateAuthenticated
-          ? updatedState.accessToken
-          : null;
+      return updatedState is AuthStateAuthenticated ? updatedState.accessToken : null;
     }
 
     return currentState.accessToken;

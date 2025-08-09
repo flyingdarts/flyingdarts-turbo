@@ -5,13 +5,13 @@ publish_to: none
 
 environment:
   sdk: ^3.8.1
-  flutter: ^3.26.0
+  flutter: ">=3.26.0"
 resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-  authress_login:
+  flyingdarts_authress_login:
   rxdart: ^0.28.0
   web_socket_channel: ^3.0.3
   injectable: ^2.5.0

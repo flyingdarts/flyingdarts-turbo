@@ -1,10 +1,12 @@
 import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flyingdarts_authress_login/src/models/auth_state.dart';
+import 'package:flyingdarts_authress_login/src/models/deep_link_config.dart';
+import 'package:flyingdarts_authress_login/src/services/authentication_service.dart';
+import 'package:flyingdarts_authress_login/src/services/http_service.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:authress_login/src/services/authentication_service.dart';
-import 'package:authress_login/src/models/auth_state.dart';
-import 'package:authress_login/src/models/deep_link_config.dart';
-import 'package:authress_login/src/services/http_service.dart';
+
 import '../test_utils/mocks.dart';
 
 void main() {
@@ -117,8 +119,7 @@ void main() {
         ).thenAnswer(
           (_) async => HttpResponse(
             statusCode: 200,
-            body:
-                '{"access_token": "new-token", "refresh_token": "new-refresh", "expires_in": 3600}',
+            body: '{"access_token": "new-token", "refresh_token": "new-refresh", "expires_in": 3600}',
             headers: const {},
             isSuccess: true,
           ),
@@ -191,7 +192,7 @@ void main() {
         ).thenAnswer(
           (_) async => HttpResponse(
             statusCode: 200,
-            body: '${json.encode(TestData.tokenResponse)}',
+            body: json.encode(TestData.tokenResponse),
             headers: const {},
             isSuccess: true,
           ),
@@ -393,7 +394,7 @@ void main() {
         ).thenAnswer(
           (_) async => HttpResponse(
             statusCode: 200,
-            body: '${json.encode(TestData.tokenResponse)}',
+            body: json.encode(TestData.tokenResponse),
             headers: const {},
             isSuccess: true,
           ),

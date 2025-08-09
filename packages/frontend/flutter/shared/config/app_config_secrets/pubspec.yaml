@@ -5,13 +5,13 @@ publish_to: none
 
 environment:
   sdk: ^3.8.1
-  flutter: ^3.26.0
+  flutter: ">=3.26.0"
 resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-    
+
   app_config_core:
 
   json_annotation: ^4.9.0
