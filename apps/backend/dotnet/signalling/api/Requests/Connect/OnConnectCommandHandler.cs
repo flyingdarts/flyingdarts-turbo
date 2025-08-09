@@ -21,22 +21,27 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         _dynamoDbService = dynamoDbService;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(OnConnectCommand request, CancellationToken cancellationToken)
+    public async Task<APIGatewayProxyResponse> Handle(
+        OnConnectCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        Console.WriteLine(
-            $"[OnConnect] Starting connection process for AuthProviderUserId: {request.AuthProviderUserId}, ConnectionId: {request.ConnectionId}"
-        );
+        Console.WriteLine($"[OnConnect] Processing request", JsonSerializer.Serialize(request));
 
         try
         {
             var user = await EnsureUserIsUpdatedOrCreated(request, cancellationToken);
-            Console.WriteLine($"[OnConnect] User ensured - UserId: {user.UserId}, AuthProviderUserId: {user.AuthProviderUserId}");
+            Console.WriteLine(
+                $"[OnConnect] User ensured - UserId: {user.UserId}, AuthProviderUserId: {user.AuthProviderUserId}"
+            );
 
             user.MeetingIdentifier = await EnsureUserHasMeetingRoom(user, cancellationToken);
 
             await _dynamoDbService.WriteUserAsync(user, cancellationToken);
 
-            Console.WriteLine($"[OnConnect] Meeting room ensured - MeetingIdentifier: {user.MeetingIdentifier}");
+            Console.WriteLine(
+                $"[OnConnect] Meeting room ensured - MeetingIdentifier: {user.MeetingIdentifier}"
+            );
 
             var body = new Dictionary<string, string>
             {
@@ -44,7 +49,10 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
                 { "MeetingIdentifier", user.MeetingIdentifier.ToString() },
             };
 
-            Console.WriteLine($"[OnConnect] Connection process completed successfully for UserId: {user.UserId}");
+            Console.WriteLine(
+                $"[OnConnect] Connection process completed successfully for UserId: {user.UserId}"
+            );
+
             return ResponseBuilder.SuccessJson(body, 201);
         }
         catch (Exception ex)
@@ -57,20 +65,30 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         }
     }
 
-    private async Task<User> EnsureUserIsUpdatedOrCreated(OnConnectCommand request, CancellationToken cancellationToken)
+    private async Task<User> EnsureUserIsUpdatedOrCreated(
+        OnConnectCommand request,
+        CancellationToken cancellationToken
+    )
     {
-        Console.WriteLine($"[OnConnect] Ensuring user exists for AuthProviderUserId: {request.AuthProviderUserId}");
+        Console.WriteLine(
+            $"[OnConnect] Ensuring user exists for AuthProviderUserId: {request.AuthProviderUserId}"
+        );
 
         User? user = null;
         try
         {
             Console.WriteLine($"[OnConnect] Attempting to read existing user from database");
-            user = await _dynamoDbService.ReadUserByAuthProviderUserIdAsync(request.AuthProviderUserId, cancellationToken);
+            user = await _dynamoDbService.ReadUserByAuthProviderUserIdAsync(
+                request.AuthProviderUserId,
+                cancellationToken
+            );
             Console.WriteLine($"[OnConnect] Existing user found - UserId: {user.UserId}");
         }
         catch (DynamoDbService.UserNotFoundException)
         {
-            Console.WriteLine($"[OnConnect] User not found, creating new user for AuthProviderUserId: {request.AuthProviderUserId}");
+            Console.WriteLine(
+                $"[OnConnect] User not found, creating new user for AuthProviderUserId: {request.AuthProviderUserId}"
+            );
 
             var userProfile = CreateFromAuthressToken(request.AuthressToken);
             Console.WriteLine(
@@ -94,7 +112,9 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         {
             if (user is null)
             {
-                Console.WriteLine($"[OnConnect] User is null after all attempts for AuthProviderUserId: {request.AuthProviderUserId}");
+                Console.WriteLine(
+                    $"[OnConnect] User is null after all attempts for AuthProviderUserId: {request.AuthProviderUserId}"
+                );
                 throw new Exception("User not found");
             }
         }
@@ -107,9 +127,19 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
 
         try
         {
+            Console.WriteLine($"[OnConnect] Token: {token}");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                Console.WriteLine("[OnConnect] Token is null or empty");
+                throw new Exception("Token is null or empty");
+            }
+
+            var normalizedToken = NormalizeAuthressToken(token);
+            Console.WriteLine($"[OnConnect] Normalized token: {normalizedToken}");
             // Parse the JWT token to extract user information
             var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
+            var jwtToken = handler.ReadJwtToken(normalizedToken);
 
             var userProfile = new UserProfile();
 
@@ -140,7 +170,9 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
             if (pictureClaim != null)
             {
                 userProfile.Picture = pictureClaim.Value;
-                Console.WriteLine($"[OnConnect] Extracted picture from token: {pictureClaim.Value}");
+                Console.WriteLine(
+                    $"[OnConnect] Extracted picture from token: {pictureClaim.Value}"
+                );
             }
             else
             {
@@ -159,7 +191,35 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         }
     }
 
-    private async Task<Guid> EnsureUserHasMeetingRoom(User user, CancellationToken cancellationToken)
+    private static string NormalizeAuthressToken(string authressToken)
+    {
+        if (string.IsNullOrWhiteSpace(authressToken))
+        {
+            return string.Empty;
+        }
+
+        // Normalize leading/trailing whitespace first
+        var trimmedToken = authressToken.Trim();
+        Console.WriteLine($"[OnConnect] Normalizing token: {trimmedToken}");
+
+        const string userPrefix = "user=";
+
+        // Case 1: Token starts with "user=" (case-insensitive)
+        if (trimmedToken.StartsWith(userPrefix, StringComparison.OrdinalIgnoreCase))
+        {
+            var tokenValue = trimmedToken.Substring(userPrefix.Length).Trim();
+            Console.WriteLine($"[OnConnect] Normalized token: {tokenValue}");
+            return tokenValue;
+        }
+
+        Console.WriteLine($"[OnConnect] Token is not prefixed with 'user='");
+        return trimmedToken;
+    }
+
+    private async Task<Guid> EnsureUserHasMeetingRoom(
+        User user,
+        CancellationToken cancellationToken
+    )
     {
         Console.WriteLine($"[OnConnect] Ensuring user has meeting room for UserId: {user.UserId}");
 
@@ -169,12 +229,16 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
 
             if (meeting is null)
             {
-                Console.WriteLine($"[OnConnect] No existing meeting found for UserId: {user.UserId}, creating new meeting");
+                Console.WriteLine(
+                    $"[OnConnect] No existing meeting found for UserId: {user.UserId}, creating new meeting"
+                );
                 meeting = await _meetingService.CreateAsync(user.UserId, cancellationToken);
 
                 if (meeting is null)
                 {
-                    Console.WriteLine($"[OnConnect] Failed to create meeting for UserId: {user.UserId}");
+                    Console.WriteLine(
+                        $"[OnConnect] Failed to create meeting for UserId: {user.UserId}"
+                    );
                     throw new Exception("Couldn't create or find a meeting for some reason");
                 }
 
@@ -183,25 +247,35 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
                     Console.WriteLine(
                         $"[OnConnect] Meeting created but ID is null for UserId: {user.UserId}. Meeting data: {JsonSerializer.Serialize(meeting)}"
                     );
-                    throw new Exception($"Couldn't add the meeting because the id was null {JsonSerializer.Serialize(meeting)}");
+                    throw new Exception(
+                        $"Couldn't add the meeting because the id was null {JsonSerializer.Serialize(meeting)}"
+                    );
                 }
 
-                Console.WriteLine($"[OnConnect] New meeting created successfully - MeetingId: {meeting.Id}");
+                Console.WriteLine(
+                    $"[OnConnect] New meeting created successfully - MeetingId: {meeting.Id}"
+                );
                 await _dynamoDbService.WriteUserAsync(user, cancellationToken);
                 Console.WriteLine($"[OnConnect] User updated with new meeting in database");
             }
             else
             {
-                Console.WriteLine($"[OnConnect] Existing meeting found for UserId: {user.UserId} - MeetingId: {meeting.Id}");
+                Console.WriteLine(
+                    $"[OnConnect] Existing meeting found for UserId: {user.UserId} - MeetingId: {meeting.Id}"
+                );
             }
 
             var meetingId = meeting.Id ?? throw new Exception("Cant add user id");
-            Console.WriteLine($"[OnConnect] Meeting room ensured successfully - MeetingId: {meetingId}");
+            Console.WriteLine(
+                $"[OnConnect] Meeting room ensured successfully - MeetingId: {meetingId}"
+            );
             return meetingId;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[OnConnect] Error ensuring meeting room for UserId: {user.UserId}. Error: {ex.Message}");
+            Console.WriteLine(
+                $"[OnConnect] Error ensuring meeting room for UserId: {user.UserId}. Error: {ex.Message}"
+            );
             throw;
         }
     }

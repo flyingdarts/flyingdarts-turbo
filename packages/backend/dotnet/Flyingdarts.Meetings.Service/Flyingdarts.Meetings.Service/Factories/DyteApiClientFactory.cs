@@ -16,7 +16,9 @@ public class DyteApiClientFactory
 
     public DyteApiClient GetClient()
     {
-        return new DyteApiClient(new HttpClientRequestAdapter(_authenticationProvider, httpClient: _httpClient));
+        return new DyteApiClient(
+            new HttpClientRequestAdapter(_authenticationProvider, httpClient: _httpClient)
+        );
     }
 }
 
@@ -28,16 +30,19 @@ public class DyteAuthenticationProvider : IAuthenticationProvider
         CancellationToken cancellationToken = default
     )
     {
-        var dyteOrganizationId = Environment.GetEnvironmentVariable("DyteOrganizationId");
-        var dyteApiKey = Environment.GetEnvironmentVariable("DyteApiKey");
+        var dyteAuthorizationHeaderValue = Environment.GetEnvironmentVariable(
+            "DyteAuthorizationHeaderValue"
+        );
 
-        if (string.IsNullOrEmpty(dyteOrganizationId) || string.IsNullOrEmpty(dyteApiKey))
+        if (string.IsNullOrEmpty(dyteAuthorizationHeaderValue))
         {
-            throw new InvalidOperationException("DyteOrganizationId and DyteApiKey environment variables must be set");
+            throw new InvalidOperationException(
+                "DyteAuthorizationHeaderValue environment variable must be set"
+            );
         }
 
-        var authHeaderValue = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{dyteOrganizationId}:{dyteApiKey}"));
-        request.Headers.Add("Authorization", $"Basic {authHeaderValue}");
+        request.Headers.Add("Authorization", dyteAuthorizationHeaderValue);
+
         await Task.CompletedTask;
     }
 }
