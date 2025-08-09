@@ -3,15 +3,12 @@ name: Signalling API Lambda (Development)
 on:
   workflow_call:
   push:
+    branches:
+      - development
     paths:
       - "apps/backend/dotnet/signalling/**"
       - "packages/backend/dotnet/**"
       - ".github/workflows/signalling-api-dev.yml"
-  pull_request:
-    paths:
-      - "apps/backend/dotnet/signalling/**"
-      - "packages/backend/dotnet/**"
-
 jobs:
   build-signalling-api-dev:
     uses: ./.github/workflows/build-dotnet-lambda.yml
