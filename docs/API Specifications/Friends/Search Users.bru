@@ -4,24 +4,14 @@ meta {
   seq: 2
 }
 
-post {
-  url: {{baseUrl}}/friends/search
+get {
+  url: https://hye8b8qfx8.execute-api.eu-west-1.amazonaws.com/prod/friends
   body: json
   auth: bearer
 }
 
-headers {
-  : 
-}
-
 auth:bearer {
   token: {{token}}
-}
-
-body:json {
-  {
-    "SearchTerm": "638890993640285456"
-  }
 }
 
 docs {
