@@ -1,0 +1,22 @@
+name: Main Flutter App Workflow (Development)
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - development
+    paths:
+      - "apps/frontend/flutter/**"
+      - "packages/frontend/flutter/**"
+      - ".github/workflows/main_flutter_dev.yml"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+jobs:
+  build-flutter-ios-development:
+    uses: ./.github/workflows/build-flutter-ios.yml
+    with:
+      project-name: "flyingdarts_mobile"
+      project-directory: "apps/frontend/flutter/flyingdarts_mobile"
+      flutter-version: "3.32.6"
+      channel: "stable"
+      flavor: "dev"
