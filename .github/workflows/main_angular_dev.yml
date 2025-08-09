@@ -19,6 +19,7 @@ on:
       - "apps/frontend/angular/**"
       - ".github/workflows/main_angular_dev.yml"
 
+
 jobs:
   build-angular-dev:
     uses: ./.github/workflows/build-angular-app.yml
@@ -35,4 +36,7 @@ jobs:
     with:
       project-name: "fd-app"
       environment: "development"
-    secrets: inherit
+    secrets:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEPLOYMENT_ROLE_ARN: ${{ secrets.AWS_DEPLOYMENT_ROLE_ARN }}
+      AWS_CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID_DEV }}
