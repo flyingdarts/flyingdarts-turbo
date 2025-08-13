@@ -1,4 +1,8 @@
-﻿namespace Flyingdarts.E2E;
+﻿using System.Text.RegularExpressions;
+using Microsoft.Playwright;
+using Microsoft.Playwright.Xunit;
+
+namespace Flyingdarts.E2E;
 
 public class UnitTest1 : PageTest
 {
@@ -22,5 +26,23 @@ public class UnitTest1 : PageTest
         // Expects page to have a heading with the name of Installation.
         await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Installation" }))
             .ToBeVisibleAsync();
+    }
+
+    [Fact]
+    public async Task GetToken()
+    {
+        var cookie = new Cookie
+        {
+            Name = "authorization",
+            Value = $"{Environment.GetEnvironmentVariable("AUTHRESS_TOKEN")}",
+            Domain = "flyingdarts.net",
+            Path = "/",
+        };
+
+        await Page.Context.AddCookiesAsync(new List<Cookie> { cookie });
+        await Page.GotoAsync("https://staging.flyingdarts.net");
+
+        // Click the get started link.
+        await Page.GetByText("create room", new() { Exact = false }).ClickAsync();
     }
 }
