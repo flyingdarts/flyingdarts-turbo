@@ -23,7 +23,7 @@ jobs:
       working-directory: e2e
 
     - name: Ensure browsers are installed
-      run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
+      run: pwsh bin/Debug/net9.0/playwright.ps1 install --with-deps
       working-directory: e2e
 
     - name: Run your tests
