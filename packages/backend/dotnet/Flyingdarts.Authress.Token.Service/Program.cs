@@ -33,11 +33,10 @@ app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 // Returns a service JWT minted via Service Client Provider
 app.MapGet(
     "/token/service",
-    ([FromServices] AuthressClientTokenProvider provider) =>
+    async ([FromServices] AuthressClientTokenProvider provider) =>
     {
         // The provider issues a valid JWT for your service client.
-        // If the SDK version exposes async, switch to an async handler and await accordingly.
-        var jwt = provider.GetBearerToken();
+        var jwt = await provider.GetBearerToken();
         return Results.Ok(new { token = jwt });
     }
 );

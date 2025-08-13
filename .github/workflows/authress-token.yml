@@ -123,7 +123,9 @@ jobs:
             exit 1
           fi
           echo "Authress token: $TOKEN"
-          echo "authress_token=$TOKEN" >> "$GITHUB_OUTPUT"
+          {
+            echo "authress_token=$TOKEN"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Stop container
         if: always()
