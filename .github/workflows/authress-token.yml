@@ -47,7 +47,7 @@ jobs:
           AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
         run: |
           docker run -d --rm --name authress-token \
-            -p 8080:8080 \
+            -p 1337:8080 \
             -e AUTHRESS_API_URL="$AUTHRESS_API_URL" \
             -e AUTHRESS_SERVICE_CLIENT_ACCESS_KEY="$AUTHRESS_SERVICE_CLIENT_ACCESS_KEY" \
             "${{ steps.meta.outputs.image_tag }}"
@@ -61,7 +61,7 @@ jobs:
         timeout-minutes: 2
         run: |
           for i in {1..60}; do
-            if curl -fsS http://localhost:8080/health > /dev/null; then
+            if curl -fsS http://localhost:1337/health > /dev/null; then
               exit 0
             fi
             sleep 2
