@@ -9,15 +9,7 @@ on:
       - "e2e/**"
       - ".github/workflows/run-dart-game-test.yml"
 jobs:
-  # Prune the project
-  prune:
-    uses: ./.github/workflows/setup-build-turbo-prune.yml
-    with:
-      project-name: "flyingdarts.e2e"
-      node-version: "22"
-
   e2e-test:
-    needs: prune
     runs-on: ubuntu-latest
     steps:
     - name: Setup dotnet
@@ -26,7 +18,12 @@ jobs:
         dotnet-version: 8.0.x
     - name: Build & Install
       run: dotnet build
+      working-directory: e2e
+
     - name: Ensure browsers are installed
       run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
+      working-directory: e2e
+
     - name: Run your tests
       run: dotnet test
+      working-directory: e2e
