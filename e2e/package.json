@@ -1,0 +1,11 @@
+{
+  "name": "flyingdarts.e2e",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mike Pattyn",
+  "license": "ISC",
+  "description": "E2E tests for the Dart Game"
+}

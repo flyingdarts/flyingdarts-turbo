@@ -12,7 +12,8 @@
     "packages/backend/rust/**/*",
     "packages/frontend/flutter/**/*",
     "packages/tools/dotnet/**/*",
-    "packages/tools/config"
+    "packages/tools/config",
+    "e2e/**/*"
   ],
   "dependencies": {
     "ajv": "^8.17.1",

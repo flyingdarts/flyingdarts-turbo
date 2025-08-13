@@ -1,0 +1,32 @@
+name: Dart Game Test
+
+on:
+  workflow_call:
+  push:
+    branches:
+      - staging
+    paths:
+      - "e2e/**"
+      - ".github/workflows/run-dart-game-test.yml"
+jobs:
+  # Prune the project
+  prune:
+    uses: ./.github/workflows/setup-build-turbo-prune.yml
+    with:
+      project-name: "flyingdarts.e2e"
+      node-version: "22"
+
+  e2e-test:
+    needs: prune
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    - name: Build & Install
+      run: dotnet build
+    - name: Ensure browsers are installed
+      run: pwsh bin/Debug/net8.0/playwright.ps1 install --with-deps
+    - name: Run your tests
+      run: dotnet test
