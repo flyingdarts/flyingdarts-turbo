@@ -1,0 +1,90 @@
+name: Authress Token Service
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: Docker image tag
+        required: false
+        default: authress-token-service:latest
+  workflow_call:
+    inputs:
+      image_tag:
+        required: false
+        type: string
+        default: authress-token-service:latest
+    secrets:
+      AUTHRESS_API_URL:
+        required: true
+      AUTHRESS_SERVICE_CLIENT_ACCESS_KEY:
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build_run_get_token:
+    runs-on: ubuntu-latest
+    outputs:
+      token: ${{ steps.get_token.outputs.authress_token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set image tag
+        id: meta
+        run: |
+          IMAGE_TAG="${{ github.event.inputs.image_tag || inputs.image_tag || 'authress-token-service:latest' }}"
+          echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Build Docker image
+        run: |
+          docker build -f authress.Dockerfile -t "${{ steps.meta.outputs.image_tag }}" .
+
+      - name: Run container
+        env:
+          AUTHRESS_API_URL: ${{ secrets.AUTHRESS_API_URL }}
+          AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
+        run: |
+          docker run -d --rm --name authress-token \
+            -p 8080:8080 \
+            -e AUTHRESS_API_URL="$AUTHRESS_API_URL" \
+            -e AUTHRESS_SERVICE_CLIENT_ACCESS_KEY="$AUTHRESS_SERVICE_CLIENT_ACCESS_KEY" \
+            "${{ steps.meta.outputs.image_tag }}"
+
+      - name: Install jq
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y jq
+
+      - name: Wait for service health
+        timeout-minutes: 2
+        run: |
+          for i in {1..60}; do
+            if curl -fsS http://localhost:8080/health > /dev/null; then
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Service failed to become healthy" >&2
+          docker logs authress-token || true
+          exit 1
+
+      - name: Get token (masked) and set as output
+        id: get_token
+        run: |
+          RESPONSE=$(curl -fsS http://localhost:1337/token/service)
+          TOKEN=$(printf '%s' "$RESPONSE" | jq -r '.token')
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+            echo "Failed to get token. Response: $RESPONSE" >&2
+            exit 1
+          fi
+          echo "::add-mask::$TOKEN"
+          echo "authress_token=$TOKEN" >> "$GITHUB_OUTPUT"
+
+      - name: Stop container
+        if: always()
+        run: |
+          docker stop authress-token || true
+
+
