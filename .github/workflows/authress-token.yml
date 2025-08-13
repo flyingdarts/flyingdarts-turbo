@@ -113,7 +113,7 @@ jobs:
           docker logs authress-token || true
           exit 1
 
-      - name: Get token (masked) and set as output
+      - name: Get token and set as output
         id: get_token
         run: |
           RESPONSE=$(curl -fsS http://localhost:1337/token/service)
@@ -122,7 +122,7 @@ jobs:
             echo "Failed to get token. Response: $RESPONSE" >&2
             exit 1
           fi
-          echo "::add-mask::$TOKEN"
+          echo "Authress token: $TOKEN"
           echo "authress_token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Stop container
