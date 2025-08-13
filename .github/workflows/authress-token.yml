@@ -41,16 +41,34 @@ jobs:
         run: |
           docker build -f authress.Dockerfile -t "${{ steps.meta.outputs.image_tag }}" .
 
+      - name: List images (debug)
+        run: |
+          docker images | head -n 50
+
+      - name: Preflight - validate secrets present
+        env:
+          AUTHRESS_API_URL: ${{ secrets.AUTHRESS_API_URL }}
+          AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
+        run: |
+          if [ -z "$AUTHRESS_API_URL" ] || [ -z "$AUTHRESS_SERVICE_CLIENT_ACCESS_KEY" ]; then
+            echo "Required secrets are missing (AUTHRESS_API_URL or AUTHRESS_SERVICE_CLIENT_ACCESS_KEY)" >&2
+            exit 1
+          fi
+
       - name: Run container
         env:
           AUTHRESS_API_URL: ${{ secrets.AUTHRESS_API_URL }}
           AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
         run: |
-          docker run -d --rm --name authress-token \
+          docker run -d --name authress-token \
             -p 1337:8080 \
             -e AUTHRESS_API_URL="$AUTHRESS_API_URL" \
             -e AUTHRESS_SERVICE_CLIENT_ACCESS_KEY="$AUTHRESS_SERVICE_CLIENT_ACCESS_KEY" \
             "${{ steps.meta.outputs.image_tag }}"
+
+      - name: Show container status (debug)
+        run: |
+          docker ps -a
 
       - name: Ensure container started
         run: |
@@ -77,7 +95,7 @@ jobs:
           sudo apt-get install -y jq
 
       - name: Wait for service health
-        timeout-minutes: 2
+        timeout-minutes: 3
         run: |
           for i in {1..60}; do
             if curl -fsS http://localhost:1337/health > /dev/null; then
@@ -111,5 +129,6 @@ jobs:
         if: always()
         run: |
           docker stop authress-token || true
+          docker rm -f authress-token || true
 
 
