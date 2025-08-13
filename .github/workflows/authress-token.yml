@@ -52,6 +52,25 @@ jobs:
             -e AUTHRESS_SERVICE_CLIENT_ACCESS_KEY="$AUTHRESS_SERVICE_CLIENT_ACCESS_KEY" \
             "${{ steps.meta.outputs.image_tag }}"
 
+      - name: Ensure container started
+        run: |
+          for i in {1..30}; do
+            STATUS=$(docker inspect -f '{{.State.Status}}' authress-token || true)
+            if [ "$STATUS" = "running" ]; then
+              echo "Container is running"
+              exit 0
+            fi
+            if [ "$STATUS" = "exited" ] || [ -z "$STATUS" ]; then
+              echo "Container is not running. Status: $STATUS" >&2
+              docker logs authress-token || true
+              exit 1
+            fi
+            sleep 1
+          done
+          echo "Container did not reach running state in time" >&2
+          docker logs authress-token || true
+          exit 1
+
       - name: Install jq
         run: |
           sudo apt-get update -y
@@ -63,6 +82,12 @@ jobs:
           for i in {1..60}; do
             if curl -fsS http://localhost:1337/health > /dev/null; then
               exit 0
+            fi
+            # Show last few log lines periodically to aid debugging
+            if ! (( i % 10 )); then
+              echo "--- docker logs (tail) ---"
+              docker logs --tail 100 authress-token || true
+              echo "--------------------------"
             fi
             sleep 2
           done
