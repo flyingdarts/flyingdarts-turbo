@@ -9,14 +9,8 @@ on:
       - "e2e/**"
       - ".github/workflows/run-dart-game-test.yml"
 jobs:
-  authress_token:
-    uses: ./.github/workflows/authress-token.yml
-    secrets:
-      AUTHRESS_API_URL: ${{ secrets.AUTHRESS_API_URL }}
-      AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
   e2e-test:
     runs-on: ubuntu-latest
-    needs: authress_token
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -24,6 +18,61 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
+
+    # Inline Authress token acquisition
+    - name: Build token service image
+      run: docker build -f authress.Dockerfile -t authress-token:local .
+
+    - name: Run token service container
+      env:
+        AUTHRESS_API_URL: ${{ secrets.AUTHRESS_API_URL }}
+        AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
+      run: |
+        docker run -d --name authress-token -p 1337:8080 \
+          -e AUTHRESS_API_URL -e AUTHRESS_SERVICE_CLIENT_ACCESS_KEY authress-token:local
+
+    - name: Wait for token service health
+      run: |
+        for i in {1..60}; do
+          if curl -fsS http://localhost:1337/health > /dev/null; then
+            exit 0
+          fi
+          sleep 2
+        done
+        echo "Service failed to become healthy" >&2
+        docker logs --tail 200 authress-token || true
+        exit 1
+
+    - name: Install jq
+      run: |
+        sudo apt-get update -y
+        sudo apt-get install -y jq
+
+    - name: Get token and export env
+      run: |
+        RESPONSE=$(curl -fsS http://localhost:1337/token/service)
+        TOKEN=$(printf '%s' "$RESPONSE" | jq -r '.token')
+        if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+          echo "Failed to get token. Response: $RESPONSE" >&2
+          exit 1
+        fi
+        echo "::add-mask::$TOKEN"
+        echo "AUTHRESS_TOKEN=$TOKEN" >> "$GITHUB_ENV"
+
+    - name: Stop token service
+      if: always()
+      run: |
+        docker stop authress-token || true
+        docker rm -f authress-token || true
+    - name: Verify token is present
+      run: |
+        if [ -z "${AUTHRESS_TOKEN}" ]; then
+          echo "AUTHRESS_TOKEN is missing" >&2
+          exit 1
+        fi
+        echo "::add-mask::$AUTHRESS_TOKEN"
+        echo "AUTHRESS_TOKEN length: ${#AUTHRESS_TOKEN}"
+
     - name: Build & Install
       run: dotnet build
       working-directory: e2e
@@ -32,19 +81,6 @@ jobs:
       run: pwsh bin/Debug/net9.0/playwright.ps1 install --with-deps
       working-directory: e2e
 
-    - name: Verify token is present
-      env:
-        AUTHRESS_TOKEN: ${{ needs.authress_token.outputs.token }}
-      run: |
-        if [ -z "$AUTHRESS_TOKEN" ]; then
-          echo "AUTHRESS_TOKEN is missing" >&2
-          exit 1
-        fi
-        echo "::add-mask::$AUTHRESS_TOKEN"
-        echo "AUTHRESS_TOKEN length: ${#AUTHRESS_TOKEN}"
-
     - name: Run your tests
-      env:
-        AUTHRESS_TOKEN: ${{ needs.authress_token.outputs.token }}
       run: dotnet test
       working-directory: e2e
