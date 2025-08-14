@@ -32,8 +32,19 @@ jobs:
       run: pwsh bin/Debug/net9.0/playwright.ps1 install --with-deps
       working-directory: e2e
 
+    - name: Verify token is present
+      env:
+        AUTHRESS_TOKEN: ${{ needs['authress-token'].outputs.token }}
+      run: |
+        if [ -z "$AUTHRESS_TOKEN" ]; then
+          echo "AUTHRESS_TOKEN is missing" >&2
+          exit 1
+        fi
+        echo "::add-mask::$AUTHRESS_TOKEN"
+        echo "AUTHRESS_TOKEN length: ${#AUTHRESS_TOKEN}"
+
     - name: Run your tests
       env:
-        AUTHRESS_TOKEN: ${{ needs.authress-token.outputs.token }}
+        AUTHRESS_TOKEN: ${{ needs['authress-token'].outputs.token }}
       run: dotnet test
       working-directory: e2e
