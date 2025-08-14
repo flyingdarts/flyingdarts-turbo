@@ -9,8 +9,14 @@ on:
       - "e2e/**"
       - ".github/workflows/run-dart-game-test.yml"
 jobs:
+  authress-token:
+    uses: ./.github/workflows/authress-token.yml
+    secrets:
+      AUTHRESS_API_URL: ${{ secrets.AUTHRESS_API_URL }}
+      AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
   e2e-test:
     runs-on: ubuntu-latest
+    needs: authress-token
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -27,5 +33,7 @@ jobs:
       working-directory: e2e
 
     - name: Run your tests
+      env:
+        AUTHRESS_TOKEN: ${{ env.token }}
       run: dotnet test
       working-directory: e2e

@@ -13,6 +13,10 @@ on:
         required: false
         type: string
         default: authress-token-service:latest
+    outputs:
+      token:
+        description: "Authress service token"
+        value: ${{ jobs.build_run_get_token.outputs.token }}
     secrets:
       AUTHRESS_API_URL:
         required: true
