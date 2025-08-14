@@ -10,7 +10,7 @@ on:
       - ".github/workflows/run-dart-game-test.yml"
 jobs:
   authress_token:
-    uses: mikepattyn/flyingdarts/.github/workflows/authress-token.yml@staging
+    uses: ./.github/workflows/authress-token.yml
     secrets:
       AUTHRESS_API_URL: ${{ secrets.AUTHRESS_API_URL }}
       AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
