@@ -9,14 +9,14 @@ on:
       - "e2e/**"
       - ".github/workflows/run-dart-game-test.yml"
 jobs:
-  authress-token:
-    uses: ./.github/workflows/authress-token.yml
+  authress_token:
+    uses: mikepattyn/flyingdarts/.github/workflows/authress-token.yml@staging
     secrets:
       AUTHRESS_API_URL: ${{ secrets.AUTHRESS_API_URL }}
       AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
   e2e-test:
     runs-on: ubuntu-latest
-    needs: authress-token
+    needs: authress_token
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
 
     - name: Verify token is present
       env:
-        AUTHRESS_TOKEN: ${{ needs['authress-token'].outputs.token }}
+        AUTHRESS_TOKEN: ${{ needs.authress_token.outputs.token }}
       run: |
         if [ -z "$AUTHRESS_TOKEN" ]; then
           echo "AUTHRESS_TOKEN is missing" >&2
@@ -45,6 +45,6 @@ jobs:
 
     - name: Run your tests
       env:
-        AUTHRESS_TOKEN: ${{ needs['authress-token'].outputs.token }}
+        AUTHRESS_TOKEN: ${{ needs.authress_token.outputs.token }}
       run: dotnet test
       working-directory: e2e
