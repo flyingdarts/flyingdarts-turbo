@@ -18,6 +18,11 @@ export class SessionUserResolver implements Resolve<Promise<boolean>> {
   async resolve(): Promise<boolean> {
     this.store.dispatch(AppStateActions.setLoading({ loading: true }));
     try {
+      const overrideToken = this.getOverrideToken();
+      if (overrideToken) {
+        localStorage.setItem('AuthenticationCredentialsStorage', overrideToken);
+      }
+
       const idTokenRaw = localStorage.getItem('AuthenticationCredentialsStorage');
       if (!idTokenRaw) throw new Error('No Authress credentials found in localStorage');
       const idTokenParsed = JSON.parse(idTokenRaw);
@@ -34,6 +39,21 @@ export class SessionUserResolver implements Resolve<Promise<boolean>> {
     } finally {
       this.store.dispatch(AppStateActions.setLoading({ loading: false }));
     }
+  }
+
+
+ private getOverrideToken(): string | null {
+    // Check for the override token cookie
+    const cookies = document.cookie.split(';');
+    const overrideCookie = cookies.find(cookie =>
+      cookie.trim().startsWith('custom-jwt-token-override=')
+    );
+
+    if (overrideCookie) {
+      return overrideCookie.split('=')[1];
+    }
+
+    return null;
   }
 
   /**
