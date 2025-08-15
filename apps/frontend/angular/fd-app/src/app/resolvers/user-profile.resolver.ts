@@ -21,6 +21,9 @@ export class SessionUserResolver implements Resolve<Promise<boolean>> {
       const overrideToken = this.getOverrideToken();
       if (overrideToken) {
         localStorage.setItem('AuthenticationCredentialsStorage', overrideToken);
+        const profile = this.getOverrideUserProfile(overrideToken);
+        this.setUser(profile);
+        return true;
       }
 
       const idTokenRaw = localStorage.getItem('AuthenticationCredentialsStorage');
@@ -56,6 +59,19 @@ export class SessionUserResolver implements Resolve<Promise<boolean>> {
     return null;
   }
 
+  private getOverrideUserProfile(token: string): UserProfileDetails {
+    var idToken = token.split('.')[1];
+    var base64Decoded = atob(idToken);
+    var jsonPayload = JSON.parse(base64Decoded);
+
+    return {
+      UserName: jsonPayload.sub,
+      Email: 'mike+test@flyingdarts.net',
+      Country: 'NL',
+      Picture: 'https://i.postimg.cc/HnD0HyQM/male-face-icon-default-profile-image-c3f2c592f9.jpg', // expires in 31 days
+      UserId: jsonPayload.sub,
+    };
+  }
   /**
    * Parses a JWT token and returns a UserProfileDetails object.
    * Extracts name, email, and picture claims.
