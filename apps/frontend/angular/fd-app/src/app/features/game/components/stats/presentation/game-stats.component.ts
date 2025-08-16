@@ -27,4 +27,24 @@ export class GameStatsComponent {
     }
     return darts.join(' | ');
   }
+
+  getPlayerName(player: GameStateStates.PlayerState | undefined): string {
+    if (!player) {
+      return '';
+    }
+    if (player.name.substring(0, 2) === 'sc') {
+      return 'SC Player';
+    }
+    return player.name;
+  }
+
+  getOpponentName(opponent: GameStateStates.PlayerState | undefined): string {
+    if (!opponent) {
+      return '';
+    }
+    if (opponent.name.substring(0, 2) === 'sc') {
+      return 'SC Opponent';
+    }
+    return opponent.name;
+  }
 }

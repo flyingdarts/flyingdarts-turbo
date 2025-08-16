@@ -111,20 +111,6 @@
         ]
     },
     "makefile.configureOnOpen": false,
-    // Exclude build folders and generated files from formatting
-    "files.exclude": {
-        "**/build/": true,
-        "**/bin/": true,
-        "**/obj/": true,
-        "**/target/": true,
-        "**/dist/": true,
-        "**/node_modules/": true,
-        "**/.dart_tool/": true,
-        "**/*.g.dart": true,
-        "**/*.mocks.dart": true,
-        "**/*.module.dart": true,
-        "**/*.config.dart": true
-    },
     "dart.lineLength": 140,
     "dart.enableSdkFormatter": true,
     "rust-analyzer.checkOnSave": true,

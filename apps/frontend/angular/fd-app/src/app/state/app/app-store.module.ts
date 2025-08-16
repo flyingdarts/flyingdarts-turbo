@@ -10,6 +10,10 @@ export function appStateMetaReducer(reducer: ActionReducer<any>): ActionReducer<
     switch (action.type) {
       case AppStateActions.AppStateActions.SetX01GameSettings:
         localStorage.setItem('X01GameSettings', JSON.stringify(nextState.gameSettings.x01));
+        break;
+      case AppStateActions.AppStateActions.SetUser:
+        sessionStorage.setItem('userId', nextState.user?.UserId ?? '');
+        break;
     }
     return nextState;
   };

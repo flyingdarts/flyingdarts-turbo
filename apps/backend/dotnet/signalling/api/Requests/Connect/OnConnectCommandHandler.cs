@@ -90,7 +90,10 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
                 $"[OnConnect] User not found, creating new user for AuthProviderUserId: {request.AuthProviderUserId}"
             );
 
-            var userProfile = CreateFromAuthressToken(request.AuthressToken);
+            var userProfile = CreateFromAuthressToken(
+                request.AuthressToken,
+                request.IsServiceClient
+            );
             Console.WriteLine(
                 $"[OnConnect] User profile created from token - UserName: {userProfile.UserName}, Email: {userProfile.Email}"
             );
@@ -121,7 +124,7 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         return user;
     }
 
-    private UserProfile CreateFromAuthressToken(string token)
+    private UserProfile CreateFromAuthressToken(string token, bool isServiceClient = false)
     {
         Console.WriteLine("[OnConnect] Creating user profile from Authress token");
 
@@ -135,12 +138,19 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
                 throw new Exception("Token is null or empty");
             }
 
+            if (isServiceClient)
+            {
+                Console.WriteLine("[OnConnect] Creating service client user profile");
+                return GetServiceClientUserProfile(token);
+            }
+
             var normalizedToken = NormalizeAuthressToken(token);
             Console.WriteLine($"[OnConnect] Normalized token: {normalizedToken}");
             // Parse the JWT token to extract user information
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(normalizedToken);
 
+            Console.WriteLine("[OnConnect] Parsing JWT token");
             var userProfile = new UserProfile();
 
             // Example: Extract "name" and "email" claims if they exist
@@ -188,6 +198,50 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         {
             Console.WriteLine($"[OnConnect] Error creating user profile from token: {ex.Message}");
             throw;
+        }
+    }
+
+    public UserProfile GetServiceClientUserProfile(string token)
+    {
+        try
+        {
+            var idToken = token.Split('.')[1];
+
+            // JWT tokens use Base64URL encoding, need to convert to standard Base64
+            var base64String = idToken.Replace('-', '+').Replace('_', '/');
+
+            // Add padding if needed
+            switch (base64String.Length % 4)
+            {
+                case 2:
+                    base64String += "==";
+                    break;
+                case 3:
+                    base64String += "=";
+                    break;
+            }
+
+            var base64Decoded = Convert.FromBase64String(base64String);
+            var jsonPayload = JsonSerializer.Deserialize<Dictionary<string, object>>(base64Decoded);
+
+            return new UserProfile
+            {
+                UserName = jsonPayload["sub"]?.ToString() ?? "unknown",
+                Email = "mike+test@flyingdarts.net",
+                Country = "NL",
+                Picture =
+                    "https://i.postimg.cc/HnD0HyQM/male-face-icon-default-profile-image-c3f2c592f9.jpg", // expires in 31 days
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[OnConnect] Error decoding JWT token: {ex.Message}");
+            Console.WriteLine(
+                $"[OnConnect] Token part being decoded: {(token?.Split('.').Length > 1 ? token.Split('.')[1] : "INVALID_TOKEN")}"
+            );
+
+            // Return a fallback profile or rethrow based on your requirements
+            throw new InvalidOperationException($"Failed to decode JWT token: {ex.Message}", ex);
         }
     }
 

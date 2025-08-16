@@ -146,9 +146,28 @@ export class GameContainerComponent implements AfterViewInit {
     const currWinningPlayerId = currState.winningPlayer;
 
     const currPlayers = [currState.player, currState.opponent];
-
     const currWinningPlayer = currPlayers.find(player => player.id === currWinningPlayerId);
 
+    // Check if a player has won the game by winning enough sets
+    const requiredSetsToWin = Math.ceil(currState.game.sets / 2);
+
+    if (currState.player.sets >= requiredSetsToWin) {
+      this.winnerSubject.next({
+        winner: currState.player.name,
+        text: 'Wins the game!',
+      });
+      return;
+    }
+
+    if (currState.opponent.sets >= requiredSetsToWin) {
+      this.winnerSubject.next({
+        winner: currState.opponent.name,
+        text: 'Wins the game!',
+      });
+      return;
+    }
+
+    // Check if backend indicates a game winner (fallback)
     if (currWinningPlayer && currWinningPlayerId && prevWinningPlayerId === null) {
       this.winnerSubject.next({
         winner: currWinningPlayer.name,
