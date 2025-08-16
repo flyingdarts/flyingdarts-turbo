@@ -50,15 +50,16 @@ public class SignallingApiBootstrap : ApiGatewayLambdaBootstrap<IRequest<APIGate
         DefaultLambdaJsonSerializer serializer
     )
     {
-        var token = NormalizeAuthressToken(request.QueryStringParameters["idToken"]);
+        var authProviderUserId =
+            request.RequestContext!.Authorizer?.GetValueOrDefault("UserId")?.ToString()
+            ?? string.Empty;
+
         return new OnConnectCommand
         {
             ConnectionId = request.RequestContext!.ConnectionId ?? string.Empty,
-            AuthProviderUserId =
-                request.RequestContext!.Authorizer?.GetValueOrDefault("UserId")?.ToString()
-                ?? string.Empty,
-            AuthressToken = token,
-            IsServiceClient = token.StartsWith("sc"),
+            AuthProviderUserId = authProviderUserId,
+            AuthressToken = NormalizeAuthressToken(request.QueryStringParameters["idToken"]),
+            IsServiceClient = authProviderUserId.StartsWith("sc"),
         };
     }
 
