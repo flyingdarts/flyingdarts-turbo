@@ -86,6 +86,18 @@ public static class Constants
     public const int ExtendedUiDelay = 200;
 
     /// <summary>
+    /// Delay between individual dart throws (500ms)
+    /// Used to ensure proper backend processing between dart inputs
+    /// </summary>
+    public const int DartThrowDelay = 500;
+
+    /// <summary>
+    /// Extended delay for game completion (1000ms)
+    /// Used after final dart throws to ensure game state is fully updated
+    /// </summary>
+    public const int LegCompletionDelay = 1000;
+
+    /// <summary>
     /// Polling interval for element value change detection (50ms)
     /// How often to check if an element value has changed
     /// </summary>
@@ -133,6 +145,11 @@ public static class Constants
     /// Player name selector
     /// </summary>
     public const string PlayerNameSelector = "#playerName";
+
+    /// <summary>
+    /// Player score selector
+    /// </summary>
+    public const string PlayerScoreSelector = "#playerScore";
 
     /// <summary>
     /// Save button text

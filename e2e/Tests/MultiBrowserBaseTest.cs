@@ -60,7 +60,7 @@ public abstract class MultiBrowserBaseTest : IDisposable
         User1Context = await BrowserUser1.NewContextAsync(
             new BrowserNewContextOptions
             {
-                ViewportSize = new ViewportSize { Width = 1280, Height = 720 },
+                ViewportSize = new ViewportSize { Width = 1600, Height = 900 },
                 UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
                 // Performance optimizations
                 ExtraHTTPHeaders = new Dictionary<string, string>
@@ -73,7 +73,7 @@ public abstract class MultiBrowserBaseTest : IDisposable
         User2Context = await BrowserUser2.NewContextAsync(
             new BrowserNewContextOptions
             {
-                ViewportSize = new ViewportSize { Width = 1280, Height = 720 },
+                ViewportSize = new ViewportSize { Width = 720, Height = 1280 },
                 UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
                 // Performance optimizations
                 ExtraHTTPHeaders = new Dictionary<string, string>

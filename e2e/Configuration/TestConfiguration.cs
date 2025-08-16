@@ -100,7 +100,7 @@ public static class TestConfiguration
         public static int DefaultViewportWidth =>
             int.TryParse(Environment.GetEnvironmentVariable("E2E_VIEWPORT_WIDTH"), out var value)
                 ? value
-                : 1280;
+                : 1600;
 
         /// <summary>
         /// Default viewport height
@@ -108,7 +108,7 @@ public static class TestConfiguration
         public static int DefaultViewportHeight =>
             int.TryParse(Environment.GetEnvironmentVariable("E2E_VIEWPORT_HEIGHT"), out var value)
                 ? value
-                : 720;
+                : 900;
 
         /// <summary>
         /// Whether to enable browser performance monitoring
@@ -120,25 +120,6 @@ public static class TestConfiguration
             )
                 ? value
                 : true;
-
-        /// <summary>
-        /// Browser launch arguments for performance
-        /// </summary>
-        public static string[] PerformanceLaunchArgs =>
-            new[]
-            {
-                "--disable-dev-shm-usage",
-                "--no-sandbox",
-                "--disable-setuid-sandbox",
-                "--disable-gpu",
-                "--disable-web-security",
-                "--disable-features=VizDisplayCompositor",
-                "--disable-background-timer-throttling",
-                "--disable-backgrounding-occluded-windows",
-                "--disable-renderer-backgrounding",
-                "--disable-field-trial-config",
-                "--disable-ipc-flooding-protection",
-            };
     }
 
     /// <summary>
@@ -188,38 +169,6 @@ public static class TestConfiguration
     public static class ResourceBlocking
     {
         /// <summary>
-        /// Patterns to block for performance
-        /// </summary>
-        public static string[] BlockedPatterns =>
-            new[]
-            {
-                "analytics",
-                "tracking",
-                "ads",
-                "doubleclick",
-                "facebook.com",
-                "google-analytics",
-                "googletagmanager",
-                "hotjar",
-                "mixpanel",
-                "optimizely",
-                "segment",
-                "amplitude",
-                "intercom",
-                "zendesk",
-                "livechat",
-                "chatbot",
-                "widget",
-                "pixel",
-                "beacon",
-                "telemetry",
-                "fonts.googleapis.com",
-                "fonts.gstatic.com",
-                "cdn.jsdelivr.net",
-                "unpkg.com",
-            };
-
-        /// <summary>
         /// Whether to block images for faster loading
         /// </summary>
         public static bool BlockImages =>
@@ -261,21 +210,5 @@ public static class TestConfiguration
             ["ResourceBlocking.BlockImages"] = ResourceBlocking.BlockImages,
             ["ResourceBlocking.BlockCSS"] = ResourceBlocking.BlockCSS,
         };
-    }
-
-    /// <summary>
-    /// Print current configuration to console
-    /// </summary>
-    public static void PrintConfiguration()
-    {
-        Console.WriteLine("\n⚙️  E2E TEST CONFIGURATION ⚙️");
-        Console.WriteLine("================================");
-
-        foreach (var config in GetAllConfiguration())
-        {
-            Console.WriteLine($"{config.Key}: {config.Value}");
-        }
-
-        Console.WriteLine("================================\n");
     }
 }

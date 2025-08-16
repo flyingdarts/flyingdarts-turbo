@@ -399,7 +399,7 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
     public void GetServiceClientUserProfile_WithBase64UrlEncodedToken_ShouldHandlePaddingCorrectly()
     {
         // Arrange
-        // Test token with different padding scenarios
+        // Test token with different padding scenariofs
         var payload = "eyJzdWIiOiJ0ZXN0LXVzZXItMTIzIiwibmFtZSI6IlRlc3QgVXNlciJ9"; // {"sub":"test-user-123","name":"Test User"}
         var header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
         var signature = "dGVzdC1zaWduYXR1cmU";

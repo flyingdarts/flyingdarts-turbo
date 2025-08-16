@@ -70,11 +70,22 @@ public class GamePage : OptimizedBasePage
     /// <summary>
     /// Get the current player name with optimized extraction
     /// </summary>
-    public async Task<string> GetPlayerNameAsync()
+    public async Task<int> GetPlayerNameAsync()
     {
         var element = await WaitForElementSmartAsync(
             () => Page.Locator(Constants.PlayerNameSelector),
             "playerName",
+            Constants.OptimizedButtonTimeout
+        );
+        var text = await element.TextContentAsync();
+        return int.Parse(text?.Trim() ?? throw new Exception("Player score not found"));
+    }
+
+    public async Task<string> GetRemainingScoreAsync()
+    {
+        var element = await WaitForElementSmartAsync(
+            () => Page.Locator(Constants.PlayerScoreSelector),
+            "playerScore",
             Constants.OptimizedButtonTimeout
         );
         var text = await element.TextContentAsync();
@@ -136,7 +147,7 @@ public class GamePage : OptimizedBasePage
     {
         // Randomly select a number between 1-20 for realistic dart throwing
         var random = new Random();
-        var dartScore = random.Next(1, 21);
+        var dartScore = random.Next(1, 50);
 
         // Click the individual digits for multi-digit numbers
         await ClickDigitsForNumberAsync(dartScore);
@@ -157,7 +168,7 @@ public class GamePage : OptimizedBasePage
     /// <param name="score">The score to throw (0-20)</param>
     public async Task ThrowDartWithScoreAsync(int score)
     {
-        if (score < 0 || score > 20)
+        if (score < 1 || score > 180)
         {
             throw new ArgumentException("Score must be between 0 and 20", nameof(score));
         }
@@ -170,9 +181,12 @@ public class GamePage : OptimizedBasePage
 
         // Click OK to submit the score
         var okButton = Page.Locator(Constants.CalcButtonOkSelector);
+
         await okButton.ClickAsync();
 
         Console.WriteLine($"🎯 Threw dart with specific score: {score}");
+
+        await Task.Delay(Constants.DartThrowDelay);
     }
 
     /// <summary>
@@ -262,6 +276,79 @@ public class GamePage : OptimizedBasePage
         await okButton.ClickAsync();
 
         Console.WriteLine($"🎯 Input and submitted score: {score}");
+    }
+
+    /// <summary>
+    /// Check if the checkout button is enabled
+    /// </summary>
+    public async Task<bool> CanCheckoutAsync()
+    {
+        try
+        {
+            var checkoutButton = Page.Locator(Constants.CalcButtonCheckSelector);
+
+            // Wait for the button to be visible
+            await checkoutButton.WaitForAsync(
+                new() { State = WaitForSelectorState.Visible, Timeout = 5000 }
+            );
+
+            // Check if it's enabled and not disabled
+            var isEnabled = await checkoutButton.IsEnabledAsync();
+            var classAttribute = await checkoutButton.GetAttributeAsync("class");
+            var hasDisabledClass = classAttribute?.Contains("disabled") == true;
+
+            var canCheckout = isEnabled && !hasDisabledClass;
+
+            Console.WriteLine(
+                $"🔍 Checkout button - Enabled: {isEnabled}, HasDisabledClass: {hasDisabledClass}, CanCheckout: {canCheckout}"
+            );
+
+            return canCheckout;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"⚠️ Error checking checkout button: {ex.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Click the checkout button
+    /// </summary>
+    public async Task ClickCheckoutAsync()
+    {
+        var checkoutButton = Page.Locator(Constants.CalcButtonCheckSelector);
+
+        // Wait for the button to be fully ready
+        await checkoutButton.WaitForAsync(new() { State = WaitForSelectorState.Visible });
+
+        // Try to scroll the button into view and ensure it's clickable
+        await checkoutButton.ScrollIntoViewIfNeededAsync();
+
+        // Wait a bit for any animations or overlays to settle
+        await Task.Delay(Constants.StandardUiDelay);
+
+        try
+        {
+            // First try normal click
+            await checkoutButton.ClickAsync();
+            Console.WriteLine("✅ Checkout button clicked successfully");
+        }
+        catch (Exception ex)
+            when (ex.Message.Contains("intercepts pointer events")
+                || ex.Message.Contains("element is not stable")
+            )
+        {
+            Console.WriteLine("⚠️ Normal click failed, trying force click...");
+
+            // If normal click fails, try force click
+            await checkoutButton.ClickAsync(new() { Force = true });
+            Console.WriteLine("✅ Checkout button clicked with force");
+        }
+        finally
+        {
+            await Task.Delay(Constants.LegCompletionDelay);
+        }
     }
 
     /// <summary>

@@ -74,8 +74,8 @@ set_performance_env() {
     export E2E_TOKEN_CACHE_EXPIRATION=55
 
     # Browser optimizations
-    export E2E_VIEWPORT_WIDTH=1280
-    export E2E_VIEWPORT_HEIGHT=720
+    export E2E_VIEWPORT_WIDTH=1600
+    export E2E_VIEWPORT_HEIGHT=900
     export E2E_ENABLE_PERFORMANCE_MONITORING=true
 
     # Execution optimizations
