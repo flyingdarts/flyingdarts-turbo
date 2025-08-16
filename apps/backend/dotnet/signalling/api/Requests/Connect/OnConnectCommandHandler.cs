@@ -222,11 +222,11 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
             }
 
             var base64Decoded = Convert.FromBase64String(base64String);
-            var jsonPayload = JsonSerializer.Deserialize<Dictionary<string, string>>(base64Decoded);
+            var jsonPayload = JsonSerializer.Deserialize<Dictionary<string, object>>(base64Decoded);
 
             return new UserProfile
             {
-                UserName = jsonPayload["sub"],
+                UserName = jsonPayload["sub"]?.ToString() ?? "unknown",
                 Email = "mike+test@flyingdarts.net",
                 Country = "NL",
                 Picture =

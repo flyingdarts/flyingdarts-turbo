@@ -386,6 +386,13 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         // Assert
         result.Should().NotBeNull();
         result.UserName.Should().Be("test-user-123");
+        result.Email.Should().Be("mike+test@flyingdarts.net");
+        result.Country.Should().Be("NL");
+        result
+            .Picture.Should()
+            .Be(
+                "https://i.postimg.cc/HnD0HyQM/male-face-icon-default-profile-image-c3f2c592f9.jpg"
+            );
     }
 
     [Fact]
@@ -448,5 +455,28 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
         );
 
         exception.Message.Should().Contain("Failed to decode JWT token");
+    }
+
+    [Fact]
+    public void GetServiceClientUserProfile_WithNumericTimestampClaims_ShouldHandleCorrectly()
+    {
+        // Arrange
+        // Test token with numeric timestamp claims (exp, iat, nbf) like the real service client token
+        var header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"; // {"alg":"HS256","typ":"JWT"}
+        var payload =
+            "eyJzdWIiOiJzY19hU2dZV21YTWZEN1ZpQkczQjNhV3hNSCIsImV4cCI6MTc1NTQxMTY0NCwiaWF0IjoxNzU1MzI1MjQ0LCJuYmYiOjE3NTUzMjQ2NDR9"; // {"sub":"sc_aSgYWmXMfD7ViBG3B3aWxMH","exp":1755411644,"iat":1755325244,"nbf":1755324644}
+        var signature = "dGVzdC1zaWduYXR1cmU"; // "test-signature"
+
+        var token = $"{header}.{payload}.{signature}";
+
+        // Act
+        var result = _handler.GetServiceClientUserProfile(token);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.UserName.Should().Be("sc_aSgYWmXMfD7ViBG3B3aWxMH");
+        result.Email.Should().Be("mike+test@flyingdarts.net");
+        result.Country.Should().Be("NL");
+        result.Picture.Should().NotBeNullOrEmpty();
     }
 }
