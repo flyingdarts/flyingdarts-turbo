@@ -7,7 +7,7 @@ on:
       - development
     paths:
       - "apps/frontend/angular/**"
-      - ".github/workflows/main_angular_development.yml"
+      - ".github/workflows/ci-angular-app-development.yml"
       - "angular.json"
 jobs:
   build-angular-development:
