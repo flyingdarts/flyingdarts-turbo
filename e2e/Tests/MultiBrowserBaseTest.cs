@@ -34,7 +34,9 @@ public abstract class MultiBrowserBaseTest : IDisposable
     protected virtual async Task SetupAsync()
     {
         // Initialize performance test runner
-        TestRunner = new PerformanceTestRunner(maxConcurrentTests: 2);
+        TestRunner = new PerformanceTestRunner(
+            maxConcurrentTests: Configuration.TestConfiguration.Performance.MaxConcurrentTests
+        );
         await TestRunner.InitializeAsync();
 
         // Get browsers from pool for better performance
@@ -60,7 +62,11 @@ public abstract class MultiBrowserBaseTest : IDisposable
         User1Context = await BrowserUser1.NewContextAsync(
             new BrowserNewContextOptions
             {
-                ViewportSize = new ViewportSize { Width = 1600, Height = 900 },
+                ViewportSize = new ViewportSize
+                {
+                    Width = Configuration.TestConfiguration.Browser.DefaultViewportWidth,
+                    Height = Configuration.TestConfiguration.Browser.DefaultViewportHeight,
+                },
                 UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
                 // Performance optimizations
                 ExtraHTTPHeaders = new Dictionary<string, string>
@@ -88,10 +94,18 @@ public abstract class MultiBrowserBaseTest : IDisposable
         User2Page = await User2Context.NewPageAsync();
 
         // Set optimized timeouts for both pages
-        User1Page.SetDefaultTimeout(15000); // Reduced from 30s to 15s
-        User1Page.SetDefaultNavigationTimeout(15000);
-        User2Page.SetDefaultTimeout(15000);
-        User2Page.SetDefaultNavigationTimeout(15000);
+        User1Page.SetDefaultTimeout(
+            Configuration.TestConfiguration.Performance.DefaultElementTimeout
+        );
+        User1Page.SetDefaultNavigationTimeout(
+            Configuration.TestConfiguration.Performance.DefaultNavigationTimeout
+        );
+        User2Page.SetDefaultTimeout(
+            Configuration.TestConfiguration.Performance.DefaultElementTimeout
+        );
+        User2Page.SetDefaultNavigationTimeout(
+            Configuration.TestConfiguration.Performance.DefaultNavigationTimeout
+        );
 
         // Enable performance monitoring
         await User1Page.Context.RouteAsync(
@@ -99,7 +113,10 @@ public abstract class MultiBrowserBaseTest : IDisposable
             async route =>
             {
                 // Block unnecessary resources for faster loading
-                if (ShouldBlockResource(route.Request.Url))
+                if (
+                    Configuration.TestConfiguration.Performance.EnableResourceBlocking
+                    && ShouldBlockResource(route.Request.Url)
+                )
                 {
                     await route.AbortAsync();
                     return;
@@ -113,7 +130,10 @@ public abstract class MultiBrowserBaseTest : IDisposable
             async route =>
             {
                 // Block unnecessary resources for faster loading
-                if (ShouldBlockResource(route.Request.Url))
+                if (
+                    Configuration.TestConfiguration.Performance.EnableResourceBlocking
+                    && ShouldBlockResource(route.Request.Url)
+                )
                 {
                     await route.AbortAsync();
                     return;
@@ -256,7 +276,7 @@ public abstract class MultiBrowserBaseTest : IDisposable
             var token = await AuthressHelperUser1.GetBearerTokenAsync();
             var cookie = new Cookie
             {
-                Name = "custom-jwt-token-override",
+                Name = Constants.AuthCookieName,
                 Value = token,
                 Domain = ".flyingdarts.net",
                 Path = "/",
@@ -274,7 +294,7 @@ public abstract class MultiBrowserBaseTest : IDisposable
     {
         var cookie = new Cookie
         {
-            Name = "custom-jwt-token-override",
+            Name = Constants.AuthCookieName,
             Value = token,
             Domain = ".flyingdarts.net",
             Path = "/",
@@ -293,7 +313,7 @@ public abstract class MultiBrowserBaseTest : IDisposable
             var token = await AuthressHelperUser2.GetBearerTokenAsync();
             var cookie = new Cookie
             {
-                Name = "custom-jwt-token-override",
+                Name = Constants.AuthCookieName,
                 Value = token,
                 Domain = ".flyingdarts.net",
                 Path = "/",
@@ -359,8 +379,8 @@ public abstract class MultiBrowserBaseTest : IDisposable
     /// <param name="name">Screenshot name</param>
     protected async Task TakeUser2ScreenshotAsync(string name)
     {
-        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"User2_{name}_{timestamp}.png";
+        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss"); // get from consts
+        var filename = $"User2_{name}_{timestamp}.png"; // get png from consts
         await User2Page.ScreenshotAsync(new() { Path = filename });
     }
 
@@ -497,10 +517,10 @@ public abstract class MultiBrowserBaseTest : IDisposable
         var user2Cookies = await User2Context.CookiesAsync();
 
         var user1Token = user1Cookies
-            .FirstOrDefault(c => c.Name == "custom-jwt-token-override")
+            .FirstOrDefault(c => c.Name == Constants.AuthCookieName)
             ?.Value;
         var user2Token = user2Cookies
-            .FirstOrDefault(c => c.Name == "custom-jwt-token-override")
+            .FirstOrDefault(c => c.Name == Constants.AuthCookieName)
             ?.Value;
 
         if (string.IsNullOrEmpty(user1Token) || string.IsNullOrEmpty(user2Token))

@@ -10,13 +10,13 @@ public class HomePage : OptimizedBasePage
 {
     // Cached locators for better performance
     private ILocator HomeContainer =>
-        GetCachedLocator("homeContainer", () => Page.Locator("#homeContainer"));
+        GetCachedLocator("homeContainer", () => Page.Locator(Constants.HomeContainerSelector));
     private ILocator GameSettingsButton =>
-        GetCachedLocator("gameSettings", () => Page.Locator("#gameSettings"));
+        GetCachedLocator("gameSettings", () => Page.Locator(Constants.GameSettingsButtonSelector));
     private ILocator StartGameButton =>
-        GetCachedLocator("startGame", () => Page.GetByText("create room"));
+        GetCachedLocator("startGame", () => Page.GetByText(Constants.CreateRoomButtonText));
 
-    public HomePage(IPage page, string baseUrl = "https://staging.flyingdarts.net")
+    public HomePage(IPage page, string baseUrl = "https:/ /staging.flyingdarts.net") // get from consts
         : base(page, baseUrl) { }
 
     /// <summary>
@@ -49,7 +49,7 @@ public class HomePage : OptimizedBasePage
     /// </summary>
     public bool IsOnSettingsPage()
     {
-        return Page.Url.EndsWith("/settings");
+        return Page.Url.EndsWith(Constants.SettingsUrlSegment);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public class HomePage : OptimizedBasePage
         var url = Page.Url;
 
         // Verify we're on a game page
-        if (!url.Contains("/game/"))
+        if (!url.Contains(Constants.GameUrlSegment))
         {
             throw new InvalidOperationException(
                 $"Cannot extract game ID from URL: {url}. Expected URL to contain '{Constants.GameUrlPattern.Replace("**", "")}'"

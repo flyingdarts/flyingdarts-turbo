@@ -10,15 +10,15 @@ public class GamePage : OptimizedBasePage
 {
     // Cached locators for better performance
     private ILocator GameContainer =>
-        GetCachedLocator("gameContainer", () => Page.Locator("#gameContainer"));
+        GetCachedLocator("gameContainer", () => Page.Locator(Constants.GameContainerSelector));
     private ILocator PlayerName =>
-        GetCachedLocator("playerName", () => Page.Locator("#playerName"));
+        GetCachedLocator("playerName", () => Page.Locator(Constants.PlayerNameSelector));
     private ILocator UserDropdown =>
-        GetCachedLocator("userDropdown", () => Page.Locator("#userDropdown"));
+        GetCachedLocator("userDropdown", () => Page.Locator(Constants.UserDropdownSelector));
     private ILocator SettingsButton =>
-        GetCachedLocator("settingsButton", () => Page.Locator("#settingsButton"));
+        GetCachedLocator("settingsButton", () => Page.Locator(Constants.SettingsButtonSelector));
 
-    public GamePage(IPage page, string baseUrl = "https://staging.flyingdarts.net")
+    public GamePage(IPage page, string baseUrl = Constants.DefaultBaseUrl)
         : base(page, baseUrl) { }
 
     /// <summary>
@@ -68,13 +68,13 @@ public class GamePage : OptimizedBasePage
     }
 
     /// <summary>
-    /// Get the current player name with optimized extraction
+    /// Get the current player score with optimized extraction
     /// </summary>
-    public async Task<int> GetPlayerNameAsync()
+    public async Task<int> GetPlayerScoreAsync()
     {
         var element = await WaitForElementSmartAsync(
-            () => Page.Locator(Constants.PlayerNameSelector),
-            "playerName",
+            () => Page.Locator(Constants.PlayerScoreSelector),
+            "playerScore",
             Constants.OptimizedButtonTimeout
         );
         var text = await element.TextContentAsync();
@@ -145,9 +145,10 @@ public class GamePage : OptimizedBasePage
     /// </summary>
     public async Task ThrowDartAsync()
     {
-        // Randomly select a number between 1-20 for realistic dart throwing
+        // Randomly select a number between 1-180 for realistic dart throwing
         var random = new Random();
-        var dartScore = random.Next(1, 50);
+
+        var dartScore = random.Next(1, 181);
 
         // Click the individual digits for multi-digit numbers
         await ClickDigitsForNumberAsync(dartScore);
@@ -157,6 +158,7 @@ public class GamePage : OptimizedBasePage
 
         // Click OK to submit the score
         var okButton = Page.Locator(Constants.CalcButtonOkSelector);
+
         await okButton.ClickAsync();
 
         Console.WriteLine($"🎯 Threw dart with score: {dartScore}");
@@ -165,12 +167,12 @@ public class GamePage : OptimizedBasePage
     /// <summary>
     /// Throw a dart with a specific score
     /// </summary>
-    /// <param name="score">The score to throw (0-20)</param>
+    /// <param name="score">The score to throw (0-180)</param>
     public async Task ThrowDartWithScoreAsync(int score)
     {
-        if (score < 1 || score > 180)
+        if (score < 0 || score > 180)
         {
-            throw new ArgumentException("Score must be between 0 and 20", nameof(score));
+            throw new ArgumentException("Score must be between 0 and 180", nameof(score));
         }
 
         // Click the individual digits for multi-digit numbers
@@ -289,7 +291,11 @@ public class GamePage : OptimizedBasePage
 
             // Wait for the button to be visible
             await checkoutButton.WaitForAsync(
-                new() { State = WaitForSelectorState.Visible, Timeout = 5000 }
+                new()
+                {
+                    State = WaitForSelectorState.Visible,
+                    Timeout = Constants.DefaultVisibleWaitTimeout,
+                }
             );
 
             // Check if it's enabled and not disabled

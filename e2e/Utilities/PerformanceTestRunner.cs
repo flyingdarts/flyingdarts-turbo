@@ -19,7 +19,10 @@ public class PerformanceTestRunner : IDisposable
     {
         _maxConcurrentTests = maxConcurrentTests;
         _testSemaphore = new SemaphoreSlim(maxConcurrentTests, maxConcurrentTests);
-        _browserPool = new BrowserPool(maxConcurrentTests * 2, headless: false);
+        _browserPool = new BrowserPool(
+            Flyingdarts.E2E.Configuration.TestConfiguration.Performance.BrowserPoolSize,
+            headless: Flyingdarts.E2E.Configuration.TestConfiguration.Performance.HeadlessMode
+        );
         _tokenCache = new TokenCache();
     }
 

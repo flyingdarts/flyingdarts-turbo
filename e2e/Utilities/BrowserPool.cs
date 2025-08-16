@@ -146,19 +146,26 @@ public class BrowserPool : IDisposable
     /// </summary>
     public async ValueTask DisposeAsync()
     {
+        List<Task> disposeTasks = new();
+
         lock (_lock)
         {
             foreach (var browser in _availableBrowsers)
             {
-                browser.DisposeAsync();
+                disposeTasks.Add(browser.DisposeAsync().AsTask());
             }
             _availableBrowsers.Clear();
 
             foreach (var browser in _inUseBrowsers)
             {
-                browser.DisposeAsync();
+                disposeTasks.Add(browser.DisposeAsync().AsTask());
             }
             _inUseBrowsers.Clear();
+        }
+
+        if (disposeTasks.Count > 0)
+        {
+            await Task.WhenAll(disposeTasks);
         }
 
         _semaphore?.Dispose();
@@ -167,6 +174,6 @@ public class BrowserPool : IDisposable
 
     public void Dispose()
     {
-        DisposeAsync().AsTask().Wait();
+        DisposeAsync().AsTask().GetAwaiter().GetResult();
     }
 }

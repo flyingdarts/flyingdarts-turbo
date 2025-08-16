@@ -74,7 +74,7 @@ public class UnitTest1 : MultiBrowserBaseTest
         var currentUrl = User1Page.Url;
         Console.WriteLine($"Current URL after starting game: {currentUrl}");
 
-        if (!currentUrl.Contains("/game/"))
+        if (!currentUrl.Contains(Constants.GameUrlSegment))
         {
             throw new Exception($"Expected to be on game page, but current URL is: {currentUrl}");
         }
@@ -88,7 +88,7 @@ public class UnitTest1 : MultiBrowserBaseTest
         }
 
         // Player 2 joins the game
-        await player2Home.NavigateToAsync($"/game/{gameId}");
+        await player2Home.NavigateToAsync($"{Constants.GameUrlSegment}{gameId}");
 
         // Create optimized game page objects for both users
         var player1Game = new GamePage(User1Page, BaseUrl);
@@ -404,8 +404,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("🔍 Validating Player 1 won the leg...");
 
         // Wait for the winner popup to appear on both pages
-        var winnerPopup1 = User1Page.Locator("#winnerPopupOverlay");
-        var winnerPopup2 = User2Page.Locator("#winnerPopupOverlay");
+        var winnerPopup1 = User1Page.Locator(Constants.WinnerPopupOverlaySelector);
+        var winnerPopup2 = User2Page.Locator(Constants.WinnerPopupOverlaySelector);
 
         await winnerPopup1.WaitForAsync(
             new() { State = WaitForSelectorState.Visible, Timeout = 10000 }
@@ -426,8 +426,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         }
 
         // Check the winner name and text on Player 1's page
-        var winnerName = User1Page.Locator(".winner-name");
-        var winnerText = User1Page.Locator(".winner-text");
+        var winnerName = User1Page.Locator(Constants.WinnerNameSelector);
+        var winnerText = User1Page.Locator(Constants.WinnerTextSelector);
 
         await winnerName.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await winnerText.WaitForAsync(new() { State = WaitForSelectorState.Visible });
@@ -446,12 +446,12 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("✅ Player 1 leg win validation successful!");
 
         // Close the winner popup on Player 1's page
-        var closeButton1 = User1Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton1 = User1Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton1.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton1.ClickAsync();
 
         // Close the winner popup on Player 2's page
-        var closeButton2 = User2Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton2 = User2Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton2.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton2.ClickAsync();
 
@@ -474,8 +474,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("🔍 Validating Player 1 won the set...");
 
         // Wait for the winner popup to appear on both pages
-        var winnerPopup1 = User1Page.Locator("#winnerPopupOverlay");
-        var winnerPopup2 = User2Page.Locator("#winnerPopupOverlay");
+        var winnerPopup1 = User1Page.Locator(Constants.WinnerPopupOverlaySelector);
+        var winnerPopup2 = User2Page.Locator(Constants.WinnerPopupOverlaySelector);
 
         await winnerPopup1.WaitForAsync(
             new() { State = WaitForSelectorState.Visible, Timeout = 10000 }
@@ -496,8 +496,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         }
 
         // Check the winner name and text on Player 1's page
-        var winnerName = User1Page.Locator(".winner-name");
-        var winnerText = User1Page.Locator(".winner-text");
+        var winnerName = User1Page.Locator(Constants.WinnerNameSelector);
+        var winnerText = User1Page.Locator(Constants.WinnerTextSelector);
 
         await winnerName.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await winnerText.WaitForAsync(new() { State = WaitForSelectorState.Visible });
@@ -516,12 +516,12 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("✅ Player 1 set win validation successful!");
 
         // Close the winner popup on Player 1's page
-        var closeButton1 = User1Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton1 = User1Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton1.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton1.ClickAsync();
 
         // Close the winner popup on Player 2's page
-        var closeButton2 = User2Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton2 = User2Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton2.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton2.ClickAsync();
 
@@ -544,8 +544,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("🔍 Validating Player 1 won the game...");
 
         // Wait for the winner popup to appear on both pages
-        var winnerPopup1 = User1Page.Locator("#winnerPopupOverlay");
-        var winnerPopup2 = User2Page.Locator("#winnerPopupOverlay");
+        var winnerPopup1 = User1Page.Locator(Constants.WinnerPopupOverlaySelector);
+        var winnerPopup2 = User2Page.Locator(Constants.WinnerPopupOverlaySelector);
 
         await winnerPopup1.WaitForAsync(
             new() { State = WaitForSelectorState.Visible, Timeout = 10000 }
@@ -566,8 +566,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         }
 
         // Check the winner name and text on Player 1's page
-        var winnerName = User1Page.Locator(".winner-name");
-        var winnerText = User1Page.Locator(".winner-text");
+        var winnerName = User1Page.Locator(Constants.WinnerNameSelector);
+        var winnerText = User1Page.Locator(Constants.WinnerTextSelector);
 
         await winnerName.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await winnerText.WaitForAsync(new() { State = WaitForSelectorState.Visible });
@@ -586,12 +586,12 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("✅ Player 1 game win validation successful!");
 
         // Close the winner popup on Player 1's page
-        var closeButton1 = User1Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton1 = User1Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton1.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton1.ClickAsync();
 
         // Close the winner popup on Player 2's page
-        var closeButton2 = User2Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton2 = User2Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton2.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton2.ClickAsync();
 
@@ -614,8 +614,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("🔍 Validating Player 2 won the leg...");
 
         // Wait for the winner popup to appear on both pages
-        var winnerPopup1 = User1Page.Locator("#winnerPopupOverlay");
-        var winnerPopup2 = User2Page.Locator("#winnerPopupOverlay");
+        var winnerPopup1 = User1Page.Locator(Constants.WinnerPopupOverlaySelector);
+        var winnerPopup2 = User2Page.Locator(Constants.WinnerPopupOverlaySelector);
 
         await winnerPopup1.WaitForAsync(
             new() { State = WaitForSelectorState.Visible, Timeout = 10000 }
@@ -636,8 +636,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         }
 
         // Check the winner name and text on Player 2's page
-        var winnerName = User2Page.Locator(".winner-name");
-        var winnerText = User2Page.Locator(".winner-text");
+        var winnerName = User2Page.Locator(Constants.WinnerNameSelector);
+        var winnerText = User2Page.Locator(Constants.WinnerTextSelector);
 
         await winnerName.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await winnerText.WaitForAsync(new() { State = WaitForSelectorState.Visible });
@@ -656,12 +656,12 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("✅ Player 2 leg win validation successful!");
 
         // Close the winner popup on Player 1's page
-        var closeButton1 = User1Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton1 = User1Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton1.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton1.ClickAsync();
 
         // Close the winner popup on Player 2's page
-        var closeButton2 = User2Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton2 = User2Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton2.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton2.ClickAsync();
 
@@ -684,8 +684,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("🔍 Validating Player 2 won the set...");
 
         // Wait for the winner popup to appear on both pages
-        var winnerPopup1 = User1Page.Locator("#winnerPopupOverlay");
-        var winnerPopup2 = User2Page.Locator("#winnerPopupOverlay");
+        var winnerPopup1 = User1Page.Locator(Constants.WinnerPopupOverlaySelector);
+        var winnerPopup2 = User2Page.Locator(Constants.WinnerPopupOverlaySelector);
 
         await winnerPopup1.WaitForAsync(
             new() { State = WaitForSelectorState.Visible, Timeout = 10000 }
@@ -706,8 +706,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         }
 
         // Check the winner name and text on Player 2's page
-        var winnerName = User2Page.Locator(".winner-name");
-        var winnerText = User2Page.Locator(".winner-text");
+        var winnerName = User2Page.Locator(Constants.WinnerNameSelector);
+        var winnerText = User2Page.Locator(Constants.WinnerTextSelector);
 
         await winnerName.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await winnerText.WaitForAsync(new() { State = WaitForSelectorState.Visible });
@@ -726,12 +726,12 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("✅ Player 2 set win validation successful!");
 
         // Close the winner popup on Player 1's page
-        var closeButton1 = User1Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton1 = User1Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton1.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton1.ClickAsync();
 
         // Close the winner popup on Player 2's page
-        var closeButton2 = User2Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton2 = User2Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton2.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton2.ClickAsync();
 
@@ -754,8 +754,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("🔍 Validating Player 2 won the game...");
 
         // Wait for the winner popup to appear on both pages
-        var winnerPopup1 = User1Page.Locator("#winnerPopupOverlay");
-        var winnerPopup2 = User2Page.Locator("#winnerPopupOverlay");
+        var winnerPopup1 = User1Page.Locator(Constants.WinnerPopupOverlaySelector);
+        var winnerPopup2 = User2Page.Locator(Constants.WinnerPopupOverlaySelector);
 
         await winnerPopup1.WaitForAsync(
             new() { State = WaitForSelectorState.Visible, Timeout = 10000 }
@@ -776,8 +776,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         }
 
         // Check the winner name and text on Player 2's page
-        var winnerName = User2Page.Locator(".winner-name");
-        var winnerText = User2Page.Locator(".winner-text");
+        var winnerName = User2Page.Locator(Constants.WinnerNameSelector);
+        var winnerText = User2Page.Locator(Constants.WinnerTextSelector);
 
         await winnerName.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await winnerText.WaitForAsync(new() { State = WaitForSelectorState.Visible });
@@ -796,12 +796,12 @@ public class UnitTest1 : MultiBrowserBaseTest
         Console.WriteLine("✅ Player 2 game win validation successful!");
 
         // Close the winner popup on Player 1's page
-        var closeButton1 = User1Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton1 = User1Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton1.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton1.ClickAsync();
 
         // Close the winner popup on Player 2's page
-        var closeButton2 = User2Page.Locator("#winnerPopupOverlay .btn.btn-primary");
+        var closeButton2 = User2Page.Locator(Constants.WinnerPopupPrimaryButtonSelector);
         await closeButton2.WaitForAsync(new() { State = WaitForSelectorState.Visible });
         await closeButton2.ClickAsync();
 

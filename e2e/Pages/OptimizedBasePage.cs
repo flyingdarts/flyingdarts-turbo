@@ -116,7 +116,7 @@ public abstract class OptimizedBasePage : BasePage
         );
 
         // If not immediately visible, use the retry logic with shorter timeout
-        var retryTimeout = Math.Min(timeout, 1000); // Cap retry timeout at 1 second
+        var retryTimeout = Math.Min(timeout, Constants.OptimizedElementValueChangeTimeout);
 
         while (DateTime.UtcNow - startTime < TimeSpan.FromMilliseconds(retryTimeout))
         {
@@ -272,10 +272,10 @@ public abstract class OptimizedBasePage : BasePage
     /// <summary>
     /// Take performance-optimized screenshot
     /// </summary>
-    protected async Task TakeOptimizedScreenshotAsync(string name)
+    protected async Task TakeScreenshotAsync(string name)
     {
-        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"{name}_{timestamp}.png";
+        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss"); // get from consts
+        var filename = $"{name}_{timestamp}.png"; // get png from consts
 
         // Use optimized screenshot options
         await Page.ScreenshotAsync(
@@ -286,34 +286,5 @@ public abstract class OptimizedBasePage : BasePage
                 Type = ScreenshotType.Png,
             }
         );
-    }
-
-    /// <summary>
-    /// Get page performance metrics
-    /// </summary>
-    protected async Task<Dictionary<string, object>> GetPerformanceMetricsAsync()
-    {
-        try
-        {
-            var metrics = await Page.EvaluateAsync<Dictionary<string, object>>(
-                @"
-                () => {
-                    const perf = performance;
-                    return {
-                        navigationStart: perf.timing.navigationStart,
-                        loadEventEnd: perf.timing.loadEventEnd,
-                        domContentLoaded: perf.timing.domContentLoadedEventEnd,
-                        firstPaint: perf.getEntriesByType('paint').find(e => e.name === 'first-paint')?.startTime,
-                        firstContentfulPaint: perf.getEntriesByType('paint').find(e => e.name === 'first-contentful-paint')?.startTime
-                    };
-                }
-            "
-            );
-            return metrics;
-        }
-        catch
-        {
-            return new Dictionary<string, object>();
-        }
     }
 }

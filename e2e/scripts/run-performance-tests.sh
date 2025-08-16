@@ -109,7 +109,13 @@ clean_build() {
     dotnet clean --verbosity quiet
 
     echo "Removing bin and obj directories..."
-    rm -rf "$PROJECT_DIR/bin" "$PROJECT_DIR/obj"
+    echo "This will delete $PROJECT_DIR/bin and $PROJECT_DIR/obj. Are you sure? (yes/no)"
+    read -r CONFIRM
+    if [[ "$CONFIRM" == "yes" ]]; then
+        rm -rf "$PROJECT_DIR/bin" "$PROJECT_DIR/obj"
+    else
+        echo "Skipping deletion of bin/obj."
+    fi
 
     echo -e "${GREEN}✅ Build artifacts cleaned${NC}"
 }

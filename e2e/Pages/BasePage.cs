@@ -11,7 +11,7 @@ public abstract class BasePage
     public readonly IPage Page;
     protected readonly string BaseUrl;
 
-    protected BasePage(IPage page, string baseUrl = "https://staging.flyingdarts.net")
+    protected BasePage(IPage page, string baseUrl = "https://staging.flyingdarts.net") // add to consts
     {
         Page = page;
         BaseUrl = baseUrl;
@@ -41,30 +41,6 @@ public abstract class BasePage
     }
 
     /// <summary>
-    /// Wait for an element to be visible
-    /// </summary>
-    /// <param name="locator">Element locator</param>
-    /// <param name="timeout">Timeout in milliseconds</param>
-    protected async Task WaitForElementVisibleAsync(ILocator locator, int timeout = 30000)
-    {
-        await locator.WaitForAsync(
-            new() { State = WaitForSelectorState.Visible, Timeout = timeout }
-        );
-    }
-
-    /// <summary>
-    /// Wait for an element to be attached to DOM
-    /// </summary>
-    /// <param name="locator">Element locator</param>
-    /// <param name="timeout">Timeout in milliseconds</param>
-    protected async Task WaitForElementAttachedAsync(ILocator locator, int timeout = 30000)
-    {
-        await locator.WaitForAsync(
-            new() { State = WaitForSelectorState.Attached, Timeout = timeout }
-        );
-    }
-
-    /// <summary>
     /// Click an element with retry logic
     /// </summary>
     /// <param name="locator">Element locator</param>
@@ -80,7 +56,7 @@ public abstract class BasePage
             }
             catch (Exception) when (i < maxRetries - 1)
             {
-                await Task.Delay(1000); // Wait 1 second before retry
+                await Task.Delay(Constants.StandardUiDelay);
             }
         }
         throw new Exception($"Failed to click element after {maxRetries} retries");
@@ -103,7 +79,7 @@ public abstract class BasePage
             }
             catch (Exception) when (i < maxRetries - 1)
             {
-                await Task.Delay(1000); // Wait 1 second before retry
+                await Task.Delay(Constants.StandardUiDelay);
             }
         }
         throw new Exception($"Failed to fill element after {maxRetries} retries");
@@ -143,16 +119,5 @@ public abstract class BasePage
     {
         // Default implementation - can be overridden by specific pages
         await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-    }
-
-    /// <summary>
-    /// Take a screenshot for debugging
-    /// </summary>
-    /// <param name="name">Screenshot name</param>
-    protected async Task TakeScreenshotAsync(string name)
-    {
-        var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"{name}_{timestamp}.png";
-        await Page.ScreenshotAsync(new() { Path = filename });
     }
 }

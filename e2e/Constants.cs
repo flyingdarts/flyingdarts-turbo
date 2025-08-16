@@ -14,6 +14,11 @@ public static class Constants
     public const int DefaultElementTimeout = 15000;
 
     /// <summary>
+    /// Default timeout for waiting for element visibility (5 seconds)
+    /// </summary>
+    public const int DefaultVisibleWaitTimeout = 5000;
+
+    /// <summary>
     /// Default timeout for page load operations (10 seconds)
     /// </summary>
     public const int DefaultPageLoadTimeout = 10000;
@@ -121,11 +126,18 @@ public static class Constants
     /// Pattern for game URLs
     /// </summary>
     public const string GameUrlPattern = "**/game/**";
+    public const string GameUrlSegment = "/game/";
 
     /// <summary>
     /// Pattern for settings URLs
     /// </summary>
     public const string SettingsUrlPattern = "**/settings";
+    public const string SettingsUrlSegment = "/settings";
+
+    /// <summary>
+    /// Default base URL for the application under test
+    /// </summary>
+    public const string DefaultBaseUrl = "https://staging.flyingdarts.net";
 
     #endregion
 
@@ -175,6 +187,31 @@ public static class Constants
     /// Settings button selector
     /// </summary>
     public const string SettingsButtonSelector = "#settingsButton";
+
+    /// <summary>
+    /// User dropdown selector
+    /// </summary>
+    public const string UserDropdownSelector = "#userDropdown";
+
+    /// <summary>
+    /// Winner overlay selector
+    /// </summary>
+    public const string WinnerPopupOverlaySelector = "#winnerPopupOverlay";
+
+    /// <summary>
+    /// Winner overlay primary button selector
+    /// </summary>
+    public const string WinnerPopupPrimaryButtonSelector = "#winnerPopupOverlay .btn.btn-primary";
+
+    /// <summary>
+    /// Winner name selector
+    /// </summary>
+    public const string WinnerNameSelector = ".winner-name";
+
+    /// <summary>
+    /// Winner text selector
+    /// </summary>
+    public const string WinnerTextSelector = ".winner-text";
 
     #endregion
 
@@ -253,6 +290,11 @@ public static class Constants
     /// Browser pool size for performance optimization
     /// </summary>
     public const int BrowserPoolSize = 4;
+
+    /// <summary>
+    /// Auth cookie name used to inject token for E2E
+    /// </summary>
+    public const string AuthCookieName = "custom-jwt-token-override";
 
     #endregion
 }
