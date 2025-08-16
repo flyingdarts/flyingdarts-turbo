@@ -36,7 +36,7 @@ public class FrontendStack : BaseStack<FrontendStackProps>
             }
         );
 
-        if (props.DeploymentEnvironment.IsProduction)
+        if (props.DeploymentEnvironment.IsMarketing)
         {
             ARecord = new ARecord(
                 this,

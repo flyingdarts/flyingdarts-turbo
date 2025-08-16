@@ -14,17 +14,17 @@ public readonly struct DeploymentEnvironment
         Subdomain = subdomain;
     }
 
-    public static readonly DeploymentEnvironment Marketing = new("Marketing", "marketing");
+    public static readonly DeploymentEnvironment Marketing = new("Marketing", "www");
     public static readonly DeploymentEnvironment Development = new("Development", "dev");
     public static readonly DeploymentEnvironment Staging = new("Staging", "staging");
-    public static readonly DeploymentEnvironment Production = new("Production", "www");
+    public static readonly DeploymentEnvironment Production = new("Production", "game");
     public static readonly DeploymentEnvironment None = new("None", null);
 
     public string[] DomainNames
     {
         get
         {
-            if (IsProduction)
+            if (IsMarketing)
             {
                 return [$"{Subdomain}.{Constants.DomainName}", Constants.DomainName];
             }
@@ -47,10 +47,10 @@ public readonly struct DeploymentEnvironment
 
     public string GetARecordName()
     {
-        if (!IsProduction)
+        if (!IsMarketing)
         {
             throw new InvalidOperationException(
-                "ARecordName is only valid for Production environment"
+                "ARecordName is only valid for marketing environment"
             );
         }
 
@@ -60,6 +60,7 @@ public readonly struct DeploymentEnvironment
     public bool IsProduction => this == Production;
     public bool IsStaging => this == Staging;
     public bool IsDevelopment => this == Development;
+    public bool IsMarketing => this == Marketing;
     public bool IsValidDeploymentEnvironment => this != None;
 
     public static bool operator ==(DeploymentEnvironment left, DeploymentEnvironment right)
