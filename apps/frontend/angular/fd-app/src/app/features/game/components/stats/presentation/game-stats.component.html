@@ -10,7 +10,7 @@
     </thead>
     <tbody>
       <tr>
-        <td id="playerName">{{ (gameState$ | async)?.player?.name }}</td>
+        <td id="playerName">{{ getPlayerName((gameState$ | async)?.player) }}</td>
         <td id="playerWonSets">{{ (gameState$ | async)?.player?.sets }}</td>
         <td id="playerWonLegs">{{ (gameState$ | async)?.player?.legs }}</td>
         <td id="playerScore">{{ (gameState$ | async)?.player?.score }}</td>
@@ -23,7 +23,7 @@
         </td>
       </tr>
       <tr [hidden]="(gameState$ | async)?.opponent?.name == ''">
-        <td>{{ (gameState$ | async)?.opponent?.name }}</td>
+        <td>{{ getOpponentName((gameState$ | async)?.opponent) }}</td>
         <td>{{ (gameState$ | async)?.opponent?.sets }}</td>
         <td>{{ (gameState$ | async)?.opponent?.legs }}</td>
         <td>{{ (gameState$ | async)?.opponent?.score }}</td>
