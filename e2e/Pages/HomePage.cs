@@ -3,37 +3,40 @@ using Microsoft.Playwright;
 namespace Flyingdarts.E2E.Pages;
 
 /// <summary>
-/// Page object for the Home page
+/// Optimized page object for the Home page with performance improvements
+/// Eliminates navigation pauses and uses smart waiting strategies
 /// </summary>
-public class HomePage : BasePage
+public class HomePage : OptimizedBasePage
 {
-    // Locators for home page elements
-    private readonly ILocator _homeContainer;
-    private readonly ILocator _gameSettingsButton;
-    private readonly ILocator _startGameButton;
+    // Cached locators for better performance
+    private ILocator HomeContainer =>
+        GetCachedLocator("homeContainer", () => Page.Locator("#homeContainer"));
+    private ILocator GameSettingsButton =>
+        GetCachedLocator("gameSettings", () => Page.Locator("#gameSettings"));
+    private ILocator StartGameButton =>
+        GetCachedLocator("startGame", () => Page.GetByText("create room"));
 
     public HomePage(IPage page, string baseUrl = "https://staging.flyingdarts.net")
-        : base(page, baseUrl)
-    {
-        // Initialize locators
-        _homeContainer = Page.Locator("#homeContainer");
-        _gameSettingsButton = Page.Locator("//*[@id='homeContainer']/div/app-home/div/i");
-        _startGameButton = Page.GetByText("create room");
-    }
+        : base(page, baseUrl) { }
 
     /// <summary>
-    /// Wait for the home page to be fully loaded
+    /// Wait for the home page to be fully loaded with optimized waiting
     /// </summary>
     public override async Task WaitForPageReadyAsync()
     {
+        // Use optimized base page waiting
         await base.WaitForPageReadyAsync();
 
-        // Wait for home container to be visible
-        await WaitForElementVisibleAsync(_homeContainer);
+        // Wait for home container with smart waiting
+        await WaitForElementSmartAsync(
+            () => Page.Locator(Constants.HomeContainerSelector),
+            "homeContainer",
+            Constants.DefaultHomePageTimeout
+        );
     }
 
     /// <summary>
-    /// Navigate to the home page
+    /// Navigate to the home page with optimized loading
     /// </summary>
     public async Task NavigateToHomeAsync()
     {
@@ -50,7 +53,7 @@ public class HomePage : BasePage
     }
 
     /// <summary>
-    /// Navigate to game settings
+    /// Navigate to game settings with optimized waiting
     /// </summary>
     public async Task NavigateToGameSettingsAsync()
     {
@@ -60,40 +63,51 @@ public class HomePage : BasePage
             return;
         }
 
-        await WaitForElementVisibleAsync(_gameSettingsButton);
-        await ClickWithRetryAsync(_gameSettingsButton);
+        var button = await WaitForElementSmartAsync(
+            () => Page.Locator(Constants.GameSettingsButtonSelector),
+            "gameSettings",
+            Constants.OptimizedButtonTimeout
+        );
+        await button.ClickAsync();
 
-        // Wait for navigation to complete
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        // Smart wait for navigation instead of fixed network idle wait
+        await WaitForNavigationToSettingsAsync();
     }
 
     /// <summary>
-    /// Start a new game
+    /// Start a new game with optimized waiting
     /// </summary>
     public async Task StartNewGameAsync()
     {
-        await WaitForElementVisibleAsync(_startGameButton);
-        await ClickWithRetryAsync(_startGameButton);
+        var button = await WaitForElementSmartAsync(
+            () => Page.GetByText(Constants.CreateRoomButtonText),
+            "startGame",
+            Constants.OptimizedButtonTimeout
+        );
+        await button.ClickAsync();
 
-        // Wait for game to start
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        // Smart wait for game to start instead of fixed network idle wait
+        await WaitForGameStartAsync();
     }
 
     /// <summary>
-    /// Wait for the game page to be ready after starting a new game
+    /// Wait for the game page to be ready after starting a new game with optimized waiting
     /// </summary>
     public async Task WaitForGamePageReadyAsync()
     {
-        // Wait for navigation to complete
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        // Wait for URL change with shorter timeout
+        await Page.WaitForURLAsync(
+            Constants.GameUrlPattern,
+            new() { Timeout = Constants.DefaultUrlNavigationTimeout }
+        );
 
-        // Wait for the URL to change to a game page
-        await Page.WaitForURLAsync("**/game/**");
-
-        // Additional wait to ensure the page is fully loaded
-        await Task.Delay(500);
+        // Brief wait for page stability instead of fixed delay
+        await Task.Delay(Constants.StandardUiDelay);
     }
 
+    /// <summary>
+    /// Get game ID with optimized extraction
+    /// </summary>
     public string GetGameId()
     {
         var url = Page.Url;
@@ -102,7 +116,7 @@ public class HomePage : BasePage
         if (!url.Contains("/game/"))
         {
             throw new InvalidOperationException(
-                $"Cannot extract game ID from URL: {url}. Expected URL to contain '/game/'"
+                $"Cannot extract game ID from URL: {url}. Expected URL to contain '{Constants.GameUrlPattern.Replace("**", "")}'"
             );
         }
 
@@ -121,14 +135,18 @@ public class HomePage : BasePage
     }
 
     /// <summary>
-    /// Check if the home page is fully loaded
+    /// Check if the home page is fully loaded with optimized checking
     /// </summary>
     public async Task<bool> IsHomePageLoadedAsync()
     {
         try
         {
-            return await IsElementVisibleAsync(_homeContainer)
-                && await IsElementVisibleAsync(_startGameButton);
+            var containerTask = IsElementVisibleAsync(HomeContainer);
+            var buttonTask = IsElementVisibleAsync(StartGameButton);
+
+            await Task.WhenAll(containerTask, buttonTask);
+
+            return await containerTask && await buttonTask;
         }
         catch
         {
@@ -145,7 +163,7 @@ public class HomePage : BasePage
     }
 
     /// <summary>
-    /// Check if a specific button is visible
+    /// Check if a specific button is visible with optimized checking
     /// </summary>
     /// <param name="buttonName">Name of the button to check</param>
     public async Task<bool> IsButtonVisibleAsync(string buttonName)
@@ -153,4 +171,38 @@ public class HomePage : BasePage
         var button = Page.GetByRole(AriaRole.Button, new() { Name = buttonName });
         return await IsElementVisibleAsync(button);
     }
+
+    #region Performance-Optimized Navigation Methods
+
+    /// <summary>
+    /// Smart wait for navigation to settings page
+    /// </summary>
+    private async Task WaitForNavigationToSettingsAsync()
+    {
+        // Wait for URL change with shorter timeout
+        await Page.WaitForURLAsync(
+            Constants.SettingsUrlPattern,
+            new() { Timeout = Constants.DefaultSettingsTimeout }
+        );
+
+        // Brief wait for page stability
+        await Task.Delay(Constants.StandardUiDelay);
+    }
+
+    /// <summary>
+    /// Smart wait for game start
+    /// </summary>
+    private async Task WaitForGameStartAsync()
+    {
+        // Wait for URL change with shorter timeout
+        await Page.WaitForURLAsync(
+            Constants.GameUrlPattern,
+            new() { Timeout = Constants.DefaultUrlNavigationTimeout }
+        );
+
+        // Brief wait for page stability
+        await Task.Delay(Constants.StandardUiDelay);
+    }
+
+    #endregion
 }

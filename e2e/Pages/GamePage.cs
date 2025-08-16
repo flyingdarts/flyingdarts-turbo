@@ -3,352 +3,63 @@ using Microsoft.Playwright;
 namespace Flyingdarts.E2E.Pages;
 
 /// <summary>
-/// Page object for the Darts Game page
+/// Optimized page object for the Game page with performance improvements
+/// Eliminates waiting pauses and uses smart waiting strategies
 /// </summary>
-public class GamePage : BasePage
+public class GamePage : OptimizedBasePage
 {
-    // Game information and stats (placeholders)
-    private readonly ILocator _gameTitle;
-    private readonly ILocator _bestOfDisplay;
-    private readonly ILocator _playerWonSets;
-    private readonly ILocator _playerWonLegs;
-    private readonly ILocator _playerScore;
-    private readonly ILocator _playerName;
-
-    // User controls
-    private readonly ILocator _userDropdown;
-    private readonly ILocator _settingsButton;
-
-    // Input display
-    private readonly ILocator _inputDisplay;
-
-    // Control buttons
-    private readonly ILocator _clearButton;
-    private readonly ILocator _checkButton;
-    private readonly ILocator _noScoreButton;
-    private readonly ILocator _okButton;
-
-    // Numerical/Score keypad buttons
-    private readonly ILocator _button26;
-    private readonly ILocator _button1;
-    private readonly ILocator _button2;
-    private readonly ILocator _button3;
-    private readonly ILocator _button41;
-    private readonly ILocator _button45;
-    private readonly ILocator _button4;
-    private readonly ILocator _button5;
-    private readonly ILocator _button6;
-    private readonly ILocator _button60;
-    private readonly ILocator _button85;
-    private readonly ILocator _button7;
-    private readonly ILocator _button8;
-    private readonly ILocator _button9;
-    private readonly ILocator _button100;
-    private readonly ILocator _button0;
+    // Cached locators for better performance
+    private ILocator GameContainer =>
+        GetCachedLocator("gameContainer", () => Page.Locator("#gameContainer"));
+    private ILocator PlayerName =>
+        GetCachedLocator("playerName", () => Page.Locator("#playerName"));
+    private ILocator UserDropdown =>
+        GetCachedLocator("userDropdown", () => Page.Locator("#userDropdown"));
+    private ILocator SettingsButton =>
+        GetCachedLocator("settingsButton", () => Page.Locator("#settingsButton"));
 
     public GamePage(IPage page, string baseUrl = "https://staging.flyingdarts.net")
-        : base(page, baseUrl)
-    {
-        // Initialize game information locators (placeholders)
-        _gameTitle = Page.GetByText("Flyingdarts");
-        _bestOfDisplay = Page.Locator("app-game-stats table thead tr th:first-child");
-        _playerWonSets = Page.Locator("app-game-stats table tbody tr:first-child td:nth-child(2)");
-        _playerWonLegs = Page.Locator("app-game-stats table tbody tr:first-child td:nth-child(3)");
-        _playerScore = Page.Locator("app-game-stats table tbody tr:first-child td:nth-child(4)");
-
-        // Initialize input display (placeholder)
-        _inputDisplay = Page.Locator("#calcInputFieldHidden");
-
-        // Initialize control button locators
-        _clearButton = Page.GetByText("CLEAR");
-        _checkButton = Page.GetByText("CHECK");
-        _noScoreButton = Page.GetByText("NO SCORE");
-        _okButton = Page.GetByText("OK");
-
-        // Initialize numerical/score keypad locators
-        _button26 = Page.GetByText("26");
-        _button1 = Page.GetByText("1");
-        _button2 = Page.GetByText("2");
-        _button3 = Page.GetByText("3");
-        _button41 = Page.GetByText("41");
-        _button45 = Page.GetByText("45");
-        _button4 = Page.GetByText("4");
-        _button5 = Page.GetByText("5");
-        _button6 = Page.GetByText("6");
-        _button60 = Page.GetByText("60");
-        _button85 = Page.GetByText("85");
-        _button7 = Page.GetByText("7");
-        _button8 = Page.GetByText("8");
-        _button9 = Page.GetByText("9");
-        _button100 = Page.GetByText("100");
-        _button0 = Page.GetByText("0");
-    }
+        : base(page, baseUrl) { }
 
     /// <summary>
-    /// Wait for the game page to be fully loaded
+    /// Wait for the game page to be fully loaded with optimized waiting
     /// </summary>
     public override async Task WaitForPageReadyAsync()
     {
+        // Use optimized base page waiting
         await base.WaitForPageReadyAsync();
 
-        // Wait for key game elements to be visible
-        await WaitForElementVisibleAsync(_gameTitle);
-        // await WaitForElementVisibleAsync(_bestOfDisplay);
-        // await WaitForElementVisibleAsync(_clearButton);
-        // await WaitForElementVisibleAsync(_checkButton);
-    }
-
-    #region Game Information
-
-    /// <summary>
-    /// Get the current game title
-    /// </summary>
-    public async Task<string> GetGameTitleAsync()
-    {
-        return await GetTextSafelyAsync(_gameTitle);
-    }
-
-    /// <summary>
-    /// Get the "Best Of" display text
-    /// </summary>
-    public async Task<string> GetBestOfDisplayAsync()
-    {
-        return await GetTextSafelyAsync(_bestOfDisplay);
-    }
-
-    /// <summary>
-    /// Get the current sets score
-    /// </summary>
-    public async Task<int> GetCurrentSetsAsync()
-    {
-        var text = await GetTextSafelyAsync(_playerWonSets);
-        return int.TryParse(text, out var result) ? result : 0;
-    }
-
-    /// <summary>
-    /// Get the current legs score
-    /// </summary>
-    public async Task<int> GetCurrentLegsAsync()
-    {
-        var text = await GetTextSafelyAsync(_playerWonLegs);
-        return int.TryParse(text, out var result) ? result : 0;
-    }
-
-    /// <summary>
-    /// Get the current game score
-    /// </summary>
-    public async Task<int> GetCurrentScoreAsync()
-    {
-        var text = await GetTextSafelyAsync(_playerScore);
-        return int.TryParse(text, out var result) ? result : 501;
-    }
-
-    #endregion
-
-    #region Input Display
-
-    /// <summary>
-    /// Get the current input display value
-    /// </summary>
-    public async Task<string> GetInputDisplayValueAsync()
-    {
-        return await GetTextSafelyAsync(_inputDisplay);
-    }
-
-    /// <summary>
-    /// Check if input display is empty
-    /// </summary>
-    public async Task<bool> IsInputDisplayEmptyAsync()
-    {
-        var value = await GetInputDisplayValueAsync();
-        return string.IsNullOrEmpty(value);
-    }
-
-    #endregion
-
-    #region Control Buttons
-
-    /// <summary>
-    /// Clear the current input
-    /// </summary>
-    public async Task ClearInputAsync()
-    {
-        await WaitForElementVisibleAsync(_clearButton);
-        await ClickWithRetryAsync(_clearButton);
-    }
-
-    /// <summary>
-    /// Check the current input
-    /// </summary>
-    public async Task CheckInputAsync()
-    {
-        await WaitForElementVisibleAsync(_checkButton);
-        await ClickWithRetryAsync(_checkButton);
-    }
-
-    /// <summary>
-    /// Mark no score for the current throw
-    /// </summary>
-    public async Task MarkNoScoreAsync()
-    {
-        await WaitForElementVisibleAsync(_noScoreButton);
-        await ClickWithRetryAsync(_noScoreButton);
-    }
-
-    /// <summary>
-    /// Confirm the current input
-    /// </summary>
-    public async Task ConfirmInputAsync()
-    {
-        await WaitForElementVisibleAsync(_okButton);
-        await ClickWithRetryAsync(_okButton);
-    }
-
-    #endregion
-
-    #region Numerical Keypad
-
-    /// <summary>
-    /// Press a number button
-    /// </summary>
-    /// <param name="number">Number to press (0-9)</param>
-    public async Task PressNumberAsync(int number)
-    {
-        var button = number switch
+        // Wait for key elements in parallel for faster loading
+        var waitTasks = new[]
         {
-            0 => _button0,
-            1 => _button1,
-            2 => _button2,
-            3 => _button3,
-            4 => _button4,
-            5 => _button5,
-            6 => _button6,
-            7 => _button7,
-            8 => _button8,
-            9 => _button9,
-            _ => throw new ArgumentException($"Invalid number: {number}. Must be 0-9."),
-        };
-
-        await WaitForElementVisibleAsync(button);
-        await ClickWithRetryAsync(button);
-    }
-
-    #endregion
-
-    #region Score Buttons
-
-    /// <summary>
-    /// Press a specific score button
-    /// </summary>
-    /// <param name="score">Score value to press</param>
-    public async Task PressScoreAsync(int score)
-    {
-        var button = score switch
-        {
-            26 => _button26,
-            41 => _button41,
-            45 => _button45,
-            60 => _button60,
-            85 => _button85,
-            100 => _button100,
-            _ => throw new ArgumentException(
-                $"Invalid score: {score}. Valid scores are: 26, 41, 45, 60, 85, 100."
+            WaitForElementSmartAsync(
+                () => Page.Locator(Constants.GameContainerSelector),
+                "gameContainer",
+                Constants.DefaultGamePageTimeout
+            ),
+            WaitForElementSmartAsync(
+                () => Page.Locator(Constants.PlayerNameSelector),
+                "playerName",
+                Constants.DefaultGamePageTimeout
             ),
         };
 
-        await WaitForElementVisibleAsync(button);
-        await ClickWithRetryAsync(button);
-    }
-
-    #endregion
-
-    #region Combined Operations
-
-    /// <summary>
-    /// Enter a score using the keypad
-    /// </summary>
-    /// <param name="score">Score to enter</param>
-    public async Task EnterScoreAsync(int score)
-    {
-        // Clear any existing input first
-        await ClearInputAsync();
-
-        // Convert score to string and press each digit
-        var scoreString = score.ToString();
-        foreach (var digit in scoreString)
-        {
-            await PressNumberAsync(int.Parse(digit.ToString()));
-        }
+        await Task.WhenAll(waitTasks);
     }
 
     /// <summary>
-    /// Enter a score and confirm it
-    /// </summary>
-    /// <param name="score">Score to enter</param>
-    public async Task EnterAndConfirmScoreAsync(int score)
-    {
-        await EnterScoreAsync(score);
-        await ConfirmInputAsync();
-    }
-
-    /// <summary>
-    /// Enter a score and check it
-    /// </summary>
-    /// <param name="score">Score to enter</param>
-    public async Task EnterAndCheckScoreAsync(int score)
-    {
-        await EnterScoreAsync(score);
-        await CheckInputAsync();
-    }
-
-    #endregion
-
-    #region User Controls
-
-    /// <summary>
-    /// Navigate to settings
-    /// </summary>
-    public async Task NavigateToSettingsAsync()
-    {
-        await WaitForElementVisibleAsync(_settingsButton);
-        await ClickWithRetryAsync(_settingsButton);
-
-        // Wait for navigation to complete
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
-    }
-
-    /// <summary>
-    /// Get the current user name
-    /// </summary>
-    public async Task<string> GetUserNameAsync()
-    {
-        return await GetTextSafelyAsync(_playerName);
-    }
-
-    /// <summary>
-    /// Open user dropdown menu
-    /// </summary>
-    public async Task OpenUserDropdownAsync()
-    {
-        await WaitForElementVisibleAsync(_userDropdown);
-        await ClickWithRetryAsync(_userDropdown);
-    }
-
-    #endregion
-
-    #region Game State Validation
-
-    /// <summary>
-    /// Check if the game page is fully loaded
+    /// Check if the game page is loaded with optimized checking
     /// </summary>
     public async Task<bool> IsGamePageLoadedAsync()
     {
         try
         {
-            return await IsElementVisibleAsync(_gameTitle)
-                && await IsElementVisibleAsync(_bestOfDisplay)
-                && await IsElementVisibleAsync(_clearButton)
-                && await IsElementVisibleAsync(_checkButton);
+            var containerTask = IsElementVisibleAsync(GameContainer);
+            var playerNameTask = IsElementVisibleAsync(PlayerName);
+
+            await Task.WhenAll(containerTask, playerNameTask);
+
+            return await containerTask && await playerNameTask;
         }
         catch
         {
@@ -357,13 +68,226 @@ public class GamePage : BasePage
     }
 
     /// <summary>
-    /// Check if the game is in progress
+    /// Get the current player name with optimized extraction
     /// </summary>
-    public async Task<bool> IsGameInProgressAsync()
+    public async Task<string> GetPlayerNameAsync()
     {
-        var currentScore = await GetCurrentScoreAsync();
-        return currentScore > 0 && currentScore <= 501;
+        var element = await WaitForElementSmartAsync(
+            () => Page.Locator(Constants.PlayerNameSelector),
+            "playerName",
+            Constants.OptimizedButtonTimeout
+        );
+        var text = await element.TextContentAsync();
+        return text?.Trim() ?? string.Empty;
     }
 
-    #endregion
+    /// <summary>
+    /// Check if the user dropdown is visible
+    /// </summary>
+    public async Task<bool> IsUserDropdownVisibleAsync()
+    {
+        try
+        {
+            return await IsElementVisibleAsync(UserDropdown);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Check if the settings button is visible
+    /// </summary>
+    public async Task<bool> IsSettingsButtonVisibleAsync()
+    {
+        try
+        {
+            return await IsElementVisibleAsync(SettingsButton);
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Wait for game page to be ready with optimized waiting
+    /// </summary>
+    public async Task WaitForGamePageReadyAsync()
+    {
+        // Wait for URL to contain game pattern
+        await Page.WaitForURLAsync(
+            Constants.GameUrlPattern,
+            new() { Timeout = Constants.DefaultUrlNavigationTimeout }
+        );
+
+        // Wait for page to be ready
+        await WaitForPageReadyAsync();
+
+        // Brief wait for page stability
+        await Task.Delay(Constants.StandardUiDelay);
+    }
+
+    /// <summary>
+    /// Throw a dart by clicking a random number button (1-20) and then OK
+    /// </summary>
+    public async Task ThrowDartAsync()
+    {
+        // Randomly select a number between 1-20 for realistic dart throwing
+        var random = new Random();
+        var dartScore = random.Next(1, 21);
+
+        // Click the individual digits for multi-digit numbers
+        await ClickDigitsForNumberAsync(dartScore);
+
+        // Wait a moment for the input to register
+        await Task.Delay(Constants.MinimalUiDelay);
+
+        // Click OK to submit the score
+        var okButton = Page.Locator(Constants.CalcButtonOkSelector);
+        await okButton.ClickAsync();
+
+        Console.WriteLine($"🎯 Threw dart with score: {dartScore}");
+    }
+
+    /// <summary>
+    /// Throw a dart with a specific score
+    /// </summary>
+    /// <param name="score">The score to throw (0-20)</param>
+    public async Task ThrowDartWithScoreAsync(int score)
+    {
+        if (score < 0 || score > 20)
+        {
+            throw new ArgumentException("Score must be between 0 and 20", nameof(score));
+        }
+
+        // Click the individual digits for multi-digit numbers
+        await ClickDigitsForNumberAsync(score);
+
+        // Wait a moment for the input to register
+        await Task.Delay(Constants.MinimalUiDelay);
+
+        // Click OK to submit the score
+        var okButton = Page.Locator(Constants.CalcButtonOkSelector);
+        await okButton.ClickAsync();
+
+        Console.WriteLine($"🎯 Threw dart with specific score: {score}");
+    }
+
+    /// <summary>
+    /// Use a quick score button (26, 41, 45, 60, 85, 100)
+    /// </summary>
+    /// <param name="quickScore">The quick score to use</param>
+    public async Task UseQuickScoreAsync(int quickScore)
+    {
+        if (!Constants.QuickScoreButtonSelectors.ContainsKey(quickScore))
+        {
+            throw new ArgumentException(
+                $"Quick score {quickScore} is not valid. Valid scores: {string.Join(", ", Constants.QuickScoreButtonSelectors.Keys)}",
+                nameof(quickScore)
+            );
+        }
+
+        // Click the quick score button
+        var quickScoreButton = Page.Locator(Constants.QuickScoreButtonSelectors[quickScore]);
+        await quickScoreButton.ClickAsync();
+
+        // Wait a moment for the input to register
+        await Task.Delay(Constants.MinimalUiDelay);
+
+        // Click OK to submit the score
+        var okButton = Page.Locator(Constants.CalcButtonOkSelector);
+        await okButton.ClickAsync();
+
+        Console.WriteLine($"🎯 Used quick score: {quickScore}");
+    }
+
+    /// <summary>
+    /// Clear the current score input
+    /// </summary>
+    public async Task ClearScoreAsync()
+    {
+        var clearButton = Page.Locator(Constants.CalcButtonClearSelector);
+        await clearButton.ClickAsync();
+        Console.WriteLine("🧹 Cleared score input");
+    }
+
+    /// <summary>
+    /// Submit no score for the current turn
+    /// </summary>
+    public async Task SubmitNoScoreAsync()
+    {
+        var noScoreButton = Page.Locator(Constants.CalcButtonNoScoreSelector);
+        await noScoreButton.ClickAsync();
+        Console.WriteLine("❌ Submitted no score");
+    }
+
+    /// <summary>
+    /// Input any score by clicking individual digits (useful for scores like 15, 23, etc.)
+    /// </summary>
+    /// <param name="score">The score to input (0-180)</param>
+    public async Task InputScoreAsync(int score)
+    {
+        if (score < 0 || score > 180)
+        {
+            throw new ArgumentException("Score must be between 0 and 180", nameof(score));
+        }
+
+        // Click the individual digits for the score
+        await ClickDigitsForNumberAsync(score);
+
+        Console.WriteLine($"⌨️ Input score: {score}");
+    }
+
+    /// <summary>
+    /// Input a score and submit it (complete flow)
+    /// </summary>
+    /// <param name="score">The score to input and submit (0-180)</param>
+    public async Task InputAndSubmitScoreAsync(int score)
+    {
+        if (score < 0 || score > 180)
+        {
+            throw new ArgumentException("Score must be between 0 and 180", nameof(score));
+        }
+
+        // Input the score
+        await InputScoreAsync(score);
+
+        // Wait a moment for the input to register
+        await Task.Delay(Constants.MinimalUiDelay);
+
+        // Click OK to submit the score
+        var okButton = Page.Locator(Constants.CalcButtonOkSelector);
+        await okButton.ClickAsync();
+
+        Console.WriteLine($"🎯 Input and submitted score: {score}");
+    }
+
+    /// <summary>
+    /// Helper method to click individual digit buttons for multi-digit numbers
+    /// </summary>
+    /// <param name="number">The number to input (0-180)</param>
+    private async Task ClickDigitsForNumberAsync(int number)
+    {
+        var digits = number.ToString().ToCharArray();
+
+        foreach (var digit in digits)
+        {
+            var digitValue = int.Parse(digit.ToString());
+
+            if (!Constants.NumberButtonSelectors.ContainsKey(digitValue))
+            {
+                throw new InvalidOperationException(
+                    $"Digit {digitValue} is not available in the number button selectors"
+                );
+            }
+
+            var digitButton = Page.Locator(Constants.NumberButtonSelectors[digitValue]);
+            await digitButton.ClickAsync();
+
+            // Small delay between digit clicks for stability
+            await Task.Delay(Constants.MinimalUiDelay);
+        }
+    }
 }

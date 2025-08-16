@@ -1,33 +1,25 @@
-﻿using System.Text.Json;
-using System.Text.RegularExpressions;
-using Authress.SDK;
-using Authress.SDK.Client;
-using Flyingdarts.E2E.Pages;
+﻿using Flyingdarts.E2E.Pages;
 using Flyingdarts.E2E.Tests;
-using Microsoft.Playwright;
-using Microsoft.Playwright.Xunit;
 
 namespace Flyingdarts.E2E;
 
 /// <summary>
-/// Legacy test class - demonstrates migration to POM architecture
-/// This class shows how existing tests can be gradually migrated
+/// Testing a game of darts between two players
 /// </summary>
 public class UnitTest1 : MultiBrowserBaseTest
 {
     /// <summary>
-    /// Example of how to migrate to the new POM architecture
-    /// This test demonstrates the new approach
+    /// Testing a game of darts between two players
     /// </summary>
     [Fact]
-    public async Task MigratedToPOM_ShouldSetGameSettings()
+    public async Task GameOfDarts()
     {
         // Setup both users
         await SetupAsync();
         var tasks = new List<Task> { SetupPlayer(), SetupOpponent() };
         await Task.WhenAll(tasks);
 
-        // Create home pages for both users
+        // Create optimized home pages for both users
         var player1Home = new HomePage(User1Page, BaseUrl);
         var player2Home = new HomePage(User2Page, BaseUrl);
 
@@ -45,7 +37,7 @@ public class UnitTest1 : MultiBrowserBaseTest
         var navigateTasks = new List<Task> { player1NavigateTask, player2NavigateTask };
         await Task.WhenAll(navigateTasks);
 
-        // Handle settings for both users simultaneously
+        // Handle settings for both users simultaneously with original settings page
         var player1SettingsTask = Task.Run(async () =>
         {
             if (player1Home.IsOnSettingsPage())
@@ -97,7 +89,7 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Player 2 joins the game
         await player2Home.NavigateToAsync($"/game/{gameId}");
 
-        // Create game page objects for both users
+        // Create optimized game page objects for both users
         var player1Game = new GamePage(User1Page, BaseUrl);
         var player2Game = new GamePage(User2Page, BaseUrl);
 
@@ -112,13 +104,55 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Take screenshots from both perspectives
         await TakeBothUsersScreenshotsAsync("game_settings_migrated");
 
+        // Player 1 throws a dart
+        await player1Game.ThrowDartAsync();
+
+        // Player 2 throws a dart
+        await player2Game.ThrowDartAsync();
+
+        // Player 1 throws a dart
+        await player1Game.ThrowDartAsync();
+
+        // Player 2 throws a dart
+        await player2Game.ThrowDartAsync();
+
+        // Player 1 throws a dart
+        await player1Game.ThrowDartAsync();
+
+        // Player 2 throws a dart
+        await player2Game.ThrowDartAsync();
+
+        // Player 1 throws a dart
+        await player1Game.ThrowDartAsync();
+
+        // Player 2 throws a dart
+        await player2Game.ThrowDartAsync();
+
+        // Player 1 throws a dart
+        await player1Game.ThrowDartAsync();
+
+        // Player 2 throws a dart
+        await player2Game.ThrowDartAsync();
+
+        // Player 1 throws a dart
+        await player1Game.ThrowDartAsync();
+
+        // Player 2 throws a dart
+        await player2Game.ThrowDartAsync();
+
+        // Player 1 throws a dart
+        await player1Game.ThrowDartAsync();
+
+        // Player 2 throws a dart
+        await player2Game.ThrowDartAsync();
+
         // Cleanup
         await TeardownAsync();
     }
 
     private async Task SetupPlayer()
     {
-        var token = await AuthressHelper?.GetBearerTokenAsync();
+        var token = await AuthressHelperUser1?.GetBearerTokenAsync();
         if (token is null)
         {
             throw new Exception("Token is null");
@@ -129,7 +163,7 @@ public class UnitTest1 : MultiBrowserBaseTest
 
     private async Task SetupOpponent()
     {
-        var token = await AuthressHelper?.GetBearerTokenAsync();
+        var token = await AuthressHelperUser2?.GetBearerTokenAsync();
         if (token is null)
         {
             throw new Exception("Token is null");

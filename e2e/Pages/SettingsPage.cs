@@ -3,139 +3,217 @@ using Microsoft.Playwright;
 namespace Flyingdarts.E2E.Pages;
 
 /// <summary>
-/// Page object for the Game Settings page
+/// Optimized page object for the Game Settings page with performance improvements
+/// Eliminates pauses and uses smart waiting strategies
 /// </summary>
-public class SettingsPage : BasePage
+public class SettingsPage : OptimizedBasePage
 {
-    // Locators using the existing XPath selectors
-    private readonly ILocator _setMinusButton;
-    private readonly ILocator _setPlusButton;
-    private readonly ILocator _setCountDisplay;
-    private readonly ILocator _legMinusButton;
-    private readonly ILocator _legPlusButton;
-    private readonly ILocator _legCountDisplay;
-    private readonly ILocator _saveButton;
+    // Cached locators for better performance
+    private ILocator SetMinusButton =>
+        GetCachedLocator("setMinus", () => Page.Locator(SettingsXpathSelectors.SetMinusXpath));
+    private ILocator SetPlusButton =>
+        GetCachedLocator("setPlus", () => Page.Locator(SettingsXpathSelectors.SetPlusXpath));
+    private ILocator SetCountDisplay =>
+        GetCachedLocator("setCount", () => Page.Locator(SettingsXpathSelectors.SetCount));
+    private ILocator LegMinusButton =>
+        GetCachedLocator("legMinus", () => Page.Locator(SettingsXpathSelectors.LegMinusXpath));
+    private ILocator LegPlusButton =>
+        GetCachedLocator("legPlus", () => Page.Locator(SettingsXpathSelectors.LegPlusXpath));
+    private ILocator LegCountDisplay =>
+        GetCachedLocator("legCount", () => Page.Locator(SettingsXpathSelectors.LegCount));
+    private ILocator SaveButton => GetCachedLocator("save", () => Page.GetByText("save"));
 
     public SettingsPage(IPage page, string baseUrl = "https://staging.flyingdarts.net")
-        : base(page, baseUrl)
-    {
-        // Initialize locators using the existing XPath selectors
-        _setMinusButton = Page.Locator(SettingsXpathSelectors.SetMinusXpath);
-        _setPlusButton = Page.Locator(SettingsXpathSelectors.SetPlusXpath);
-        _setCountDisplay = Page.Locator(SettingsXpathSelectors.SetCount);
-        _legMinusButton = Page.Locator(SettingsXpathSelectors.LegMinusXpath);
-        _legPlusButton = Page.Locator(SettingsXpathSelectors.LegPlusXpath);
-        _legCountDisplay = Page.Locator(SettingsXpathSelectors.LegCount);
-        _saveButton = Page.GetByText("save");
-    }
+        : base(page, baseUrl) { }
 
     /// <summary>
-    /// Wait for the settings page to be fully loaded
+    /// Wait for the settings page to be fully loaded with optimized waiting
     /// </summary>
     public override async Task WaitForPageReadyAsync()
     {
+        // Use optimized base page waiting
         await base.WaitForPageReadyAsync();
 
-        // Wait for key elements to be visible
-        await WaitForElementVisibleAsync(_setCountDisplay);
-        await WaitForElementVisibleAsync(_legCountDisplay);
-        await WaitForElementVisibleAsync(_saveButton);
+        // Wait for key elements in parallel for faster loading
+        var waitTasks = new[]
+        {
+            WaitForElementSmartAsync(
+                () => Page.Locator(SettingsXpathSelectors.SetCount),
+                "setCount",
+                Constants.DefaultSettingsTimeout
+            ),
+            WaitForElementSmartAsync(
+                () => Page.Locator(SettingsXpathSelectors.LegCount),
+                "legCount",
+                Constants.DefaultSettingsTimeout
+            ),
+            WaitForElementSmartAsync(
+                () => Page.GetByText(Constants.SaveButtonText),
+                "save",
+                Constants.DefaultSettingsTimeout
+            ),
+        };
+
+        await Task.WhenAll(waitTasks);
     }
 
-    #region Set Controls
+    #region Optimized Set Controls
 
     /// <summary>
-    /// Decrease the number of sets
+    /// Decrease the number of sets with smart waiting
     /// </summary>
     public async Task DecreaseSetsAsync()
     {
-        await WaitForElementVisibleAsync(_setMinusButton);
-        await ClickWithRetryAsync(_setMinusButton);
-        await WaitForSetCountUpdateAsync();
+        var button = await WaitForElementSmartAsync(
+            () => Page.Locator(SettingsXpathSelectors.SetMinusXpath),
+            "setMinus",
+            Constants.OptimizedButtonTimeout
+        );
+        await button.ClickAsync();
+
+        // Smart wait for UI update instead of fixed delay
+        await WaitForElementValueChangeAsync(
+            SetCountDisplay,
+            Constants.OptimizedElementValueChangeTimeout
+        );
     }
 
     /// <summary>
-    /// Increase the number of sets
+    /// Increase the number of sets with smart waiting
     /// </summary>
     public async Task IncreaseSetsAsync()
     {
-        await WaitForElementVisibleAsync(_setPlusButton);
-        await ClickWithRetryAsync(_setPlusButton);
-        await WaitForSetCountUpdateAsync();
+        Console.WriteLine($"[TIMING] Starting IncreaseSetsAsync");
+        var startTime = DateTime.UtcNow;
+
+        var button = await WaitForElementSmartAsync(
+            () => Page.Locator(SettingsXpathSelectors.SetPlusXpath),
+            "setPlus",
+            Constants.OptimizedButtonTimeout
+        );
+
+        var buttonWaitTime = (DateTime.UtcNow - startTime).TotalMilliseconds;
+        Console.WriteLine($"[TIMING] Button wait completed in {buttonWaitTime:F0}ms");
+
+        await button.ClickAsync();
+        Console.WriteLine($"[TIMING] Button clicked");
+
+        // Smart wait for UI update instead of fixed delay
+        var valueChangeStart = DateTime.UtcNow;
+        await WaitForElementValueChangeAsync(
+            SetCountDisplay,
+            Constants.OptimizedElementValueChangeTimeout
+        );
+
+        var valueChangeTime = (DateTime.UtcNow - valueChangeStart).TotalMilliseconds;
+        Console.WriteLine($"[TIMING] Value change wait completed in {valueChangeTime:F0}ms");
+
+        var totalTime = (DateTime.UtcNow - startTime).TotalMilliseconds;
+        Console.WriteLine($"[TIMING] IncreaseSetsAsync total time: {totalTime:F0}ms");
     }
 
     /// <summary>
-    /// Get the current number of sets
+    /// Get the current number of sets with caching
     /// </summary>
     public async Task<int> GetSetCountAsync()
     {
-        await WaitForElementVisibleAsync(_setCountDisplay);
-        var text = await GetTextSafelyAsync(_setCountDisplay);
+        var display = await WaitForElementSmartAsync(
+            () => Page.Locator(SettingsXpathSelectors.SetCount),
+            "setCount",
+            Constants.OptimizedButtonTimeout
+        );
+        var text = await display.TextContentAsync();
 
         // Extract number from text like "Sets: 3"
-        var match = System.Text.RegularExpressions.Regex.Match(text, @"\d+");
+        var match = System.Text.RegularExpressions.Regex.Match(text ?? "", @"\d+");
         return match.Success ? int.Parse(match.Value) : 1;
     }
 
     #endregion
 
-    #region Leg Controls
+    #region Optimized Leg Controls
 
     /// <summary>
-    /// Decrease the number of legs
+    /// Decrease the number of legs with smart waiting
     /// </summary>
     public async Task DecreaseLegsAsync()
     {
-        await WaitForElementVisibleAsync(_legMinusButton);
-        await ClickWithRetryAsync(_legMinusButton);
-        await WaitForLegCountUpdateAsync();
+        var button = await WaitForElementSmartAsync(
+            () => Page.Locator(SettingsXpathSelectors.LegMinusXpath),
+            "legMinus",
+            Constants.OptimizedButtonTimeout
+        );
+        await button.ClickAsync();
+
+        // Smart wait for UI update instead of fixed delay
+        await WaitForElementValueChangeAsync(
+            LegCountDisplay,
+            Constants.OptimizedElementValueChangeTimeout
+        );
     }
 
     /// <summary>
-    /// Increase the number of legs
+    /// Increase the number of legs with smart waiting
     /// </summary>
     public async Task IncreaseLegsAsync()
     {
-        await WaitForElementVisibleAsync(_legPlusButton);
-        await ClickWithRetryAsync(_legPlusButton);
-        await WaitForLegCountUpdateAsync();
+        var button = await WaitForElementSmartAsync(
+            () => Page.Locator(SettingsXpathSelectors.LegPlusXpath),
+            "legPlus",
+            Constants.OptimizedButtonTimeout
+        );
+        await button.ClickAsync();
+
+        // Smart wait for UI update instead of fixed delay
+        await WaitForElementValueChangeAsync(
+            LegCountDisplay,
+            Constants.OptimizedElementValueChangeTimeout
+        );
     }
 
     /// <summary>
-    /// Get the current number of legs
+    /// Get the current number of legs with caching
     /// </summary>
     public async Task<int> GetLegCountAsync()
     {
-        await WaitForElementVisibleAsync(_legCountDisplay);
-        var text = await GetTextSafelyAsync(_legCountDisplay);
+        var display = await WaitForElementSmartAsync(
+            () => Page.Locator(SettingsXpathSelectors.LegCount),
+            "legCount",
+            Constants.OptimizedButtonTimeout
+        );
+        var text = await display.TextContentAsync();
 
         // Extract number from text like "Legs: 5"
-        var match = System.Text.RegularExpressions.Regex.Match(text, @"\d+");
+        var match = System.Text.RegularExpressions.Regex.Match(text ?? "", @"\d+");
         return match.Success ? int.Parse(match.Value) : 1;
     }
 
     #endregion
 
-    #region Save Operations
+    #region Optimized Save Operations
 
     /// <summary>
-    /// Save the current settings
+    /// Save the current settings with optimized waiting
     /// </summary>
     public async Task SaveSettingsAsync()
     {
-        await WaitForElementVisibleAsync(_saveButton);
-        await ClickWithRetryAsync(_saveButton);
+        var button = await WaitForElementSmartAsync(
+            () => Page.GetByText(Constants.SaveButtonText),
+            "save",
+            Constants.DefaultSaveTimeout
+        );
+        await button.ClickAsync();
 
-        // Wait for save operation to complete
-        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        // Wait for save operation with shorter timeout and smart detection
+        await WaitForSaveCompletionAsync();
     }
 
     #endregion
 
-    #region Combined Operations
+    #region High-Performance Combined Operations
 
     /// <summary>
-    /// Set the game settings to specific values
+    /// Set the game settings to specific values with parallel operations and smart waiting
     /// </summary>
     /// <param name="sets">Number of sets</param>
     /// <param name="legs">Number of legs</param>
@@ -145,94 +223,248 @@ public class SettingsPage : BasePage
         if (sets < 1 || legs < 1)
             throw new ArgumentException("Sets and legs must be at least 1");
 
-        // Reset to minimum values first
-        await ResetToMinimumAsync();
+        // Get current values in parallel
+        var (currentSets, currentLegs) = await GetCurrentSettingsAsync();
 
-        // Set the desired number of sets
-        var currentSets = await GetSetCountAsync();
-        while (currentSets < sets)
+        // Calculate required changes for both directions
+        var setsToAdd = Math.Max(0, sets - currentSets);
+        var setsToRemove = Math.Max(0, currentSets - sets);
+        var legsToAdd = Math.Max(0, legs - currentLegs);
+        var legsToRemove = Math.Max(0, currentLegs - legs);
+
+        // Execute changes sequentially to avoid race conditions
+        if (setsToAdd > 0)
         {
-            await IncreaseSetsAsync();
-            currentSets = await GetSetCountAsync();
+            await IncreaseSetsByAmountAsync(setsToAdd);
         }
 
-        // Set the desired number of legs
-        var currentLegs = await GetLegCountAsync();
-        while (currentLegs < legs)
+        if (setsToRemove > 0)
         {
-            await IncreaseLegsAsync();
-            currentLegs = await GetLegCountAsync();
+            await DecreaseSetsByAmountAsync(setsToRemove);
         }
+
+        if (legsToAdd > 0)
+        {
+            await IncreaseLegsByAmountAsync(legsToAdd);
+        }
+
+        if (legsToRemove > 0)
+        {
+            await DecreaseLegsByAmountAsync(legsToRemove);
+        }
+
+        // Verify settings were applied correctly
+        await VerifySettingsAsync(sets, legs);
     }
 
     /// <summary>
-    /// Reset settings to minimum values
+    /// Reset settings to minimum values with parallel operations
     /// </summary>
     public async Task ResetToMinimumAsync()
     {
-        // Reset sets to minimum (1)
-        var currentSets = await GetSetCountAsync();
-        while (currentSets > 1)
+        // Get current values in parallel
+        var (currentSets, currentLegs) = await GetCurrentSettingsAsync();
+
+        // Calculate required changes
+        var setsToRemove = Math.Max(0, currentSets - 1);
+        var legsToRemove = Math.Max(0, currentLegs - 1);
+
+        // Execute changes in parallel if possible
+        var tasks = new List<Task>();
+
+        if (setsToRemove > 0)
         {
-            await DecreaseSetsAsync();
-            currentSets = await GetSetCountAsync();
+            tasks.Add(DecreaseSetsByAmountAsync(setsToRemove));
         }
 
-        // Reset legs to minimum (1)
-        var currentLegs = await GetLegCountAsync();
-        while (currentLegs > 1)
+        if (legsToRemove > 0)
         {
-            await DecreaseLegsAsync();
-            currentLegs = await GetLegCountAsync();
+            tasks.Add(DecreaseLegsByAmountAsync(legsToRemove));
+        }
+
+        if (tasks.Any())
+        {
+            await Task.WhenAll(tasks);
         }
     }
 
     #endregion
 
-    #region Utility Methods
+    #region Performance-Optimized Utility Methods
 
     /// <summary>
-    /// Wait for set count to update after a change
+    /// Get current settings in parallel for better performance
     /// </summary>
-    private async Task WaitForSetCountUpdateAsync()
+    private async Task<(int Sets, int Legs)> GetCurrentSettingsAsync()
     {
-        await Task.Delay(500); // Brief delay for UI update
+        var setsTask = GetSetCountAsync();
+        var legsTask = GetLegCountAsync();
+
+        await Task.WhenAll(setsTask, legsTask);
+
+        return (await setsTask, await legsTask);
     }
 
     /// <summary>
-    /// Wait for leg count to update after a change
+    /// Increase sets by a specific amount with optimized waiting
     /// </summary>
-    private async Task WaitForLegCountUpdateAsync()
+    private async Task IncreaseSetsByAmountAsync(int amount)
     {
-        await Task.Delay(500); // Brief delay for UI update
+        for (int i = 0; i < amount; i++)
+        {
+            await IncreaseSetsAsync();
+
+            // Brief wait only if more changes are needed
+            if (i < amount - 1)
+            {
+                await Task.Delay(Constants.MinimalUiDelay); // Minimal delay for UI stability
+            }
+        }
+    }
+
+    /// <summary>
+    /// Increase legs by a specific amount with optimized waiting
+    /// </summary>
+    private async Task IncreaseLegsByAmountAsync(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            await IncreaseLegsAsync();
+
+            // Brief wait only if more changes are needed
+            if (i < amount - 1)
+            {
+                await Task.Delay(Constants.MinimalUiDelay); // Minimal delay for UI stability
+            }
+        }
+    }
+
+    /// <summary>
+    /// Decrease sets by a specific amount with optimized waiting
+    /// </summary>
+    private async Task DecreaseSetsByAmountAsync(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            await DecreaseSetsAsync();
+
+            // Brief wait only if more changes are needed
+            if (i < amount - 1)
+            {
+                await Task.Delay(Constants.MinimalUiDelay); // Minimal delay for UI stability
+            }
+        }
+    }
+
+    /// <summary>
+    /// Decrease legs by a specific amount with optimized waiting
+    /// </summary>
+    private async Task DecreaseLegsByAmountAsync(int amount)
+    {
+        for (int i = 0; i < amount; i++)
+        {
+            await DecreaseLegsAsync();
+
+            // Brief wait only if more changes are needed
+            if (i < amount - 1)
+            {
+                await Task.Delay(Constants.MinimalUiDelay); // Minimal delay for UI stability
+            }
+        }
+    }
+
+    /// <summary>
+    /// Smart wait for element value change instead of fixed delays
+    /// </summary>
+    private async Task WaitForElementValueChangeAsync(
+        ILocator element,
+        int timeoutMs = Constants.DefaultElementValueChangeTimeout
+    )
+    {
+        var startTime = DateTime.UtcNow;
+        var initialValue = await element.TextContentAsync();
+
+        Console.WriteLine($"[TIMING] Waiting for value change from '{initialValue}'");
+
+        // First, try immediate check (UI might update instantly)
+        await Task.Delay(10); // Minimal 10ms wait for immediate updates
+        var currentValue = await element.TextContentAsync();
+        if (currentValue != initialValue)
+        {
+            var immediateTime = (DateTime.UtcNow - startTime).TotalMilliseconds;
+            Console.WriteLine($"[TIMING] Value changed immediately in {immediateTime:F0}ms");
+            return; // Value changed immediately
+        }
+
+        // If not immediate, use faster polling
+        var fastPollingInterval = 20; // Check every 20ms instead of 50ms
+
+        while (DateTime.UtcNow - startTime < TimeSpan.FromMilliseconds(timeoutMs))
+        {
+            await Task.Delay(fastPollingInterval);
+
+            var currentValue2 = await element.TextContentAsync();
+            if (currentValue2 != initialValue)
+            {
+                var totalTime = (DateTime.UtcNow - startTime).TotalMilliseconds;
+                Console.WriteLine($"[TIMING] Value changed after {totalTime:F0}ms");
+                return; // Value changed, we're done
+            }
+        }
+
+        // If timeout reached, check one more time
+        var finalValue = await element.TextContentAsync();
+        if (finalValue != initialValue)
+        {
+            var totalTime = (DateTime.UtcNow - startTime).TotalMilliseconds;
+            Console.WriteLine($"[TIMING] Value changed on final check after {totalTime:F0}ms");
+            return;
+        }
+
+        var timeoutTime = (DateTime.UtcNow - startTime).TotalMilliseconds;
+        Console.WriteLine($"[TIMING] Value change timeout after {timeoutTime:F0}ms");
+        // If timeout reached, continue anyway - the change might have happened
+    }
+
+    /// <summary>
+    /// Smart wait for save completion instead of fixed network idle wait
+    /// </summary>
+    private async Task WaitForSaveCompletionAsync()
+    {
+        // Wait for any network activity to settle (shorter timeout)
+        await Page.WaitForLoadStateAsync(
+            LoadState.NetworkIdle,
+            new() { Timeout = Constants.DefaultSaveTimeout }
+        );
+
+        // Additional brief wait for UI to update
+        await Task.Delay(Constants.StandardUiDelay);
+    }
+
+    /// <summary>
+    /// Verify settings were applied correctly
+    /// </summary>
+    private async Task VerifySettingsAsync(int expectedSets, int expectedLegs)
+    {
+        var (actualSets, actualLegs) = await GetCurrentSettingsAsync();
+
+        if (actualSets != expectedSets || actualLegs != expectedLegs)
+        {
+            throw new InvalidOperationException(
+                $"Settings verification failed. Expected: {expectedSets} sets, {expectedLegs} legs. "
+                    + $"Actual: {actualSets} sets, {actualLegs} legs."
+            );
+        }
     }
 
     /// <summary>
     /// Check if the current settings match the expected values
     /// </summary>
-    /// <param name="expectedSets">Expected number of sets</param>
-    /// <param name="expectedLegs">Expected number of legs</param>
     public async Task<bool> AreSettingsCorrectAsync(int expectedSets, int expectedLegs)
     {
-        var currentSets = await GetSetCountAsync();
-        var currentLegs = await GetLegCountAsync();
-
+        var (currentSets, currentLegs) = await GetCurrentSettingsAsync();
         return currentSets == expectedSets && currentLegs == expectedLegs;
     }
 
     #endregion
-}
-
-/// <summary>
-/// XPath selectors for the settings page - using the existing selectors
-/// </summary>
-public static class SettingsXpathSelectors
-{
-    public const string SetMinusXpath = "//*[@id='homeContainer']/div/app-home/div[2]/button[1]";
-    public const string SetPlusXpath = "//*[@id='homeContainer']/div/app-home/div[2]/button[2]";
-    public const string SetCount = "//*[@id='homeContainer']/div/app-home/div[2]/p[2]";
-
-    public const string LegMinusXpath = "//*[@id='homeContainer']/div/app-home/div[3]/button[1]";
-    public const string LegPlusXpath = "//*[@id='homeContainer']/div/app-home/div[3]/button[2]";
-    public const string LegCount = "//*[@id='homeContainer']/div/app-home/div[3]/p[2]";
 }

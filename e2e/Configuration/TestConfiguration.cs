@@ -1,126 +1,281 @@
 namespace Flyingdarts.E2E.Configuration;
 
 /// <summary>
-/// Configuration settings for E2E tests
+/// Configuration for test execution with performance optimizations
 /// </summary>
 public static class TestConfiguration
 {
     /// <summary>
-    /// Base URLs for different environments
+    /// Performance-related configuration
     /// </summary>
-    public static class Urls
+    public static class Performance
     {
-        public const string Staging = "https://staging.flyingdarts.net";
-        public const string Production = "https://flyingdarts.net";
-        public const string Development = "https://dev.flyingdarts.net";
-        public const string Local = "http://localhost:4200";
+        /// <summary>
+        /// Maximum number of concurrent tests
+        /// </summary>
+        public static int MaxConcurrentTests =>
+            int.TryParse(
+                Environment.GetEnvironmentVariable("E2E_MAX_CONCURRENT_TESTS"),
+                out var value
+            )
+                ? value
+                : 4;
+
+        /// <summary>
+        /// Browser pool size
+        /// </summary>
+        public static int BrowserPoolSize =>
+            int.TryParse(Environment.GetEnvironmentVariable("E2E_BROWSER_POOL_SIZE"), out var value)
+                ? value
+                : 8;
+
+        /// <summary>
+        /// Whether to run browsers in headless mode
+        /// </summary>
+        public static bool HeadlessMode =>
+            bool.TryParse(Environment.GetEnvironmentVariable("E2E_HEADLESS_MODE"), out var value)
+            && value;
+
+        /// <summary>
+        /// Default timeout for element operations (ms)
+        /// </summary>
+        public static int DefaultElementTimeout =>
+            int.TryParse(Environment.GetEnvironmentVariable("E2E_ELEMENT_TIMEOUT"), out var value)
+                ? value
+                : 15000;
+
+        /// <summary>
+        /// Default timeout for navigation (ms)
+        /// </summary>
+        public static int DefaultNavigationTimeout =>
+            int.TryParse(
+                Environment.GetEnvironmentVariable("E2E_NAVIGATION_TIMEOUT"),
+                out var value
+            )
+                ? value
+                : 15000;
+
+        /// <summary>
+        /// Whether to enable resource blocking
+        /// </summary>
+        public static bool EnableResourceBlocking =>
+            bool.TryParse(
+                Environment.GetEnvironmentVariable("E2E_ENABLE_RESOURCE_BLOCKING"),
+                out var value
+            )
+                ? value
+                : true;
+
+        /// <summary>
+        /// Whether to enable token caching
+        /// </summary>
+        public static bool EnableTokenCaching =>
+            bool.TryParse(
+                Environment.GetEnvironmentVariable("E2E_ENABLE_TOKEN_CACHING"),
+                out var value
+            )
+                ? value
+                : true;
+
+        /// <summary>
+        /// Token cache expiration time (minutes)
+        /// </summary>
+        public static int TokenCacheExpirationMinutes =>
+            int.TryParse(
+                Environment.GetEnvironmentVariable("E2E_TOKEN_CACHE_EXPIRATION"),
+                out var value
+            )
+                ? value
+                : 55;
     }
 
     /// <summary>
-    /// Authress configuration
+    /// Browser-related configuration
     /// </summary>
-    public static class Authress
+    public static class Browser
     {
-        public const string Url = "https://authress.flyingdarts.net";
-        public const string TokenCookieName = "custom-jwt-token-override";
-        public const string TokenCookieDomain = ".flyingdarts.net";
-        public const string TokenCookiePath = "/";
+        /// <summary>
+        /// Default viewport width
+        /// </summary>
+        public static int DefaultViewportWidth =>
+            int.TryParse(Environment.GetEnvironmentVariable("E2E_VIEWPORT_WIDTH"), out var value)
+                ? value
+                : 1280;
+
+        /// <summary>
+        /// Default viewport height
+        /// </summary>
+        public static int DefaultViewportHeight =>
+            int.TryParse(Environment.GetEnvironmentVariable("E2E_VIEWPORT_HEIGHT"), out var value)
+                ? value
+                : 720;
+
+        /// <summary>
+        /// Whether to enable browser performance monitoring
+        /// </summary>
+        public static bool EnablePerformanceMonitoring =>
+            bool.TryParse(
+                Environment.GetEnvironmentVariable("E2E_ENABLE_PERFORMANCE_MONITORING"),
+                out var value
+            )
+                ? value
+                : true;
+
+        /// <summary>
+        /// Browser launch arguments for performance
+        /// </summary>
+        public static string[] PerformanceLaunchArgs =>
+            new[]
+            {
+                "--disable-dev-shm-usage",
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-gpu",
+                "--disable-web-security",
+                "--disable-features=VizDisplayCompositor",
+                "--disable-background-timer-throttling",
+                "--disable-backgrounding-occluded-windows",
+                "--disable-renderer-backgrounding",
+                "--disable-field-trial-config",
+                "--disable-ipc-flooding-protection",
+            };
     }
 
     /// <summary>
-    /// Timeout settings
+    /// Test execution configuration
     /// </summary>
-    public static class Timeouts
+    public static class Execution
     {
-        public const int DefaultTimeout = 30000; // 30 seconds
-        public const int NavigationTimeout = 30000; // 30 seconds
-        public const int ElementWaitTimeout = 10000; // 10 seconds
-        public const int RetryDelay = 1000; // 1 second
-        public const int MaxRetries = 3;
+        /// <summary>
+        /// Whether to enable parallel test execution
+        /// </summary>
+        public static bool EnableParallelExecution =>
+            bool.TryParse(Environment.GetEnvironmentVariable("E2E_ENABLE_PARALLEL"), out var value)
+                ? value
+                : true;
+
+        /// <summary>
+        /// Whether to enable test retry on failure
+        /// </summary>
+        public static bool EnableTestRetry =>
+            bool.TryParse(Environment.GetEnvironmentVariable("E2E_ENABLE_RETRY"), out var value)
+                ? value
+                : true;
+
+        /// <summary>
+        /// Maximum number of test retries
+        /// </summary>
+        public static int MaxTestRetries =>
+            int.TryParse(Environment.GetEnvironmentVariable("E2E_MAX_RETRIES"), out var value)
+                ? value
+                : 2;
+
+        /// <summary>
+        /// Whether to enable performance reporting
+        /// </summary>
+        public static bool EnablePerformanceReporting =>
+            bool.TryParse(
+                Environment.GetEnvironmentVariable("E2E_ENABLE_PERFORMANCE_REPORTING"),
+                out var value
+            )
+                ? value
+                : true;
     }
 
     /// <summary>
-    /// Screenshot settings
+    /// Resource blocking configuration
     /// </summary>
-    public static class Screenshots
+    public static class ResourceBlocking
     {
-        public const string Directory = "screenshots";
-        public const string Format = "png";
-        public const string DateTimeFormat = "yyyyMMdd_HHmmss";
+        /// <summary>
+        /// Patterns to block for performance
+        /// </summary>
+        public static string[] BlockedPatterns =>
+            new[]
+            {
+                "analytics",
+                "tracking",
+                "ads",
+                "doubleclick",
+                "facebook.com",
+                "google-analytics",
+                "googletagmanager",
+                "hotjar",
+                "mixpanel",
+                "optimizely",
+                "segment",
+                "amplitude",
+                "intercom",
+                "zendesk",
+                "livechat",
+                "chatbot",
+                "widget",
+                "pixel",
+                "beacon",
+                "telemetry",
+                "fonts.googleapis.com",
+                "fonts.gstatic.com",
+                "cdn.jsdelivr.net",
+                "unpkg.com",
+            };
+
+        /// <summary>
+        /// Whether to block images for faster loading
+        /// </summary>
+        public static bool BlockImages =>
+            bool.TryParse(Environment.GetEnvironmentVariable("E2E_BLOCK_IMAGES"), out var value)
+                ? value
+                : false;
+
+        /// <summary>
+        /// Whether to block CSS for faster loading
+        /// </summary>
+        public static bool BlockCSS =>
+            bool.TryParse(Environment.GetEnvironmentVariable("E2E_BLOCK_CSS"), out var value)
+                ? value
+                : false;
     }
 
     /// <summary>
-    /// Test data settings
+    /// Get all configuration as a dictionary for logging
     /// </summary>
-    public static class TestData
+    public static Dictionary<string, object> GetAllConfiguration()
     {
-        public const int MinSets = 1;
-        public const int MaxSets = 10;
-        public const int MinLegs = 1;
-        public const int MaxLegs = 15;
-        public const int DefaultSets = 3;
-        public const int DefaultLegs = 5;
-    }
-
-    /// <summary>
-    /// Get the base URL based on environment variable or default to staging
-    /// </summary>
-    /// <returns>Base URL for tests</returns>
-    public static string GetBaseUrl()
-    {
-        var environment = Environment.GetEnvironmentVariable("TEST_ENVIRONMENT")?.ToLower();
-
-        return environment switch
+        return new Dictionary<string, object>
         {
-            "production" => Urls.Production,
-            "development" => Urls.Development,
-            "local" => Urls.Local,
-            _ => Urls.Staging, // Default to staging
+            ["Performance.MaxConcurrentTests"] = Performance.MaxConcurrentTests,
+            ["Performance.BrowserPoolSize"] = Performance.BrowserPoolSize,
+            ["Performance.HeadlessMode"] = Performance.HeadlessMode,
+            ["Performance.DefaultElementTimeout"] = Performance.DefaultElementTimeout,
+            ["Performance.DefaultNavigationTimeout"] = Performance.DefaultNavigationTimeout,
+            ["Performance.EnableResourceBlocking"] = Performance.EnableResourceBlocking,
+            ["Performance.EnableTokenCaching"] = Performance.EnableTokenCaching,
+            ["Performance.TokenCacheExpirationMinutes"] = Performance.TokenCacheExpirationMinutes,
+            ["Browser.DefaultViewportWidth"] = Browser.DefaultViewportWidth,
+            ["Browser.DefaultViewportHeight"] = Browser.DefaultViewportHeight,
+            ["Browser.EnablePerformanceMonitoring"] = Browser.EnablePerformanceMonitoring,
+            ["Execution.EnableParallelExecution"] = Execution.EnableParallelExecution,
+            ["Execution.EnableTestRetry"] = Execution.EnableTestRetry,
+            ["Execution.MaxTestRetries"] = Execution.MaxTestRetries,
+            ["Execution.EnablePerformanceReporting"] = Execution.EnablePerformanceReporting,
+            ["ResourceBlocking.BlockImages"] = ResourceBlocking.BlockImages,
+            ["ResourceBlocking.BlockCSS"] = ResourceBlocking.BlockCSS,
         };
     }
 
     /// <summary>
-    /// Get timeout value based on environment variable or default
+    /// Print current configuration to console
     /// </summary>
-    /// <param name="defaultTimeout">Default timeout value</param>
-    /// <returns>Timeout value in milliseconds</returns>
-    public static int GetTimeout(int defaultTimeout = Timeouts.DefaultTimeout)
+    public static void PrintConfiguration()
     {
-        var timeoutEnv = Environment.GetEnvironmentVariable("TEST_TIMEOUT");
-        if (int.TryParse(timeoutEnv, out var timeout))
+        Console.WriteLine("\n⚙️  E2E TEST CONFIGURATION ⚙️");
+        Console.WriteLine("================================");
+
+        foreach (var config in GetAllConfiguration())
         {
-            return timeout;
+            Console.WriteLine($"{config.Key}: {config.Value}");
         }
-        return defaultTimeout;
-    }
 
-    /// <summary>
-    /// Check if tests should run in headless mode
-    /// </summary>
-    /// <returns>True if headless mode is enabled</returns>
-    public static bool IsHeadlessMode()
-    {
-        var headlessEnv = Environment.GetEnvironmentVariable("TEST_HEADLESS");
-        return string.IsNullOrEmpty(headlessEnv) || headlessEnv.ToLower() == "true";
-    }
-
-    /// <summary>
-    /// Check if screenshots should be taken
-    /// </summary>
-    /// <returns>True if screenshots are enabled</returns>
-    public static bool AreScreenshotsEnabled()
-    {
-        var screenshotsEnv = Environment.GetEnvironmentVariable("TEST_SCREENSHOTS");
-        return string.IsNullOrEmpty(screenshotsEnv) || screenshotsEnv.ToLower() == "true";
-    }
-
-    /// <summary>
-    /// Get the screenshot directory path
-    /// </summary>
-    /// <returns>Screenshot directory path</returns>
-    public static string GetScreenshotDirectory()
-    {
-        var screenshotsDir = Environment.GetEnvironmentVariable("TEST_SCREENSHOTS_DIR");
-        return string.IsNullOrEmpty(screenshotsDir) ? Screenshots.Directory : screenshotsDir;
+        Console.WriteLine("================================\n");
     }
 }

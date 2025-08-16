@@ -90,7 +90,10 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
                 $"[OnConnect] User not found, creating new user for AuthProviderUserId: {request.AuthProviderUserId}"
             );
 
-            var userProfile = CreateFromAuthressToken(request.AuthressToken);
+            var userProfile = CreateFromAuthressToken(
+                request.AuthressToken,
+                request.IsServiceClient
+            );
             Console.WriteLine(
                 $"[OnConnect] User profile created from token - UserName: {userProfile.UserName}, Email: {userProfile.Email}"
             );
@@ -121,7 +124,7 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         return user;
     }
 
-    private UserProfile CreateFromAuthressToken(string token)
+    private UserProfile CreateFromAuthressToken(string token, bool isServiceClient = false)
     {
         Console.WriteLine("[OnConnect] Creating user profile from Authress token");
 
@@ -133,6 +136,11 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
             {
                 Console.WriteLine("[OnConnect] Token is null or empty");
                 throw new Exception("Token is null or empty");
+            }
+
+            if (isServiceClient)
+            {
+                return GetServiceClientUserProfile(token);
             }
 
             var normalizedToken = NormalizeAuthressToken(token);
@@ -189,6 +197,22 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
             Console.WriteLine($"[OnConnect] Error creating user profile from token: {ex.Message}");
             throw;
         }
+    }
+
+    private UserProfile GetServiceClientUserProfile(string token)
+    {
+        var idToken = token.Split('.')[1];
+        var base64Decoded = Convert.FromBase64String(idToken);
+        var jsonPayload = JsonSerializer.Deserialize<Dictionary<string, string>>(base64Decoded);
+
+        return new UserProfile
+        {
+            UserName = jsonPayload["sub"],
+            Email = "mike+test@flyingdarts.net",
+            Country = "NL",
+            Picture =
+                "https://i.postimg.cc/HnD0HyQM/male-face-icon-default-profile-image-c3f2c592f9.jpg", // expires in 31 days
+        };
     }
 
     private static string NormalizeAuthressToken(string authressToken)

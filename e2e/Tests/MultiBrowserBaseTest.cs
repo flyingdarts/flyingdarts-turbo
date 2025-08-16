@@ -6,13 +6,15 @@ using Microsoft.Playwright.Xunit;
 namespace Flyingdarts.E2E.Tests;
 
 /// <summary>
-/// Base class for E2E tests that require multiple browser contexts (multiple users).
-/// Creates separate browser instances for each user to ensure complete isolation.
+/// Optimized base class for E2E tests that require multiple browser contexts (multiple users).
+/// Uses browser pooling and token caching for improved performance.
 /// </summary>
-public abstract class MultiBrowserBaseTest
+public abstract class MultiBrowserBaseTest : IDisposable
 {
     protected string BaseUrl { get; set; } = "https://staging.flyingdarts.net";
-    protected AuthressHelper? AuthressHelper { get; private set; }
+    protected AuthressHelper? AuthressHelperUser1 { get; private set; }
+    protected AuthressHelper? AuthressHelperUser2 { get; private set; }
+    protected PerformanceTestRunner? TestRunner { get; private set; }
 
     // Multiple browser contexts for different users
     protected IBrowser BrowserUser1 { get; private set; } = null!;
@@ -22,31 +24,36 @@ public abstract class MultiBrowserBaseTest
     protected IPage User1Page { get; private set; } = null!;
     protected IPage User2Page { get; private set; } = null!;
 
+    // Performance tracking
+    private readonly DateTime _testStartTime = DateTime.UtcNow;
+    private bool _disposed = false;
+
     /// <summary>
     /// Setup method that runs before each test - creates multiple browser contexts
     /// </summary>
     protected virtual async Task SetupAsync()
     {
-        // Initialize Authress helper if needed
-        AuthressHelper = new AuthressHelper();
+        // Initialize performance test runner
+        TestRunner = new PerformanceTestRunner(maxConcurrentTests: 2);
+        await TestRunner.InitializeAsync();
 
-        // Create separate browser instances for complete isolation
-        // We'll use Playwright's built-in browser management
-        var playwright = await Playwright.CreateAsync();
+        // Get browsers from pool for better performance
+        BrowserUser1 = await TestRunner.GetBrowserAsync();
+        BrowserUser2 = await TestRunner.GetBrowserAsync();
 
-        // Launch separate browsers for each user
-        BrowserUser1 = await playwright.Chromium.LaunchAsync(
-            new BrowserTypeLaunchOptions
-            {
-                Headless = false, // Show browsers during testing
-            }
+        // Initialize Authress helper with caching
+        AuthressHelperUser1 = new AuthressHelper(
+            Environment.GetEnvironmentVariable("AUTHRESS_SERVICE_CLIENT_ACCESS_KEY")
+                ?? throw new InvalidOperationException(
+                    "Missing env AUTHRESS_SERVICE_CLIENT_ACCESS_KEY"
+                )
         );
 
-        BrowserUser2 = await playwright.Chromium.LaunchAsync(
-            new BrowserTypeLaunchOptions
-            {
-                Headless = false, // Show browsers during testing
-            }
+        AuthressHelperUser2 = new AuthressHelper(
+            Environment.GetEnvironmentVariable("AUTHRESS_SERVICE_CLIENT_ACCESS_KEY_OPPONENT")
+                ?? throw new InvalidOperationException(
+                    "Missing env AUTHRESS_SERVICE_CLIENT_ACCESS_KEY_OPPONENT"
+                )
         );
 
         // Create two separate browser contexts for different users
@@ -55,6 +62,11 @@ public abstract class MultiBrowserBaseTest
             {
                 ViewportSize = new ViewportSize { Width = 1280, Height = 720 },
                 UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+                // Performance optimizations
+                ExtraHTTPHeaders = new Dictionary<string, string>
+                {
+                    ["Accept-Encoding"] = "gzip, deflate, br",
+                },
             }
         );
 
@@ -63,6 +75,11 @@ public abstract class MultiBrowserBaseTest
             {
                 ViewportSize = new ViewportSize { Width = 1280, Height = 720 },
                 UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+                // Performance optimizations
+                ExtraHTTPHeaders = new Dictionary<string, string>
+                {
+                    ["Accept-Encoding"] = "gzip, deflate, br",
+                },
             }
         );
 
@@ -70,11 +87,74 @@ public abstract class MultiBrowserBaseTest
         User1Page = await User1Context.NewPageAsync();
         User2Page = await User2Context.NewPageAsync();
 
-        // Set default timeouts for both pages
-        User1Page.SetDefaultTimeout(30000);
-        User1Page.SetDefaultNavigationTimeout(30000);
-        User2Page.SetDefaultTimeout(30000);
-        User2Page.SetDefaultNavigationTimeout(30000);
+        // Set optimized timeouts for both pages
+        User1Page.SetDefaultTimeout(15000); // Reduced from 30s to 15s
+        User1Page.SetDefaultNavigationTimeout(15000);
+        User2Page.SetDefaultTimeout(15000);
+        User2Page.SetDefaultNavigationTimeout(15000);
+
+        // Enable performance monitoring
+        await User1Page.Context.RouteAsync(
+            "**/*",
+            async route =>
+            {
+                // Block unnecessary resources for faster loading
+                if (ShouldBlockResource(route.Request.Url))
+                {
+                    await route.AbortAsync();
+                    return;
+                }
+                await route.ContinueAsync();
+            }
+        );
+
+        await User2Page.Context.RouteAsync(
+            "**/*",
+            async route =>
+            {
+                // Block unnecessary resources for faster loading
+                if (ShouldBlockResource(route.Request.Url))
+                {
+                    await route.AbortAsync();
+                    return;
+                }
+                await route.ContinueAsync();
+            }
+        );
+
+        Console.WriteLine(
+            $"🚀 Test setup completed in {(DateTime.UtcNow - _testStartTime).TotalMilliseconds:F0}ms"
+        );
+    }
+
+    /// <summary>
+    /// Determine if a resource should be blocked for performance
+    /// </summary>
+    private static bool ShouldBlockResource(string url)
+    {
+        var lowerUrl = url.ToLowerInvariant();
+
+        // Block unnecessary resources
+        return lowerUrl.Contains("analytics")
+            || lowerUrl.Contains("tracking")
+            || lowerUrl.Contains("ads")
+            || lowerUrl.Contains("doubleclick")
+            || lowerUrl.Contains("facebook.com")
+            || lowerUrl.Contains("google-analytics")
+            || lowerUrl.Contains("googletagmanager")
+            || lowerUrl.Contains("hotjar")
+            || lowerUrl.Contains("mixpanel")
+            || lowerUrl.Contains("optimizely")
+            || lowerUrl.Contains("segment")
+            || lowerUrl.Contains("amplitude")
+            || lowerUrl.Contains("intercom")
+            || lowerUrl.Contains("zendesk")
+            || lowerUrl.Contains("livechat")
+            || lowerUrl.Contains("chatbot")
+            || lowerUrl.Contains("widget")
+            || lowerUrl.Contains("pixel")
+            || lowerUrl.Contains("beacon")
+            || lowerUrl.Contains("telemetry");
     }
 
     /// <summary>
@@ -103,15 +183,44 @@ public abstract class MultiBrowserBaseTest
             await User2Context.CloseAsync();
         }
 
-        // Close browsers
-        if (BrowserUser1 != null)
+        // Return browsers to pool instead of closing them
+        if (TestRunner != null)
         {
-            await BrowserUser1.CloseAsync();
+            if (BrowserUser1 != null)
+            {
+                TestRunner.ReturnBrowser(BrowserUser1);
+            }
+            if (BrowserUser2 != null)
+            {
+                TestRunner.ReturnBrowser(BrowserUser2);
+            }
         }
 
-        if (BrowserUser2 != null)
+        // Print performance stats
+        if (TestRunner != null)
         {
-            await BrowserUser2.CloseAsync();
+            TestRunner.PrintPerformanceReport();
+        }
+    }
+
+    /// <summary>
+    /// Dispose method for cleanup
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Protected dispose method
+    /// </summary>
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_disposed && disposing)
+        {
+            TestRunner?.Dispose();
+            _disposed = true;
         }
     }
 
@@ -140,10 +249,11 @@ public abstract class MultiBrowserBaseTest
     /// <summary>
     /// Set authentication token for User 1
     /// </summary>
-    protected async Task SetAuthTokenAsync(string token, IPage page)
+    protected async Task SetUser1AuthTokenAsync()
     {
-        if (AuthressHelper != null)
+        if (AuthressHelperUser1 != null)
         {
+            var token = await AuthressHelperUser1.GetBearerTokenAsync();
             var cookie = new Cookie
             {
                 Name = "custom-jwt-token-override",
@@ -152,8 +262,25 @@ public abstract class MultiBrowserBaseTest
                 Path = "/",
             };
 
-            await page.Context.AddCookiesAsync(new List<Cookie> { cookie });
+            await User1Context.AddCookiesAsync(new List<Cookie> { cookie });
+            Console.WriteLine("🔐 User 1 authentication token set successfully");
         }
+    }
+
+    /// <summary>
+    /// Set authentication token for a specific page (legacy method)
+    /// </summary>
+    protected async Task SetAuthTokenAsync(string token, IPage page)
+    {
+        var cookie = new Cookie
+        {
+            Name = "custom-jwt-token-override",
+            Value = token,
+            Domain = ".flyingdarts.net",
+            Path = "/",
+        };
+
+        await page.Context.AddCookiesAsync(new List<Cookie> { cookie });
     }
 
     /// <summary>
@@ -161,9 +288,9 @@ public abstract class MultiBrowserBaseTest
     /// </summary>
     protected async Task SetUser2AuthTokenAsync()
     {
-        if (AuthressHelper != null)
+        if (AuthressHelperUser2 != null)
         {
-            var token = await AuthressHelper.GetBearerTokenAsync();
+            var token = await AuthressHelperUser2.GetBearerTokenAsync();
             var cookie = new Cookie
             {
                 Name = "custom-jwt-token-override",
@@ -173,6 +300,7 @@ public abstract class MultiBrowserBaseTest
             };
 
             await User2Context.AddCookiesAsync(new List<Cookie> { cookie });
+            Console.WriteLine("🔐 User 2 authentication token set successfully");
         }
     }
 
