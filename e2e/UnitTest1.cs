@@ -25,17 +25,11 @@ public class UnitTest1 : MultiBrowserBaseTest
         var player2Home = new HomePage(User2Page, BaseUrl);
 
         // Navigate both users to home simultaneously
-        var player1NavigateTask = Task.Run(async () =>
-        {
-            await player1Home.NavigateToHomeAsync();
-        });
-
-        var player2NavigateTask = Task.Run(async () =>
-        {
-            await player2Home.NavigateToHomeAsync();
-        });
+        var player1NavigateTask = Task.Run(() => player1Home.NavigateToHomeAsync());
+        var player2NavigateTask = Task.Run(() => player2Home.NavigateToHomeAsync());
 
         var navigateTasks = new List<Task> { player1NavigateTask, player2NavigateTask };
+
         await Task.WhenAll(navigateTasks);
 
         // Handle settings for both users simultaneously with original settings page
