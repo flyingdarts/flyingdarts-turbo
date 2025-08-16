@@ -1,0 +1,32 @@
+name: PR Rust Clippy & Format
+
+on:
+  pull_request:
+    paths:
+      - "**/Cargo.toml"
+      - "**/*.rs"
+      - "rust-toolchain.toml"
+      - "rustfmt.toml"
+      - ".github/workflows/pr-rust.yml"
+
+jobs:
+  lint-format-rust:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+
+      - name: Run clippy (workspace)
+        run: cargo clippy --workspace -- -D warnings
+
+      - name: Run rustfmt (check)
+        run: cargo fmt --all -- --check
+
+

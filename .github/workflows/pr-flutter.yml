@@ -1,0 +1,38 @@
+name: PR Flutter Lint & Format
+
+on:
+  pull_request:
+    paths:
+      - "apps/frontend/flutter/**"
+      - "packages/frontend/flutter/**"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+      - ".github/workflows/pr-flutter.yml"
+
+jobs:
+  lint-format-flutter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.32.6"
+          channel: "stable"
+
+      - name: Flutter pub get (workspace)
+        run: flutter pub get
+
+      - name: Dart format check (workspace)
+        run: dart format --set-exit-if-changed .
+
+      - name: Dart analyze (workspace)
+        run: dart analyze --fatal-infos --fatal-warnings
+
+      - name: Run Flutter tests (app)
+        run: flutter test
+        working-directory: apps/frontend/flutter/flyingdarts_mobile
+
+

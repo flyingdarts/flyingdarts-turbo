@@ -1,0 +1,67 @@
+name: PR Angular App Lint & Format
+
+on:
+  pull_request:
+    paths:
+      - "apps/frontend/angular/**"
+      - "angular.json"
+      - ".github/workflows/pr-angular-app.yml"
+
+jobs:
+  lint-format-angular:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install Turbo
+        run: npm install -g turbo
+
+      - name: Turbo prune
+        run: turbo prune fd-app --out-dir ./dist --docker
+
+      - name: Ensure angular.json present in dist/full
+        run: |
+          if ! find ./dist/full -name "angular.json" -type f | grep -q .; then
+            cp angular.json ./dist/full/
+          fi
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./dist/full
+
+      - name: Prettier check
+        run: npx -y prettier@3 --check "src/**/*.{ts,html,scss,json}"
+        working-directory: ./dist/full/apps/frontend/angular/fd-app
+
+      - name: ESLint (if config present)
+        shell: bash
+        run: |
+          if find . -maxdepth 1 \( -name 'eslint.config.*' -o -name '.eslintrc*' \) | grep -q .; then
+            npx -y eslint@9 . --max-warnings=0
+          else
+            echo "No ESLint config found, skipping ESLint"
+          fi
+        working-directory: ./dist/full/apps/frontend/angular/fd-app
+
+      - name: TypeScript type-check (fallback)
+        shell: bash
+        run: |
+          if [ -f tsconfig.app.json ]; then
+            npx -y typescript@5.4.2 -p tsconfig.app.json --pretty false --noEmit
+          else
+            echo "No tsconfig.app.json found, skipping type-check"
+          fi
+        working-directory: ./dist/full/apps/frontend/angular/fd-app
+
+      - name: Run unit tests
+        run: npm test --silent
+        working-directory: ./dist/full/apps/frontend/angular/fd-app
+
+

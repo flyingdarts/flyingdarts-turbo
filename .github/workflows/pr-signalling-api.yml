@@ -1,0 +1,37 @@
+name: PR Signalling API .NET Format & Test
+
+on:
+  pull_request:
+    paths:
+      - "apps/backend/dotnet/signalling/**"
+      - "packages/backend/dotnet/**"
+      - "**/*.sln"
+      - ".github/workflows/pr-signalling-api.yml"
+
+jobs:
+  dotnet-signalling-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore flyingdarts.sln
+
+      - name: dotnet format (check)
+        run: |
+          dotnet format whitespace flyingdarts.sln --verify-no-changes
+          dotnet format style flyingdarts.sln --verify-no-changes
+
+      - name: Build
+        run: dotnet build flyingdarts.sln --no-restore
+
+      - name: Test
+        run: dotnet test flyingdarts.sln --no-build
+
+

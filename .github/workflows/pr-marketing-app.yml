@@ -1,0 +1,38 @@
+name: PR Marketing App Lint & Format
+
+on:
+  pull_request:
+    paths:
+      - "apps/frontend/react/marketing/**"
+      - ".github/workflows/pr-marketing-app.yml"
+
+jobs:
+  lint-format-marketing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: apps/frontend/react/marketing
+
+      - name: ESLint
+        run: npx -y eslint@9 . --max-warnings=0
+        working-directory: apps/frontend/react/marketing
+
+      - name: Prettier check
+        run: npx -y prettier@3 --check "**/*.{ts,tsx,js,jsx,css,md,json}"
+        working-directory: apps/frontend/react/marketing
+
+      - name: TypeScript type-check
+        run: npx -y tsc --noEmit
+        working-directory: apps/frontend/react/marketing
+
+

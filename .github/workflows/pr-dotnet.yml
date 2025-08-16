@@ -1,0 +1,41 @@
+name: PR .NET Format & Style
+
+on:
+  pull_request:
+    paths:
+      - "**/*.sln"
+      - "**/*.cs"
+      - "**/*.csproj"
+      - ".editorconfig"
+      - ".github/workflows/pr-dotnet.yml"
+
+jobs:
+  format-style-dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: |
+          if [ -f flyingdarts.sln ]; then
+            dotnet restore flyingdarts.sln
+          else
+            dotnet restore
+          fi
+
+      - name: dotnet format (check)
+        run: |
+          if [ -f flyingdarts.sln ]; then
+            dotnet format whitespace flyingdarts.sln --verify-no-changes
+            dotnet format style flyingdarts.sln --verify-no-changes
+          else
+            dotnet format --verify-no-changes
+          fi
+
+
