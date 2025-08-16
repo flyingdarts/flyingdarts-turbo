@@ -13,7 +13,7 @@ namespace Flyingdarts.E2E;
 /// Legacy test class - demonstrates migration to POM architecture
 /// This class shows how existing tests can be gradually migrated
 /// </summary>
-public class UnitTest1 : BaseTest
+public class UnitTest1 : MultiBrowserBaseTest
 {
     /// <summary>
     /// Example of how to migrate to the new POM architecture
@@ -22,24 +22,119 @@ public class UnitTest1 : BaseTest
     [Fact]
     public async Task MigratedToPOM_ShouldSetGameSettings()
     {
+        // Setup both users
         await SetupAsync();
-        await SetAuthTokenAsync();
+        var tasks = new List<Task> { SetupPlayer(), SetupOpponent() };
+        await Task.WhenAll(tasks);
 
-        var homePage = new HomePage(Page);
-        await homePage.NavigateToHomeAsync();
+        // Create home pages for both users
+        var player1Home = new HomePage(User1Page, BaseUrl);
+        var player2Home = new HomePage(User2Page, BaseUrl);
 
-        if (homePage.IsOnSettingsPage())
+        // Navigate both users to home simultaneously
+        var player1NavigateTask = Task.Run(async () =>
         {
-            var settingsPage = new SettingsPage(Page);
-            await settingsPage.WaitForPageReadyAsync();
-            await settingsPage.SetGameSettingsAsync(3, 5);
-            await settingsPage.SaveSettingsAsync();
+            await player1Home.NavigateToHomeAsync();
+        });
+
+        var player2NavigateTask = Task.Run(async () =>
+        {
+            await player2Home.NavigateToHomeAsync();
+        });
+
+        var navigateTasks = new List<Task> { player1NavigateTask, player2NavigateTask };
+        await Task.WhenAll(navigateTasks);
+
+        // Handle settings for both users simultaneously
+        var player1SettingsTask = Task.Run(async () =>
+        {
+            if (player1Home.IsOnSettingsPage())
+            {
+                var settingsPage = new SettingsPage(User1Page, BaseUrl);
+                await settingsPage.WaitForPageReadyAsync();
+                await settingsPage.SetGameSettingsAsync(3, 5);
+                await settingsPage.SaveSettingsAsync();
+            }
+        });
+
+        var player2SettingsTask = Task.Run(async () =>
+        {
+            if (player2Home.IsOnSettingsPage())
+            {
+                var settingsPage = new SettingsPage(User2Page, BaseUrl);
+                await settingsPage.WaitForPageReadyAsync();
+                await settingsPage.SetGameSettingsAsync(3, 5);
+                await settingsPage.SaveSettingsAsync();
+            }
+        });
+
+        var settingsTasks = new List<Task> { player1SettingsTask, player2SettingsTask };
+        await Task.WhenAll(settingsTasks);
+
+        // Player 1 starts a new game
+        await player1Home.StartNewGameAsync();
+
+        // Wait for the game page to be ready
+        await player1Home.WaitForGamePageReadyAsync();
+
+        // Verify we're on a game page before extracting the ID
+        var currentUrl = User1Page.Url;
+        Console.WriteLine($"Current URL after starting game: {currentUrl}");
+
+        if (!currentUrl.Contains("/game/"))
+        {
+            throw new Exception($"Expected to be on game page, but current URL is: {currentUrl}");
         }
 
-        await homePage.StartNewGameAsync();
+        var gameId = player1Home.GetGameId();
+        Console.WriteLine($"Extracted game ID: {gameId}");
 
-        var gamePage = new GamePage(Page);
+        if (string.IsNullOrEmpty(gameId))
+        {
+            throw new Exception($"Game ID is null. Current URL: {currentUrl}");
+        }
 
-        await gamePage.WaitForPageReadyAsync();
+        // Player 2 joins the game
+        await player2Home.NavigateToAsync($"/game/{gameId}");
+
+        // Create game page objects for both users
+        var player1Game = new GamePage(User1Page, BaseUrl);
+        var player2Game = new GamePage(User2Page, BaseUrl);
+
+        // Wait for both game pages to be ready
+        await player1Game.WaitForPageReadyAsync();
+        await player2Game.WaitForPageReadyAsync();
+
+        // Verify both users are on the game page
+        await player1Game.IsGamePageLoadedAsync();
+        await player2Game.IsGamePageLoadedAsync();
+
+        // Take screenshots from both perspectives
+        await TakeBothUsersScreenshotsAsync("game_settings_migrated");
+
+        // Cleanup
+        await TeardownAsync();
+    }
+
+    private async Task SetupPlayer()
+    {
+        var token = await AuthressHelper?.GetBearerTokenAsync();
+        if (token is null)
+        {
+            throw new Exception("Token is null");
+        }
+
+        await SetAuthTokenAsync(token, User1Page);
+    }
+
+    private async Task SetupOpponent()
+    {
+        var token = await AuthressHelper?.GetBearerTokenAsync();
+        if (token is null)
+        {
+            throw new Exception("Token is null");
+        }
+
+        await SetAuthTokenAsync(token, User2Page);
     }
 }

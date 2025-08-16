@@ -80,6 +80,47 @@ public class HomePage : BasePage
     }
 
     /// <summary>
+    /// Wait for the game page to be ready after starting a new game
+    /// </summary>
+    public async Task WaitForGamePageReadyAsync()
+    {
+        // Wait for navigation to complete
+        await Page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+
+        // Wait for the URL to change to a game page
+        await Page.WaitForURLAsync("**/game/**");
+
+        // Additional wait to ensure the page is fully loaded
+        await Task.Delay(500);
+    }
+
+    public string GetGameId()
+    {
+        var url = Page.Url;
+
+        // Verify we're on a game page
+        if (!url.Contains("/game/"))
+        {
+            throw new InvalidOperationException(
+                $"Cannot extract game ID from URL: {url}. Expected URL to contain '/game/'"
+            );
+        }
+
+        var urlParts = url.Split("/");
+        var gameId = urlParts.Last();
+
+        // Verify the game ID is not empty and looks valid
+        if (string.IsNullOrEmpty(gameId) || gameId == "game")
+        {
+            throw new InvalidOperationException(
+                $"Invalid game ID extracted from URL: {url}. Game ID: '{gameId}'"
+            );
+        }
+
+        return gameId;
+    }
+
+    /// <summary>
     /// Check if the home page is fully loaded
     /// </summary>
     public async Task<bool> IsHomePageLoadedAsync()

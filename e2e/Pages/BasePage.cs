@@ -8,7 +8,7 @@ namespace Flyingdarts.E2E.Pages;
 /// </summary>
 public abstract class BasePage
 {
-    protected readonly IPage Page;
+    public readonly IPage Page;
     protected readonly string BaseUrl;
 
     protected BasePage(IPage page, string baseUrl = "https://staging.flyingdarts.net")

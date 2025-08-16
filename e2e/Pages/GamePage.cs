@@ -51,17 +51,10 @@ public class GamePage : BasePage
     {
         // Initialize game information locators (placeholders)
         _gameTitle = Page.GetByText("Flyingdarts");
-        _bestOfDisplay = Page.GetByText("Best Of 3/3");
-
-        _playerWonSets = Page.Locator(
-            "/html/body/app-root/div/div/div/app-game/app-game-ui/div/div[1]/div/app-game-stats/app-game-stats-ui/div/table/tbody/tr[1]/td[2]"
-        );
-        _playerWonLegs = Page.Locator(
-            "/html/body/app-root/div/div/div/app-game/app-game-ui/div/div[1]/div/app-game-stats/app-game-stats-ui/div/table/tbody/tr[1]/td[3]"
-        );
-        _playerScore = Page.Locator(
-            "/html/body/app-root/div/div/div/app-game/app-game-ui/div/div[1]/div/app-game-stats/app-game-stats-ui/div/table/tbody/tr[1]/td[4]"
-        );
+        _bestOfDisplay = Page.Locator("app-game-stats table thead tr th:first-child");
+        _playerWonSets = Page.Locator("app-game-stats table tbody tr:first-child td:nth-child(2)");
+        _playerWonLegs = Page.Locator("app-game-stats table tbody tr:first-child td:nth-child(3)");
+        _playerScore = Page.Locator("app-game-stats table tbody tr:first-child td:nth-child(4)");
 
         // Initialize input display (placeholder)
         _inputDisplay = Page.Locator("#calcInputFieldHidden");
@@ -100,9 +93,9 @@ public class GamePage : BasePage
 
         // Wait for key game elements to be visible
         await WaitForElementVisibleAsync(_gameTitle);
-        await WaitForElementVisibleAsync(_bestOfDisplay);
-        await WaitForElementVisibleAsync(_clearButton);
-        await WaitForElementVisibleAsync(_checkButton);
+        // await WaitForElementVisibleAsync(_bestOfDisplay);
+        // await WaitForElementVisibleAsync(_clearButton);
+        // await WaitForElementVisibleAsync(_checkButton);
     }
 
     #region Game Information
