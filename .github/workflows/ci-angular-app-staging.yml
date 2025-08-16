@@ -52,10 +52,9 @@ jobs:
         run: dotnet build e2e/Flyingdarts.E2E.csproj -c Release --no-restore
 
       - name: Install Playwright browsers
-        shell: bash
+        shell: pwsh
         run: |
-          chmod +x ./e2e/bin/Release/net9.0/playwright.sh || true
-          ./e2e/bin/Release/net9.0/playwright.sh install --with-deps
+          ./e2e/bin/Release/net9.0/playwright.ps1 install --with-deps
 
       - name: Run E2E tests (headless-mode)
         run: dotnet test e2e/Flyingdarts.E2E.csproj -c Release --no-build
