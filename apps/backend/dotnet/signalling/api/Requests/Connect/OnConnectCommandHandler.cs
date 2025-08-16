@@ -140,6 +140,7 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
 
             if (isServiceClient)
             {
+                Console.WriteLine("[OnConnect] Creating service client user profile");
                 return GetServiceClientUserProfile(token);
             }
 
@@ -149,6 +150,7 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(normalizedToken);
 
+            Console.WriteLine("[OnConnect] Parsing JWT token");
             var userProfile = new UserProfile();
 
             // Example: Extract "name" and "email" claims if they exist
