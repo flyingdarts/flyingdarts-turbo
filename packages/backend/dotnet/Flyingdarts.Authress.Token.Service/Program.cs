@@ -9,7 +9,9 @@ var accessKey =
     ?? throw new InvalidOperationException("Missing env AUTHRESS_SERVICE_CLIENT_ACCESS_KEY");
 
 // Services
-builder.Services.AddSingleton(new AuthressClientTokenProvider(accessKey));
+builder.Services.AddSingleton(
+    new AuthressClientTokenProvider(accessKey, "https://authress.flyingdarts.net")
+);
 
 var app = builder.Build();
 

@@ -4,6 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <Configuration>Debug</Configuration>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Authress.SDK" Version="2.0.80" />
