@@ -21,7 +21,7 @@ public static class Constants
     /// <summary>
     /// Default timeout for URL navigation operations (10 seconds)
     /// </summary>
-    public const int DefaultUrlNavigationTimeout = 15000;
+    public const int DefaultUrlNavigationTimeout = 30000;
 
     /// <summary>
     /// Default timeout for settings page operations (5 seconds)

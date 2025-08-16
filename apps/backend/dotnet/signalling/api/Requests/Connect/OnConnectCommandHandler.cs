@@ -201,20 +201,48 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
         }
     }
 
-    private UserProfile GetServiceClientUserProfile(string token)
+    public UserProfile GetServiceClientUserProfile(string token)
     {
-        var idToken = token.Split('.')[1];
-        var base64Decoded = Convert.FromBase64String(idToken);
-        var jsonPayload = JsonSerializer.Deserialize<Dictionary<string, string>>(base64Decoded);
-
-        return new UserProfile
+        try
         {
-            UserName = jsonPayload["sub"],
-            Email = "mike+test@flyingdarts.net",
-            Country = "NL",
-            Picture =
-                "https://i.postimg.cc/HnD0HyQM/male-face-icon-default-profile-image-c3f2c592f9.jpg", // expires in 31 days
-        };
+            var idToken = token.Split('.')[1];
+
+            // JWT tokens use Base64URL encoding, need to convert to standard Base64
+            var base64String = idToken.Replace('-', '+').Replace('_', '/');
+
+            // Add padding if needed
+            switch (base64String.Length % 4)
+            {
+                case 2:
+                    base64String += "==";
+                    break;
+                case 3:
+                    base64String += "=";
+                    break;
+            }
+
+            var base64Decoded = Convert.FromBase64String(base64String);
+            var jsonPayload = JsonSerializer.Deserialize<Dictionary<string, string>>(base64Decoded);
+
+            return new UserProfile
+            {
+                UserName = jsonPayload["sub"],
+                Email = "mike+test@flyingdarts.net",
+                Country = "NL",
+                Picture =
+                    "https://i.postimg.cc/HnD0HyQM/male-face-icon-default-profile-image-c3f2c592f9.jpg", // expires in 31 days
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[OnConnect] Error decoding JWT token: {ex.Message}");
+            Console.WriteLine(
+                $"[OnConnect] Token part being decoded: {(token?.Split('.').Length > 1 ? token.Split('.')[1] : "INVALID_TOKEN")}"
+            );
+
+            // Return a fallback profile or rethrow based on your requirements
+            throw new InvalidOperationException($"Failed to decode JWT token: {ex.Message}", ex);
+        }
     }
 
     private static string NormalizeAuthressToken(string authressToken)

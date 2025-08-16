@@ -367,4 +367,86 @@ public class OnConnectTests : LambdaTestBase<OnConnectCommand, APIGatewayProxyRe
             Times.Once
         );
     }
+
+    [Fact]
+    public void GetServiceClientUserProfile_WithValidJwtToken_ShouldReturnUserProfile()
+    {
+        // Arrange
+        // Create a valid JWT token with Base64URL encoding
+        var header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"; // {"alg":"HS256","typ":"JWT"}
+        var payload =
+            "eyJzdWIiOiJ0ZXN0LXVzZXItMTIzIiwibmFtZSI6IlRlc3QgVXNlciIsImlhdCI6MTYzNzQ5NjAwMH0"; // {"sub":"test-user-123","name":"Test User","iat":1637496000}
+        var signature = "dGVzdC1zaWduYXR1cmU"; // "test-signature"
+
+        var validToken = $"{header}.{payload}.{signature}";
+
+        // Act
+        var result = _handler.GetServiceClientUserProfile(validToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.UserName.Should().Be("test-user-123");
+    }
+
+    [Fact]
+    public void GetServiceClientUserProfile_WithBase64UrlEncodedToken_ShouldHandlePaddingCorrectly()
+    {
+        // Arrange
+        // Test token with different padding scenarios
+        var payload = "eyJzdWIiOiJ0ZXN0LXVzZXItMTIzIiwibmFtZSI6IlRlc3QgVXNlciJ9"; // {"sub":"test-user-123","name":"Test User"}
+        var header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9";
+        var signature = "dGVzdC1zaWduYXR1cmU";
+
+        var token = $"{header}.{payload}.{signature}";
+
+        // Act
+        var result = _handler.GetServiceClientUserProfile(token);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.UserName.Should().Be("test-user-123");
+    }
+
+    [Fact]
+    public void GetServiceClientUserProfile_WithInvalidToken_ShouldThrowException()
+    {
+        // Arrange
+        var invalidToken = "invalid.token.format";
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            _handler.GetServiceClientUserProfile(invalidToken)
+        );
+
+        exception.Message.Should().Contain("Failed to decode JWT token");
+    }
+
+    [Fact]
+    public void GetServiceClientUserProfile_WithMalformedBase64_ShouldThrowException()
+    {
+        // Arrange
+        var malformedToken =
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.invalid-base64-characters!.dGVzdC1zaWduYXR1cmU";
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            _handler.GetServiceClientUserProfile(malformedToken)
+        );
+
+        exception.Message.Should().Contain("Failed to decode JWT token");
+    }
+
+    [Fact]
+    public void GetServiceClientUserProfile_WithEmptyToken_ShouldThrowException()
+    {
+        // Arrange
+        var emptyToken = "";
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() =>
+            _handler.GetServiceClientUserProfile(emptyToken)
+        );
+
+        exception.Message.Should().Contain("Failed to decode JWT token");
+    }
 }
