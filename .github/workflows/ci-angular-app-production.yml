@@ -10,7 +10,39 @@ on:
       - ".github/workflows/main_angular_production.yml"
       - "angular.json"
 jobs:
+  e2e-preprod:
+    name: Run E2E (headless) against Staging
+    runs-on: ubuntu-latest
+    env:
+      E2E_HEADLESS_MODE: 'true'
+      AUTHRESS_SERVICE_CLIENT_ACCESS_KEY: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY }}
+      AUTHRESS_SERVICE_CLIENT_ACCESS_KEY_OPPONENT: ${{ secrets.AUTHRESS_SERVICE_CLIENT_ACCESS_KEY_OPPONENT }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore e2e/Flyingdarts.E2E.csproj
+
+      - name: Build E2E tests (Release)
+        run: dotnet build e2e/Flyingdarts.E2E.csproj -c Release --no-restore
+
+      - name: Install Playwright browsers
+        shell: bash
+        run: |
+          chmod +x ./e2e/bin/Release/net9.0/playwright.sh || true
+          ./e2e/bin/Release/net9.0/playwright.sh install --with-deps
+
+      - name: Run E2E tests (headless)
+        run: dotnet test e2e/Flyingdarts.E2E.csproj -c Release --no-build
+
   build-angular-production:
+    needs: e2e-preprod
     uses: ./.github/workflows/build-angular-app.yml
     with:
       project-name: "fd-app"
