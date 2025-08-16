@@ -18,6 +18,14 @@ export class SessionUserResolver implements Resolve<Promise<boolean>> {
   async resolve(): Promise<boolean> {
     this.store.dispatch(AppStateActions.setLoading({ loading: true }));
     try {
+      const overrideToken = this.getOverrideToken();
+      if (overrideToken) {
+        localStorage.setItem('AuthenticationCredentialsStorage', overrideToken);
+        const profile = await this.getOverrideUserProfile(overrideToken);
+        this.setUser(profile);
+        return true;
+      }
+
       const idTokenRaw = localStorage.getItem('AuthenticationCredentialsStorage');
       if (!idTokenRaw) throw new Error('No Authress credentials found in localStorage');
       const idTokenParsed = JSON.parse(idTokenRaw);
@@ -36,6 +44,34 @@ export class SessionUserResolver implements Resolve<Promise<boolean>> {
     }
   }
 
+
+ private getOverrideToken(): string | null {
+    // Check for the override token cookie
+    const cookies = document.cookie.split(';');
+    const overrideCookie = cookies.find(cookie =>
+      cookie.trim().startsWith('custom-jwt-token-override=')
+    );
+
+    if (overrideCookie) {
+      return overrideCookie.split('=')[1];
+    }
+
+    return null;
+  }
+
+  private async getOverrideUserProfile(token: string): Promise<UserProfileDetails> {
+    var idToken = token.split('.')[1];
+    var base64Decoded = atob(idToken);
+    var jsonPayload = JSON.parse(base64Decoded);
+    const user = await firstValueFrom(this.userRepository.getUser());
+    return {
+      UserName: jsonPayload.sub,
+      Email: 'mike+test@flyingdarts.net',
+      Country: 'NL',
+      Picture: 'https://i.postimg.cc/HnD0HyQM/male-face-icon-default-profile-image-c3f2c592f9.jpg', // expires in 31 days
+      UserId: user.UserId,
+    };
+  }
   /**
    * Parses a JWT token and returns a UserProfileDetails object.
    * Extracts name, email, and picture claims.

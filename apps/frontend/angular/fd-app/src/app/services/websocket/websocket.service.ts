@@ -18,19 +18,26 @@ export class WebSocketService {
 
   constructor(getTokenCallback: () => Promise<string>) {
     getTokenCallback().then(token => {
-      const idToken = localStorage.getItem('AuthenticationCredentialsStorage')!;
-      const idTokenParsed = JSON.parse(idToken);
-      const idTokenValue = idTokenParsed.idToken;
+      const idToken = this.getToken();
 
       var url = environment.webSocketUrl + `?token=${encodeURIComponent(token)}`;
-      if (idTokenValue) {
-        url = url + `&idToken=${encodeURIComponent(idTokenValue)}`;
+      if (idToken) {
+        url = url + `&idToken=${encodeURIComponent(idToken)}`;
       }
       this.socket = new WebSocket(url);
       this.connect();
     });
   }
+  private getToken(): string {
+    const idToken = localStorage.getItem('AuthenticationCredentialsStorage')!;
+      if (typeof idToken === 'string') {
+        return idToken;
+      }
+      const idTokenParsed = JSON.parse(idToken);
+      const idTokenValue = idTokenParsed.idToken;
 
+      return idTokenValue;
+  }
   private connect(): void {
     this.socket.onopen = event => {
       this.isConnectedSubject.next(true);

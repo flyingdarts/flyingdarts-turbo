@@ -81,6 +81,10 @@ public class LambdaConstruct
                 Environment = new Dictionary<string, string>
                 {
                     { "TableName", props.DynamoDbConstruct.Application.TableName },
+                    {
+                        "DyteAuthorizationHeaderValue",
+                        $"Basic {System.Environment.GetEnvironmentVariable("DyteAuthorizationHeaderValue")!}"
+                    },
                 },
                 InitialPolicy =
                 [
