@@ -59,11 +59,6 @@ public static class Constants
     public const int DefaultSaveTimeout = 3000;
 
     /// <summary>
-    /// Default timeout for button operations (3 seconds)
-    /// </summary>
-    public const int DefaultButtonTimeout = 3000;
-
-    /// <summary>
     /// Optimized timeout for button operations (1 second) - for elements that should be immediately ready
     /// </summary>
     public const int OptimizedButtonTimeout = 1000;
@@ -101,12 +96,6 @@ public static class Constants
     /// Used after final dart throws to ensure game state is fully updated
     /// </summary>
     public const int LegCompletionDelay = 1000;
-
-    /// <summary>
-    /// Polling interval for element value change detection (50ms)
-    /// How often to check if an element value has changed
-    /// </summary>
-    public const int ElementValueChangePollingInterval = 50;
 
     #endregion
 

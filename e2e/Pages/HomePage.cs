@@ -16,7 +16,7 @@ public class HomePage : OptimizedBasePage
     private ILocator StartGameButton =>
         GetCachedLocator("startGame", () => Page.GetByText(Constants.CreateRoomButtonText));
 
-    public HomePage(IPage page, string baseUrl = "https:/ /staging.flyingdarts.net") // get from consts
+    public HomePage(IPage page, string baseUrl = Constants.DefaultBaseUrl)
         : base(page, baseUrl) { }
 
     /// <summary>

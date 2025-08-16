@@ -23,7 +23,7 @@ public class SettingsPage : OptimizedBasePage
         GetCachedLocator("legCount", () => Page.Locator(SettingsXpathSelectors.LegCount));
     private ILocator SaveButton => GetCachedLocator("save", () => Page.GetByText("save"));
 
-    public SettingsPage(IPage page, string baseUrl = "https://staging.flyingdarts.net")
+    public SettingsPage(IPage page, string baseUrl = Constants.DefaultBaseUrl)
         : base(page, baseUrl) { }
 
     /// <summary>
