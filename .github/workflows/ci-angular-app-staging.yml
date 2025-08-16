@@ -6,7 +6,7 @@ on:
       - staging
     paths:
       - "apps/frontend/angular/**"
-      - ".github/workflows/main_angular_staging.yml"
+      - ".github/workflows/ci-angular-app-staging.yml"
       - "angular.json"
 jobs:
   build-angular-staging:
@@ -57,5 +57,5 @@ jobs:
           chmod +x ./e2e/bin/Release/net9.0/playwright.sh || true
           ./e2e/bin/Release/net9.0/playwright.sh install --with-deps
 
-      - name: Run E2E tests (headless)
+      - name: Run E2E tests (headless-mode)
         run: dotnet test e2e/Flyingdarts.E2E.csproj -c Release --no-build

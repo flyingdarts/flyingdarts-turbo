@@ -7,7 +7,7 @@ on:
       - production
     paths:
       - "apps/frontend/angular/**"
-      - ".github/workflows/main_angular_production.yml"
+      - ".github/workflows/ci-angular-app-production.yml"
       - "angular.json"
 jobs:
   e2e-preprod:
