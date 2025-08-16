@@ -10,13 +10,15 @@
 <div class="d-flex">
   <p class="me-2">sets</p>
   <button
+    id="setMinus"
     class="circle-button"
     (click)="action('decrease', 'sets')"
   >
     <i class="bi bi-dash"></i>
   </button>
-  <p class="mx-2">{{ preferredX01Sets | async }}</p>
+  <p id="setCount" class="mx-2">{{ preferredX01Sets | async }}</p>
   <button
+    id="setPlus"
     class="circle-button"
     (click)="action('increase', 'sets')"
   >
@@ -26,13 +28,15 @@
 <div class="d-flex mb-5">
   <p class="me-2 mb-0">legs</p>
   <button
+    id="legMinus"
     class="circle-button"
     (click)="action('decrease', 'legs')"
   >
     <i class="bi bi-dash"></i>
   </button>
-  <p class="mx-2 mb-0">{{ preferredX01Legs | async }}</p>
+  <p id="legCount" class="mx-2 mb-0">{{ preferredX01Legs | async }}</p>
   <button
+    id="legPlus"
     class="circle-button"
     (click)="action('increase', 'legs')"
   >
