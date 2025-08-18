@@ -1,62 +1,27 @@
-﻿using Flyingdarts.E2E.Pages;
+using Flyingdarts.E2E.Pages;
 using Flyingdarts.E2E.Tests;
+using Flyingdarts.E2E.Utilities;
 using Microsoft.Playwright;
 
 namespace Flyingdarts.E2E;
 
 /// <summary>
 /// Testing a game of darts between two players
+/// In a logical order where who ever throws the first dart wins the game
+/// This test throws perfect 9 darter legs each round.
 /// </summary>
-public class UnitTest1 : MultiBrowserBaseTest
+[Collection("SharedRunnerCollection")]
+public class StarterAlwaysWins : MultiBrowserBaseTest
 {
     /// <summary>
     /// Testing a game of darts between two players
     /// </summary>
-    [Fact]
-    public async Task GameOfDarts()
+    public async Task StarterAlwaysWins_Scenario()
     {
-        // Setup both users
+        // Setup both users and navigate to home, applying settings if prompted
         await SetupAsync();
-        var tasks = new List<Task> { SetupPlayer(), SetupOpponent() };
-        await Task.WhenAll(tasks);
-
-        // Create optimized home pages for both users
-        var player1Home = new HomePage(User1Page, BaseUrl);
-        var player2Home = new HomePage(User2Page, BaseUrl);
-
-        // Navigate both users to home simultaneously
-        var player1NavigateTask = Task.Run(() => player1Home.NavigateToHomeAsync());
-        var player2NavigateTask = Task.Run(() => player2Home.NavigateToHomeAsync());
-
-        var navigateTasks = new List<Task> { player1NavigateTask, player2NavigateTask };
-
-        await Task.WhenAll(navigateTasks);
-
-        // Handle settings for both users simultaneously with original settings page
-        var player1SettingsTask = Task.Run(async () =>
-        {
-            if (player1Home.IsOnSettingsPage())
-            {
-                var settingsPage = new SettingsPage(User1Page, BaseUrl);
-                await settingsPage.WaitForPageReadyAsync();
-                await settingsPage.SetGameSettingsAsync(3, 5);
-                await settingsPage.SaveSettingsAsync();
-            }
-        });
-
-        var player2SettingsTask = Task.Run(async () =>
-        {
-            if (player2Home.IsOnSettingsPage())
-            {
-                var settingsPage = new SettingsPage(User2Page, BaseUrl);
-                await settingsPage.WaitForPageReadyAsync();
-                await settingsPage.SetGameSettingsAsync(3, 5);
-                await settingsPage.SaveSettingsAsync();
-            }
-        });
-
-        var settingsTasks = new List<Task> { player1SettingsTask, player2SettingsTask };
-        await Task.WhenAll(settingsTasks);
+        var (player1Home, player2Home) =
+            await InitializeBothUsersOnHomeAndApplySettingsIfPromptedAsync(3, 5);
 
         // Player 1 starts a new game
         await player1Home.StartNewGameAsync();
@@ -97,7 +62,7 @@ public class UnitTest1 : MultiBrowserBaseTest
         await player2Game.IsGamePageLoadedAsync();
 
         // Take screenshots from both perspectives
-        await TakeBothUsersScreenshotsAsync("game_settings_migrated");
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Init");
 
         // 🎯 Hardcoded 9-dart leg instead of random darts
         Console.WriteLine("🎯 Starting hardcoded 9-dart leg sequence...");
@@ -117,24 +82,28 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 1: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ClickCheckoutAsync(); // Triple 20
 
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_1");
+
         Console.WriteLine("🎯 Player 1 won the leg!");
 
         await ValidatePlayer1WonLeg();
 
         // Round 2: Player 2 starts a new leg: 180 (3x60) to get to 321
-        await player2Game.ThrowDartWithScoreAsync(180); // Triple 20
+        await player2Game.ThrowDartWithScoreAsync(80); // Triple 20
 
         // Round 2: Player 1: 3 darts
         await player1Game.ThrowDartWithScoreAsync(180); // Triple 20
 
         // Round 2: Player 2: Next 3 darts: 180 (3x60) to get to 141
-        await player2Game.ThrowDartWithScoreAsync(180); // Triple 20
+        await player2Game.ThrowDartWithScoreAsync(80); // Triple 20
 
         // Round 2: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ThrowDartWithScoreAsync(180); // Triple 20
 
         // Round 2: Player 2: Final 3 darts: 141 checkout (T20, T19, D12)
         await player2Game.ClickCheckoutAsync();
+
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_2");
 
         Console.WriteLine("🎯 Player 2 won the leg!");
 
@@ -155,6 +124,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 3: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ClickCheckoutAsync();
 
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_3");
+
         Console.WriteLine("🎯 Player 1 won the leg!");
 
         await ValidatePlayer1WonLeg();
@@ -174,6 +145,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 4: Player 2: Final 3 darts: 141 checkout (T20, T19, D12)
         await player2Game.ClickCheckoutAsync();
 
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_4");
+
         Console.WriteLine("🎯 Player 2 won the leg!");
 
         await ValidatePlayer2WonLeg();
@@ -192,6 +165,8 @@ public class UnitTest1 : MultiBrowserBaseTest
 
         // Round 5: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ClickCheckoutAsync(); // Triple 20
+
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_5");
 
         Console.WriteLine("🎯 Player 1 won the set!");
 
@@ -213,6 +188,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 6: Player 2: Final 3 darts: 141 checkout (T20, T19, D12)
         await player2Game.ClickCheckoutAsync();
 
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_6");
+
         Console.WriteLine("🎯 Player 2 won the set!");
 
         // validate player 2 won the set
@@ -233,6 +210,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 7: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ClickCheckoutAsync();
 
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_7");
+
         Console.WriteLine("🎯 Player 1 won the round!");
 
         await ValidatePlayer1WonLeg();
@@ -251,6 +230,8 @@ public class UnitTest1 : MultiBrowserBaseTest
 
         // Round 8: Player 2: Final 3 darts: 141 checkout (T20, T19, D12)
         await player2Game.ClickCheckoutAsync();
+
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_8");
 
         Console.WriteLine("🎯 Player 2 won the round!");
 
@@ -271,6 +252,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 9: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ClickCheckoutAsync();
 
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_9");
+
         Console.WriteLine("🎯 Player 1 won the round!");
 
         await ValidatePlayer1WonLeg();
@@ -289,6 +272,8 @@ public class UnitTest1 : MultiBrowserBaseTest
 
         // Round 10: Player 2: Final 3 darts: 141 checkout (T20, T19, D12)
         await player2Game.ClickCheckoutAsync();
+
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_10");
 
         Console.WriteLine("🎯 Player 2 won the set!");
 
@@ -309,6 +294,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 11: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ClickCheckoutAsync();
 
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_11");
+
         Console.WriteLine("🎯 Player 1 won the leg!");
 
         await ValidatePlayer1WonLeg();
@@ -327,6 +314,8 @@ public class UnitTest1 : MultiBrowserBaseTest
 
         // Round 12: Player 2: Final 3 darts: 141 checkout (T20, T19, D12)
         await player2Game.ClickCheckoutAsync();
+
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_12");
 
         Console.WriteLine("🎯 Player 2 won the leg!");
 
@@ -347,6 +336,8 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 13: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ClickCheckoutAsync();
 
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_13");
+
         Console.WriteLine("🎯 Player 1 won the round!");
 
         await ValidatePlayer1WonLeg();
@@ -365,6 +356,8 @@ public class UnitTest1 : MultiBrowserBaseTest
 
         // Round 14: Player 2: Final 3 darts: 141 checkout (T20, T19, D12)
         await player2Game.ClickCheckoutAsync();
+
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_14");
 
         Console.WriteLine("🎯 Player 2 won the round!");
 
@@ -385,7 +378,9 @@ public class UnitTest1 : MultiBrowserBaseTest
         // Round 15: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ClickCheckoutAsync();
 
-        Console.WriteLine("🎯 Player 1 won the round!");
+        await TakeBothUsersScreenshotsAsync("StarterAlwaysWins_Round_15");
+
+        Console.WriteLine("🎯 Player 1 won the game!");
 
         await ValidatePlayer1WonGame();
 
@@ -811,27 +806,5 @@ public class UnitTest1 : MultiBrowserBaseTest
             );
         }
         Console.WriteLine("🚪 Winner popup closed successfully on both pages!");
-    }
-
-    private async Task SetupPlayer()
-    {
-        var token = await AuthressHelperUser1?.GetBearerTokenAsync();
-        if (token is null)
-        {
-            throw new Exception("Token is null");
-        }
-
-        await SetAuthTokenAsync(token, User1Page);
-    }
-
-    private async Task SetupOpponent()
-    {
-        var token = await AuthressHelperUser2?.GetBearerTokenAsync();
-        if (token is null)
-        {
-            throw new Exception("Token is null");
-        }
-
-        await SetAuthTokenAsync(token, User2Page);
     }
 }

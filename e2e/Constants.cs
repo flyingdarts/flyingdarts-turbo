@@ -138,6 +138,11 @@ public static class Constants
     public const string HomeContainerSelector = "#homeContainer";
 
     /// <summary>
+    /// Friends container selector
+    /// </summary>
+    public const string FriendsContainerSelector = "#friendsContainer";
+
+    /// <summary>
     /// Game container selector
     /// </summary>
     public const string GameContainerSelector = "#gameContainer";
@@ -278,7 +283,7 @@ public static class Constants
     /// <summary>
     /// Browser pool size for performance optimization
     /// </summary>
-    public const int BrowserPoolSize = 4;
+    public const int BrowserPoolSize = 2;
 
     /// <summary>
     /// Auth cookie name used to inject token for E2E

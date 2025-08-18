@@ -73,6 +73,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.CDK.Constructs.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.CDK.Constructs", "packages\tools\dotnet\Flyingdarts.CDK.Constructs\Flyingdarts.CDK.Constructs.csproj", "{9EE87FF2-B4FE-4589-A100-BAE51D19BA1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flyingdarts.E2E", "e2e\Flyingdarts.E2E.csproj", "{BE018675-B31C-43A8-9CBE-99C5A7B4F424}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -162,6 +164,10 @@ Global
 		{9EE87FF2-B4FE-4589-A100-BAE51D19BA1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EE87FF2-B4FE-4589-A100-BAE51D19BA1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EE87FF2-B4FE-4589-A100-BAE51D19BA1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE018675-B31C-43A8-9CBE-99C5A7B4F424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE018675-B31C-43A8-9CBE-99C5A7B4F424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE018675-B31C-43A8-9CBE-99C5A7B4F424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE018675-B31C-43A8-9CBE-99C5A7B4F424}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D2299E61-D54E-4988-9FF4-0815F2D3B0B4} = {E145EC30-F145-41B1-B232-7AB9835F7CF3}

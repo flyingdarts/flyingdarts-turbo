@@ -1,3 +1,5 @@
+using Constants = Flyingdarts.E2E.Constants;
+
 namespace Flyingdarts.E2E.Configuration;
 
 /// <summary>
@@ -19,7 +21,7 @@ public static class TestConfiguration
                 out var value
             )
                 ? value
-                : 4;
+                : Constants.MaxConcurrentTests;
 
         /// <summary>
         /// Browser pool size
@@ -27,7 +29,7 @@ public static class TestConfiguration
         public static int BrowserPoolSize =>
             int.TryParse(Environment.GetEnvironmentVariable("E2E_BROWSER_POOL_SIZE"), out var value)
                 ? value
-                : 8;
+                : Constants.BrowserPoolSize;
 
         /// <summary>
         /// Whether to run browsers in headless mode

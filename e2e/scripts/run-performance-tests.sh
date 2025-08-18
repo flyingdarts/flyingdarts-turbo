@@ -64,8 +64,8 @@ set_performance_env() {
     print_section "Setting Performance Environment Variables"
 
     # Performance optimizations
-    export E2E_MAX_CONCURRENT_TESTS=4
-    export E2E_BROWSER_POOL_SIZE=8
+    export E2E_MAX_CONCURRENT_TESTS=1
+    export E2E_BROWSER_POOL_SIZE=2
     export E2E_HEADLESS_MODE=false
     export E2E_ELEMENT_TIMEOUT=15000
     export E2E_NAVIGATION_TIMEOUT=15000

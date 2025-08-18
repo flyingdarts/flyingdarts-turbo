@@ -11,16 +11,23 @@ public class PerformanceTestRunner : IDisposable
     private readonly BrowserPool _browserPool;
     private readonly TokenCache _tokenCache;
     private readonly int _maxConcurrentTests;
+    private readonly int _browserPoolSize;
     private readonly SemaphoreSlim _testSemaphore;
     private readonly List<TestExecutionInfo> _activeTests = new();
     private readonly object _lock = new();
 
-    public PerformanceTestRunner(int maxConcurrentTests = 4)
+    public PerformanceTestRunner(int maxConcurrentTests)
     {
         _maxConcurrentTests = maxConcurrentTests;
         _testSemaphore = new SemaphoreSlim(maxConcurrentTests, maxConcurrentTests);
+        _browserPoolSize = Flyingdarts
+            .E2E
+            .Configuration
+            .TestConfiguration
+            .Performance
+            .BrowserPoolSize;
         _browserPool = new BrowserPool(
-            Flyingdarts.E2E.Configuration.TestConfiguration.Performance.BrowserPoolSize,
+            _browserPoolSize,
             headless: Flyingdarts.E2E.Configuration.TestConfiguration.Performance.HeadlessMode
         );
         _tokenCache = new TokenCache();
@@ -34,7 +41,7 @@ public class PerformanceTestRunner : IDisposable
         await _browserPool.InitializeAsync();
         Console.WriteLine("🚀 Performance Test Runner initialized successfully!");
         Console.WriteLine($"📊 Max concurrent tests: {_maxConcurrentTests}");
-        Console.WriteLine($"🌐 Browser pool size: {_maxConcurrentTests * 2}");
+        Console.WriteLine($"🌐 Browser pool size: {_browserPoolSize}");
     }
 
     /// <summary>

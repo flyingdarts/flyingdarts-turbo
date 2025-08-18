@@ -33,11 +33,8 @@ public abstract class MultiBrowserBaseTest : IDisposable
     /// </summary>
     protected virtual async Task SetupAsync()
     {
-        // Initialize performance test runner
-        TestRunner = new PerformanceTestRunner(
-            maxConcurrentTests: Configuration.TestConfiguration.Performance.MaxConcurrentTests
-        );
-        await TestRunner.InitializeAsync();
+        // Initialize or re-use shared performance test runner to enforce global browser cap
+        TestRunner = await GlobalPerformanceRunner.GetRunnerAsync();
 
         // Get browsers from pool for better performance
         BrowserUser1 = await TestRunner.GetBrowserAsync();
@@ -239,7 +236,7 @@ public abstract class MultiBrowserBaseTest : IDisposable
     {
         if (!_disposed && disposing)
         {
-            TestRunner?.Dispose();
+            // Do not dispose the shared TestRunner here; lifecycle is managed by the collection fixture
             _disposed = true;
         }
     }
@@ -392,6 +389,98 @@ public abstract class MultiBrowserBaseTest : IDisposable
     {
         await TakeUser1ScreenshotAsync(name);
         await TakeUser2ScreenshotAsync(name);
+    }
+
+    /// <summary>
+    /// Initialize both users on the Home page and apply game settings if the app prompts with the Settings page.
+    /// Returns the constructed HomePage instances for both users.
+    /// Assumes SetupAsync() has already been called.
+    /// </summary>
+    /// <param name="sets">Target sets to apply if settings page is shown</param>
+    /// <param name="legs">Target legs to apply if settings page is shown</param>
+    /// <returns>Tuple of HomePage for User1 and User2</returns>
+    protected async Task<(
+        HomePage User1Home,
+        HomePage User2Home
+    )> InitializeBothUsersOnHomeAndApplySettingsIfPromptedAsync(int sets, int legs)
+    {
+        // Ensure auth tokens are present for both users
+        await SetUser1AuthTokenAsync();
+        await SetUser2AuthTokenAsync();
+
+        // Create home pages
+        var user1Home = new HomePage(User1Page, BaseUrl);
+        var user2Home = new HomePage(User2Page, BaseUrl);
+
+        // Navigate both users to home concurrently
+        var navigateTasks = new List<Task>
+        {
+            user1Home.NavigateToHomeAsync(),
+            user2Home.NavigateToHomeAsync(),
+        };
+        await Task.WhenAll(navigateTasks);
+
+        // If app redirected to settings, apply desired values and save for each user concurrently
+        var settingsTasks = new List<Task>();
+
+        settingsTasks.Add(
+            Task.Run(async () =>
+            {
+                if (user1Home.IsOnSettingsPage())
+                {
+                    var settingsPage = new SettingsPage(User1Page, BaseUrl);
+                    await settingsPage.WaitForPageReadyAsync();
+                    await settingsPage.SetGameSettingsAsync(sets, legs);
+                    await settingsPage.SaveSettingsAsync();
+                }
+            })
+        );
+
+        settingsTasks.Add(
+            Task.Run(async () =>
+            {
+                if (user2Home.IsOnSettingsPage())
+                {
+                    var settingsPage = new SettingsPage(User2Page, BaseUrl);
+                    await settingsPage.WaitForPageReadyAsync();
+                    await settingsPage.SetGameSettingsAsync(sets, legs);
+                    await settingsPage.SaveSettingsAsync();
+                }
+            })
+        );
+
+        await Task.WhenAll(settingsTasks);
+
+        return (user1Home, user2Home);
+    }
+
+    /// <summary>
+    /// Initialize User 1 on the Home page and apply game settings if the app prompts with the Settings page.
+    /// Returns the constructed HomePage instance for User 1.
+    /// Assumes SetupAsync() has already been called.
+    /// </summary>
+    /// <param name="sets">Target sets to apply if settings page is shown</param>
+    /// <param name="legs">Target legs to apply if settings page is shown</param>
+    /// <returns>HomePage for User1</returns>
+    protected async Task<HomePage> InitializeUser1OnHomeAndApplySettingsIfPromptedAsync(
+        int sets,
+        int legs
+    )
+    {
+        await SetUser1AuthTokenAsync();
+
+        var user1Home = new HomePage(User1Page, BaseUrl);
+        await user1Home.NavigateToHomeAsync();
+
+        if (user1Home.IsOnSettingsPage())
+        {
+            var settingsPage = new SettingsPage(User1Page, BaseUrl);
+            await settingsPage.WaitForPageReadyAsync();
+            await settingsPage.SetGameSettingsAsync(sets, legs);
+            await settingsPage.SaveSettingsAsync();
+        }
+
+        return user1Home;
     }
 
     /// <summary>

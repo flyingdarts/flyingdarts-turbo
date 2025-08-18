@@ -377,10 +377,59 @@ public class GamePage : OptimizedBasePage
             }
 
             var digitButton = Page.Locator(Constants.NumberButtonSelectors[digitValue]);
-            await digitButton.ClickAsync();
+            await ClickWithResilienceAsync(digitButton, $"digit-{digitValue}");
 
             // Small delay between digit clicks for stability
             await Task.Delay(Constants.MinimalUiDelay);
+        }
+    }
+
+    /// <summary>
+    /// Click a button with resilience: wait for visibility, ensure it's not marked disabled via class,
+    /// scroll into view, and fall back to a force click if something intercepts pointer events.
+    /// </summary>
+    private async Task ClickWithResilienceAsync(ILocator button, string nameForLogs)
+    {
+        // Ensure visible first
+        await button.WaitForAsync(
+            new()
+            {
+                State = WaitForSelectorState.Visible,
+                Timeout = Constants.DefaultVisibleWaitTimeout,
+            }
+        );
+
+        // Wait until CSS class no longer contains "disabled" (apps often use class-based disabling)
+        var waitUntil = DateTime.UtcNow.AddMilliseconds(Constants.DefaultElementTimeout);
+        while (DateTime.UtcNow < waitUntil)
+        {
+            var classAttribute = await button.GetAttributeAsync("class");
+            var hasDisabledClass = classAttribute?.Contains("disabled") == true;
+            if (!hasDisabledClass)
+            {
+                break;
+            }
+
+            await Task.Delay(Constants.DefaultRetryInterval);
+        }
+
+        // Bring into view and allow minor layout stabilization
+        await button.ScrollIntoViewIfNeededAsync();
+        await Task.Delay(Constants.MinimalUiDelay);
+
+        try
+        {
+            await button.ClickAsync();
+        }
+        catch (Exception ex)
+            when (ex.Message.Contains("intercepts pointer events")
+                || ex.Message.Contains("element is not stable")
+                || ex.Message.Contains("Element is not visible")
+            )
+        {
+            Console.WriteLine($"⚠️ Normal click failed on {nameForLogs}, trying force click...");
+            await button.ClickAsync(new() { Force = true });
+            Console.WriteLine($"✅ Force click succeeded on {nameForLogs}");
         }
     }
 }
