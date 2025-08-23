@@ -10,7 +10,7 @@ public interface IFriendsDynamoDbService : IDynamoDbService
     Task<List<FriendRequest>> GetOutgoingFriendRequestsAsync(string userId, CancellationToken cancellationToken);
     Task<List<FriendRelationship>> GetUserFriendsAsync(string userId, CancellationToken cancellationToken);
     Task<FriendRelationship?> GetFriendRelationshipAsync(string userId, string friendId, CancellationToken cancellationToken);
-    Task<List<User>> SearchUsersAsync(string searchTerm, CancellationToken cancellationToken);
+    Task<List<User>> SearchUsersAsync(string searchTerm, string authUserId, CancellationToken cancellationToken);
     Task SaveFriendRequestAsync(FriendRequest friendRequest, CancellationToken cancellationToken);
     Task AcceptFriendRequestAsync(FriendRequest friendRequest, CancellationToken cancellationToken);
     Task DeclineFriendRequestAsync(FriendRequest friendRequest, CancellationToken cancellationToken);
@@ -235,7 +235,7 @@ public class FriendsDynamoDbService : DynamoDbService, IFriendsDynamoDbService
         }
     }
 
-    public async Task<List<User>> SearchUsersAsync(string searchTerm, CancellationToken cancellationToken)
+    public async Task<List<User>> SearchUsersAsync(string searchTerm, string authUserId, CancellationToken cancellationToken)
     {
         Console.WriteLine($"[FriendsDynamoDbService] Searching users with term: '{searchTerm}'");
 
@@ -267,6 +267,7 @@ public class FriendsDynamoDbService : DynamoDbService, IFriendsDynamoDbService
                     || (u.Profile?.Email?.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) == true)
                     || u.UserId == searchTerm
                 )
+                .Where(u => u.UserId != authUserId)
                 .Take(10)
                 .ToList(); // Limit to 10 results
 

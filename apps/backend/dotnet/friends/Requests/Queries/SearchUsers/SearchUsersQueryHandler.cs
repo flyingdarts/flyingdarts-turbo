@@ -13,7 +13,10 @@ public class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, APIGate
         _friendsDynamoDbService = friendsDynamoDbService;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(SearchUsersQuery request, CancellationToken cancellationToken)
+    public async Task<APIGatewayProxyResponse> Handle(
+        SearchUsersQuery request,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
@@ -32,12 +35,24 @@ public class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, APIGate
                 };
             }
 
-            var users = await _friendsDynamoDbService.SearchUsersAsync(request.SearchTerm, cancellationToken);
+            var users = await _friendsDynamoDbService.SearchUsersAsync(
+                request.SearchTerm,
+                request.SearchByUserId ?? string.Empty,
+                cancellationToken
+            );
 
-            Console.WriteLine($"[SearchUsersQueryHandler] Found user matching search term: '{request.SearchTerm}'");
+            Console.WriteLine(
+                $"[SearchUsersQueryHandler] Found user matching search term: '{request.SearchTerm}'"
+            );
 
-            var userDtos = await ConvertToUserSearchDtosAsync(users, request.SearchByUserId, cancellationToken);
-            Console.WriteLine($"[SearchUsersQueryHandler] Converted {userDtos.Count} users to search DTOs");
+            var userDtos = await ConvertToUserSearchDtosAsync(
+                users,
+                request.SearchByUserId,
+                cancellationToken
+            );
+            Console.WriteLine(
+                $"[SearchUsersQueryHandler] Converted {userDtos.Count} users to search DTOs"
+            );
 
             return new APIGatewayProxyResponse
             {
@@ -75,7 +90,9 @@ public class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, APIGate
             // Skip the searching user
             if (user.UserId == searchByUserId)
             {
-                Console.WriteLine($"[SearchUsersQueryHandler] Skipping self (user {user.UserId}) from search results");
+                Console.WriteLine(
+                    $"[SearchUsersQueryHandler] Skipping self (user {user.UserId}) from search results"
+                );
                 continue;
             }
 
@@ -84,10 +101,20 @@ public class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, APIGate
 
             if (!string.IsNullOrEmpty(searchByUserId))
             {
-                Console.WriteLine($"[SearchUsersQueryHandler] Checking friendship status between {searchByUserId} and {user.UserId}");
+                Console.WriteLine(
+                    $"[SearchUsersQueryHandler] Checking friendship status between {searchByUserId} and {user.UserId}"
+                );
 
-                isAlreadyFriend = await _friendsDynamoDbService.CheckIfAlreadyFriendsAsync(searchByUserId, user.UserId, cancellationToken);
-                hasPendingRequest = await _friendsDynamoDbService.CheckExistingRequestAsync(searchByUserId, user.UserId, cancellationToken);
+                isAlreadyFriend = await _friendsDynamoDbService.CheckIfAlreadyFriendsAsync(
+                    searchByUserId,
+                    user.UserId,
+                    cancellationToken
+                );
+                hasPendingRequest = await _friendsDynamoDbService.CheckExistingRequestAsync(
+                    searchByUserId,
+                    user.UserId,
+                    cancellationToken
+                );
 
                 Console.WriteLine(
                     $"[SearchUsersQueryHandler] User {user.UserId}: IsFriend={isAlreadyFriend}, HasPendingRequest={hasPendingRequest}"
@@ -109,11 +136,15 @@ public class SearchUsersQueryHandler : IRequestHandler<SearchUsersQuery, APIGate
             processedCount++;
             if (processedCount % 5 == 0) // Log progress every 5 users
             {
-                Console.WriteLine($"[SearchUsersQueryHandler] Processed {processedCount}/{users.Count} users");
+                Console.WriteLine(
+                    $"[SearchUsersQueryHandler] Processed {processedCount}/{users.Count} users"
+                );
             }
         }
 
-        Console.WriteLine($"[SearchUsersQueryHandler] Completed conversion. Final result: {userDtos.Count} search DTOs");
+        Console.WriteLine(
+            $"[SearchUsersQueryHandler] Completed conversion. Final result: {userDtos.Count} search DTOs"
+        );
         return userDtos;
     }
 
