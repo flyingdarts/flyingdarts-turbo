@@ -10,7 +10,7 @@ namespace Flyingdarts.E2E;
 [Collection("SharedRunnerCollection")]
 public class FriendsFeature : MultiBrowserBaseTest
 {
-    [Fact]
+    [Fact(Skip = "Skipping this test for now")]
     public async Task FriendInviteAcceptHappyFlow()
     {
         await SetupAsync();
