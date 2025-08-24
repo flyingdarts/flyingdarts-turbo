@@ -16,6 +16,7 @@ public class StarterAlwaysWins : MultiBrowserBaseTest
     /// <summary>
     /// Testing a game of darts between two players
     /// </summary>
+    [Fact]
     public async Task StarterAlwaysWins_Scenario()
     {
         // Setup both users and navigate to home, applying settings if prompted
@@ -89,13 +90,13 @@ public class StarterAlwaysWins : MultiBrowserBaseTest
         await ValidatePlayer1WonLeg();
 
         // Round 2: Player 2 starts a new leg: 180 (3x60) to get to 321
-        await player2Game.ThrowDartWithScoreAsync(80); // Triple 20
+        await player2Game.ThrowDartWithScoreAsync(180); // Triple 20
 
         // Round 2: Player 1: 3 darts
         await player1Game.ThrowDartWithScoreAsync(180); // Triple 20
 
         // Round 2: Player 2: Next 3 darts: 180 (3x60) to get to 141
-        await player2Game.ThrowDartWithScoreAsync(80); // Triple 20
+        await player2Game.ThrowDartWithScoreAsync(180); // Triple 20
 
         // Round 2: Player 1: Final 3 darts: 141 checkout (T20, T19, D12)
         await player1Game.ThrowDartWithScoreAsync(180); // Triple 20
