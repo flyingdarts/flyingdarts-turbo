@@ -1,7 +1,6 @@
 // Global using directives
 
 global using System;
-global using System;
 global using System.Collections.Generic;
 global using System.Linq;
 global using System.Text.Json;
@@ -9,7 +8,6 @@ global using System.Threading;
 global using System.Threading.Tasks;
 global using Amazon.DynamoDBv2;
 global using Amazon.DynamoDBv2.DataModel;
-global using Amazon.DynamoDBv2.DocumentModel;
 global using Amazon.DynamoDBv2.DocumentModel;
 global using Amazon.Lambda.APIGatewayEvents;
 global using Amazon.Lambda.Core;

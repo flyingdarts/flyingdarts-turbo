@@ -16,10 +16,14 @@ public sealed class X01MetadataService : MetadataService<X01State>
     /// </summary>
     /// <param name="dynamoDbService">The DynamoDB service for data access</param>
     /// <param name="cachingService">The caching service used to store the game state</param>
-    public X01MetadataService(IDynamoDbService dynamoDbService, CachingService<X01State> cachingService)
+    public X01MetadataService(
+        IDynamoDbService dynamoDbService,
+        CachingService<X01State> cachingService
+    )
         : base(cachingService)
     {
-        _dynamoDbService = dynamoDbService ?? throw new ArgumentNullException(nameof(dynamoDbService));
+        _dynamoDbService =
+            dynamoDbService ?? throw new ArgumentNullException(nameof(dynamoDbService));
         _cachingService = cachingService ?? throw new ArgumentNullException(nameof(cachingService));
     }
 
@@ -31,7 +35,11 @@ public sealed class X01MetadataService : MetadataService<X01State>
     /// <returns>A complete metadata object containing game state, players, and darts information</returns>
     /// <exception cref="ArgumentException">Thrown when the game ID format is invalid</exception>
     /// <exception cref="InvalidOperationException">Thrown when the game is not found</exception>
-    public async Task<Dtos.Metadata> GetMetadataAsync(string gameId, string? userId, CancellationToken cancellationToken = default)
+    public Task<Dtos.Metadata> GetMetadataAsync(
+        string gameId,
+        string? userId,
+        CancellationToken cancellationToken = default
+    )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(gameId);
 
@@ -46,20 +54,39 @@ public sealed class X01MetadataService : MetadataService<X01State>
         var metadata = CreateMetadata(game, darts, players, users, userId);
 
         // Check if any player has won the game
-        if (HasAnyPlayerWon(darts, game.X01.Legs, game.X01.Sets, players.Select(p => p.PlayerId).ToList()))
+        if (
+            HasAnyPlayerWon(
+                darts,
+                game.X01.Legs,
+                game.X01.Sets,
+                players.Select(p => p.PlayerId).ToList()
+            )
+        )
         {
             metadata.NextPlayer = null;
-            metadata.WinningPlayer = GetWinningPlayer(darts, game.X01.Legs, game.X01.Sets, players.Select(p => p.PlayerId).ToList());
-            Console.WriteLine($"[{nameof(X01MetadataService)}] Winning player: {metadata.WinningPlayer}");
+            metadata.WinningPlayer = GetWinningPlayer(
+                darts,
+                game.X01.Legs,
+                game.X01.Sets,
+                players.Select(p => p.PlayerId).ToList()
+            );
+            Console.WriteLine(
+                $"[{nameof(X01MetadataService)}] Winning player: {metadata.WinningPlayer}"
+            );
         }
 
-        return metadata;
+        return Task.FromResult(metadata);
     }
 
     /// <summary>
     /// Fetches all required game data from DynamoDB in parallel for optimal performance.
     /// </summary>
-    private (Game game, List<GamePlayer> players, List<GameDart> darts, List<User> users) FetchGameData(CancellationToken cancellationToken)
+    private (
+        Game game,
+        List<GamePlayer> players,
+        List<GameDart> darts,
+        List<User> users
+    ) FetchGameData(CancellationToken cancellationToken)
     {
         var game = _cachingService.State.Game;
         var players = _cachingService.State.Players;
@@ -143,7 +170,10 @@ public sealed class X01MetadataService : MetadataService<X01State>
     /// <summary>
     /// Creates a dictionary of darts organized by player ID using collection expressions.
     /// </summary>
-    private static Dictionary<string, List<DartDto>> CreateDartsDictionary(List<GameDart> darts, List<GamePlayer> players)
+    private static Dictionary<string, List<DartDto>> CreateDartsDictionary(
+        List<GameDart> darts,
+        List<GamePlayer> players
+    )
     {
         if (darts is null or { Count: 0 } || players is null or { Count: 0 })
         {
@@ -189,7 +219,9 @@ public sealed class X01MetadataService : MetadataService<X01State>
             return Enumerable.Empty<PlayerDto>().OrderBy(p => p.CreatedAt);
         }
 
-        var playersStats = players.Select(p => CalculatePlayerStats(darts, p.PlayerId, bestOfLegs)).ToList();
+        var playersStats = players
+            .Select(p => CalculatePlayerStats(darts, p.PlayerId, bestOfLegs))
+            .ToList();
         var shouldResetLegs = playersStats.Any(stat => stat.ShouldResetLegs);
 
         var playerDtos = players.Select(player =>
@@ -197,7 +229,9 @@ public sealed class X01MetadataService : MetadataService<X01State>
             var stats = CalculatePlayerStats(darts, player.PlayerId, bestOfLegs);
             var user =
                 users.FirstOrDefault(u => u.UserId == player.PlayerId)
-                ?? throw new InvalidOperationException($"User not found for player {player.PlayerId}");
+                ?? throw new InvalidOperationException(
+                    $"User not found for player {player.PlayerId}"
+                );
 
             return new PlayerDto
             {
@@ -216,7 +250,10 @@ public sealed class X01MetadataService : MetadataService<X01State>
     /// <summary>
     /// Removes darts that were thrown after the last finishing dart for cleaner display.
     /// </summary>
-    private static void RemoveDartsAfterLastFinisher(Dictionary<string, List<DartDto>>? dartsDictionary, List<GameDart> darts)
+    private static void RemoveDartsAfterLastFinisher(
+        Dictionary<string, List<DartDto>>? dartsDictionary,
+        List<GameDart> darts
+    )
     {
         if (dartsDictionary is null or { Count: 0 } || darts is null or { Count: 0 })
         {
@@ -231,7 +268,9 @@ public sealed class X01MetadataService : MetadataService<X01State>
 
             foreach (var playerId in dartsDictionary.Keys)
             {
-                dartsDictionary[playerId] = dartsDictionary[playerId].Where(d => d.CreatedAt > lastFinisherTicks).ToList();
+                dartsDictionary[playerId] = dartsDictionary[playerId]
+                    .Where(d => d.CreatedAt > lastFinisherTicks)
+                    .ToList();
             }
         }
         catch (InvalidOperationException)
@@ -243,7 +282,12 @@ public sealed class X01MetadataService : MetadataService<X01State>
     /// <summary>
     /// Determines if any player has won the game based on the required sets.
     /// </summary>
-    private static bool HasAnyPlayerWon(List<GameDart> darts, int legsRequired, int bestOfSets, List<string> playerIds)
+    private static bool HasAnyPlayerWon(
+        List<GameDart> darts,
+        int legsRequired,
+        int bestOfSets,
+        List<string> playerIds
+    )
     {
         ArgumentNullException.ThrowIfNull(playerIds);
 
@@ -264,7 +308,12 @@ public sealed class X01MetadataService : MetadataService<X01State>
     /// <summary>
     /// Gets the winning player ID if any player has won the game.
     /// </summary>
-    private static string? GetWinningPlayer(List<GameDart> darts, int bestOfLegs, int bestOfSets, List<string> playerIds)
+    private static string? GetWinningPlayer(
+        List<GameDart> darts,
+        int bestOfLegs,
+        int bestOfSets,
+        List<string> playerIds
+    )
     {
         ArgumentNullException.ThrowIfNull(playerIds);
 
@@ -285,7 +334,11 @@ public sealed class X01MetadataService : MetadataService<X01State>
     /// <summary>
     /// Calculates player statistics including sets won, legs won, and whether legs should be reset.
     /// </summary>
-    private static PlayerStats CalculatePlayerStats(List<GameDart> darts, string playerId, int bestOfLegs)
+    private static PlayerStats CalculatePlayerStats(
+        List<GameDart> darts,
+        string playerId,
+        int bestOfLegs
+    )
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(playerId);
 
@@ -337,7 +390,9 @@ public sealed class X01MetadataService : MetadataService<X01State>
         }
 
         var currentSet = darts.Max(dart => dart.Set);
-        var legsInCurrentSet = darts.Where(dart => dart.Set == currentSet).GroupBy(dart => dart.Leg);
+        var legsInCurrentSet = darts
+            .Where(dart => dart.Set == currentSet)
+            .GroupBy(dart => dart.Leg);
 
         var playerLegWins = new Dictionary<string, int>();
 
@@ -346,7 +401,8 @@ public sealed class X01MetadataService : MetadataService<X01State>
             var winningPlayer = leg.FirstOrDefault(dart => dart.GameScore == 0)?.PlayerId;
             if (!string.IsNullOrEmpty(winningPlayer))
             {
-                playerLegWins[winningPlayer] = playerLegWins.GetValueOrDefault(winningPlayer, 0) + 1;
+                playerLegWins[winningPlayer] =
+                    playerLegWins.GetValueOrDefault(winningPlayer, 0) + 1;
             }
         }
 
@@ -356,10 +412,16 @@ public sealed class X01MetadataService : MetadataService<X01State>
     /// <summary>
     /// Determines which player should throw next based on the current game state.
     /// </summary>
-    private static string? DetermineNextPlayer(List<GamePlayer> players, List<GameDart> darts, int bestOfLegs)
+    private static string? DetermineNextPlayer(
+        List<GamePlayer> players,
+        List<GameDart> darts,
+        int bestOfLegs
+    )
     {
         // Debug log: print all player IDs
-        Console.WriteLine($"[DetermineNextPlayer][DEBUG] Players: {string.Join(", ", players.Select(p => p.PlayerId))}");
+        Console.WriteLine(
+            $"[DetermineNextPlayer][DEBUG] Players: {string.Join(", ", players.Select(p => p.PlayerId))}"
+        );
         // Debug log: print all darts
         foreach (var dart in darts)
         {
@@ -370,7 +432,9 @@ public sealed class X01MetadataService : MetadataService<X01State>
 
         if (players == null || players.Count < 2)
         {
-            Console.WriteLine("[DetermineNextPlayer][DEBUG] Not enough players to determine next player.");
+            Console.WriteLine(
+                "[DetermineNextPlayer][DEBUG] Not enough players to determine next player."
+            );
             return null;
         }
 
@@ -378,14 +442,18 @@ public sealed class X01MetadataService : MetadataService<X01State>
         {
             // Pick a random or first player as the starter
             var starter = players.First().PlayerId;
-            Console.WriteLine($"[DetermineNextPlayer][DEBUG] No darts thrown yet. Starter: {starter}");
+            Console.WriteLine(
+                $"[DetermineNextPlayer][DEBUG] No darts thrown yet. Starter: {starter}"
+            );
             return starter;
         }
 
         var lastDart = darts.OrderByDescending(d => d.CreatedAt).First();
         var playerThatLastThrew = lastDart.PlayerId;
         var nextPlayer = players.First(p => p.PlayerId != playerThatLastThrew).PlayerId;
-        Console.WriteLine($"[DetermineNextPlayer][DEBUG] LastDart.PlayerId: {playerThatLastThrew}, Next player: {nextPlayer}");
+        Console.WriteLine(
+            $"[DetermineNextPlayer][DEBUG] LastDart.PlayerId: {playerThatLastThrew}, Next player: {nextPlayer}"
+        );
         return nextPlayer;
     }
 
@@ -418,7 +486,10 @@ public sealed class X01MetadataService : MetadataService<X01State>
         }
 
         // Regular leg finish within a set
-        var dartsInLastLeg = darts.Where(x => x.Set == lastSet && x.Leg == lastLeg).OrderBy(x => x.CreatedAt).ToList();
+        var dartsInLastLeg = darts
+            .Where(x => x.Set == lastSet && x.Leg == lastLeg)
+            .OrderBy(x => x.CreatedAt)
+            .ToList();
 
         var starterId = dartsInLastLeg.First().PlayerId;
         var winnerId = dartsInLastLeg.Last(x => x.GameScore == 0).PlayerId;

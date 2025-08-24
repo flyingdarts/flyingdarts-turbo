@@ -38,7 +38,8 @@ public abstract class LambdaBootstrap<TRequest, TResponse>
 /// Base class for Lambda function bootstrap that handles APIGatewayProxyRequest and returns APIGatewayProxyResponse
 /// </summary>
 /// <typeparam name="TRequest">The type of request the Lambda handles</typeparam>
-public abstract class ApiGatewayLambdaBootstrap<TRequest> : LambdaBootstrap<APIGatewayProxyRequest, APIGatewayProxyResponse>
+public abstract class ApiGatewayLambdaBootstrap<TRequest>
+    : LambdaBootstrap<APIGatewayProxyRequest, APIGatewayProxyResponse>
 {
     private readonly ILambdaHandler<TRequest> _innerHandler;
 
@@ -68,7 +69,8 @@ public abstract class ApiGatewayLambdaBootstrap<TRequest> : LambdaBootstrap<APIG
     /// <returns>The converted request</returns>
     protected abstract TRequest ConvertRequest(APIGatewayProxyRequest request);
 
-    private class ApiGatewayHandler<T> : ILambdaHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
+    private class ApiGatewayHandler<T>
+        : ILambdaHandler<APIGatewayProxyRequest, APIGatewayProxyResponse>
     {
         private readonly ILambdaHandler<T> _innerHandler;
 
@@ -77,10 +79,12 @@ public abstract class ApiGatewayLambdaBootstrap<TRequest> : LambdaBootstrap<APIG
             _innerHandler = innerHandler;
         }
 
-        public async Task<APIGatewayProxyResponse> Handle(APIGatewayProxyRequest request)
+        public Task<APIGatewayProxyResponse> Handle(APIGatewayProxyRequest request)
         {
             // This is a placeholder - the actual conversion happens in the derived class
-            throw new NotImplementedException("This should not be called directly");
+            return Task.FromException<APIGatewayProxyResponse>(
+                new NotImplementedException("This should not be called directly")
+            );
         }
     }
 }

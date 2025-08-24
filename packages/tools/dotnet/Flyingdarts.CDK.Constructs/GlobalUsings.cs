@@ -1,10 +1,8 @@
 global using Amazon.CDK;
-global using Amazon.CDK;
 global using Amazon.CDK.AWS.APIGateway;
 global using Amazon.CDK.AWS.Apigatewayv2.Alpha;
 global using Amazon.CDK.AWS.Apigatewayv2.Authorizers.Alpha;
 global using Amazon.CDK.AWS.Apigatewayv2.Integrations.Alpha;
-global using Amazon.CDK.AWS.CertificateManager;
 global using Amazon.CDK.AWS.CertificateManager;
 global using Amazon.CDK.AWS.CloudFront;
 global using Amazon.CDK.AWS.CloudFront.Origins;
