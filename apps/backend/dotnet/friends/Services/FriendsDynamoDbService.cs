@@ -468,14 +468,14 @@ public class FriendsDynamoDbService : DynamoDbService, IFriendsDynamoDbService
                 friendRequest.RequesterId,
                 friendRequest.TargetUserId,
                 friendRequest.CreatedAt,
-                friendRequest.Message
+                friendRequest.Message ?? string.Empty
             );
 
             var relationship2 = FriendRelationship.Create(
                 friendRequest.TargetUserId,
                 friendRequest.RequesterId,
                 friendRequest.CreatedAt,
-                friendRequest.Message
+                friendRequest.Message ?? string.Empty
             );
 
             // Save all changes

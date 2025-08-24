@@ -8,18 +8,25 @@ using Flyingdarts.Core.Models;
 
 namespace Flyingdarts.Backend.Friends.Api.Requests.Commands.SendFriendRequest;
 
-public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequestCommand, APIGatewayProxyResponse>
+public class SendFriendRequestCommandHandler
+    : IRequestHandler<SendFriendRequestCommand, APIGatewayProxyResponse>
 {
     private readonly IFriendsDynamoDbService _friendsDynamoDbService;
     private readonly IAmazonApiGatewayManagementApi _apiGatewayClient;
 
-    public SendFriendRequestCommandHandler(IFriendsDynamoDbService friendsDynamoDbService, IAmazonApiGatewayManagementApi apiGatewayClient)
+    public SendFriendRequestCommandHandler(
+        IFriendsDynamoDbService friendsDynamoDbService,
+        IAmazonApiGatewayManagementApi apiGatewayClient
+    )
     {
         _friendsDynamoDbService = friendsDynamoDbService;
         _apiGatewayClient = apiGatewayClient;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(SendFriendRequestCommand request, CancellationToken cancellationToken)
+    public async Task<APIGatewayProxyResponse> Handle(
+        SendFriendRequestCommand request,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
@@ -27,25 +34,37 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
                 $"[SendFriendRequestCommandHandler] Starting friend request from {request.RequesterId} to {request.TargetUserId}"
             );
 
-            var requester = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(request.RequesterId, cancellationToken);
+            var requester = await _friendsDynamoDbService.ReadUserByAuthProviderUserIdAsync(
+                request.RequesterId,
+                cancellationToken
+            );
 
             // Validate request
             if (requester.UserId == request.TargetUserId)
             {
-                Console.WriteLine($"[SendFriendRequestCommandHandler] Self-friend request attempted by user: {requester.UserId}");
+                Console.WriteLine(
+                    $"[SendFriendRequestCommandHandler] Self-friend request attempted by user: {requester.UserId}"
+                );
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
-                    Body = JsonSerializer.Serialize(new { error = "Cannot send friend request to yourself" }),
+                    Body = JsonSerializer.Serialize(
+                        new { error = "Cannot send friend request to yourself" }
+                    ),
                     Headers = GetCorsHeaders(),
                 };
             }
 
             // Check if target user exists
-            var targetUserExists = await _friendsDynamoDbService.CheckUserExistsAsync(request.TargetUserId, cancellationToken);
+            var targetUserExists = await _friendsDynamoDbService.CheckUserExistsAsync(
+                request.TargetUserId,
+                cancellationToken
+            );
             if (!targetUserExists)
             {
-                Console.WriteLine($"[SendFriendRequestCommandHandler] Target user not found: {request.TargetUserId}");
+                Console.WriteLine(
+                    $"[SendFriendRequestCommandHandler] Target user not found: {request.TargetUserId}"
+                );
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 404,
@@ -93,7 +112,11 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
             }
 
             // Create and save friend request
-            var friendRequest = CreateFriendRequest(requester.UserId, request.TargetUserId, request.Message);
+            var friendRequest = CreateFriendRequest(
+                requester.UserId,
+                request.TargetUserId,
+                request.Message ?? string.Empty
+            );
 
             await _friendsDynamoDbService.SaveFriendRequestAsync(friendRequest, cancellationToken);
             Console.WriteLine(
@@ -105,7 +128,9 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
             return new APIGatewayProxyResponse
             {
                 StatusCode = 201,
-                Body = JsonSerializer.Serialize(new { message = "Friend request sent successfully" }),
+                Body = JsonSerializer.Serialize(
+                    new { message = "Friend request sent successfully" }
+                ),
                 Headers = GetCorsHeaders(),
             };
         }
@@ -120,9 +145,16 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
         }
     }
 
-    private async Task NotifyTargetUser(string requestTargetUserId, FriendRequest friendRequest, CancellationToken cancellationToken)
+    private async Task NotifyTargetUser(
+        string requestTargetUserId,
+        FriendRequest friendRequest,
+        CancellationToken cancellationToken
+    )
     {
-        var user = await _friendsDynamoDbService.ReadUserAsync(requestTargetUserId, cancellationToken);
+        var user = await _friendsDynamoDbService.ReadUserAsync(
+            requestTargetUserId,
+            cancellationToken
+        );
         var connectionId = user.ConnectionId;
         var socketMessage = new SocketMessage<string>
         {
@@ -133,12 +165,20 @@ public class SendFriendRequestCommandHandler : IRequestHandler<SendFriendRequest
         var messageJson = JsonSerializer.Serialize(socketMessage);
         var messageBytes = Encoding.UTF8.GetBytes(messageJson);
         var messageStream = new MemoryStream(messageBytes);
-        var postConnectionRequest = new PostToConnectionRequest { ConnectionId = connectionId, Data = messageStream };
+        var postConnectionRequest = new PostToConnectionRequest
+        {
+            ConnectionId = connectionId,
+            Data = messageStream,
+        };
 
         await _apiGatewayClient.PostToConnectionAsync(postConnectionRequest, cancellationToken);
     }
 
-    private static FriendRequest CreateFriendRequest(string requesterId, string targetUserId, string? message)
+    private static FriendRequest CreateFriendRequest(
+        string requesterId,
+        string targetUserId,
+        string? message
+    )
     {
         return FriendRequest.Create(requesterId, targetUserId, message);
     }

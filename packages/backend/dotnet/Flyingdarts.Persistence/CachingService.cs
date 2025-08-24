@@ -33,7 +33,7 @@ public class CachingService<T> : ICachingService<T>
                 $"[DEBUG] CachingService.Load - Query results: {JsonSerializer.Serialize(results)}"
             );
 
-            if (results.Any())
+            if (results != null && results.Any())
             {
                 State = results.Single();
                 Console.WriteLine(
@@ -45,7 +45,7 @@ public class CachingService<T> : ICachingService<T>
                 Console.WriteLine(
                     $"[WARNING] CachingService.Load - No state found for gameId: {gameId}"
                 );
-                State = default(T);
+                State = default!;
             }
         }
         catch (Exception ex)
@@ -145,18 +145,19 @@ public class CachingService<T> : ICachingService<T>
             throw new InvalidOperationException("State is null, cannot add dart");
         }
 
+        var currentState = State;
         Console.WriteLine(
-            $"[DEBUG] CachingService.AddDart - Current darts count before adding: {State.Darts?.Count ?? 0}"
+            $"[DEBUG] CachingService.AddDart - Current darts count before adding: {currentState?.Darts?.Count ?? 0}"
         );
-        State.Darts.Add(dart);
+        currentState!.Darts.Add(dart);
         Console.WriteLine(
-            $"[DEBUG] CachingService.AddDart - Dart added successfully. New darts count: {State.Darts.Count}"
+            $"[DEBUG] CachingService.AddDart - Dart added successfully. New darts count: {currentState.Darts.Count}"
         );
     }
 
     public void AddUser(User user)
     {
-        if (!State.Users.Any(x => x.UserId == user.UserId))
+        if (State != null && !State.Users.Any(x => x.UserId == user.UserId))
             State.Users.Add(user);
     }
 }

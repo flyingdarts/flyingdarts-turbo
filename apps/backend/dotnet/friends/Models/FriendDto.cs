@@ -41,5 +41,5 @@ public class UserSearchDto
     public string Country { get; set; } = string.Empty;
     public bool IsAlreadyFriend { get; set; }
     public bool HasPendingRequest { get; set; }
-    public string Picture { get; set; }
+    public string? Picture { get; set; }
 }
