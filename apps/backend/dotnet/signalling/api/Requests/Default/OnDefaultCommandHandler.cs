@@ -19,7 +19,10 @@ public class OnDefaultCommandHandler : IRequestHandler<OnDefaultCommand, APIGate
         _dynamoDbService = dynamoDbService;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(OnDefaultCommand request, CancellationToken cancellationToken)
+    public async Task<APIGatewayProxyResponse> Handle(
+        OnDefaultCommand request,
+        CancellationToken cancellationToken
+    )
     {
         Console.WriteLine($"[OnDefault] Starting default message broadcast");
 
@@ -27,12 +30,20 @@ public class OnDefaultCommandHandler : IRequestHandler<OnDefaultCommand, APIGate
         {
             // Get all users with connection IDs
             var allUsers = await GetAllUsersWithConnections(cancellationToken);
-            var connectedUsers = allUsers.Where(u => !string.IsNullOrEmpty(u.ConnectionId)).ToList();
+            var connectedUsers = allUsers
+                .Where(u => !string.IsNullOrEmpty(u.ConnectionId))
+                .ToList();
 
-            Console.WriteLine($"[OnDefault] Found {connectedUsers.Count} connected users to broadcast to");
+            Console.WriteLine(
+                $"[OnDefault] Found {connectedUsers.Count} connected users to broadcast to"
+            );
 
             // Construct the socket message
-            var socketMessage = new SocketMessage<OnDefaultCommand> { Message = request, Action = "default$" };
+            var socketMessage = new SocketMessage<OnDefaultCommand>
+            {
+                Message = request,
+                Action = "default$",
+            };
 
             var messageJson = JsonSerializer.Serialize(socketMessage);
             var messageBytes = Encoding.UTF8.GetBytes(messageJson);
@@ -45,27 +56,42 @@ public class OnDefaultCommandHandler : IRequestHandler<OnDefaultCommand, APIGate
                 {
                     // Create a new stream for each connection to avoid position issues
                     var stream = new MemoryStream(messageBytes);
-                    var postConnectionRequest = new PostToConnectionRequest { ConnectionId = user.ConnectionId, Data = stream };
+                    var postConnectionRequest = new PostToConnectionRequest
+                    {
+                        ConnectionId = user.ConnectionId!,
+                        Data = stream,
+                    };
 
-                    Console.WriteLine($"[OnDefault] Broadcasting to connection {successCount}: {user.ConnectionId}");
-                    await request.ApiGatewayManagementApiClient.PostToConnectionAsync(postConnectionRequest, cancellationToken);
+                    Console.WriteLine(
+                        $"[OnDefault] Broadcasting to connection {successCount}: {user.ConnectionId}"
+                    );
+                    await request.ApiGatewayManagementApiClient.PostToConnectionAsync(
+                        postConnectionRequest,
+                        cancellationToken
+                    );
                     successCount++;
                 }
                 catch (GoneException)
                 {
                     // Connection is no longer available, remove the connection ID
-                    Console.WriteLine($"[OnDefault] Connection {user.ConnectionId} is no longer available, removing connection ID");
-                    user.ConnectionId = null;
+                    Console.WriteLine(
+                        $"[OnDefault] Connection {user.ConnectionId} is no longer available, removing connection ID"
+                    );
+                    user.ConnectionId = string.Empty;
                     await _dynamoDbService.WriteUserAsync(user, cancellationToken);
                 }
                 catch (Exception ex)
                 {
                     // Log other errors but don't fail the entire operation
-                    Console.WriteLine($"[OnDefault] Error sending to connection {user.ConnectionId}: {ex.Message}");
+                    Console.WriteLine(
+                        $"[OnDefault] Error sending to connection {user.ConnectionId}: {ex.Message}"
+                    );
                 }
             }
 
-            Console.WriteLine($"[OnDefault] Successfully broadcasted to {successCount} connections");
+            Console.WriteLine(
+                $"[OnDefault] Successfully broadcasted to {successCount} connections"
+            );
 
             return ResponseBuilder.SuccessJson(socketMessage, 200);
         }
@@ -83,7 +109,9 @@ public class OnDefaultCommandHandler : IRequestHandler<OnDefaultCommand, APIGate
         var allUsers = await _dynamoDbService.ReadAllUsersAsync(cancellationToken);
         var connectedUsers = allUsers.Where(u => !string.IsNullOrEmpty(u.ConnectionId)).ToList();
 
-        Console.WriteLine($"[OnDefault] Found {allUsers.Count} total users, {connectedUsers.Count} with active connections");
+        Console.WriteLine(
+            $"[OnDefault] Found {allUsers.Count} total users, {connectedUsers.Count} with active connections"
+        );
 
         return connectedUsers;
     }

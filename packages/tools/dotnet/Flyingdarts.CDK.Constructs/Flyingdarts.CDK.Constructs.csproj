@@ -6,7 +6,7 @@
     <LangVersion>latest</LangVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Title>Flyingdarts.CDK.Constructs</Title>
-    <VersionPrefix>1.0.2</VersionPrefix>
+    <VersionPrefix>1.0.3-alpha.0</VersionPrefix>
     <Version>$(VersionPrefix)</Version>
     <PackageId>Flyingdarts.CDK.Constructs</PackageId>
     <Authors>Flyingdarts</Authors>

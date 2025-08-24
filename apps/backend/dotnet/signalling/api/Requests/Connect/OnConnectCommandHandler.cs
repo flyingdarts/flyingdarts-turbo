@@ -226,7 +226,7 @@ public class OnConnectCommandHandler : IRequestHandler<OnConnectCommand, APIGate
 
             return new UserProfile
             {
-                UserName = jsonPayload["sub"]?.ToString() ?? "unknown",
+                UserName = jsonPayload?["sub"]?.ToString() ?? "unknown",
                 Email = "mike+test@flyingdarts.net",
                 Country = "NL",
                 Picture =

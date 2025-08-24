@@ -22,30 +22,60 @@ public class DyteApiClientWrapper : IDyteApiClientWrapper
     }
 
     /// <inheritdoc />
-    public async Task<MeetingsPostResponse> CreateMeetingAsync(CreateMeetingRequest request, CancellationToken cancellationToken)
+    public async Task<MeetingsPostResponse> CreateMeetingAsync(
+        CreateMeetingRequest request,
+        CancellationToken cancellationToken
+    )
     {
-        return await _client.Meetings.PostAsMeetingsPostResponseAsync(request, cancellationToken: cancellationToken);
+        var result = await _client.Meetings.PostAsMeetingsPostResponseAsync(
+            request,
+            cancellationToken: cancellationToken
+        );
+        return result ?? new MeetingsPostResponse();
     }
 
     /// <inheritdoc />
-    public async Task<WithMeeting_GetResponse> GetMeetingByIdAsync(string meetingId, CancellationToken cancellationToken)
+    public async Task<WithMeeting_GetResponse> GetMeetingByIdAsync(
+        string meetingId,
+        CancellationToken cancellationToken
+    )
     {
-        return await _client.Meetings[meetingId].GetAsWithMeeting_GetResponseAsync(cancellationToken: cancellationToken);
+        if (!Guid.TryParse(meetingId, out var meetingGuid))
+        {
+            throw new ArgumentException("Meeting ID must be a valid GUID", nameof(meetingId));
+        }
+        var result = await _client
+            .Meetings[meetingGuid]
+            .GetAsWithMeeting_GetResponseAsync(cancellationToken: cancellationToken);
+        return result ?? new WithMeeting_GetResponse();
     }
 
     /// <inheritdoc />
-    public async Task<MeetingsGetResponse> SearchMeetingsAsync(string searchQuery, CancellationToken cancellationToken)
+    public async Task<MeetingsGetResponse> SearchMeetingsAsync(
+        string searchQuery,
+        CancellationToken cancellationToken
+    )
     {
-        return await _client.Meetings.GetAsMeetingsGetResponseAsync(
-            config => config.QueryParameters.Search = searchQuery,
+        var result = await _client.Meetings.GetAsMeetingsGetResponseAsync(
+            config =>
+            {
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    config.QueryParameters.Search = searchQuery;
+                }
+            },
             cancellationToken
         );
+        return result ?? new MeetingsGetResponse();
     }
 
     /// <inheritdoc />
     public async Task<MeetingsGetResponse> GetAllMeetingsAsync(CancellationToken cancellationToken)
     {
-        return await _client.Meetings.GetAsMeetingsGetResponseAsync(cancellationToken: cancellationToken);
+        var result = await _client.Meetings.GetAsMeetingsGetResponseAsync(
+            cancellationToken: cancellationToken
+        );
+        return result ?? new MeetingsGetResponse();
     }
 
     /// <inheritdoc />
@@ -55,6 +85,13 @@ public class DyteApiClientWrapper : IDyteApiClientWrapper
         CancellationToken cancellationToken
     )
     {
-        return await _client.Meetings[meetingId].Participants.PostAsParticipantsPostResponseAsync(request, null, cancellationToken);
+        if (!Guid.TryParse(meetingId, out var meetingGuid))
+        {
+            throw new ArgumentException("Meeting ID must be a valid GUID", nameof(meetingId));
+        }
+        var result = await _client
+            .Meetings[meetingGuid]
+            .Participants.PostAsParticipantsPostResponseAsync(request, null, cancellationToken);
+        return result ?? new ParticipantsPostResponse();
     }
 }

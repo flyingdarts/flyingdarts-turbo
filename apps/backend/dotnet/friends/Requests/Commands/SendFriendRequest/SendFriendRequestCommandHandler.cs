@@ -177,7 +177,7 @@ public class SendFriendRequestCommandHandler
     private static FriendRequest CreateFriendRequest(
         string requesterId,
         string targetUserId,
-        string? message
+        string message
     )
     {
         return FriendRequest.Create(requesterId, targetUserId, message);

@@ -20,7 +20,10 @@ public record CreateX01ScoreCommandHandler(
     ConnectionService ConnectionService
 ) : IRequestHandler<CreateX01ScoreCommand, APIGatewayProxyResponse>
 {
-    public async Task<APIGatewayProxyResponse> Handle(CreateX01ScoreCommand request, CancellationToken cancellationToken)
+    public async Task<APIGatewayProxyResponse> Handle(
+        CreateX01ScoreCommand request,
+        CancellationToken cancellationToken
+    )
     {
         Console.WriteLine(
             $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Starting with request: GameId={request.GameId}, PlayerId={request.PlayerId}, Score={request.Score}, Input={request.Input}"
@@ -30,7 +33,9 @@ public record CreateX01ScoreCommandHandler(
         ArgumentNullException.ThrowIfNull(request.GameId);
         ArgumentNullException.ThrowIfNull(request.ConnectionId);
 
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - All arguments validated successfully");
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - All arguments validated successfully"
+        );
 
         var socketMessage = new SocketMessage<CreateX01ScoreCommand> { Action = "games/x01/score" };
 
@@ -38,12 +43,22 @@ public record CreateX01ScoreCommandHandler(
 
         var playerId = await GetPlayerIdAsync(request.PlayerId, cancellationToken);
         // Update connection ID
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Updating connection ID for player {playerId}");
-        await ConnectionService.UpdateConnectionIdAsync(playerId, request.ConnectionId, cancellationToken);
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Connection ID updated successfully");
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Updating connection ID for player {playerId}"
+        );
+        await ConnectionService.UpdateConnectionIdAsync(
+            playerId,
+            request.ConnectionId,
+            cancellationToken
+        );
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Connection ID updated successfully"
+        );
 
         // Load game state
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Loading game state for game {request.GameId}");
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Loading game state for game {request.GameId}"
+        );
         await CachingService.Load(request.GameId, cancellationToken);
         Console.WriteLine(
             $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Game state loaded. State is null: {CachingService.State == null}"
@@ -52,24 +67,41 @@ public record CreateX01ScoreCommandHandler(
         // Create and save dart record
         Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Creating dart record");
         await CreateDartRecordAsync(request, playerId, cancellationToken);
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Dart record created and saved");
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Dart record created and saved"
+        );
 
         // Check if game is finished and update accordingly
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Checking game completion");
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Checking game completion"
+        );
         await HandleGameCompletionAsync(request.GameId, playerId, cancellationToken);
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Game completion check finished");
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Game completion check finished"
+        );
 
         // Populate metadata as the final step
         Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Getting metadata");
-        var metadata = await MetadataService.GetMetadataAsync(request.GameId, playerId, cancellationToken);
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Metadata retrieved successfully");
+        var metadata = await MetadataService.GetMetadataAsync(
+            request.GameId,
+            playerId,
+            cancellationToken
+        );
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Metadata retrieved successfully"
+        );
 
         socketMessage.Metadata = metadata.ToDictionary();
 
         // Get all player connection IDs
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Getting player connection IDs");
-        var gameUsers = CachingService.State.Users;
-        var playerConnectionIds = gameUsers.Select(x => x.ConnectionId).Where(id => !string.IsNullOrEmpty(id)).ToArray();
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Getting player connection IDs"
+        );
+        var gameUsers = CachingService.State?.Users ?? new List<User>();
+        var playerConnectionIds = gameUsers
+            .Select(x => x.ConnectionId)
+            .Where(id => !string.IsNullOrEmpty(id))
+            .ToArray();
         Console.WriteLine(
             $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Found {playerConnectionIds.Length} player connection IDs: [{string.Join(", ", playerConnectionIds)}]"
         );
@@ -77,30 +109,52 @@ public record CreateX01ScoreCommandHandler(
         // Notify people in the room
         Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Notifying room");
         await NotifyRoomAsync(socketMessage, playerConnectionIds, cancellationToken);
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Room notification completed");
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Room notification completed"
+        );
 
-        Console.WriteLine($"[DEBUG] CreateX01ScoreCommandHandler.Handle - Returning successful response");
-        return new APIGatewayProxyResponse { StatusCode = 200, Body = JsonSerializer.Serialize(socketMessage) };
+        Console.WriteLine(
+            $"[DEBUG] CreateX01ScoreCommandHandler.Handle - Returning successful response"
+        );
+        return new APIGatewayProxyResponse
+        {
+            StatusCode = 200,
+            Body = JsonSerializer.Serialize(socketMessage),
+        };
     }
 
-    private async Task<string> GetPlayerIdAsync(string authProviderUserId, CancellationToken cancellationToken)
+    private async Task<string> GetPlayerIdAsync(
+        string authProviderUserId,
+        CancellationToken cancellationToken
+    )
     {
-        var user = await DynamoDbService.ReadUserByAuthProviderUserIdAsync(authProviderUserId, cancellationToken);
+        var user = await DynamoDbService.ReadUserByAuthProviderUserIdAsync(
+            authProviderUserId,
+            cancellationToken
+        );
         return user.UserId;
     }
 
-    private async Task CreateDartRecordAsync(CreateX01ScoreCommand request, string playerId, CancellationToken cancellationToken)
+    private async Task CreateDartRecordAsync(
+        CreateX01ScoreCommand request,
+        string playerId,
+        CancellationToken cancellationToken
+    )
     {
         Console.WriteLine(
             $"[DEBUG] CreateDartRecordAsync - Starting with request: GameId={request.GameId}, PlayerId={playerId}, Score={request.Score}, Input={request.Input}"
         );
 
         var setsAndLegs = GetSetsAndLegs();
-        Console.WriteLine($"[DEBUG] CreateDartRecordAsync - GetSetsAndLegs returned: {setsAndLegs}");
+        Console.WriteLine(
+            $"[DEBUG] CreateDartRecordAsync - GetSetsAndLegs returned: {setsAndLegs}"
+        );
 
         if (setsAndLegs is null)
         {
-            Console.WriteLine($"[ERROR] CreateDartRecordAsync - GetSetsAndLegs returned null, cannot create dart record");
+            Console.WriteLine(
+                $"[ERROR] CreateDartRecordAsync - GetSetsAndLegs returned null, cannot create dart record"
+            );
             return;
         }
 
@@ -124,11 +178,15 @@ public record CreateX01ScoreCommandHandler(
         try
         {
             await DynamoDbService.WriteGameDartAsync(gameDart, cancellationToken);
-            Console.WriteLine($"[DEBUG] CreateDartRecordAsync - Dart written to database successfully");
+            Console.WriteLine(
+                $"[DEBUG] CreateDartRecordAsync - Dart written to database successfully"
+            );
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[ERROR] CreateDartRecordAsync - Failed to write dart to database: {ex.Message}");
+            Console.WriteLine(
+                $"[ERROR] CreateDartRecordAsync - Failed to write dart to database: {ex.Message}"
+            );
             Console.WriteLine($"[ERROR] CreateDartRecordAsync - Exception details: {ex}");
             throw;
         }
@@ -138,12 +196,14 @@ public record CreateX01ScoreCommandHandler(
         {
             CachingService.AddDart(gameDart);
             Console.WriteLine(
-                $"[DEBUG] CreateDartRecordAsync - Dart added to cache successfully. Cache now has {CachingService.State.Darts.Count} darts"
+                $"[DEBUG] CreateDartRecordAsync - Dart added to cache successfully. Cache now has {CachingService.State?.Darts?.Count ?? 0} darts"
             );
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[ERROR] CreateDartRecordAsync - Failed to add dart to cache: {ex.Message}");
+            Console.WriteLine(
+                $"[ERROR] CreateDartRecordAsync - Failed to add dart to cache: {ex.Message}"
+            );
             Console.WriteLine($"[ERROR] CreateDartRecordAsync - Exception details: {ex}");
             throw;
         }
@@ -156,7 +216,9 @@ public record CreateX01ScoreCommandHandler(
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[ERROR] CreateDartRecordAsync - Failed to save cache: {ex.Message}");
+            Console.WriteLine(
+                $"[ERROR] CreateDartRecordAsync - Failed to save cache: {ex.Message}"
+            );
             Console.WriteLine($"[ERROR] CreateDartRecordAsync - Exception details: {ex}");
             throw;
         }
@@ -164,25 +226,41 @@ public record CreateX01ScoreCommandHandler(
         Console.WriteLine($"[DEBUG] CreateDartRecordAsync - Completed successfully");
     }
 
-    private async Task HandleGameCompletionAsync(string gameId, string playerId, CancellationToken cancellationToken)
+    private async Task HandleGameCompletionAsync(
+        string gameId,
+        string playerId,
+        CancellationToken cancellationToken
+    )
     {
-        Console.WriteLine($"[DEBUG] HandleGameCompletionAsync - Starting with gameId={gameId}, playerId={playerId}");
+        Console.WriteLine(
+            $"[DEBUG] HandleGameCompletionAsync - Starting with gameId={gameId}, playerId={playerId}"
+        );
 
         var metadata = await MetadataService.GetMetadataAsync(gameId, playerId, cancellationToken);
-        Console.WriteLine($"[DEBUG] HandleGameCompletionAsync - Metadata retrieved, WinningPlayer={metadata.WinningPlayer}");
+        Console.WriteLine(
+            $"[DEBUG] HandleGameCompletionAsync - Metadata retrieved, WinningPlayer={metadata.WinningPlayer}"
+        );
 
         if (metadata.WinningPlayer is not null)
         {
-            Console.WriteLine($"[DEBUG] HandleGameCompletionAsync - Game has a winner, updating game status to Finished");
-            var game = (await DynamoDbService.ReadStartedGameAsync(long.Parse(gameId), cancellationToken)).Single();
+            Console.WriteLine(
+                $"[DEBUG] HandleGameCompletionAsync - Game has a winner, updating game status to Finished"
+            );
+            var game = (
+                await DynamoDbService.ReadStartedGameAsync(long.Parse(gameId), cancellationToken)
+            ).Single();
             game.Status = GameStatus.Finished;
 
             // Write game to database and cache
-            Console.WriteLine($"[DEBUG] HandleGameCompletionAsync - Writing finished game to database");
+            Console.WriteLine(
+                $"[DEBUG] HandleGameCompletionAsync - Writing finished game to database"
+            );
             await DynamoDbService.WriteGameAsync(game, cancellationToken);
             CachingService.AddGame(game);
             await CachingService.Save(cancellationToken);
-            Console.WriteLine($"[DEBUG] HandleGameCompletionAsync - Finished game saved successfully");
+            Console.WriteLine(
+                $"[DEBUG] HandleGameCompletionAsync - Finished game saved successfully"
+            );
         }
         else
         {
@@ -193,7 +271,7 @@ public record CreateX01ScoreCommandHandler(
     private (int Set, int Leg)? GetSetsAndLegs()
     {
         Console.WriteLine($"[DEBUG] GetSetsAndLegs - Starting");
-        var darts = CachingService.State.Darts;
+        var darts = CachingService.State?.Darts ?? new List<GameDart>();
         Console.WriteLine($"[DEBUG] GetSetsAndLegs - Current darts count: {darts?.Count ?? 0}");
 
         if (darts is { Count: 0 })
@@ -204,7 +282,8 @@ public record CreateX01ScoreCommandHandler(
 
         int currentSet = 1;
         int currentLeg = 1;
-        int legsNeededToWinSet = (CachingService.State.Game.X01.Legs + 1) / 2;
+        var x01 = CachingService.State?.Game?.X01;
+        int legsNeededToWinSet = ((x01?.Legs ?? 1) + 1) / 2;
         Console.WriteLine(
             $"[DEBUG] GetSetsAndLegs - Initial values: currentSet={currentSet}, currentLeg={currentLeg}, legsNeededToWinSet={legsNeededToWinSet}"
         );
@@ -212,8 +291,13 @@ public record CreateX01ScoreCommandHandler(
         // Track leg wins per player per set
         var legWinsPerPlayer = new Dictionary<string, int>();
 
-        foreach (var dart in darts)
+        var safeDarts = darts ?? Enumerable.Empty<GameDart>();
+        foreach (var dart in safeDarts)
         {
+            if (dart is null)
+            {
+                continue;
+            }
             Console.WriteLine(
                 $"[DEBUG] GetSetsAndLegs - Processing dart: PlayerId={dart.PlayerId}, GameScore={dart.GameScore}, Set={dart.Set}, Leg={dart.Leg}"
             );
@@ -228,7 +312,9 @@ public record CreateX01ScoreCommandHandler(
                 // Check if the player has won enough legs to win the set
                 if (legWinsPerPlayer[dart.PlayerId] >= legsNeededToWinSet)
                 {
-                    Console.WriteLine($"[DEBUG] GetSetsAndLegs - Player {dart.PlayerId} won the set, moving to next set");
+                    Console.WriteLine(
+                        $"[DEBUG] GetSetsAndLegs - Player {dart.PlayerId} won the set, moving to next set"
+                    );
                     currentSet++;
                     currentLeg = 1; // Reset leg count for the new set
 
@@ -237,13 +323,17 @@ public record CreateX01ScoreCommandHandler(
                 }
                 else
                 {
-                    Console.WriteLine($"[DEBUG] GetSetsAndLegs - Player {dart.PlayerId} won a leg but not the set, moving to next leg");
+                    Console.WriteLine(
+                        $"[DEBUG] GetSetsAndLegs - Player {dart.PlayerId} won a leg but not the set, moving to next leg"
+                    );
                     currentLeg++; // Move to the next leg within the same set
                 }
             }
         }
 
-        Console.WriteLine($"[DEBUG] GetSetsAndLegs - Final result: Set={currentSet}, Leg={currentLeg}");
+        Console.WriteLine(
+            $"[DEBUG] GetSetsAndLegs - Final result: Set={currentSet}, Leg={currentLeg}"
+        );
         return (currentSet, currentLeg);
     }
 
@@ -253,7 +343,9 @@ public record CreateX01ScoreCommandHandler(
         CancellationToken cancellationToken
     )
     {
-        Console.WriteLine($"[DEBUG] NotifyRoomAsync - Starting with {connectionIds.Length} connection IDs");
+        Console.WriteLine(
+            $"[DEBUG] NotifyRoomAsync - Starting with {connectionIds.Length} connection IDs"
+        );
 
         if (connectionIds.Length == 0)
         {
@@ -263,33 +355,52 @@ public record CreateX01ScoreCommandHandler(
 
         var messageJson = JsonSerializer.Serialize(socketMessage);
         var messageBytes = Encoding.UTF8.GetBytes(messageJson);
-        Console.WriteLine($"[DEBUG] NotifyRoomAsync - Message serialized, size: {messageBytes.Length} bytes");
+        Console.WriteLine(
+            $"[DEBUG] NotifyRoomAsync - Message serialized, size: {messageBytes.Length} bytes"
+        );
 
         var tasks = connectionIds
             .Select(async connectionId =>
             {
-                Console.WriteLine($"[DEBUG] NotifyRoomAsync - Sending message to connection {connectionId}");
+                Console.WriteLine(
+                    $"[DEBUG] NotifyRoomAsync - Sending message to connection {connectionId}"
+                );
                 var stream = new MemoryStream(messageBytes);
-                var postConnectionRequest = new PostToConnectionRequest { ConnectionId = connectionId, Data = stream };
+                var postConnectionRequest = new PostToConnectionRequest
+                {
+                    ConnectionId = connectionId,
+                    Data = stream,
+                };
 
                 try
                 {
-                    await ApiGatewayClient.PostToConnectionAsync(postConnectionRequest, cancellationToken);
-                    Console.WriteLine($"[DEBUG] NotifyRoomAsync - Successfully sent message to connection {connectionId}");
+                    await ApiGatewayClient.PostToConnectionAsync(
+                        postConnectionRequest,
+                        cancellationToken
+                    );
+                    Console.WriteLine(
+                        $"[DEBUG] NotifyRoomAsync - Successfully sent message to connection {connectionId}"
+                    );
                 }
                 catch (GoneException)
                 {
-                    Console.WriteLine($"[DEBUG] NotifyRoomAsync - Connection {connectionId} is no longer available, ignoring");
+                    Console.WriteLine(
+                        $"[DEBUG] NotifyRoomAsync - Connection {connectionId} is no longer available, ignoring"
+                    );
                     // Connection is no longer available, ignore
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"[ERROR] NotifyRoomAsync - Failed to send message to connection {connectionId}: {ex.Message}");
+                    Console.WriteLine(
+                        $"[ERROR] NotifyRoomAsync - Failed to send message to connection {connectionId}: {ex.Message}"
+                    );
                 }
             })
             .ToArray();
 
         await Task.WhenAll(tasks);
-        Console.WriteLine($"[DEBUG] NotifyRoomAsync - Completed sending messages to all connections");
+        Console.WriteLine(
+            $"[DEBUG] NotifyRoomAsync - Completed sending messages to all connections"
+        );
     }
 }
