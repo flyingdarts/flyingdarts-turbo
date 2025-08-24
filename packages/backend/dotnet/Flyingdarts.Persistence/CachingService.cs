@@ -23,7 +23,7 @@ public class CachingService<T> : ICachingService<T>
         try
         {
             var results = await DbContext
-                .FromQueryAsync<T>(Query(gameId), OperationConfig)
+                .FromQueryAsyncCompat<T>(Query(gameId), OperationConfig)
                 .GetRemainingAsync(cancellationToken);
 
             Console.WriteLine(
@@ -76,7 +76,7 @@ public class CachingService<T> : ICachingService<T>
 
         try
         {
-            var stateWrite = DbContext.CreateBatchWrite<T>(OperationConfig);
+            var stateWrite = DbContext.CreateBatchWriteCompat<T>(OperationConfig);
             Console.WriteLine($"[DEBUG] CachingService.Save - Created batch write operation");
 
             stateWrite.AddPutItem(State);

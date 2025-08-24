@@ -6,6 +6,7 @@ using Moq;
 
 namespace Flyingdarts.DynamoDb.Service.Tests;
 
+#pragma warning disable CS0618 // Suppress deprecation warnings for legacy DynamoDBContext overloads in tests
 public class DynamoDbServiceTests
 {
     [Fact]
@@ -20,13 +21,23 @@ public class DynamoDbServiceTests
 
         // Mock the query to return an empty list (simulating null/empty result)
         var mockAsyncSearch = new Mock<IAsyncSearch<User>>();
-        mockAsyncSearch.Setup(x => x.GetRemainingAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<User>());
+        mockAsyncSearch
+            .Setup(x => x.GetRemainingAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<User>());
 
         mockDbContext
-            .Setup(x => x.FromQueryAsync<User>(It.IsAny<QueryOperationConfig>(), It.IsAny<DynamoDBOperationConfig>()))
+            .Setup(x =>
+                x.FromQueryAsync<User>(
+                    It.IsAny<QueryOperationConfig>(),
+                    It.IsAny<DynamoDBOperationConfig>()
+                )
+            )
             .Returns(mockAsyncSearch.Object);
 
-        var dynamoDbService = new DynamoDbService(mockDbContext.Object, mockApplicationOptions.Object);
+        var dynamoDbService = new DynamoDbService(
+            mockDbContext.Object,
+            mockApplicationOptions.Object
+        );
         var authProviderUserId = "test-auth-provider-user-id";
         var cancellationToken = CancellationToken.None;
 
@@ -38,7 +49,10 @@ public class DynamoDbServiceTests
         // Verify the exception details
         Assert.Equal("authProviderUserId", exception.SearchParam);
         Assert.Equal(authProviderUserId, exception.UserId);
-        Assert.Contains($"User not found by authProviderUserId: {authProviderUserId}", exception.Message);
+        Assert.Contains(
+            $"User not found by authProviderUserId: {authProviderUserId}",
+            exception.Message
+        );
     }
 
     [Fact]
@@ -53,13 +67,23 @@ public class DynamoDbServiceTests
 
         // Mock the query to return an empty list
         var mockAsyncSearch = new Mock<IAsyncSearch<User>>();
-        mockAsyncSearch.Setup(x => x.GetRemainingAsync(It.IsAny<CancellationToken>())).ReturnsAsync(new List<User>());
+        mockAsyncSearch
+            .Setup(x => x.GetRemainingAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<User>());
 
         mockDbContext
-            .Setup(x => x.FromQueryAsync<User>(It.IsAny<QueryOperationConfig>(), It.IsAny<DynamoDBOperationConfig>()))
+            .Setup(x =>
+                x.FromQueryAsync<User>(
+                    It.IsAny<QueryOperationConfig>(),
+                    It.IsAny<DynamoDBOperationConfig>()
+                )
+            )
             .Returns(mockAsyncSearch.Object);
 
-        var dynamoDbService = new DynamoDbService(mockDbContext.Object, mockApplicationOptions.Object);
+        var dynamoDbService = new DynamoDbService(
+            mockDbContext.Object,
+            mockApplicationOptions.Object
+        );
         var authProviderUserId = "non-existent-user-id";
         var cancellationToken = CancellationToken.None;
 
@@ -71,7 +95,10 @@ public class DynamoDbServiceTests
         // Verify the exception details
         Assert.Equal("authProviderUserId", exception.SearchParam);
         Assert.Equal(authProviderUserId, exception.UserId);
-        Assert.Contains($"User not found by authProviderUserId: {authProviderUserId}", exception.Message);
+        Assert.Contains(
+            $"User not found by authProviderUserId: {authProviderUserId}",
+            exception.Message
+        );
     }
 
     [Fact]
@@ -99,18 +126,31 @@ public class DynamoDbServiceTests
         var queryResult = new List<User> { existingUser };
 
         var mockAsyncSearch = new Mock<IAsyncSearch<User>>();
-        mockAsyncSearch.Setup(x => x.GetRemainingAsync(It.IsAny<CancellationToken>())).ReturnsAsync(queryResult);
+        mockAsyncSearch
+            .Setup(x => x.GetRemainingAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(queryResult);
 
         mockDbContext
-            .Setup(x => x.FromQueryAsync<User>(It.IsAny<QueryOperationConfig>(), It.IsAny<DynamoDBOperationConfig>()))
+            .Setup(x =>
+                x.FromQueryAsync<User>(
+                    It.IsAny<QueryOperationConfig>(),
+                    It.IsAny<DynamoDBOperationConfig>()
+                )
+            )
             .Returns(mockAsyncSearch.Object);
 
-        var dynamoDbService = new DynamoDbService(mockDbContext.Object, mockApplicationOptions.Object);
+        var dynamoDbService = new DynamoDbService(
+            mockDbContext.Object,
+            mockApplicationOptions.Object
+        );
         var authProviderUserId = "test-auth-provider-user-id";
         var cancellationToken = CancellationToken.None;
 
         // Act
-        var result = await dynamoDbService.ReadUserByAuthProviderUserIdAsync(authProviderUserId, cancellationToken);
+        var result = await dynamoDbService.ReadUserByAuthProviderUserIdAsync(
+            authProviderUserId,
+            cancellationToken
+        );
 
         // Assert
         Assert.NotNull(result);
@@ -119,3 +159,4 @@ public class DynamoDbServiceTests
         Assert.Equal(existingUser.Profile.UserName, result.Profile.UserName);
     }
 }
+#pragma warning restore CS0618

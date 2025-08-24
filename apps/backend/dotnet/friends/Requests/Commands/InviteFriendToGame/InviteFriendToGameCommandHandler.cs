@@ -4,18 +4,25 @@ using Amazon.DynamoDBv2.DocumentModel;
 
 namespace Flyingdarts.Backend.Friends.Api.Requests.Commands.InviteFriendToGame;
 
-public class InviteFriendToGameCommandHandler : IRequestHandler<InviteFriendToGameCommand, APIGatewayProxyResponse>
+public class InviteFriendToGameCommandHandler
+    : IRequestHandler<InviteFriendToGameCommand, APIGatewayProxyResponse>
 {
     private readonly IDynamoDBContext _dbContext;
     private readonly IOptions<ApplicationOptions> _options;
 
-    public InviteFriendToGameCommandHandler(IDynamoDBContext dbContext, IOptions<ApplicationOptions> options)
+    public InviteFriendToGameCommandHandler(
+        IDynamoDBContext dbContext,
+        IOptions<ApplicationOptions> options
+    )
     {
         _dbContext = dbContext;
         _options = options;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(InviteFriendToGameCommand request, CancellationToken cancellationToken)
+    public async Task<APIGatewayProxyResponse> Handle(
+        InviteFriendToGameCommand request,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
@@ -26,18 +33,24 @@ public class InviteFriendToGameCommandHandler : IRequestHandler<InviteFriendToGa
             // Validate request
             if (!request.FriendIds.Any())
             {
-                Console.WriteLine($"[InviteFriendToGameCommandHandler] No friends selected for invitation by user: {request.InviterId}");
+                Console.WriteLine(
+                    $"[InviteFriendToGameCommandHandler] No friends selected for invitation by user: {request.InviterId}"
+                );
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
-                    Body = JsonSerializer.Serialize(new { error = "At least one friend must be selected" }),
+                    Body = JsonSerializer.Serialize(
+                        new { error = "At least one friend must be selected" }
+                    ),
                     Headers = GetCorsHeaders(),
                 };
             }
 
             if (string.IsNullOrWhiteSpace(request.GameType))
             {
-                Console.WriteLine($"[InviteFriendToGameCommandHandler] GameType is missing for user: {request.InviterId}");
+                Console.WriteLine(
+                    $"[InviteFriendToGameCommandHandler] GameType is missing for user: {request.InviterId}"
+                );
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
@@ -50,7 +63,11 @@ public class InviteFriendToGameCommandHandler : IRequestHandler<InviteFriendToGa
             var validFriends = new List<string>();
             foreach (var friendId in request.FriendIds)
             {
-                var isFriend = await VerifyFriendshipAsync(request.InviterId, friendId, cancellationToken);
+                var isFriend = await VerifyFriendshipAsync(
+                    request.InviterId,
+                    friendId,
+                    cancellationToken
+                );
                 if (isFriend)
                 {
                     validFriends.Add(friendId);
@@ -69,11 +86,15 @@ public class InviteFriendToGameCommandHandler : IRequestHandler<InviteFriendToGa
 
             if (!validFriends.Any())
             {
-                Console.WriteLine($"[InviteFriendToGameCommandHandler] No valid friends found to invite for user: {request.InviterId}");
+                Console.WriteLine(
+                    $"[InviteFriendToGameCommandHandler] No valid friends found to invite for user: {request.InviterId}"
+                );
                 return new APIGatewayProxyResponse
                 {
                     StatusCode = 400,
-                    Body = JsonSerializer.Serialize(new { error = "No valid friends found to invite" }),
+                    Body = JsonSerializer.Serialize(
+                        new { error = "No valid friends found to invite" }
+                    ),
                     Headers = GetCorsHeaders(),
                 };
             }
@@ -117,17 +138,28 @@ public class InviteFriendToGameCommandHandler : IRequestHandler<InviteFriendToGa
         }
     }
 
-    private async Task<bool> VerifyFriendshipAsync(string userId, string friendId, CancellationToken cancellationToken)
+    private async Task<bool> VerifyFriendshipAsync(
+        string userId,
+        string friendId,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
-            var queryFilter = new QueryFilter("PK", QueryOperator.Equal, Constants.FriendRelationship);
+            var queryFilter = new QueryFilter(
+                "PK",
+                QueryOperator.Equal,
+                Constants.FriendRelationship
+            );
             queryFilter.AddCondition("SK", QueryOperator.Equal, $"{userId}#{friendId}");
 
             var queryConfig = new QueryOperationConfig { Filter = queryFilter };
 
             var results = await _dbContext
-                .FromQueryAsync<FriendRelationship>(queryConfig, _options.Value.ToOperationConfig())
+                .FromQueryAsyncCompat<FriendRelationship>(
+                    queryConfig,
+                    _options.Value.ToOperationConfig()
+                )
                 .GetRemainingAsync(cancellationToken);
 
             return results.Any(f => f.Status == FriendshipStatus.Accepted);
@@ -168,7 +200,9 @@ public class InviteFriendToGameCommandHandler : IRequestHandler<InviteFriendToGa
         }
 
         // Save invitations
-        var batch = _dbContext.CreateBatchWrite<GameInvitation>(_options.Value.ToOperationConfig());
+        var batch = _dbContext.CreateBatchWriteCompat<GameInvitation>(
+            _options.Value.ToOperationConfig()
+        );
         foreach (var invitation in invitations)
         {
             batch.AddPutItem(invitation);
