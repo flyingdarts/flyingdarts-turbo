@@ -3,7 +3,7 @@ namespace Flyingdarts.CDK.Constructs;
 public abstract class BaseConstructProps
 {
     protected abstract string ConstructName { get; }
-    public DeploymentEnvironment DeploymentEnvironment { get; set; }
+    public required DeploymentEnvironment DeploymentEnvironment { get; init; }
 
     public virtual string GetResourceIdentifier(string resource)
     {

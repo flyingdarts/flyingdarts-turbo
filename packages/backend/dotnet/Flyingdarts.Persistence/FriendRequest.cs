@@ -3,13 +3,13 @@ namespace Flyingdarts.Persistence;
 public class FriendRequest : IPrimaryKeyItem, ISortKeyItem
 {
     [DynamoDBHashKey("PK")]
-    public string PrimaryKey { get; set; } // "FRIEND#REQUEST"
+    public string PrimaryKey { get; set; } = Constants.FriendRequest; // "FRIEND#REQUEST"
 
     [DynamoDBRangeKey("SK")]
-    public string SortKey { get; set; } // "{TargetUserId}#{RequesterId}#{CreatedAt.Ticks}"
+    public string SortKey { get; set; } = string.Empty; // "{TargetUserId}#{RequesterId}#{CreatedAt.Ticks}"
 
-    public string RequesterId { get; set; }
-    public string TargetUserId { get; set; }
+    public string RequesterId { get; set; } = string.Empty;
+    public string TargetUserId { get; set; } = string.Empty;
     public string? Message { get; set; }
     public DateTime CreatedAt { get; set; }
     public FriendRequestStatus Status { get; set; }

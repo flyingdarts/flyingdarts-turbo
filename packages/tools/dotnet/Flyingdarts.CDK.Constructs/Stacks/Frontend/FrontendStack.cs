@@ -6,7 +6,7 @@ public class FrontendStack : BaseStack<FrontendStackProps>
 {
     private WebApplicationHostingConstruct WebApp { get; }
     private CnameRecord CnameRecord { get; }
-    private ARecord ARecord { get; }
+    private ARecord? ARecord { get; }
     private string DomainName => CnameRecord.DomainName;
 
     public FrontendStack(Construct scope, FrontendStackProps props)

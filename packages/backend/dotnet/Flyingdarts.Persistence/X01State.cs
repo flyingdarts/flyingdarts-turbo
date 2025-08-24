@@ -6,9 +6,9 @@ public class X01State : IGameState<X01State>, IPrimaryKeyItem, ISortKeyItem
     public string PrimaryKey { get; set; } = $"X01State";
 
     [DynamoDBRangeKey("SK")]
-    public string SortKey { get; set; }
+    public string SortKey { get; set; } = string.Empty;
 
-    public Game Game { get; set; }
+    public Game Game { get; set; } = new Game();
     public List<GameDart> Darts { get; set; } = new List<GameDart>();
     public List<GamePlayer> Players { get; set; } = new List<GamePlayer>();
     public List<User> Users { get; set; } = new List<User>();

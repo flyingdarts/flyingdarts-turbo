@@ -2,6 +2,6 @@ namespace Flyingdarts.CDK.Constructs;
 
 public class GithubActionsOIDCConstructProps : BaseConstructProps
 {
-    public string Repository { get; set; }
+    public required string Repository { get; init; }
     protected override string ConstructName => "GithubActions";
 }

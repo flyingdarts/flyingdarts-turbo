@@ -3,20 +3,20 @@
 public class Game : IPrimaryKeyItem, ISortKeyItem, IAlternativeSortKeyItem
 {
     [DynamoDBHashKey("PK")]
-    public string PrimaryKey { get; set; }
+    public string PrimaryKey { get; set; } = Constants.Game;
 
     [DynamoDBRangeKey("SK")]
-    public string SortKey { get; set; }
+    public string SortKey { get; set; } = string.Empty;
 
     [DynamoDBLocalSecondaryIndexRangeKey("LSI1")]
-    public string LSI1 { get; set; }
+    public string LSI1 { get; set; } = string.Empty;
 
     public long GameId { get; set; }
     public GameType Type { get; set; }
     public GameStatus Status { get; set; }
     public int PlayerCount { get; set; }
 
-    public X01GameSettings X01 { get; set; }
+    public X01GameSettings X01 { get; set; } = new X01GameSettings(1, 1, false, true, 501);
 
     public DateTime CreationDate => new(GameId);
     public Guid MeetingIdentifier { get; set; }

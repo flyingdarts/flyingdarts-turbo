@@ -21,16 +21,31 @@ public class ResourceIdUniquenessTests
         var developmentProps = new TestStackProps
         {
             DeploymentEnvironment = DeploymentEnvironment.Development,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
         };
 
         var stagingProps = new TestStackProps
         {
             DeploymentEnvironment = DeploymentEnvironment.Staging,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
         };
 
         var productionProps = new TestStackProps
         {
             DeploymentEnvironment = DeploymentEnvironment.Production,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
         };
 
         var resourceName = "TestResource";
@@ -57,6 +72,11 @@ public class ResourceIdUniquenessTests
         var props = new TestStackProps
         {
             DeploymentEnvironment = DeploymentEnvironment.Development,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
         };
 
         var resource1 = "Resource1";
@@ -183,16 +203,31 @@ public class ResourceIdUniquenessTests
         var developmentProps = new TestStackProps
         {
             DeploymentEnvironment = DeploymentEnvironment.Development,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
         };
 
         var stagingProps = new TestStackProps
         {
             DeploymentEnvironment = DeploymentEnvironment.Staging,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
         };
 
         var productionProps = new TestStackProps
         {
             DeploymentEnvironment = DeploymentEnvironment.Production,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
         };
 
         // Act
@@ -214,7 +249,15 @@ public class ResourceIdUniquenessTests
     public void BaseStackProps_StackId_WithNoneEnvironment_ReturnsStackNameOnly()
     {
         // Arrange
-        var props = new TestStackProps { DeploymentEnvironment = DeploymentEnvironment.None };
+        var props = new TestStackProps
+        {
+            DeploymentEnvironment = DeploymentEnvironment.None,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
+        };
 
         // Act
         var stackId = props.StackId;
@@ -230,6 +273,11 @@ public class ResourceIdUniquenessTests
         var stackProps = new TestStackProps
         {
             DeploymentEnvironment = DeploymentEnvironment.Development,
+            StackEnvironment = new Amazon.CDK.Environment
+            {
+                Account = "000000000000",
+                Region = "us-east-1",
+            },
         };
 
         var constructProps = new TestConstructProps

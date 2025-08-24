@@ -7,8 +7,8 @@ namespace Flyingdarts.CDK.Constructs;
 /// </summary>
 public class WebApplicationHostingConstructProps : BaseConstructProps
 {
-    public string AppName { get; set; }
-    public IHostedZone HostedZone { get; set; }
-    public ICertificate Certificate { get; set; }
+    public required string AppName { get; init; }
+    public required IHostedZone HostedZone { get; init; }
+    public required ICertificate Certificate { get; init; }
     protected override string ConstructName => $"WebApp-{AppName}";
 }

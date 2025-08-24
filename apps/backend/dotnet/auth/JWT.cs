@@ -2,11 +2,11 @@ namespace Flyingdarts.Backend.Auth;
 
 public class JWT
 {
-    public string iss { get; set; }
-    public string sub { get; set; }
+    public string iss { get; set; } = string.Empty;
+    public string sub { get; set; } = string.Empty;
     public int iat { get; set; }
     public int exp { get; set; }
-    public string scope { get; set; }
-    public string azp { get; set; }
-    public string client_id { get; set; }
+    public string scope { get; set; } = string.Empty;
+    public string azp { get; set; } = string.Empty;
+    public string client_id { get; set; } = string.Empty;
 }

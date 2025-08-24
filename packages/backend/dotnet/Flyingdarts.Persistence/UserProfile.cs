@@ -2,10 +2,10 @@
 {
     public class UserProfile : IUserProfile
     {
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string Country { get; set; }
-        public string Picture { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
+        public string Picture { get; set; } = string.Empty;
 
         public UserProfile()
         {
@@ -20,7 +20,12 @@
             Picture = picture;
         }
 
-        public static UserProfile Create(string userName, string email, string country, string picture)
+        public static UserProfile Create(
+            string userName,
+            string email,
+            string country,
+            string picture
+        )
         {
             return new UserProfile
             {

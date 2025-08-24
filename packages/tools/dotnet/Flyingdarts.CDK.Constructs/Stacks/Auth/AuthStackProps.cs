@@ -5,6 +5,6 @@ namespace Flyingdarts.CDK.Constructs;
 public class AuthStackProps : BaseStackProps
 {
     [Required]
-    public string Repository { get; set; }
+    public required string Repository { get; init; }
     protected override string StackName => Constants.Stacks.Auth;
 }

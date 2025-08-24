@@ -2,7 +2,7 @@ namespace Flyingdarts.CDK.Constructs;
 
 public class ApiGatewayConstructProps : BaseConstructProps
 {
-    public LambdaConstruct LambdaConstruct { get; set; }
-    public AuthorizersConstruct AuthorizersConstruct { get; set; }
+    public required LambdaConstruct LambdaConstruct { get; init; }
+    public required AuthorizersConstruct AuthorizersConstruct { get; init; }
     protected override string ConstructName => "ApiGateway";
 }

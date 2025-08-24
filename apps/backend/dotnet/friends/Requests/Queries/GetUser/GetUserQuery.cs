@@ -2,7 +2,7 @@ namespace Flyingdarts.Backend.Friends.Api.Requests.Queries.GetUser;
 
 public class GetUserQuery : IRequest<APIGatewayProxyResponse>
 {
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 }
 
 public class GetUserQueryHandler : IRequestHandler<GetUserQuery, APIGatewayProxyResponse>
@@ -14,11 +14,17 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, APIGatewayProxy
         DynamoDbService = dynamoDbService;
     }
 
-    public async Task<APIGatewayProxyResponse> Handle(GetUserQuery request, CancellationToken cancellationToken)
+    public async Task<APIGatewayProxyResponse> Handle(
+        GetUserQuery request,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
-            var user = await DynamoDbService.ReadUserByAuthProviderUserIdAsync(request.UserId, cancellationToken);
+            var user = await DynamoDbService.ReadUserByAuthProviderUserIdAsync(
+                request.UserId,
+                cancellationToken
+            );
 
             var userDto = new UserDto { UserId = user.UserId };
 
@@ -53,5 +59,5 @@ public class GetUserQueryHandler : IRequestHandler<GetUserQuery, APIGatewayProxy
 
 public class UserDto
 {
-    public string UserId { get; set; }
+    public string UserId { get; set; } = string.Empty;
 }
